@@ -1,9 +1,0 @@
-{
-  "name": "p7-web-app.presentation",
-  "version": "0.0.0",
-  "description": "P7WebApp.Presentation",
-  "main": "server.js",
-  "author": {
-    "name": ""
-  }
-}
