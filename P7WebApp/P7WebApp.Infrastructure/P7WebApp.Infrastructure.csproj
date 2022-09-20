@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Interfaces\" />
+    <Folder Include="Persistence\Configurations\" />
+    <Folder Include="Persistence\A\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>
