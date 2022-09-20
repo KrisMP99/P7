@@ -1,5 +1,5 @@
 {
-  "name": "p7webapp.presentation",
+  "name": "p7webapp.webui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,6 +10,7 @@
     "@types/node": "^16.11.59",
     "@types/react": "^18.0.20",
     "@types/react-dom": "^18.0.6",
+    "@types/react-router-dom": "^5.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -41,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-bootstrap": "^0.32.30",
     "eslint-config-react-app": "^7.0.1",
     "jest-editor-support": "^30.1.0"
   }
