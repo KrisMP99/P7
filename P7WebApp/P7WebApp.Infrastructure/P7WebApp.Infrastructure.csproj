@@ -9,8 +9,14 @@
   <ItemGroup>
     <Folder Include="Common\Interfaces\" />
     <Folder Include="Persistence\Configurations\" />
-    <Folder Include="Persistence\A\" />
+    <Folder Include="Persistence\Repositories\" />
+    <Folder Include="Logging\" />
+    <Folder Include="Identity\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
   </ItemGroup>
 
 </Project>
