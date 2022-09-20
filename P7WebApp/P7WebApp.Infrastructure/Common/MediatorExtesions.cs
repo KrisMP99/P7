@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using P7WebApp.SharedKernel;
 
 namespace P7WebApp.Infrastructure.Common
 {
@@ -8,7 +9,7 @@ namespace P7WebApp.Infrastructure.Common
         public static async Task DispatchDomainEvents(this IMediator mediator, DbContext context)
         {
             var entities = context.ChangeTracker
-                .Entries<BaseEntity>()
+                .Entries<EntityBase>()
                 .Where(e => e.Entity.DomainEvents.Any())
                 .Select(e => e.Entity);
 
