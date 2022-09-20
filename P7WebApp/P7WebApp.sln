@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Domain", "P7WebApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Application", "P7WebApp.Application\P7WebApp.Application.csproj", "{5C613779-6D0A-461C-972A-3865AA7022EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P7WebApp.SharedKernel", "P7WebApp.SharedKernel\P7WebApp.SharedKernel.csproj", "{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{5C613779-6D0A-461C-972A-3865AA7022EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C613779-6D0A-461C-972A-3865AA7022EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C613779-6D0A-461C-972A-3865AA7022EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{008A484D-BE66-4540-ABC6-670A73A18BF1} = {28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}
 		{F43A1966-2524-410F-A95F-CC052E944E0E} = {28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}
 		{5C613779-6D0A-461C-972A-3865AA7022EE} = {28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}
+		{B2E82EBC-C320-43D0-83A9-19E5143E2FE2} = {28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FF17B1C-503E-4E69-9B62-48370EA0B943}
