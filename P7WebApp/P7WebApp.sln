@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Domain", "P7WebApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Application", "P7WebApp.Application\P7WebApp.Application.csproj", "{5C613779-6D0A-461C-972A-3865AA7022EE}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "p7webapp.presentation", "p7webapp.presentation\p7webapp.presentation.esproj", "{FABDE0D9-604A-45B5-88D1-E926E25EBC74}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,12 +37,6 @@ Global
 		{5C613779-6D0A-461C-972A-3865AA7022EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C613779-6D0A-461C-972A-3865AA7022EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C613779-6D0A-461C-972A-3865AA7022EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FABDE0D9-604A-45B5-88D1-E926E25EBC74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FABDE0D9-604A-45B5-88D1-E926E25EBC74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FABDE0D9-604A-45B5-88D1-E926E25EBC74}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{FABDE0D9-604A-45B5-88D1-E926E25EBC74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FABDE0D9-604A-45B5-88D1-E926E25EBC74}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FABDE0D9-604A-45B5-88D1-E926E25EBC74}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,7 +46,6 @@ Global
 		{008A484D-BE66-4540-ABC6-670A73A18BF1} = {28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}
 		{F43A1966-2524-410F-A95F-CC052E944E0E} = {28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}
 		{5C613779-6D0A-461C-972A-3865AA7022EE} = {28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}
-		{FABDE0D9-604A-45B5-88D1-E926E25EBC74} = {28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FF17B1C-503E-4E69-9B62-48370EA0B943}
