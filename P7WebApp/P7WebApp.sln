@@ -15,9 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Domain", "P7WebApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Application", "P7WebApp.Application\P7WebApp.Application.csproj", "{5C613779-6D0A-461C-972A-3865AA7022EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P7WebApp.SharedKernel", "P7WebApp.SharedKernel\P7WebApp.SharedKernel.csproj", "{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.SharedKernel", "P7WebApp.SharedKernel\P7WebApp.SharedKernel.csproj", "{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "p7webapp.webui", "p7webapp.webui\p7webapp.webui.esproj", "{A707ED21-876B-4F11-BB76-7A6877BD3B3C}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0CD1D80B-7B8C-46AF-AEED-D3944F3A138F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{A707ED21-876B-4F11-BB76-7A6877BD3B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A707ED21-876B-4F11-BB76-7A6877BD3B3C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A707ED21-876B-4F11-BB76-7A6877BD3B3C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0CD1D80B-7B8C-46AF-AEED-D3944F3A138F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CD1D80B-7B8C-46AF-AEED-D3944F3A138F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CD1D80B-7B8C-46AF-AEED-D3944F3A138F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CD1D80B-7B8C-46AF-AEED-D3944F3A138F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
