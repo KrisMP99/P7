@@ -1,8 +1,13 @@
 import React from 'react';
+import { Container } from 'react-bootstrap';
 
-function Frontpage(): JSX.Element {
+
+function Frontpage() {
     return (
-        <p>Hello from frontpage!</p>
+        <div> 
+            <Container>ur mom</Container>
+            <p>Hello from frontpage!</p>
+        </div>
     );
 }
 

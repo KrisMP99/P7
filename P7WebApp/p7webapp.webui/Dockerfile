@@ -8,11 +8,9 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY p7webapp.webui/package.json ./
 COPY p7webapp.webui/package-lock.json ./
 RUN npm install 
-RUN npm install react-scripts -g --silent
+RUN npm install react-scripts -g
 
-COPY p7webapp.webui/ ./
-
-
+COPY . ./
 
 # start app
 CMD ["npm", "start"]

@@ -14,8 +14,10 @@ services:
       context: .
       dockerfile: P7WebApp.webui/Dockerfile
     volumes:
-      - '.:/app'
-      - '/app/node_modules'
+      - type: bind
+        source: P7WebApp.webui/
+        target: /app
+
     ports:
       - 3000:3000
     environment:
