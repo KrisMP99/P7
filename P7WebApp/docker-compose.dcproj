@@ -3,16 +3,20 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>0cd1d80b-7b8c-46af-aeed-d3944f3a138f</ProjectGuid>
+    <ProjectGuid>edd197a0-d9a3-4c7a-a9de-48666c74f034</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>p7webapp.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
+    <None Include="docker-compose.dev.override.yml">
+      <DependentUpon>docker-compose.dev.yml</DependentUpon>
     </None>
-    <None Include="docker-compose.yml" />
+    <None Include="docker-compose.dev.yml" />
     <None Include=".dockerignore" />
+    <None Include="docker-compose.prod.override.yml">
+      <DependentUpon>docker-compose.prod.yml</DependentUpon>
+    </None>
+    <None Include="docker-compose.prod.yml" />
   </ItemGroup>
 </Project>
