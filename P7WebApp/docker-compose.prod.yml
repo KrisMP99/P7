@@ -16,7 +16,7 @@ services:
       target: publish
     volumes:
       - type: bind
-        source: /p7webapp.webui/
+        source: /P7WebApp.webui/
         target: /app
     ports:
       - 3000:3000

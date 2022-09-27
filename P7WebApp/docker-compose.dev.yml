@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: P7WebApp.API/Dockerfile
-      target: build
+      target: development
   p7webapp.ui:
     image: p7webappui
     container_name: p7webapp_ui
@@ -16,7 +16,7 @@ services:
       target: build
     volumes:
       - type: bind
-        source: p7webapp.webui/
+        source: ./p7webapp.webui/
         target: /app
     ports:
       - 3000:3000
