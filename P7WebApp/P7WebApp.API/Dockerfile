@@ -16,7 +16,10 @@ COPY . .
 WORKDIR "/src/P7WebApp.API"
 RUN dotnet build "P7WebApp.API.csproj" -c Release -o /app/build
 
-FROM base AS production
+FROM build AS publish
+RUN dotnet publish "P7WebApp.API.csproj" -c Release -o /app/publish
+
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "P7WebApp.API.dll"]
@@ -25,3 +28,8 @@ FROM build AS development
 WORKDIR /app
 COPY --from=build /app/build .
 ENTRYPOINT ["dotnet", "P7WebApp.API.dll", "--environment=Development"]
+
+FROM build AS production
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "P7WebApp.API.dll"]

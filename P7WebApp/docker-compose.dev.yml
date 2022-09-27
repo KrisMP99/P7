@@ -13,7 +13,7 @@ services:
     build:
       context: .
       dockerfile: P7WebApp.webui/Dockerfile
-      target: build
+      target: development
     volumes:
       - type: bind
         source: ./p7webapp.webui/

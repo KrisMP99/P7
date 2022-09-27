@@ -1,4 +1,4 @@
-FROM node:latest as build
+FROM node:latest as development
 
 WORKDIR /app
 
@@ -16,6 +16,6 @@ CMD ["npm", "start"]
 
 
 # production
-FROM build AS publish
+FROM development AS production
 WORKDIR /app
-CMD ["npm", "build"]
+CMD ["npm", "run"]
