@@ -5,7 +5,7 @@ import { Container } from 'react-bootstrap';
 function Frontpage() {
     return (
         <div> 
-            <Container>ur mom</Container>
+            <Container>Testing my Container</Container>
             <p>Hello from frontpage!</p>
         </div>
     );
