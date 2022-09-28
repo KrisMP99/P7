@@ -39,3 +39,17 @@ services:
       dockerfile: ./nginx/Dockerfile
     ports:
       - 80:80
+  
+  postgres:
+    image: postgres:14.5
+    container_name: postgres_db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${TARGET_USER}
+      - POSTGRES_PASSWORD=${TARGET_PASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/lib/docker/volumes/postgres/_data:/var/lib/postgresql/data
