@@ -3,19 +3,23 @@ version: '3.4'
 services:
   p7webapp.api:
     image: ${DOCKER_REGISTRY-}p7webappapi
+    env_file:
+      - .env
     build:
-      context: .
+      context: ../
       dockerfile: ./P7WebApp.API/Dockerfile
-      target: production
+      target: ${TARGET_API}
     ports:
       - 5000:5000
   p7webapp.ui:
     image: p7webappui
+    env_file:
+      - .env
     container_name: p7webapp_ui
     build:
-      context: .
+      context: ../
       dockerfile: ./P7WebApp.webui/Dockerfile
-      target: production
+      target: ${TARGET_UI}
     volumes:
       - type: bind
         source: ./p7webapp.webui/
@@ -23,13 +27,15 @@ services:
     ports:
       - 3000:3000
   nginx:
+    env_file:
+      - .env
     container_name: nginx
     depends_on:
       - p7webapp.api
       - p7webapp.ui
     restart: always
     build:
-      context: .
+      context: ../
       dockerfile: ./nginx/Dockerfile
     ports:
       - 80:80

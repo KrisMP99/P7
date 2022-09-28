@@ -15,9 +15,3 @@ RUN npm ci --silent
 RUN npm install react-scripts -g
 COPY /p7webapp.webui/ .
 RUN npm run build
-
-# production
-FROM base AS production
-RUN npm run build --production
-RUN npm install -g serve
-CMD ["serve","-s", "build"]
