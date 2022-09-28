@@ -5,18 +5,31 @@ services:
     image: ${DOCKER_REGISTRY-}p7webappapi
     build:
       context: .
-      dockerfile: P7WebApp.API/Dockerfile
-      target: development
+      dockerfile: ./P7WebApp.API/Dockerfile
+      target: production
+    ports:
+      - 5000:5000
   p7webapp.ui:
     image: p7webappui
     container_name: p7webapp_ui
     build:
       context: .
-      dockerfile: P7WebApp.webui/Dockerfile
-      target: development
+      dockerfile: ./P7WebApp.webui/Dockerfile
+      target: production
     volumes:
       - type: bind
         source: ./p7webapp.webui/
         target: /app
     ports:
       - 3000:3000
+  nginx:
+    container_name: nginx
+    depends_on:
+      - p7webapp.api
+      - p7webapp.ui
+    restart: always
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - 80:80
