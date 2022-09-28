@@ -1,25 +1,21 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sources", "sources", "{28D97FF7-91BC-4DEC-922D-9AE055FC0C3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.API", "src/P7WebApp.API\P7WebApp.API.csproj", "{80FC2BF2-77A0-4B27-9360-7B1EDB89BF36}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5372B853-8038-48C2-BFB8-036538CE264C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Infrastructure", "src/P7WebApp.Infrastructure\P7WebApp.Infrastructure.csproj", "{008A484D-BE66-4540-ABC6-670A73A18BF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.API", "P7WebApp.API\P7WebApp.API.csproj", "{80FC2BF2-77A0-4B27-9360-7B1EDB89BF36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Domain", "src/P7WebApp.Domain\P7WebApp.Domain.csproj", "{F43A1966-2524-410F-A95F-CC052E944E0E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Infrastructure", "P7WebApp.Infrastructure\P7WebApp.Infrastructure.csproj", "{008A484D-BE66-4540-ABC6-670A73A18BF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Application", "src/P7WebApp.Application\P7WebApp.Application.csproj", "{5C613779-6D0A-461C-972A-3865AA7022EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Domain", "P7WebApp.Domain\P7WebApp.Domain.csproj", "{F43A1966-2524-410F-A95F-CC052E944E0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.SharedKernel", "src/P7WebApp.SharedKernel\P7WebApp.SharedKernel.csproj", "{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Application", "P7WebApp.Application\P7WebApp.Application.csproj", "{5C613779-6D0A-461C-972A-3865AA7022EE}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "p7webapp.webui", "src/p7webapp.webui\p7webapp.webui.esproj", "{A707ED21-876B-4F11-BB76-7A6877BD3B3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.SharedKernel", "P7WebApp.SharedKernel\P7WebApp.SharedKernel.csproj", "{B2E82EBC-C320-43D0-83A9-19E5143E2FE2}"
-EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "p7webapp.webui", "p7webapp.webui\p7webapp.webui.esproj", "{A707ED21-876B-4F11-BB76-7A6877BD3B3C}"
-EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{EDD197A0-D9A3-4C7A-A9DE-48666C74F034}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "src/Docker/docker-compose.dcproj", "{EDD197A0-D9A3-4C7A-A9DE-48666C74F034}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
