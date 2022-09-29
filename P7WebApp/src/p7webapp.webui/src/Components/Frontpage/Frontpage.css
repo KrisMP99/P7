@@ -1,2 +1,22 @@
 body {
+    
 }
+
+.border {
+    background-color: #B2B2B2;
+}
+
+
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button {
+    background-color: #00AB8E;
+    border: none;
+    color: #FFFF;
+    padding: 2%;
+}
+
