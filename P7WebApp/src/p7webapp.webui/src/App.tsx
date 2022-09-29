@@ -1,15 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Frontpage from './Components/Frontpage/Frontpage';
-import SignUp from './Components/SignUp/SignUp';
-import { TabContainer } from 'react-bootstrap';
 import Router from './Components/Router/Router';
+import Footer from './Components/Footer/Footer';
+import Navbar from './Components/Navbar/Navbar';
 
 function App() {
     return (
         <div className='main-container'>
+            <Navbar />
             <Router />
+            <Footer/>
         </div>
     );
 }
