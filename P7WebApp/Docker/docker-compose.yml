@@ -9,8 +9,8 @@ services:
       context: ../
       dockerfile: ./P7WebApp.API/Dockerfile
       target: ${TARGET_API}
-    ports:
-      - 5000:5000
+    expose:
+      - "5000"
   p7webapp.ui:
     image: p7webappui
     env_file:
@@ -38,7 +38,7 @@ services:
       context: ../
       dockerfile: ./nginx/Dockerfile
     ports:
-      - 80:8080
+      - 80:80
   
   postgres:
     image: postgres:14.5
