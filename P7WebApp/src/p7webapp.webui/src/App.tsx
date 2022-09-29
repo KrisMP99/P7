@@ -1,23 +1,22 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { HashRouter as Router, Route, Link, Routes } from 'react-router-dom'
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
+import { TabContainer } from 'react-bootstrap';
+import Router from './Components/Router/Router';
 
 function App() {
-  return (
-          <div>
-              <nav>
-                  <Link to="/">Home</Link>
-                  <Link to="/foo">Foo</Link>
-              </nav>
-              <Routes>
-                  <Route path="/" element={<Frontpage />} />
-                  <Route path="/foo" element={<SignUp />} />
-              </Routes>
-          </div>
-  );
+    return (
+        <div>
+            <Router />
+            <TabContainer>
+                <nav>
+                    HEJJEJE
+                </nav>
+            </TabContainer>
+        </div>
+    );
 }
 
 export default App;
