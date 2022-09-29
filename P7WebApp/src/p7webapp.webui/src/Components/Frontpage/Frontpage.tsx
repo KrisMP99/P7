@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import './Frontpage.css';
+import { NavLink } from 'react-router-dom';
 
 
 function Frontpage() {
@@ -51,7 +52,7 @@ function Frontpage() {
                             </div>
                         </form>
                         <div className="row mt-2">
-                            <p>Not registered? <a href="/signup">Sign up here!</a> </p>
+                            <p>Not registered? <NavLink to="/signup">Sign up here!</NavLink> </p>
                         </div>
                     </div>
                 </div>
