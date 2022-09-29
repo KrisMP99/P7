@@ -3,8 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 ENV DOTNET_URLS=http://+:5000
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ENV DOTNET_URLS=http://+:5000
