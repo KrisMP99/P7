@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom'
+import ExerciseBoardModule from '../ExerciseBoard/ExerciseBoard';
 import Frontpage from '../Frontpage/Frontpage';
+import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import SignUp from '../SignUp/SignUp';
 
 /* 
@@ -11,6 +13,7 @@ function Router() {
         <Routes>
             <Route path="/" element={<Frontpage />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/task/1" element={<ExerciseBoardModule />} />
         </Routes>
     );
 }

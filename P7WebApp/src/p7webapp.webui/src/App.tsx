@@ -8,13 +8,8 @@ import Router from './Components/Router/Router';
 
 function App() {
     return (
-        <div>
+        <div className='main-container'>
             <Router />
-            <TabContainer>
-                <nav>
-                    HEJJEJE
-                </nav>
-            </TabContainer>
         </div>
     );
 }
