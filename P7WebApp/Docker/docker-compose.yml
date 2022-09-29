@@ -8,12 +8,14 @@ services:
     build:
       context: ../
       dockerfile: ./P7WebApp.API/Dockerfile
-      target: ${TARGET_API}
+      target: ${TARGET_RUN_CONFIG}
     expose:
       - "5000"
     restart: always
     depends_on:
-      - nginx
+      - p7webapp.ui
+
+
   p7webapp.ui:
     image: p7webappui
     env_file:
@@ -22,23 +24,16 @@ services:
     build:
       context: ../
       dockerfile: ./P7WebApp.webui/Dockerfile
-      target: ${TARGET_UI}
+      target: ${TARGET_RUN_CONFIG}
+      args:
+        progress: plain
     volumes:
       - type: bind
         source: ./p7webapp.webui/
         target: /app
     ports:
-      - "3000:3000"
-  nginx:
-    env_file:
-      - .env
-    container_name: nginx
-    restart: always
-    build:
-      context: ../
-      dockerfile: ./nginx/Dockerfile
-    ports:
       - "80:80"
+    restart: always
   
   postgres:
     image: postgres:14.5
