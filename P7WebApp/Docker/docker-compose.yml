@@ -25,11 +25,9 @@ services:
       context: ../
       dockerfile: ./P7WebApp.webui/Dockerfile
       target: ${TARGET_RUN_CONFIG}
-      args:
-        progress: plain
     volumes:
       - type: bind
-        source: ./p7webapp.webui/
+        source: ../p7webapp.webui
         target: /app
     ports:
       - "80:80"
