@@ -1,26 +1,25 @@
 version: "3.7"
 
 services:
-  p7webapp.api:
-    image: ${DOCKER_REGISTRY-}p7webappapi
+  p7webapp.api-DEV:
+    image: ${DOCKER_REGISTRY-}p7webappapi-dev
+    container_name: p7webapp.api_DEV
     env_file:
       - .env
     build:
       context: ../
       dockerfile: ./P7WebApp.API/Dockerfile
       target: ${TARGET_RUN_CONFIG}
-    expose:
-      - "5000"
+    ports:
+      - "5000:5000"
     restart: always
-    depends_on:
-      - p7webapp.ui
 
 
-  p7webapp.ui:
-    image: p7webappui
+  p7webapp.ui-DEV:
+    image: p7webappui-dev
     env_file:
       - .env
-    container_name: p7webapp_ui
+    container_name: p7webapp_ui_DEV
     build:
       context: ../
       dockerfile: ./P7WebApp.webui/Dockerfile
@@ -30,12 +29,12 @@ services:
         source: ../p7webapp.webui
         target: /app
     ports:
-      - "80:80"
+      - "3000:3000"
     restart: always
   
-  postgres:
+  postgres-DEV:
     image: postgres:14.5
-    container_name: postgres_db
+    container_name: postgres_db_DEV
     restart: always
     env_file:
       - .env
