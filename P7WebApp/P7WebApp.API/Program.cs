@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using P7WebApp.Application;
 using P7WebApp.Infrastructure;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +23,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 
 app.UseAuthorization();
 

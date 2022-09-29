@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.7"
 
 services:
   p7webapp.api:
@@ -11,6 +11,9 @@ services:
       target: ${TARGET_API}
     expose:
       - "5000"
+    restart: always
+    depends_on:
+      - nginx
   p7webapp.ui:
     image: p7webappui
     env_file:
@@ -25,20 +28,17 @@ services:
         source: ./p7webapp.webui/
         target: /app
     ports:
-      - 3000:3000
+      - "3000:3000"
   nginx:
     env_file:
       - .env
     container_name: nginx
-    depends_on:
-      - p7webapp.api
-      - p7webapp.ui
     restart: always
     build:
       context: ../
       dockerfile: ./nginx/Dockerfile
     ports:
-      - 80:80
+      - "80:80"
   
   postgres:
     image: postgres:14.5
