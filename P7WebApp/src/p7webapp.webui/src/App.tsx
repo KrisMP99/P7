@@ -5,7 +5,7 @@ import Navbar from './Components/Navbar/Navbar';
 import { Routes, Route } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
-import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
+import ExerciseBoard, { BoardModuleType } from './Components/ExerciseBoard/ExerciseBoard';
 
 function App() {
     return (
@@ -19,7 +19,10 @@ function App() {
                     <SignUp />
                 } />
                 <Route path="/task/1" element={
-                    <ExerciseBoard />
+                    <ExerciseBoard 
+                        creatorMode={false}
+                        boardLayout={[[BoardModuleType.ExerciseDescription], [BoardModuleType.ExerciseDescription]]}
+                    />
                 } />
             </Routes>
             <Footer/>
