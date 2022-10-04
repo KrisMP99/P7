@@ -36,7 +36,7 @@ function Frontpage() {
 
                     {/* Right side of page */}
                     <div className="col login-wrapper">
-                        <form>
+                        <form >
                             <div className="row mt-3">
                                 <label>Email or username:</label>
                                 <input type="text" />

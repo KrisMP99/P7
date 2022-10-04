@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
 import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
+import Landingpage from './Components/Landingpage/Landingpage';
 
 function App() {
     return (
@@ -20,6 +21,9 @@ function App() {
                 } />
                 <Route path="/task/1" element={
                     <ExerciseBoard />
+                } />
+                <Route path="/ladningpage" element={
+                    <Landingpage />
                 } />
             </Routes>
             <Footer/>
