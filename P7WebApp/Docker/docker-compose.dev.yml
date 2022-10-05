@@ -22,7 +22,7 @@ services:
     container_name: p7webapp_ui_DEV
     build:
       context: ../
-      dockerfile: ./P7WebApp.webui/Dockerfile
+      dockerfile: ./p7webapp.webui/Dockerfile
       target: development
     volumes:
       - type: bind
@@ -32,6 +32,7 @@ services:
       - "3000:3000"
     restart: always
   
+
   postgres-DEV:
     image: postgres:14.5
     container_name: postgres_db_DEV
