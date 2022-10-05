@@ -1,8 +1,8 @@
-version: "3.7"
+version: "3.4"
 
 services:
   p7webapp.api-PROD:
-    image: ${DOCKER_REGISTRY-}p7webappapi
+    image: ${DOCKER_REGISTRY-}p7webappapi-prod
     container_name: p7webapp.api-PROD
     env_file:
       - .env
