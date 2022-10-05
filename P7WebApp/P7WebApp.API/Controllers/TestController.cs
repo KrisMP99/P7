@@ -5,6 +5,7 @@ public class TestController : BaseController
     [HttpGet]
     public IActionResult GetTest()
     {
-        return Ok("ur mom");
+        Console.WriteLine("Test test");
+        return Ok("It works!");
     }
 }
