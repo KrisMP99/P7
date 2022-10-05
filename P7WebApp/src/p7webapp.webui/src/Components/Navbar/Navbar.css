@@ -2,3 +2,10 @@
     background-color: #006F9C;
 }
 
+.collapse .navbar-nav .nav-item .nav-link {
+    color: white;
+}
+
+.navbar .container .navbar-brand {
+    color: white;
+}

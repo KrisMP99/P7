@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
 import ExerciseBoard, { BoardModuleType } from './Components/ExerciseBoard/ExerciseBoard';
+import Landingpage from './Components/Landingpage/Landingpage';
 
 function App() {
     return (
@@ -13,16 +14,23 @@ function App() {
             <Navbar />
             <Routes>
                 <Route path="/" element={
-                    <Frontpage />
+                    <div className="space-from-navbar">
+                        <Frontpage />
+                    </div>
                 } />
                 <Route path="/signup" element={
-                    <SignUp />
+                    <div className="space-from-navbar">
+                        <SignUp />
+                    </div>
                 } />
                 <Route path="/task/1" element={
                     <ExerciseBoard 
                         creatorMode={false}
                         boardLayout={[[BoardModuleType.ExerciseDescription], [BoardModuleType.ExerciseDescription]]}
                     />
+                } />
+                <Route path="/ladningpage" element={
+                    <Landingpage />
                 } />
             </Routes>
             <Footer/>
