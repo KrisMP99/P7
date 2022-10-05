@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
-  p7webapp.api-DEV:
+  p7webapp_api-DEV:
     image: p7webappapi-dev
     container_name: p7webapp.api_DEV
     env_file:
@@ -15,7 +15,7 @@ services:
     restart: always
 
 
-  p7webapp.ui-DEV:
+  p7webapp_ui-DEV:
     image: p7webappui-dev
     env_file:
       - .env
