@@ -3,7 +3,6 @@ version: "3.4"
 services:
   p7webapp.api-PROD:
     image: p7webappapi-prod
-    container_name: p7webapp.api-PROD
     env_file:
       - .env
     build:
