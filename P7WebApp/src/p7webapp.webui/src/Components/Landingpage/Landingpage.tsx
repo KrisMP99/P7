@@ -1,8 +1,11 @@
 import React from 'react';
+import { Container } from 'react-bootstrap';
 
 function Landingpage(): JSX.Element {
     return (
-        <p>Hello</p>
+        <Container>
+            <p>Hello</p>
+        </Container>
     );
 }
 

@@ -14,10 +14,14 @@ function App() {
             <Navbar />
             <Routes>
                 <Route path="/" element={
-                    <Frontpage />
+                    <div className="space-from-navbar">
+                        <Frontpage />
+                    </div>
                 } />
                 <Route path="/signup" element={
-                    <SignUp />
+                    <div className="space-from-navbar">
+                        <SignUp />
+                    </div>
                 } />
                 <Route path="/task/1" element={
                     <ExerciseBoard 
