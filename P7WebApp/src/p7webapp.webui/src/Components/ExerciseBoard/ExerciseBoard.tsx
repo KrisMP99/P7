@@ -1,5 +1,6 @@
 import { Allotment } from 'allotment';
-import React, { Component } from 'react';
+import React, { Component, useRef } from 'react';
+import CreateExerciseModal, { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import './ExerciseBoard.css';
 
@@ -20,6 +21,7 @@ interface ExerciseBoardProps {
 }
 
 export default function ExerciseBoard(props: ExerciseBoardProps) {
+    const openCreateExerciseModalRef = useRef<ShowModal>(null);
 
     let columns = []
     let colElements = [];
@@ -38,9 +40,10 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
         }
     }
     
-
     return (
         <div className='board-container'>
+            <button onClick={()=>{ openCreateExerciseModalRef.current?.handleShow() }}></button>
+            <CreateExerciseModal ref={openCreateExerciseModalRef} created={()=>{}}></CreateExerciseModal>
             <Allotment className='board-outer' separator>
                 {columns.map((col, id, arr) => {
                     return col;
