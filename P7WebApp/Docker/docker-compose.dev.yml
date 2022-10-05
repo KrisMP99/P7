@@ -1,8 +1,8 @@
-version: "3.4"
+version: "3.7"
 
 services:
   p7webapp.api-DEV:
-    image: ${DOCKER_REGISTRY-}p7webappapi-dev
+    image: p7webappapi-dev
     container_name: p7webapp.api_DEV
     env_file:
       - .env
