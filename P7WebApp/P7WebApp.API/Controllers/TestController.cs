@@ -6,7 +6,7 @@ namespace P7WebApp.API.Controllers
     {
         private readonly ILogger _logger;
 
-        public TestController(ILogger logger)
+        public TestController(ILogger<TestController> logger)
         {
             _logger = logger;
         }
@@ -14,7 +14,7 @@ namespace P7WebApp.API.Controllers
         [HttpGet]
         public IActionResult GetTest()
         {
-            _logger.LogInformation("About page visited at {DT}", 
+            _logger.LogInformation("Test page visited at {DT}", 
                 DateTime.UtcNow.ToLongTimeString());
             return Ok("It works!");
         }
