@@ -24,7 +24,7 @@ services:
     container_name: p7webapp_ui_PROD
     build:
       context: ../
-      dockerfile: ./P7WebApp.webui/Dockerfile
+      dockerfile: ./p7webapp.webui/Dockerfile
       target: production
     volumes:
       - type: bind
