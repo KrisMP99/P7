@@ -45,6 +45,6 @@ services:
       - POSTGRES_USER=${TARGET_USER}
       - POSTGRES_PASSWORD=${TARGET_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5431:5431"
     volumes:
       - /var/lib/docker/volumes/postgres/_data:/var/lib/postgresql/data
