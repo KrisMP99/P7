@@ -9,7 +9,7 @@ services:
     build:
       context: ../
       dockerfile: ./P7WebApp.API/Dockerfile
-      target: ${TARGET_RUN_CONFIG}
+      target: development
     ports:
       - "5000:5000"
     restart: always
@@ -23,7 +23,7 @@ services:
     build:
       context: ../
       dockerfile: ./P7WebApp.webui/Dockerfile
-      target: ${TARGET_RUN_CONFIG}
+      target: development
     volumes:
       - type: bind
         source: ../p7webapp.webui

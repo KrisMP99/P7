@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   p7webapp.api-PROD:
-    image: ${DOCKER_REGISTRY-}p7webappapi-prod
+    image: ${DOCKER_REGISTRY-}p7webappapi
     container_name: p7webapp.api-PROD
     env_file:
       - .env
@@ -45,6 +45,6 @@ services:
       - POSTGRES_USER=${TARGET_USER}
       - POSTGRES_PASSWORD=${TARGET_PASSWORD}
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - /var/lib/docker/volumes/postgres/_data:/var/lib/postgresql/data
