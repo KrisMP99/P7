@@ -7,6 +7,7 @@ import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
 import ExerciseBoard, { BoardModuleType } from './Components/ExerciseBoard/ExerciseBoard';
 import CreateExerciseModal, { ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
+import Landingpage from './Components/Landingpage/Landingpage';
 
 function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
@@ -18,16 +19,23 @@ function App() {
             {/* <button onClick={()=>{ openCreateExerciseModalRef.current?.handleShow() }}>Create Exercise</button> */}
             <Routes>
                 <Route path="/" element={
-                    <Frontpage />
+                    <div className="space-from-navbar">
+                        <Frontpage />
+                    </div>
                 } />
                 <Route path="/signup" element={
-                    <SignUp />
+                    <div className="space-from-navbar">
+                        <SignUp />
+                    </div>
                 } />
                 <Route path="/task/1" element={
                     <ExerciseBoard 
                         creatorMode={false}
                         boardLayout={boardLayout}
                     />
+                } />
+                <Route path="/ladningpage" element={
+                    <Landingpage />
                 } />
             </Routes>
             <Footer/>
