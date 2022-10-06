@@ -1,13 +1,10 @@
-import React, { useState, forwardRef, useImperativeHandle, useCallback } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import ExerciseDescriptionModule from '../../Modules/ExerciseDescription/ExerciseDescription';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import { Modal, Button, Table } from 'react-bootstrap';
+import { BoardModuleType } from '../../ExerciseBoard/ExerciseBoard';
 import './CreateExerciseModal.css';
 
 interface CreateExerciseModalProps {
-
-    created: (cols: JSX.Element[][]) => void;
-
+    created: (cols: BoardModuleType[][]) => void;
 }
 export interface ShowModal {
     handleShow(): void;
@@ -15,19 +12,10 @@ export interface ShowModal {
 
 export const CreateExerciseModal = forwardRef<ShowModal, CreateExerciseModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
-    const [cols, setCols] = useState<JSX.Element[][]>([])
     const [columnCount, setColumnCount] = useState(1);
     const [rowCount, setRowCount] = useState<number[]>([1]);
 
     const handleClose = () => setShow(false);
-    const handleAddCol = () => setCols(cols => [...cols, []]);
-    const handleAddRow = (colIndex: number,) =>
-        setCols(cols => [...cols.map((val, index) => {
-            if (colIndex === index) {
-                return [...val, <ExerciseDescriptionModule />]
-            }
-            return val
-        })]);
 
 
     useImperativeHandle(
@@ -40,39 +28,76 @@ export const CreateExerciseModal = forwardRef<ShowModal, CreateExerciseModalProp
     )
 
     let rows: JSX.Element[] = [];
+    let rowTables: JSX.Element[] = [];
     for (let i = 0; i < columnCount; i++) {
-        if(rowCount[columnCount - 1] === undefined) setRowCount([...rowCount.map((val) => {if(val != undefined) {return val;} else return 1 }), 1] );
-        else if (rowCount[columnCount] !== undefined) setRowCount(rowCount.slice(0, -1));
         rows.push((
-            <div>
-                <label>Rows for column {i}:</label>
-                <input type={'number'} min={1} max={50} 
-                    defaultValue={1}
-                    onKeyDown={(e)=>e.preventDefault()} 
-                    onChange={(e) => { 
-                        setRowCount(rowCount.map((val, index)=>{
-                            if(i === index) return Number(e.target.value);
+            <div className='row-input-container' key={i}>
+                <label>Rows for column {i + 1}:</label>
+                <input type={'number'} min={1} max={5}
+                    value={rowCount[i]}
+                    onKeyDown={(e) => e.preventDefault()}
+                    onChange={(e) => {
+                        setRowCount(rowCount.map((val, index) => {
+                            if (i === index) return Number(e.currentTarget.value);
                             return val;
                         }));
                     }}
                 />
             </div>
         ));
+        let tableRow = [];
+        for (let j = 0; j < rowCount[i]; j++) {
+            tableRow.push((
+                <tbody key={j}>
+                    <tr>
+                        <td>{j+1}</td>
+                        <td>
+                            <select>
+                                <option>{getModuleOptions(BoardModuleType.ExerciseDescription)}</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            ));
+        }
+        rowTables.push(
+            <div key={i}>
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Row Content:</th>
+                        </tr>
+                    </thead>
+                    { tableRow }
+                </Table>
+            </div>
+        )
     }
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose} size='lg'>
             <Modal.Header closeButton>
                 <Modal.Title>Create exercise:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                //ADD FUNCTIONALITY HERE
                 <div>
                     <label>Colums:</label>
-                    <input type={'number'} min={1} max={30} onKeyDown={(e)=>e.preventDefault()} value={columnCount} onChange={(e) => { setColumnCount(Number(e.target.value)) }} />
+                    <input type={'number'} min={1} max={3} onKeyDown={(e) => e.preventDefault()} value={columnCount} onChange={(e) => {
+                        if (Number(e.target.value) > columnCount) {
+                            setRowCount([...rowCount, 1]);
+                        }
+                        else if (Number(e.target.value) < columnCount) {
+                            setRowCount(rowCount.slice(0, Number(e.target.value)));
+                        }
+                        setColumnCount(Number(e.target.value));
+                    }} />
                 </div>
-                <div>
-                    { rows }
+                <div className='flex-space-evenly'>
+                    {rows}
+                </div>
+                <div className='flex-space-evenly'>
+                    {rowTables}
                 </div>
             </Modal.Body>
             <Modal.Footer>
@@ -81,14 +106,14 @@ export const CreateExerciseModal = forwardRef<ShowModal, CreateExerciseModalProp
                 </Button>
                 <Button variant="primary" onClick={
                     () => {
-                        let columns: JSX.Element[][] = [];
+                        let columns: BoardModuleType[][] = [];
                         for (let i = 0; i < columnCount; i++) {
                             columns.push([]);
+                            for (let j = 0; j < rowCount[i]; j++) {
+                                columns[i].push(BoardModuleType.ExerciseDescription);
+                            }
                         }
-                        for (let i = 0; i < columnCount; i++) {
-                            columns[i].push(<ExerciseDescriptionModule/>);
-                        }
-                        props.created(columns)
+                        props.created(columns);
                         handleClose();
                     }
                 }>
@@ -98,4 +123,14 @@ export const CreateExerciseModal = forwardRef<ShowModal, CreateExerciseModalProp
         </Modal>
     )
 });
+
+function getModuleOptions(id: number) {
+    switch (id) {
+        case BoardModuleType.ExerciseDescription:
+            return 'Exercise Description';
+        default:
+            return 'Error';
+    }
+} 
+
 export default CreateExerciseModal;
