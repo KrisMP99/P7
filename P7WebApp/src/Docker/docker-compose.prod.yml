@@ -5,7 +5,7 @@ networks:
   backend:
 
 services:
-  p7webapp_api_PROD:
+  p7webapp_api-PROD:
     image: p7webappapi-prod
     environment:
       ASPNETCORE_ENVIRONMENT: production
