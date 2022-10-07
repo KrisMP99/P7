@@ -1,0 +1,6 @@
+.board-container {
+    overflow: hidden;
+    width: 100%;
+    height: calc(100% - 102px);
+    display: flex;
+}

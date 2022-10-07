@@ -1,0 +1,9 @@
+.row-input-container {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+.flex-space-evenly {
+    display: flex;
+    justify-content: space-evenly;
+}
