@@ -26,7 +26,9 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
-
+      update_config:
+        parallelism: 10
+        delay: 0s
 
   p7webapp_ui-PROD:
     image: p7webappui-prod
@@ -53,6 +55,9 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
+      update_config:
+        parallelism: 10
+        delay: 0s
 
   postgres-PROD:
     image: postgres:14.5
