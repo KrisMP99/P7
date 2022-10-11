@@ -1,0 +1,48 @@
+version: "3.4"
+
+services:
+  p7webapp_api-DEV:
+    image: p7webappapi-dev
+    container_name: p7webapp_api-DEV
+    env_file:
+      - .env
+    build:
+      context: ../
+      dockerfile: ./P7WebApp.API/Dockerfile
+      target: development
+    ports:
+      - "5000:5000"
+    restart: always
+
+
+  p7webapp_ui-DEV:
+    image: p7webappui-dev
+    env_file:
+      - .env
+    container_name: p7webapp_ui-DEV
+    build:
+      context: ../
+      dockerfile: ./p7webapp.webui/Dockerfile
+      target: development
+    volumes:
+      - type: bind
+        source: ../p7webapp.webui
+        target: /app
+    ports:
+      - "3000:3000"
+    restart: always
+  
+
+  postgres-DEV:
+    image: postgres:14.5
+    container_name: postgres_db-DEV
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${TARGET_USER}
+      - POSTGRES_PASSWORD=${TARGET_PASSWORD}
+    ports:
+      - 5431:5431
+    volumes:
+      - /var/lib/docker/volumes/postgres/_data:/var/lib/postgresql/data
