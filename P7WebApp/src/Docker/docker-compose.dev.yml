@@ -17,8 +17,6 @@ services:
 
   p7webapp_ui-DEV:
     image: p7webappui-dev
-    env_file:
-      - .env
     container_name: p7webapp_ui-DEV
     build:
       context: ../
@@ -35,7 +33,7 @@ services:
 
   postgres-DEV:
     image: postgres:14.5
-    container_name: postgres_db_DEV
+    container_name: postgres_db-DEV
     restart: always
     env_file:
       - .env
