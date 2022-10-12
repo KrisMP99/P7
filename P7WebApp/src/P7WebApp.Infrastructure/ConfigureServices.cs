@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Infrastructure.Data;
 using P7WebApp.Infrastructure.Identity;
+using P7WebApp.Domain.Repositories;
+using P7WebApp.Infrastructure.Repositories;
 
 namespace P7WebApp.Infrastructure
 {
@@ -24,6 +26,8 @@ namespace P7WebApp.Infrastructure
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddTransient<ICourseRepository, CourseRepository>();
 
             return services;
         }
