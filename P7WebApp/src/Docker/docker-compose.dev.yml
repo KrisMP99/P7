@@ -4,8 +4,8 @@ services:
   p7webapp_api-DEV:
     image: p7webappapi-dev
     container_name: p7webapp_api-DEV
-    env_file:
-      - .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: development
     build:
       context: ../
       dockerfile: ./P7WebApp.API/Dockerfile
@@ -17,8 +17,6 @@ services:
 
   p7webapp_ui-DEV:
     image: p7webappui-dev
-    env_file:
-      - .env
     container_name: p7webapp_ui-DEV
     build:
       context: ../
