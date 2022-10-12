@@ -1,10 +1,15 @@
-﻿using P7WebApp.SharedKernel;
-using P7WebApp.SharedKernel.Interfaces;
+﻿using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
+namespace P7WebApp.Application.Responses
 {
-    public class Course : EntityBase, IAggregateRoot
+    public class CourseResponse
     {
+        public int Id { get; set; } 
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsPrivate { get; set; }
@@ -12,6 +17,5 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
         public DateTime ModifiedDate { get; set; }
         public int OwnerId { get; set; }
         public List<Exercise> Exercises { get; set; }
-
     }
 }

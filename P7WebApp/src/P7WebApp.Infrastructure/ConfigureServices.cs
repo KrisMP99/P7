@@ -16,16 +16,16 @@ namespace P7WebApp.Infrastructure
         {
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-            services
-                .AddDefaultIdentity<ApplicationUser>()
-                .AddRoles<IdentityRole>()
-                .AddUserStore<ApplicationDbContext>();
-
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            //services
+            //    .AddDefaultIdentity<ApplicationUser>()
+            //    .AddRoles<IdentityRole>()
+            //    .AddUserStore<ApplicationDbContext>();
+            //
+            //services.AddIdentityServer()
+            //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            //
+            //services.AddAuthentication()
+            //    .AddIdentityServerJwt();
 
             services.AddTransient<ICourseRepository, CourseRepository>();
 

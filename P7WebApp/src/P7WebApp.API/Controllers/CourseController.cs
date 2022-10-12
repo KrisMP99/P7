@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.CourseCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
 {
@@ -28,10 +29,9 @@ namespace P7WebApp.API.Controllers
                     return Ok("Create Course");
                 }
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-
-				throw;
+                return BadRequest(ex.Message);
 			}
         }
 
@@ -41,12 +41,19 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                return Ok("succes");
+                var result = _mediator.Send(new GetCourseQuery(id));
+                if (result == null)
+                {
+                    return BadRequest("Didn't find course");
+                }
+                else
+                {
+                    return Ok(result);
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return BadRequest(ex.Message);
             }
         }
     }

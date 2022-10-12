@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.Common.Mappings
 {
-    internal class CourseMapper
+    public class CourseMapper
     {
         private static readonly Lazy<IMapper> Lazy = new Lazy<IMapper>(() =>
         {

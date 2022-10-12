@@ -15,9 +15,9 @@ namespace P7WebApp.Infrastructure.Repositories
             return 1;
         }
 
-        public Task<Course> GetCourse(int id)
+        public async Task<Course> GetCourse(int id)
         {
-            throw new NotImplementedException();
+            return new Course() { Id = id};
         }
     }
 }

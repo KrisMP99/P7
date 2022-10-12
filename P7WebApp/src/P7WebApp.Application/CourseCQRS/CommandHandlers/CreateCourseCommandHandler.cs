@@ -15,6 +15,12 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
     public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, int>
     {
         private readonly ICourseRepository _courseReposity;
+
+        public CreateCourseCommandHandler(ICourseRepository courseReposity)
+        {
+            _courseReposity = courseReposity;
+        }
+
         public async Task<int> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
             try
