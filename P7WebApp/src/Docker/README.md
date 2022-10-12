@@ -3,9 +3,8 @@ To be able to run the project in Docker, and test it for deployment, you must fi
 Afterwards, either open Docker Desktop (Windows / Mac) to start the service, or on Linux run the command `sudo service docker start`.
 
 ## Development
-When developing, you can freely develop outside of the Docker container. However, if you wish to use Docker for developing,
-do the following:
-1. cd` into the `p7webapp.webui` folder, and run the command `npm install`
+When developing, you can freely develop outside of the Docker container. However, if you wish to use Docker for developing, do the following:
+1. `cd` into the `p7webapp.webui` folder, and run the command `npm install`
 1. Now, `cd` back into the `Docker` folder
 1. If you haven't already, create a `.env` file and add `TARGET_USER="username" and TARGET_PASSWORD="password"`, which is credentials used for the PostgreSQL database. Remember to change the username and password.
 1. Wait for the images to build and the containers to start
