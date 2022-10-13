@@ -11,7 +11,6 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int OwnerId { get; set; }
-        public List<Exercise> Exercises { get; set; }
-
+        public List<ExerciseGroup> ExerciseGroups { get; set; }
     }
 }
