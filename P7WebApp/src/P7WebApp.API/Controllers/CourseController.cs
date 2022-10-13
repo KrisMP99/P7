@@ -56,5 +56,73 @@ namespace P7WebApp.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> GetCourse(UpdateCourseCommand request)
+        {
+            try
+            {
+                var result = _mediator.Send(request);
+                if (result == 0)
+                {
+                    return BadRequest("Couldn't update the course");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+                
+        [HttpPut]
+        [Route("{id}/exerciseGroups/{id}")]
+        public async Task<IActionResult> GetCourse(UpdateExerciseGroupCommand request)
+        {
+            try
+            {
+                var result = _mediator.Send(request);
+                if (result == 0)
+                {
+                    return BadRequest("Couldn't update the exercise group");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+                        
+        [HttpPut]
+        [Route("{id}/exerciseGroups/{id}{exercises}{id}")]
+        public async Task<IActionResult> GetCourse(UpdateExerciseCommand request)
+        {
+            try
+            {
+                var result = _mediator.Send(request);
+                if (result == 0)
+                {
+                    return BadRequest("Couldn't update the exercise");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
