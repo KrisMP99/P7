@@ -20,7 +20,10 @@ function Navbar(): JSX.Element {
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" to={'/task/1'}>Exercise</NavLink>
-                        </li>      
+                        </li>
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to={'/ladningpage'}>Landingpage</NavLink>
+                        </li>       
                     </ul>
                 </div>
             </div>
