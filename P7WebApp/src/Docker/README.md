@@ -7,6 +7,7 @@ When developing, you can freely develop outside of the Docker container. However
 1. `cd` into the `p7webapp.webui` folder, and run the command `npm install`
 1. Now, `cd` back into the `Docker` folder
 1. If you haven't already, create a `.env` file and add `TARGET_USER="username" and TARGET_PASSWORD="password"`, which is credentials used for the PostgreSQL database. Remember to change the username and password.
+1. Run the command: `docker-compose -f docker-compose.dev.yml up -d` *Note:* On Linux you might have to include `sudo` in front of the command
 1. Wait for the images to build and the containers to start
 1. You can now access the UI at `localhost:3000` or the API at `localhost:5000`
 
