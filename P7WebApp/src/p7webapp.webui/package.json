@@ -9,6 +9,7 @@
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.59",
     "@types/react": "^18.0.20",
+    "@types/react-bootstrap": "^0.32.30",
     "@types/react-router-dom": "^5.3.3",
     "allotment": "^1.17.0",
     "bootstrap": "^5.2.1",

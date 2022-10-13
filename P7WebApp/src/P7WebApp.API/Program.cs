@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using P7WebApp.Application;
 using P7WebApp.Infrastructure;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 // Add services to the container.
 //builder.Services.AddApplicationServices();
 //builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -22,6 +25,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 
 app.UseAuthorization();
 
