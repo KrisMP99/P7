@@ -14,5 +14,6 @@ namespace P7WebApp.Domain.Repositories
         Task<Course> GetCourse(int id);
         Task<Exercise> GetExercise(int id);
         Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id);
+        Task<int> UpdateCourse(Course course);
     }
 }

@@ -31,6 +31,11 @@ namespace P7WebApp.Infrastructure.Repositories
             return new List<ExerciseGroup>().AsEnumerable(); 
         }
 
+        public async Task<int> UpdateCourse(Course course)
+        {
+            return 1;
+        }
+
         // Not implemented yet
         //public async Task<ExerciseStatistics> GetExerciseStatistics()
         //{
