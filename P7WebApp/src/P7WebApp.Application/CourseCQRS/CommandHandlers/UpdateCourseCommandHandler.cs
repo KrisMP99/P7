@@ -33,7 +33,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 }
                 else
                 {
-                    course.UpdateInformation(title: request.Title, description: request.Description, isPrivate: request.IsPrivate);
+                    course.UpdateInformation(newTitle: request.Title, newDescription: request.Description, newVisibility: request.IsPrivate);
                     int rowsAffected = await _courseRepository.UpdateCourse(course);
 
                     return rowsAffected;
