@@ -12,5 +12,13 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
         public DateTime ModifiedDate { get; set; }
         public int OwnerId { get; set; }
         public List<ExerciseGroup> ExerciseGroups { get; set; }
+
+        public void UpdateInformations(string title, string description, bool isPrivate)
+        {
+            Title = string.IsNullOrEmpty(title) ? Title : Title == title ? Title : title;
+            Description = string.IsNullOrEmpty(description) ? Description : Description == description ? Description : description;
+            IsPrivate = IsPrivate && isPrivate ? IsPrivate : isPrivate;
+
+        }
     }
 }
