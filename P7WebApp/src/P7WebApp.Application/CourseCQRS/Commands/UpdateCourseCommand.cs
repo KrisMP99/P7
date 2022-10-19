@@ -12,7 +12,7 @@ namespace P7WebApp.Application.CourseCQRS.Commands
     {
         public UpdateCourseCommand(int id, string title, string description, bool isPrivate)
         {
-            Id= id;
+            Id = id;
             Title = title;
             Description = description;
             IsPrivate = isPrivate;
