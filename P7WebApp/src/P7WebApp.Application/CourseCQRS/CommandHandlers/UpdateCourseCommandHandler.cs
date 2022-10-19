@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
-    internal class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, int>
+    public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, int>
     {
         private readonly ICourseRepository _courseRepository;
 
