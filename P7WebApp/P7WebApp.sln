@@ -7,6 +7,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Infrastructure", "src\P7WebApp.Infrastructure\P7WebApp.Infrastructure.csproj", "{008A484D-BE66-4540-ABC6-670A73A18BF1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Domain", "src\P7WebApp.Domain\P7WebApp.Domain.csproj", "{F43A1966-2524-410F-A95F-CC052E944E0E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2E82EBC-C320-43D0-83A9-19E5143E2FE2} = {B2E82EBC-C320-43D0-83A9-19E5143E2FE2}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Application", "src\P7WebApp.Application\P7WebApp.Application.csproj", "{5C613779-6D0A-461C-972A-3865AA7022EE}"
 EndProject
