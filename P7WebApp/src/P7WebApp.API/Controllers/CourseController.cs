@@ -59,11 +59,11 @@ namespace P7WebApp.API.Controllers
         
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> GetCourse(UpdateCourseCommand request)
+        public async Task<IActionResult> UpdateCourse(UpdateCourseCommand request)
         {
             try
             {
-                var result = _mediator.Send(request);
+                var result = await _mediator.Send(request);
                 if (result == 0)
                 {
                     return BadRequest("Couldn't update the course");
@@ -80,49 +80,20 @@ namespace P7WebApp.API.Controllers
         }
         
                 
-        [HttpPut]
-        [Route("{id}/exerciseGroups/{id}")]
-        public async Task<IActionResult> GetCourse(UpdateExerciseGroupCommand request)
+        [HttpGet]
+        [Route("{id}/exercise-groups")]
+        public async Task<IActionResult> GetExerciseGroups(int id)
         {
             try
             {
-                var result = _mediator.Send(request);
-                if (result == 0)
-                {
-                    return BadRequest("Couldn't update the exercise group");
-                }
-                else
-                {
-                    return Ok(result);
-                }
+                var result = await _mediator.Send(new GetExerciseGroupsQuery(id));
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        
-                        
-        [HttpPut]
-        [Route("{id}/exerciseGroups/{id}{exercises}{id}")]
-        public async Task<IActionResult> GetCourse(UpdateExerciseCommand request)
-        {
-            try
-            {
-                var result = _mediator.Send(request);
-                if (result == 0)
-                {
-                    return BadRequest("Couldn't update the exercise");
-                }
-                else
-                {
-                    return Ok(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+                       
     }
 }

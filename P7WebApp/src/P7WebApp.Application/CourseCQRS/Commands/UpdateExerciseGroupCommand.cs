@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.Commands
 {
-    public class UpdateExerciseCommand : IRequest<int>
+    public class UpdateExerciseGroupCommand : IRequest<int>
     {
-        public UpdateExerciseCommand(string desription, bool isVisible, int exerciseGroupNumber, DateTime becomesVisibleAt)
+        public UpdateExerciseGroupCommand(string description, bool isVisible, int exerciseGroupNumber, DateTime becomesVisibleAt)
         {
             Description = description;
             IsVisible = isVisible;

@@ -13,6 +13,6 @@ namespace P7WebApp.Domain.Repositories
         Task<int> AddCourse(Course course);
         Task<Course> GetCourse(int id);
         Task<Exercise> GetExercise(int id);
-        
+        Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id);
     }
 }

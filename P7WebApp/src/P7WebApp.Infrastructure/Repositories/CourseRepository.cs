@@ -26,6 +26,11 @@ namespace P7WebApp.Infrastructure.Repositories
             return new Exercise() { Id = id };
         }
 
+        public async Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id)
+        {
+            return new List<ExerciseGroup>().AsEnumerable(); 
+        }
+
         // Not implemented yet
         //public async Task<ExerciseStatistics> GetExerciseStatistics()
         //{

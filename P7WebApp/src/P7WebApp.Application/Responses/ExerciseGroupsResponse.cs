@@ -1,8 +1,6 @@
-﻿using P7WebApp.SharedKernel;
-
-namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
+﻿namespace P7WebApp.Application.Responses
 {
-    public class ExerciseGroup : EntityBase
+    public class ExerciseGroupsResponse
     {
         public string Title { get; set; }
         public string Description { get; set; }
