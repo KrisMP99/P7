@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
-    internal class UpdateExerciseGroupCommandHandler
+    public class UpdateExerciseGroupCommandHandler
     {
     }
 }
