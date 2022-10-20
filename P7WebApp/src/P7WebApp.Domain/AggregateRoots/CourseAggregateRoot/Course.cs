@@ -15,10 +15,30 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
 
         public void UpdateInformation(string newTitle, string newDescription, bool newVisibility)
         {
-            Title = string.IsNullOrEmpty(newTitle) ? Title : Title == newTitle ? Title : newTitle;
+            Title = string.IsNullOrEmpty(newTitle) ? Title : newTitle;
             Description = string.IsNullOrEmpty(newDescription) ? Description : Description == newDescription ? Description : newDescription;
             IsPrivate = IsPrivate && newVisibility ? IsPrivate : newVisibility;
+        }
 
+        public ExerciseGroup GetExerciseGroup(int groupId)
+        {
+            try
+            {
+                var exerciseGroup =  ExerciseGroups.Find(e => e.Id == groupId);
+
+                if (exerciseGroup is not null)
+                {
+                    return exerciseGroup;
+                }
+                else
+                {
+                    throw new Exception("Could not find an exercise with the specified Id");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

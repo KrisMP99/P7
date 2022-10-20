@@ -21,6 +21,11 @@ namespace P7WebApp.Infrastructure.Repositories
             return new Course() { Id = id};
         }
 
+        public async Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
+        {
+            return new Course() { Id = 1, ExerciseGroups = new List<ExerciseGroup>() { new ExerciseGroup() { Id = 1, Exercises = new List<Exercise>() { new Exercise() { Id = 1 } } } } };
+        }
+
         public async Task<Exercise> GetExercise(int id)
         {
             return new Exercise() { Id = id };

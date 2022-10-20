@@ -94,6 +94,53 @@ namespace P7WebApp.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-                       
+
+        [HttpPut]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}")]
+        public async Task<IActionResult> UpdateExercise(UpdateExerciseCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not update the exercise");
+                }
+                else
+                {
+                return Ok(result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("{courseId}/exercise-groups/{exerciseGroupId}")]
+        public async Task<IActionResult> UpdateExerciseGroup(UpdateExerciseGroupCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not update the exercise group");
+                }
+                else
+                {
+                    return Ok(result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
