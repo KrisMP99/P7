@@ -35,7 +35,7 @@ namespace P7WebApp.API.Controllers
 			}
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("{id}")]
         public async Task<IActionResult> GetCourse(int id)
         {
@@ -57,7 +57,7 @@ namespace P7WebApp.API.Controllers
             }
         }
         
-        [HttpPut]
+        [HttpPost]
         [Route("{id}")]
         public async Task<IActionResult> UpdateCourse(UpdateCourseCommand request)
         {
@@ -80,7 +80,7 @@ namespace P7WebApp.API.Controllers
         }
         
                 
-        [HttpGet]
+        [HttpPost]
         [Route("{id}/exercise-groups")]
         public async Task<IActionResult> GetExerciseGroups(int id)
         {
@@ -95,7 +95,7 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}")]
         public async Task<IActionResult> UpdateExercise(UpdateExerciseCommand request)
         {
@@ -119,7 +119,7 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("{courseId}/exercise-groups/{exerciseGroupId}")]
         public async Task<IActionResult> UpdateExerciseGroup(UpdateExerciseGroupCommand request)
         {
