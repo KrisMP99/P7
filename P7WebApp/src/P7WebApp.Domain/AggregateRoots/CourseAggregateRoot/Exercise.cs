@@ -29,7 +29,7 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
 
         public void UpdateInformation(string newTitle, bool visibility, int exerciseNumber, DateTime newStartDate, DateTime newEndDate)
         {
-            Title = string.IsNullOrEmpty(newTitle) ? Title : Title == newTitle ? Title : newTitle;
+            Title = string.IsNullOrEmpty(newTitle) ? Title : newTitle;
             IsVisible = visibility;
             ExerciseNumber = exerciseNumber;
             StartDate = newStartDate;
