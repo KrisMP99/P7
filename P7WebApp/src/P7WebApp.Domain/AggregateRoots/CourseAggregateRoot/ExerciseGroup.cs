@@ -30,9 +30,11 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
         {
             try
             {
-                if (Exercises.Any(e => e.Id == exerciseId))
+                var exercise = Exercises.Find(e => e.Id == exerciseId);
+
+                if (exercise is not null)
                 {
-                    return Exercises.Find(e => e.Id == exerciseId);
+                    return exercise;
                 }
                 else
                 {
