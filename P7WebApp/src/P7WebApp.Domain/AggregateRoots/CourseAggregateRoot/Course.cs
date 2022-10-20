@@ -24,9 +24,11 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
         {
             try
             {
-                if (ExerciseGroups.Any(e => e.Id == groupId))
+                var exerciseGroup =  ExerciseGroups.Find(e => e.Id == groupId);
+
+                if (exerciseGroup is not null)
                 {
-                    return ExerciseGroups.Find(e => e.Id == groupId);
+                    return exerciseGroup;
                 }
                 else
                 {
