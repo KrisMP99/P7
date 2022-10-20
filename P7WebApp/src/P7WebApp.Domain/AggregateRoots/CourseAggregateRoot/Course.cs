@@ -18,10 +18,9 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
             Title = string.IsNullOrEmpty(newTitle) ? Title : Title == newTitle ? Title : newTitle;
             Description = string.IsNullOrEmpty(newDescription) ? Description : Description == newDescription ? Description : newDescription;
             IsPrivate = IsPrivate && newVisibility ? IsPrivate : newVisibility;
-
         }
 
-        public ExerciseGroup GetGroupExercise(int groupId)
+        public ExerciseGroup GetExerciseGroup(int groupId)
         {
             try
             {
