@@ -20,5 +20,24 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
             IsPrivate = IsPrivate && newVisibility ? IsPrivate : newVisibility;
 
         }
+
+        public ExerciseGroup GetGroupExercise(int groupId)
+        {
+            try
+            {
+                if (ExerciseGroups.Any(e => e.Id == groupId))
+                {
+                    return ExerciseGroups.Find(e => e.Id == groupId);
+                }
+                else
+                {
+                    throw new Exception("Could not find an exercise with the specified Id");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

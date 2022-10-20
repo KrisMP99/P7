@@ -23,5 +23,7 @@ namespace P7WebApp.Application.CourseCQRS.Commands
         public int ExerciseNumber { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int ExerciseGroupId { get; set; }
+        public int Id { get; set; }
     }
 }
