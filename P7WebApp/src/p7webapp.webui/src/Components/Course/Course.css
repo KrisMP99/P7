@@ -1,0 +1,37 @@
+.exercise-id {
+    margin-right: 10px;
+}
+
+.exercise-container {
+    height: 40px;
+    align-items: center;
+    flex-grow: 1;
+    border: 1px solid gray;
+}
+.exercise-container + .exercise-container {
+    border-top: none;
+}
+.accordion-body :hover {
+    background-color: rgba(128, 128, 128, 0.194);
+    cursor: pointer;
+}
+
+.course-title-container {
+    font-size: 3em;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+.exercises-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.accordion-button {
+    background-color: #e7f1ff !important;
+    color: #0c63e4 !important;
+    border: 1px solid #86b7fe !important;
+}
+.accordion-header {
+    margin-top: 4px;
+}

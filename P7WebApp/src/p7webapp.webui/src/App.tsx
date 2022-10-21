@@ -8,10 +8,17 @@ import SignUp from './Components/SignUp/SignUp';
 import ExerciseBoard, { BoardModuleType } from './Components/ExerciseBoard/ExerciseBoard';
 import CreateExerciseModal, { ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
+import Course from './Components/Course/Course';
+
+export interface User {
+    id: number;
+    name: string;
+}
 
 function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
     const [boardLayout, setBoardLayout] = useState<BoardModuleType[][]>([[BoardModuleType.ExerciseDescription]]);
+    const [user, setUser] = useState<User | null>(null);
 
     return (
         <div className='main-container'>
@@ -34,8 +41,11 @@ function App() {
                         boardLayout={boardLayout}
                     />
                 } />
-                <Route path="/ladningpage" element={
+                <Route path="/landingpage" element={
                     <Landingpage />
+                } />
+                <Route path="/course/:id" element={
+                    <Course />
                 } />
             </Routes>
             <Footer/>

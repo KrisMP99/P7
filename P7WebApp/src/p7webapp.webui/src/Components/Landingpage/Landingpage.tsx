@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Table, Form, InputGroup} from 'react-bootstrap';
+import { NavigateOptions, Route, Routes, useNavigate } from 'react-router-dom';
+import Course from '../Course/Course';
 import {dummyData} from './dummyData.js';
 
 function Landingpage(): JSX.Element {
     const [search, setSearch] = useState('')
-    console.log(search)
+    const navigate = useNavigate();
     return (
         <Container>
             <h1 className='text-center mt-4'>Find Courses</h1>
@@ -24,10 +26,10 @@ function Landingpage(): JSX.Element {
                     </tr>
                 </thead>
                 <tbody>
-                {dummyData.filter((item) => {
+                {dummyData.filter((item: { Course_name: string; }) => {
                     return search.toLowerCase() === '' ? item : item.Course_name.toLowerCase().includes(search)
-                }).map((item) => (
-                    <tr key={item.id}>
+                }).map((item: { id: React.Key | null | undefined; Course_name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Exercises: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Members: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Owner: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) => (
+                    <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
                         <td>{item.Course_name}</td>
                         <td>{item.Exercises}</td>
                         <td>{item.Members}</td>
@@ -37,7 +39,6 @@ function Landingpage(): JSX.Element {
 
                 </tbody>
             </Table>
-
         </Container>
     );
 }
