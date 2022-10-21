@@ -6,33 +6,33 @@ import { useParams } from 'react-router-dom';
 import { dummyData } from '../Landingpage/dummyData';
 import './Course.css';
 
-export interface IExerciseGroup {
+export interface ExerciseGroup {
     id: number;
     title: string;
 }
 
-export interface IExercise {
+export interface Exercise {
     id: number;
     exerciseGroupId: number;
     title: string;
     isVisible: boolean;
 }
 
-export interface ICourse {
+export interface Course {
     title: string;
     description: string;
-    exerciseGroups: IExerciseGroup[];
-    exercises: IExercise[];
+    exerciseGroups: ExerciseGroup[];
+    exercises: Exercise[];
 }
 
 export default function Course() {
     const params = useParams();
     const [editorMode, setEditorMode] = useState<boolean>(false);
-    const [course, setCourse] = useState<ICourse|null>(null);
+    const [course, setCourse] = useState<Course|null>(null);
 
     //DUMMY DATA:
-    const exGroups: IExerciseGroup[] = [{id: 0, title:"A"}, {id: 1, title:"B"}, {id: 2, title:"C"}, {id: 3, title:"D"}];
-    const ex: IExercise[] = [
+    const exGroups: ExerciseGroup[] = [{id: 0, title:"A"}, {id: 1, title:"B"}, {id: 2, title:"C"}, {id: 3, title:"D"}];
+    const ex: Exercise[] = [
         {id:0, exerciseGroupId:0, title:'E', isVisible:true}, 
         {id:1, exerciseGroupId:1, title:'S', isVisible:true}, 
         {id:2, exerciseGroupId:1, title:'SS', isVisible:true},
