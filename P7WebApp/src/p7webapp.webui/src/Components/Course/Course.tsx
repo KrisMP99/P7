@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Accordion, Button, Container } from 'react-bootstrap';
 import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
 import { useParams } from 'react-router-dom';
 import { User } from '../../App';
-import { dummyData } from '../Landingpage/dummyData';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 import './Course.css';
+import CreateExerciseModal, { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 
 export interface ExerciseGroup {
     id: number;
@@ -29,13 +31,13 @@ export interface Course {
 
 interface CourseProps {
     user: User;
+    openCreateExerciseModalRef: React.RefObject<ShowModal>;
 }
 
 export default function Course(props: CourseProps) {
     const params = useParams();
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [course, setCourse] = useState<Course|null>(null);
-    const [editExerciseGroups, setEditExerciseGroups] = useState<boolean>(false);
 
     //DUMMY DATA:
     const exGroups: ExerciseGroup[] = [{id: 0, title:"Session 1"}, {id: 1, title:"Session 2"}, {id: 2, title:"Session 3"}, {id: 3, title:"Session 4"}];
@@ -138,10 +140,30 @@ export default function Course(props: CourseProps) {
                 />
             </div>
             <div className='course-exercises-container'>
-                <span className='exercises-title'>
-                    Exercises:
-                </span>
-                {exerciseGroupElements}
+                <Tabs defaultActiveKey={'exercises'} fill={isOwner}>
+                    <Tab eventKey={'exercises'} title={'Exercises'}>
+                        <div className='d-flex'>
+                            <Button onClick={() => {
+                                let groups = [...course?.exerciseGroups!];
+                                
+                            }}>
+                                Create ExerciseGroup
+                            </Button>
+                            <Button onClick={() => {
+                                props.openCreateExerciseModalRef.current?.handleShow();
+                            }}>
+                                Create Exercise
+                            </Button>
+                        </div>
+                        {exerciseGroupElements}
+                    </Tab>
+                    <Tab eventKey={'members'} title={'Members'}>
+                        <p>Member overview here.</p>
+                    </Tab>
+                    <Tab eventKey={'statistics'} title={'Statistics'}>
+                        <p>Statistics overview here.</p>
+                    </Tab>
+                </Tabs>
             </div>
         </Container>
     )
