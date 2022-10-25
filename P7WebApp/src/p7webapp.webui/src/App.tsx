@@ -45,7 +45,9 @@ function App() {
                     <Landingpage />
                 } />
                 <Route path="/course/:id" element={
-                    <Course />
+                    <Course 
+                        user={{id: 0, name:'Kristian Morsing'}}
+                    />
                 } />
             </Routes>
             <Footer/>

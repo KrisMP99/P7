@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, Container } from 'react-bootstrap';
+import { Accordion, Button, Container } from 'react-bootstrap';
 import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
 import { useParams } from 'react-router-dom';
+import { User } from '../../App';
 import { dummyData } from '../Landingpage/dummyData';
 import './Course.css';
 
@@ -20,38 +21,45 @@ export interface Exercise {
 
 export interface Course {
     title: string;
+    ownerId: number;
     description: string;
     exerciseGroups: ExerciseGroup[];
     exercises: Exercise[];
 }
 
-export default function Course() {
+interface CourseProps {
+    user: User;
+}
+
+export default function Course(props: CourseProps) {
     const params = useParams();
-    const [editorMode, setEditorMode] = useState<boolean>(false);
+    const [isOwner, setIsOwner] = useState<boolean>(false);
     const [course, setCourse] = useState<Course|null>(null);
+    const [editExerciseGroups, setEditExerciseGroups] = useState<boolean>(false);
 
     //DUMMY DATA:
-    const exGroups: ExerciseGroup[] = [{id: 0, title:"A"}, {id: 1, title:"B"}, {id: 2, title:"C"}, {id: 3, title:"D"}];
+    const exGroups: ExerciseGroup[] = [{id: 0, title:"Session 1"}, {id: 1, title:"Session 2"}, {id: 2, title:"Session 3"}, {id: 3, title:"Session 4"}];
     const ex: Exercise[] = [
-        {id:0, exerciseGroupId:0, title:'E', isVisible:true}, 
-        {id:1, exerciseGroupId:1, title:'S', isVisible:true}, 
-        {id:2, exerciseGroupId:1, title:'SS', isVisible:true},
-        {id:3, exerciseGroupId:2, title:'W', isVisible:true},
-        {id:4, exerciseGroupId:2, title:'WW', isVisible:true},
-        {id:5, exerciseGroupId:2, title:'WWW', isVisible:true},
-        {id:6, exerciseGroupId:3, title:'L', isVisible:true},
-        {id:7, exerciseGroupId:3, title:'LL', isVisible:true},
-        {id:8, exerciseGroupId:3, title:'LLL', isVisible:true},
-        {id:9, exerciseGroupId:3, title:'LLLL', isVisible:true}
+        {id:0, exerciseGroupId:0, title:'Exercise 1', isVisible:true}, 
+        {id:1, exerciseGroupId:1, title:'Exercise 1', isVisible:true}, 
+        {id:2, exerciseGroupId:1, title:'Exercise 2', isVisible:true},
+        {id:3, exerciseGroupId:2, title:'Exercise 1', isVisible:true},
+        {id:4, exerciseGroupId:2, title:'Exercise 2', isVisible:true},
+        {id:5, exerciseGroupId:2, title:'Exercise 3', isVisible:true},
+        {id:6, exerciseGroupId:3, title:'Exercise 1', isVisible:true},
+        {id:7, exerciseGroupId:3, title:'Exercise 2', isVisible:true},
+        {id:8, exerciseGroupId:3, title:'Exercise 3', isVisible:true},
+        {id:9, exerciseGroupId:3, title:'Exercise 4', isVisible:true}
     ]
 
 
     useEffect(()=>{
-        if (!course) {
-            //Fetch course here and set it
-            setCourse({title: 'Course Title', description: 'Course description very specific to course', exerciseGroups: exGroups, exercises: ex});
+        //Fetch course here and set it
+        if (props.user.id === course?.ownerId && !isOwner) {
+            setIsOwner(true);
         }
-    }, [params.id])
+        setCourse({title: 'Course Title', description: 'Course description very specific to course', exerciseGroups: exGroups, exercises: ex, ownerId: 0});
+    },  [course?.ownerId]);
 
     let exerciseGroupElements: JSX.Element[] = [];
     if (course && course.exerciseGroups.length > 0 && course.exercises) {
@@ -60,32 +68,79 @@ export default function Course() {
                 return val.exerciseGroupId === value.id;
             }).map((val, id, arr) => {
                 return (
-                    <div key={id} className='exercise-container d-flex'>
-                        <div className='exercise-id'>#{val.id}</div>
+                    <div key={id} className='exercise-container d-flex' onClick={(e)=>{
+                        console.log("Opening exercise");
+                    }}>
                         <div className='exercise-title'>{val.title}</div>
+                        <div className='exercise-owner-container' style={{display:isOwner?'':'none'}}>
+                            <button onClick={(e) => {
+                                e.stopPropagation();
+                                console.log("Opening exercise in edit mode");
+                            }}>
+                                Edit
+                            </button>
+                            <button onClick={(e) => {
+                                e.stopPropagation();
+                                console.log("Deleting exercise");
+                            }}>
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 )
             });
             return (
             <Accordion key={index}>
-                <AccordionHeader>{value.title}</AccordionHeader>
+                <AccordionHeader>
+                    <input 
+                        className='input-field'
+                        value={value.title} 
+                        onChange={(e)=>{
+                            if (course && e.target.value !== value.title) {
+                                let exerciseGroups = [...course.exerciseGroups]
+                                exerciseGroups[exerciseGroups.findIndex((val) => val.id === value.id)].title = e.target.value;
+                                setCourse({...course, exerciseGroups: exerciseGroups});
+                            }
+                        }} 
+                        readOnly={!isOwner}
+                    />
+                </AccordionHeader>
                 <AccordionBody>
                     {exerciseElements}
                 </AccordionBody>
             </Accordion>)
         });
     }
-    
     return (
         <Container>
             <div className='course-title-container'>
-                <span>{course ? course.title : 'Title'}</span>
+                <input
+                    className='input-field course-title'
+                    value={course ? course.title : 'Title'}
+                    onChange={(e)=>{
+                        if (course && e.target.value !== course?.title) {
+                            setCourse({...course, title: e.target.value});
+                        }
+                    }} 
+                    readOnly={!isOwner}
+                />
             </div>
             <div className='course-description-container'>
-                <p>{course ? course.description : 'Description here'}</p>
+                <textarea
+                    className='text-area'
+                    value={course ? course.description : 'Description here'}
+                    onChange={(e)=>{
+                        if (course && e.target.value !== course?.description) {
+                            setCourse({...course, description: e.target.value});
+                        }
+                    }} 
+                    readOnly={!isOwner}
+                />
             </div>
             <div className='course-exercises-container'>
-                <span className='exercises-title'>Exercises:</span>
+                <span className='exercises-title'>
+                    Exercises:
+                </span>
                 {exerciseGroupElements}
             </div>
         </Container>
