@@ -143,13 +143,17 @@ export default function Course(props: CourseProps) {
                 <Tabs defaultActiveKey={'exercises'} fill={isOwner}>
                     <Tab eventKey={'exercises'} title={'Exercises'}>
                         <div className='d-flex'>
-                            <Button onClick={() => {
-                                let groups = [...course?.exerciseGroups!];
-                                
+                            <Button className={'create-btns'} onClick={() => {
+                                let groups = [...course?.exerciseGroups!, 
+                                    {
+                                        id: Math.max(...course!.exerciseGroups?.map(o => o.id), 0) + 1,
+                                        title: 'New group added'
+                                    }];
+                                setCourse({...course!, exerciseGroups: groups});
                             }}>
                                 Create ExerciseGroup
                             </Button>
-                            <Button onClick={() => {
+                            <Button className={'create-btns'} onClick={() => {
                                 props.openCreateExerciseModalRef.current?.handleShow();
                             }}>
                                 Create Exercise

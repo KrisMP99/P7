@@ -2,6 +2,11 @@
     margin-right: 10px;
 }
 
+.create-btns {
+    margin: 2px 4px;
+    height: 40px;
+}
+
 .input-field {
     background-color: #ffffff00;
     border: none;
