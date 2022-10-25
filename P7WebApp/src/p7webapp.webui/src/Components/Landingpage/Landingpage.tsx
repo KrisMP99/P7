@@ -52,7 +52,7 @@ function Landingpage(): JSX.Element {
                 <div className='row col-7'>
                     <Form>
                         <InputGroup className='my-3'>
-                            <Form.Control onChange={(e) => setSearch(e.target.value)} placeholder='Search for course name'/>
+                            <Form.Control onChange={(e) => setSearch(e.target.value.toLowerCase())} placeholder='Search for course name'/>
                         </InputGroup>
                     </Form>
                 </div>
