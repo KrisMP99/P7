@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Table, Form, InputGroup} from 'react-bootstrap';
+import { NavigateOptions, Route, Routes, useNavigate } from 'react-router-dom';
+import Course from '../Course/Course';
 import {dummyData} from './dummyData.js';
 import Modal from '../Modals/CreateExerciseModal/CreateCourseModal';
 import useModal from '../Modals/CreateExerciseModal/useModal';
@@ -9,6 +11,7 @@ function Landingpage(): JSX.Element {
     const [search, setSearch] = useState('')
     const { isOpen, toggle } = useModal();
     console.log(search)
+    const navigate = useNavigate();
     return (
         <Container>
             <Modal isOpen={isOpen} toggle={toggle}>
@@ -67,31 +70,32 @@ function Landingpage(): JSX.Element {
                 </div>
 
                 <div className='col-9'>
-                    <Table striped bordered hover>
-                            <thead>
-                                <tr>
-                                    <th>Course name</th>
-                                    <th>Exercises</th>
-                                    <th>Members</th>
-                                    <th>Owner</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {dummyData.filter((item) => {
-                                return search.toLowerCase() === '' ? item : item.Course_name.toLowerCase().includes(search)
-                            }).map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.Course_name}</td>
-                                    <td>{item.Exercises}</td>
-                                    <td>{item.Members}</td>
-                                    <td>{item.Owner}</td>
-                                </tr>
-                            ))}
+                <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Course name</th>
+                        <th>Exercises</th>
+                        <th>Members</th>
+                        <th>Owner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {dummyData.filter((item: { Course_name: string; }) => {
+                    return search.toLowerCase() === '' ? item : item.Course_name.toLowerCase().includes(search)
+                }).map((item: { id: React.Key | null | undefined; Course_name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Exercises: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Members: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Owner: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) => (
+                    <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
+                        <td>{item.Course_name}</td>
+                        <td>{item.Exercises}</td>
+                        <td>{item.Members}</td>
+                        <td>{item.Owner}</td>
+                    </tr>
+                ))}
 
-                            </tbody>
-                    </Table>
+                </tbody>
+            </Table>
                 </div>
             </div>
+            
         </Container>
     );
 }
