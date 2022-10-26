@@ -11,9 +11,11 @@
     <Folder Include="Entities\" />
     <Folder Include="Events\" />
     <Folder Include="Enums\" />
-    <Folder Include="AggregateRoots\" />
     <Folder Include="Value Objects\" />
-    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\P7WebApp.SharedKernel\P7WebApp.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>
