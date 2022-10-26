@@ -4,7 +4,7 @@ import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
 import { useParams } from 'react-router-dom';
 import { User } from '../../App';
-import { dummyData } from '../Landingpage/dummyData';
+import { dummyData } from '../Landingpage/LandingpageModules/dummyDataOwned';
 import './Course.css';
 
 export interface ExerciseGroup {
