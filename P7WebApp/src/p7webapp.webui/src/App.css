@@ -44,3 +44,12 @@
 .space-from-navbar {
     margin-top: 8%;
 }
+
+.btn-1 {
+  height: 40px;
+  margin: 0 4px;
+}
+.btn-2 {
+  height: 40px;
+  margin: 0 2px;
+}

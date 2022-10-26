@@ -1,5 +1,8 @@
 import { Allotment } from 'allotment';
 import React from 'react';
+import { Routes } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import Course from '../Course/Course';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import './ExerciseBoard.css';
 
