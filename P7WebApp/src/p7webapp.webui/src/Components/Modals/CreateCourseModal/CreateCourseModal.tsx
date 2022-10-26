@@ -1,10 +1,20 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { ShowModal } from '../CreateExerciseModal/CreateExerciseModal';
+import './OwnedCourseModal.css';
 
 export const CreateCourseModal = forwardRef<ShowModal>((props, ref) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            handleShow() {
+                setShow(true);
+            }
+        }),
+    );
 
     return (
        <>

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Container, Table, Form, InputGroup} from 'react-bootstrap';
+import { Container, Table, Form, InputGroup, Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import {dummyData} from './dummyDataOwned';
 import './OwnedCourseOverview.css';
-import Modal from 'react-bootstrap/Modal';
+import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
 
-function OwnedCourseOverview(): JSX.Element {
+interface OwnedCourseOverviewProps {
+    openCreateCourseModal: React.RefObject<ShowModal>;
+}
+
+function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
 
@@ -15,53 +19,6 @@ function OwnedCourseOverview(): JSX.Element {
 
     return (
         <Container>
-            <>
-                <Modal show={show} onHide={handleClose} 
-                    size="lg"
-                    aria-labelledby="contained-modal-title-vcenter"
-                    centered>
-                    <Modal.Header closeButton>
-                    <Modal.Title>Create course!</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className='d-flex justify-content-center'>
-                            <div className="col-6">
-                                <form>
-                                    <div className="row mt-3">
-                                        <label>Course name:</label>
-                                        <input className='rounded' type="text"/>
-                                    </div>
-
-                                    <div className="row mt-3">
-                                        <label>Course description:</label>
-                                        <input className='rounded' type="text"/>
-                                    </div>
-
-                                    <div className="row mt-3 mb-3">
-                                        <label>Availability:</label>
-                                        <input className='rounded' type="text"/>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                    <div className="row footer text-center">
-                        <div className='col-6'>
-                            <button className="cancel rounded" onClick={handleClose}>
-                                Cancel
-                            </button>
-                        </div>
-                        <div className='col-6'>
-                            <button className='create rounded' onClick={handleClose}>
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                    </Modal.Footer>
-                </Modal>
-            </>
-
             <div className="row justify-content-center">
                 <h1 className='text-center'>Find Courses</h1>
 
@@ -78,9 +35,9 @@ function OwnedCourseOverview(): JSX.Element {
                         <h3>My courses</h3>
                     </div>
                     <div className="col text-end">
-                        <button className="rounded p-2 create-course" onClick={handleShow}>
+                        <Button className="rounded p-2 create-course" onClick={()=>props.openCreateCourseModal.current?.handleShow()}>
                             Create course
-                        </button> 
+                        </Button> 
                     </div>
                 </div>
 

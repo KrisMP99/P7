@@ -1,17 +1,3 @@
-.create {
-    background-color: #00AB8E;
-    width: 35%;
-    border: none;
-    color: white;
-}
-
-.cancel {
-    background-color: #ff5471;
-    width: 35%;
-    border: none;
-    color: white;
-}
-
 .button {
     width: 100%;
 }
