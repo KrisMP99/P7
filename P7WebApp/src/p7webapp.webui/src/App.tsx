@@ -52,7 +52,7 @@ function App() {
                     />
                 } />
             </Routes>
-            <Footer/>
+            {/* <Footer/> */}
             <CreateExerciseModal ref={openCreateExerciseModalRef} created={(newBoard: BoardModuleType[][])=>{ setBoardLayout(newBoard) }} />
             <CreateCourseModal ref={openCreateCourseModalRef}
             />

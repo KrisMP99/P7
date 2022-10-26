@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { Container, Table, Form, InputGroup, Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import {dummyData} from './dummyDataOwned';
 import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
 
+export interface CourseOverview {
+    id: number;
+    name: string;
+    exerciseAmount: number;
+    membersAmount: number;
+    owner: string;
+}
+
 interface OwnedCourseOverviewProps {
     openCreateCourseModal: React.RefObject<ShowModal>;
+    courses: CourseOverview[];
 }
 
 function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
@@ -52,14 +60,14 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                             </tr>
                         </thead>
                         <tbody>
-                        {dummyData.filter((item: { Course_name: string; }) => {
-                            return search.toLowerCase() === '' ? item : item.Course_name.toLowerCase().includes(search)
-                        }).map((item: { id: React.Key | null | undefined; Course_name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Exercises: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Members: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Owner: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) => (
+                        {props.courses.filter((item: { name: string; }) => {
+                            return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
+                        }).map((item: CourseOverview) => (
                             <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
-                                <td>{item.Course_name}</td>
-                                <td>{item.Exercises}</td>
-                                <td>{item.Members}</td>
-                                <td>{item.Owner}</td>
+                                <td>{item.name}</td>
+                                <td>{item.exerciseAmount}</td>
+                                <td>{item.membersAmount}</td>
+                                <td>{item.owner}</td>
                             </tr>
                         ))}
 
