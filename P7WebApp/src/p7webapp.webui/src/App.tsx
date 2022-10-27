@@ -26,7 +26,6 @@ function App() {
     return (
         <div className='main-container'>
             <Navbar />
-            {/* <button onClick={()=>{ openCreateExerciseModalRef.current?.handleShow() }}>Create Exercise</button> */}
             <Routes>
                 <Route path="/" element={
                     <div className="space-from-navbar">
@@ -49,7 +48,7 @@ function App() {
                 } />
                 <Route path="/course/:id" element={
                     <Course 
-                        user={{id: 0, name:'Kristian Morsing'}}
+                        user={{id: 1, name:'Kristian Morsing'}}
                         openCreateExerciseModalRef={openCreateExerciseModalRef}
                     />
                 } />
@@ -57,7 +56,6 @@ function App() {
             {/* <Footer/> */}
             <CreateCourseModal ref={openCreateCourseModalRef}
             />
-            <Footer/>
             <CreateExerciseModal ref={openCreateExerciseModalRef} created={(newBoard: BoardModuleType[][])=>{ 
                 setBoardLayout(newBoard);
                 navigator('/task/1');

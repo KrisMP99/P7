@@ -123,10 +123,10 @@ export default function Course(props: CourseProps) {
                             isOwner={isOwner}
                         />
                     </Tab>
-                    <Tab eventKey={'members'} title={'Members'}>
+                    <Tab eventKey={'members'} title={'Members'} tabClassName={!isOwner?'d-none':''}>
                         <p>Member overview here.</p>
                     </Tab>
-                    <Tab eventKey={'statistics'} title={'Statistics'}>
+                    <Tab eventKey={'statistics'} title={'Statistics'} tabClassName={!isOwner?'d-none':''}>
                         <p>Statistics overview here.</p>
                     </Tab>
                 </Tabs>
