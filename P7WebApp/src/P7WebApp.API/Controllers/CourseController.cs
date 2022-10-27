@@ -36,15 +36,15 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("{id}")]
-        public async Task<IActionResult> GetCourse(int id)
+        [Route("{courseId}")]
+        public async Task<IActionResult> CreateInviteCode(CreateInviteCommand request)
         {
             try
             {
-                var result = await _mediator.Send(new GetCourseQuery(id));
-                if (result == null)
+                var result = await _mediator.Send(request);
+                if(result == 0)
                 {
-                    return BadRequest($"Could not find course with id {id}");
+                    return BadRequest("Could not create invite code");
                 }
                 else
                 {
@@ -56,6 +56,29 @@ namespace P7WebApp.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("{courseId}")]
+        public async Task<IActionResult> GetCourse([FromRoute]int courseId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCourseQuery(courseId));
+                if (result == null)
+                {
+                    return BadRequest($"Could not find course with id {courseId}");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         
         [HttpPost]
         [Route("{id}")]
