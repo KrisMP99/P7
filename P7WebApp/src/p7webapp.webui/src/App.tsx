@@ -48,7 +48,7 @@ function App() {
                 } />
                 <Route path="/course/:id" element={
                     <Course 
-                        user={{id: 1, name:'Kristian Morsing'}}
+                        user={{id: 0, name:'Kristian Morsing'}}
                         openCreateExerciseModalRef={openCreateExerciseModalRef}
                     />
                 } />

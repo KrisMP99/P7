@@ -13,18 +13,19 @@ interface ExerciseOverviewProps {
     course: Course | null;
     openDeleteExerciseModalRef: React.RefObject<ShowDeleteConfirmModal>;
     isOwner: boolean;
+    isEditMode: boolean;
 }
 
 export default function ExerciseOverview(props: ExerciseOverviewProps) {
     const [course, setCourse] = useState<Course | null>(props.course);
     const [isOwner, setIsOwner] = useState<boolean>(props.isOwner);
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
     useEffect(() => {
         setCourse(props.course);
-    }, [props.course?.exerciseGroups, props.course?.exercises]);
-    useEffect(() => {
         setIsOwner(props.isOwner);
-    }, [props.isOwner]);
+        setIsEditMode(props.isEditMode);
+    }, [props.isOwner, props.isEditMode, props.course?.exerciseGroups, props.course?.exercises]);
 
     //Goes through every group and finds all exercises with a coresponding ID
     //Afterwards we create each group and places the exercises inside.
@@ -50,30 +51,32 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                         console.log("Opening exercise");
                     }}>
                         <div className='exercise-title'>{val.title}</div>
-                        <div className={'exercise-owner-container'} style={{ display: props.isOwner ? '' : 'none' }}>
-                            <Button onClick={(e) => {
-                                e.stopPropagation();
-                                let updatedExercises = course.exercises.map((ex) => {
-                                    if (ex.id === val.id) return { ...ex, isVisible: !ex.isVisible }
-                                    else return ex;
-                                })
-                                props.changeCourse({ ...course, exercises: updatedExercises })
-                            }}>
-                                {visibilityElement}
-                            </Button>
-                            <Button onClick={(e) => {
-                                e.stopPropagation();
-                                console.log("Opening exercise in edit mode");
-                            }}>
-                                <Pencil />
-                            </Button>
-                            <Button variant='danger' onClick={(e) => {
-                                e.stopPropagation();
-                                props.openDeleteExerciseModalRef.current?.handleShow(val.title, val.id, DeleteElementType.EXERCISE);
-                            }}>
-                                <Trash />
-                            </Button>
-                        </div>
+                        {isOwner && isEditMode &&
+                            <div className={'exercise-owner-container'}>
+                                <Button onClick={(e) => {
+                                    e.stopPropagation();
+                                    let updatedExercises = course.exercises.map((ex) => {
+                                        if (ex.id === val.id) return { ...ex, isVisible: !ex.isVisible }
+                                        else return ex;
+                                    })
+                                    props.changeCourse({ ...course, exercises: updatedExercises })
+                                }}>
+                                    {visibilityElement}
+                                </Button>
+                                <Button onClick={(e) => {
+                                    e.stopPropagation();
+                                    console.log("Opening exercise in edit mode");
+                                }}>
+                                    <Pencil />
+                                </Button>
+                                <Button variant='danger' onClick={(e) => {
+                                    e.stopPropagation();
+                                    props.openDeleteExerciseModalRef.current?.handleShow(val.title, val.id, DeleteElementType.EXERCISE);
+                                }}>
+                                    <Trash />
+                                </Button>
+                            </div>
+                        }
                     </div>
                 )
             });
@@ -95,7 +98,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                                 readOnly={!props.isOwner}
                             />
                         </AccordionHeader>
-                        {props.isOwner &&
+                        {isOwner && isEditMode &&
                             (<div>
                                 <Button className={'btn-2'} onClick={(e) => {
                                     e.stopPropagation();

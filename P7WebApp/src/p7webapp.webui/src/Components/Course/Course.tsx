@@ -7,7 +7,7 @@ import './Course.css';
 import { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import ExerciseOverview from './ExerciseOverview/ExerciseOverview';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../Modals/DeleteConfirmModal/DeleteConfirmModal';
-import { Plus } from 'react-bootstrap-icons';
+import { Gear, Plus } from 'react-bootstrap-icons';
 
 export interface ExerciseGroup {
     id: number;
@@ -37,7 +37,9 @@ interface CourseProps {
 
 export default function Course(props: CourseProps) {
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
+    const [editedCourse, setEditedCourse] = useState<Course | null>(null);
     const [isOwner, setIsOwner] = useState<boolean>(false);
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [course, setCourse] = useState<Course | null>(null);
 
     //DUMMY DATA:
@@ -67,46 +69,71 @@ export default function Course(props: CourseProps) {
             setIsOwner(true);
         }
         setCourse({ title: 'Course Title', description: 'Course description very specific to course', exerciseGroups: exGroups, exercises: ex, ownerId: 0 });
+        setEditedCourse(course);
     }, [course?.ownerId]);
-
     return (
         <Container>
             <div className='course-title-container'>
                 <input
                     className='input-field course-title'
-                    value={course ? course.title : 'Title'}
+                    value={editedCourse ? editedCourse.title : 'Title'}
                     onChange={(e) => {
-                        if (course && e.target.value !== course?.title) {
-                            setCourse({ ...course, title: e.target.value });
+                        if (editedCourse && e.target.value !== editedCourse?.title) {
+                            setEditedCourse({ ...editedCourse, title: e.target.value });
                         }
                     }}
-                    readOnly={!isOwner}
+                    readOnly={!isEditMode}
                 />
             </div>
+            {isOwner && (
+                <div>
+                    {isEditMode && 
+                        <>
+                            <Button className='btn-1' variant='success' onClick={()=> {
+                                setCourse(editedCourse);
+                                setIsEditMode(false);
+                            }}>
+                                Save Changes
+                            </Button>
+                            <Button onClick={()=> {
+                                setEditedCourse(course);
+                                setIsEditMode(false);
+                            }}>
+                                Cancel
+                            </Button>
+                        </>
+                    }                
+                    {!isEditMode &&
+                        <Button style={{height:'50px', width:'50px'}} onClick={()=>setIsEditMode(true)}>
+                            <Gear/>
+                        </Button>
+                    }
+                </div>
+            )}
             <div className='course-description-container'>
                 <textarea
                     className='text-area'
-                    value={course ? course.description : 'Description here'}
+                    value={editedCourse ? editedCourse.description : 'Description here'}
                     onChange={(e) => {
-                        if (course && e.target.value !== course?.description) {
-                            setCourse({ ...course, description: e.target.value });
+                        if (editedCourse && e.target.value !== editedCourse?.description) {
+                            setEditedCourse({ ...editedCourse, description: e.target.value });
                         }
                     }}
-                    readOnly={!isOwner}
+                    readOnly={!isEditMode}
                 />
             </div>
             <div className='course-exercises-container'>
                 <Tabs defaultActiveKey={'exercises'} fill={isOwner}>
                     <Tab eventKey={'exercises'} title={'Exercises'}>
-                        <div className={'d-flex' + (isOwner?'':' d-none')}>
+                        <div className={'d-flex' + (isEditMode?'':' d-none')}>
                             <Button className={'create-btns'} onClick={() => {
-                                let groups = [...course?.exerciseGroups!,
+                                let groups = [...editedCourse?.exerciseGroups!,
                                 {
-                                    id: Math.max(...course!.exerciseGroups?.map(o => o.id), 0) + 1,
+                                    id: Math.max(...editedCourse!.exerciseGroups?.map(o => o.id), 0) + 1,
                                     title: 'New group added',
                                     isVisible: true
                                 }];
-                                setCourse({ ...course!, exerciseGroups: groups });
+                                setEditedCourse({ ...editedCourse!, exerciseGroups: groups });
                             }}>
                                 <Plus/>ExerciseGroup
                             </Button>
@@ -117,10 +144,11 @@ export default function Course(props: CourseProps) {
                             </Button>
                         </div>
                         <ExerciseOverview
-                            course={course}
-                            changeCourse={(newCourse: Course) => { setCourse(newCourse) }}
+                            course={editedCourse}
+                            changeCourse={(newCourse: Course) => { setEditedCourse(newCourse) }}
                             openDeleteExerciseModalRef={openDeleteExerciseModalRef}
                             isOwner={isOwner}
+                            isEditMode={isEditMode}
                         />
                     </Tab>
                     <Tab eventKey={'members'} title={'Members'} tabClassName={!isOwner?'d-none':''}>
@@ -134,14 +162,14 @@ export default function Course(props: CourseProps) {
             <DeleteConfirmModal 
                 ref={openDeleteExerciseModalRef} 
                 confirmDelete={(id: number, type: DeleteElementType) => {
-                    if(course) {
+                    if(editedCourse) {
                         if(type === DeleteElementType.EXERCISE) {
-                            let newExercises = course.exercises.filter((ex) => ex.id !== id);
-                            setCourse({...course, exercises: newExercises});
+                            let newExercises = editedCourse.exercises.filter((ex) => ex.id !== id);
+                            setEditedCourse({...editedCourse, exercises: newExercises});
                         }
                         else if (type === DeleteElementType.EXERCISEGROUP) {
-                            let newExerciseGroups = course.exerciseGroups.filter((group) => group.id !== id)
-                            setCourse({...course, exerciseGroups: newExerciseGroups});
+                            let newExerciseGroups = editedCourse.exerciseGroups.filter((group) => group.id !== id)
+                            setEditedCourse({...editedCourse, exerciseGroups: newExerciseGroups});
                         }
                     }
                 }} 
