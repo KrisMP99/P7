@@ -1,0 +1,50 @@
+﻿using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+using P7WebApp.Domain.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace P7WebApp.Infrastructure.Repositories
+{
+    public class CourseRepository : ICourseRepository
+    {
+        public async Task<int> AddCourse(Course course)
+        {
+            return 1;
+        }
+
+        public async Task<Course> GetCourse(int id)
+        {
+            return new Course() { Id = id};
+        }
+
+        public async Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
+        {
+            return new Course() { Id = 1, ExerciseGroups = new List<ExerciseGroup>() { new ExerciseGroup() { Id = 1, Exercises = new List<Exercise>() { new Exercise() { Id = 1 } } } } };
+        }
+
+        public async Task<Exercise> GetExercise(int id)
+        {
+            return new Exercise() { Id = id };
+        }
+
+        public async Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id)
+        {
+            return new List<ExerciseGroup>().AsEnumerable(); 
+        }
+
+        public async Task<int> UpdateCourse(Course course)
+        {
+            return 1;
+        }
+
+        // Not implemented yet
+        //public async Task<ExerciseStatistics> GetExerciseStatistics()
+        //{
+        //    return new ExerciseStatistics();
+        //}
+    }
+}

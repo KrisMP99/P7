@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import './App.css';
 import Footer from './Components/Footer/Footer';
 import Navbar from './Components/Navbar/Navbar';
-import { Routes, Route, useNavigate  } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
 import ExerciseBoard, { BoardModuleType } from './Components/ExerciseBoard/ExerciseBoard';
@@ -21,6 +21,7 @@ function App() {
     const openCreateCourseModalRef = useRef<ShowModal>(null);
     const [boardLayout, setBoardLayout] = useState<BoardModuleType[][]>([[BoardModuleType.ExerciseDescription]]);
     const [user, setUser] = useState<User | null>(null);
+    const navigator = useNavigate();
 
     return (
         <div className='main-container'>
@@ -49,13 +50,18 @@ function App() {
                 <Route path="/course/:id" element={
                     <Course 
                         user={{id: 0, name:'Kristian Morsing'}}
+                        openCreateExerciseModalRef={openCreateExerciseModalRef}
                     />
                 } />
             </Routes>
             {/* <Footer/> */}
-            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(newBoard: BoardModuleType[][])=>{ setBoardLayout(newBoard) }} />
             <CreateCourseModal ref={openCreateCourseModalRef}
             />
+            <Footer/>
+            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(newBoard: BoardModuleType[][])=>{ 
+                setBoardLayout(newBoard);
+                navigator('/task/1');
+            }} />
         </div>
     );
 }
