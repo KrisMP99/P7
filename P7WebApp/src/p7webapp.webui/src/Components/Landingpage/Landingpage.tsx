@@ -1,103 +1,141 @@
-import React, { useState } from 'react';
-import { Container, Table, Form, InputGroup} from 'react-bootstrap';
-import { NavigateOptions, Route, Routes, useNavigate } from 'react-router-dom';
-import Course from '../Course/Course';
-import {dummyData} from './dummyData.js';
-import Modal from '../Modals/CreateExerciseModal/CreateCourseModal';
-import useModal from '../Modals/CreateExerciseModal/useModal';
-import './Landingpage.css';
+import React, { useRef, useState } from 'react';
+import { Container, Form, Pagination } from 'react-bootstrap';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import OwnedCourseOverview, { CourseOverview } from './LandingpageModules/OwnedCourseOverview';
+import AttendeeCourseOverview from './LandingpageModules/AttendeeCourseOverview';
+import CreateCourseModal from '../Modals/CreateCourseModal/CreateCourseModal';
+import { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
+import { dummyDataOwned } from './dummyDataOwned';
+import { dummyDataAttendee } from './dummyDataAttendee';
 
-function Landingpage(): JSX.Element {
-    const [search, setSearch] = useState('')
-    const { isOpen, toggle } = useModal();
-    console.log(search)
-    const navigate = useNavigate();
+export function Landingpage(): JSX.Element {
+    const openCreateCourseModal = useRef<ShowModal>(null);
+
+    const [ownedCourses, setOwnedCourses] = useState<CourseOverview[]>(dummyDataOwned);
+    const [attendedCourses, setAttendedCourses] = useState<CourseOverview[]>(dummyDataAttendee);
+
+    const [ownedCoursesCurrentPage, setOwnedCoursesCurrentPage] = useState<number>(0);
+    const [attendedCoursesCurrentPage, setAttendedCoursesCurrentPage] = useState<number>(0);
+
+    const [ownedCoursesPerPage, setOwnedCoursesPerPage] = useState<number>(10);
+    const [attendedCoursesPerPage, setAttendedCoursesPerPage] = useState<number>(10);
+
     return (
         <Container>
-            <Modal isOpen={isOpen} toggle={toggle}>
-                <div className='d-flex justify-content-center'>
-                    <div className="col-6 create-course-wrapper">
-                        <div>
-                            <h1>Create course!</h1>
-                        </div>
-                        <form>
-                            <div className="row mt-3">
-                                <label>Course name:</label>
-                                <input className='rounded' type="text" />
-                            </div>
+            <div className='tabs-container'>
+                <Tabs
+                    defaultActiveKey="My courses"
+                    id="fill-tab-example"
+                    className="mb-3 mt-3"
+                    fill>
+                    <Tab eventKey="My courses" title="My courses">
+                        <OwnedCourseOverview
+                            openCreateCourseModal={openCreateCourseModal}
+                            courses={ownedCourses}
+                        />
+                    </Tab>
+                    <Tab eventKey="Attending courses" title="Attending courses">
+                        <AttendeeCourseOverview
+                            courses={attendedCourses}
+                        />
 
-                            <div className="row mt-3">
-                                <label>Course description:</label>
-                                <input className='rounded' type="text" />
-                            </div>
-
-                            <div className="row mt-3">
-                                <label>Add Teaching Assistants:</label>
-                                <input className='rounded' type="text" />
-                            </div>
-
-                            <div className="row mt-5">
-                                <div className='col-6'>
-                                    <input className="button rounded create" type="submit" value="Create course" />
-                                </div>
-                                <div className='col-6'>
-                                    <input className="button rounded cancel" type="submit" value="Cancel" onClick={toggle} />
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </Modal>
-
-            <div className="row justify-content-center">
-                <h1 className='text-center mt-4'>Find Courses</h1>
-
-                <div className='row col-7'>
-                    <Form>
-                        <InputGroup className='my-3'>
-                            <Form.Control onChange={(e) => setSearch(e.target.value.toLowerCase())} placeholder='Search for course name'/>
-                        </InputGroup>
-                    </Form>
-                </div>
-                
-                <div className='row col-9 m-2'>
-                    <div className='col text-start'>
-                        <h3>My courses</h3>
-                    </div>
-                    <div className="col text-end"> 
-                        <button className="rounded p-2 create-course" onClick={toggle}>Create course</button>
-                    </div>
-                </div>
-
-                <div className='col-9'>
-                <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>Course name</th>
-                        <th>Exercises</th>
-                        <th>Members</th>
-                        <th>Owner</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {dummyData.filter((item: { Course_name: string; }) => {
-                    return search.toLowerCase() === '' ? item : item.Course_name.toLowerCase().includes(search)
-                }).map((item: { id: React.Key | null | undefined; Course_name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Exercises: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Members: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; Owner: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) => (
-                    <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
-                        <td>{item.Course_name}</td>
-                        <td>{item.Exercises}</td>
-                        <td>{item.Members}</td>
-                        <td>{item.Owner}</td>
-                    </tr>
-                ))}
-
-                </tbody>
-            </Table>
-                </div>
+                    </Tab>
+                </Tabs>
             </div>
-            
+            <CreateCourseModal ref={openCreateCourseModal} />
         </Container>
     );
 }
+
+// interface ListPaginationProps {
+
+// }
+
+// function ListPagination(courses: CourseOverview, currentPage: number, elementsPerPage: number) {
+//     const
+
+//     return (
+//         <div style={{ display: 'flex', justifyContent: 'center' }}>
+//             <Pagination>
+//                 <Pagination.Prev disabled={currentPage <= 0} onClick={() => this.setState({ currentPage: this.state.currentPage - 1 })} />
+
+//                 <Pagination.Item active={this.state.currentPage === 0}
+//                     onClick={() => {
+//                         if (this.state.currentPage !== 0)
+//                             this.setState({ currentPage: 0 });
+//                     }}>
+//                     {1}
+//                 </Pagination.Item>
+
+//                 {this.state.currentPage >= 3 && <Pagination.Ellipsis disabled />}
+
+//                 {this.state.currentPage === this.state.maxPages - 1 && this.state.maxPages > 3 &&
+//                     <Pagination.Item
+//                         onClick={() => {
+//                             this.setState({ currentPage: this.state.currentPage - 2 });
+//                         }}>
+//                         {this.state.currentPage - 1}
+//                     </Pagination.Item>}
+
+//                 {this.state.currentPage >= 2 &&
+//                     <Pagination.Item
+//                         onClick={() => {
+//                             this.setState({ currentPage: this.state.currentPage - 1 });
+//                         }}>
+//                         {this.state.currentPage}
+//                     </Pagination.Item>}
+
+//                 {this.state.currentPage !== 0 && this.state.currentPage !== this.state.maxPages - 1 && this.state.maxPages !== 1 &&
+//                     <Pagination.Item
+//                         active
+//                         onClick={() => { }}>
+//                         {this.state.currentPage + 1}
+//                     </Pagination.Item>}
+
+//                 {this.state.currentPage < this.state.maxPages - 2 &&
+//                     <Pagination.Item
+//                         onClick={() => {
+//                             this.setState({ currentPage: this.state.currentPage + 1 });
+//                         }}>
+//                         {this.state.currentPage + 2}
+//                     </Pagination.Item>}
+
+//                 {this.state.currentPage === 0 && this.state.maxPages > 3 &&
+//                     <Pagination.Item
+//                         onClick={() => {
+//                             this.setState({ currentPage: this.state.currentPage + 2 });
+//                         }}>
+//                         {this.state.currentPage + 3}
+//                     </Pagination.Item>}
+
+//                 {this.state.currentPage < this.state.maxPages - 3 && <Pagination.Ellipsis disabled />}
+
+//                 {this.state.maxPages !== 1 &&
+//                     <Pagination.Item active={this.state.currentPage === this.state.maxPages - 1}
+//                         onClick={() => {
+//                             this.setState({ currentPage: this.state.maxPages - 1 });
+//                         }}>
+//                         {this.state.maxPages}
+//                     </Pagination.Item>}
+
+//                 <Pagination.Next disabled={this.state.currentPage >= this.state.maxPages - 1} onClick={() => this.setState({ currentPage: this.state.currentPage + 1 })} />
+//             </Pagination>
+//             <div style={{ marginLeft: '5px', height: '33.5px' }}>
+//                 <Form.Select size="sm" style={{ height: '100%' }} value={this.state.licensePerPage}
+//                     onChange={(e) => {
+//                         this.setState({ licensePerPage: Number(e.target.value), maxPages: Math.ceil(this.state.visibleLicenses!.length / Number(e.target.value)), currentPage: 0 });
+//                     }
+//                     }>
+//                     <option value={5}>5 per page</option>
+//                     <option value={10}>10 per page</option>
+//                     <option value={25}>25 per page</option>
+//                     <option value={50}>50 per page</option>
+//                     <option value={100}>100 per page</option>
+//                 </Form.Select>
+//             </div>
+//         </div>
+//     );
+// }
 
 export default Landingpage;

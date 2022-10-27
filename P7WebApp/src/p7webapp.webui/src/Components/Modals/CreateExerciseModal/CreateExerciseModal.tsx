@@ -25,7 +25,7 @@ export const CreateExerciseModal = forwardRef<ShowModal, CreateExerciseModalProp
                 setShow(true);
             }
         }),
-    )
+    );
 
     let rows: JSX.Element[] = [];
     let rowTables: JSX.Element[] = [];
