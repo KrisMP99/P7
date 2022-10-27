@@ -11,6 +11,7 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int OwnerId { get; set; }
+        public InviteCode? InviteCode { get; set; }
         public List<ExerciseGroup> ExerciseGroups { get; set; }
 
         public void UpdateInformation(string newTitle, string newDescription, bool newVisibility)
@@ -36,6 +37,44 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
                 }
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void CreateInviteCode(InviteCode invitecode)
+        {
+            try
+            {
+                if(invitecode is not null)
+                {
+                    InviteCode = invitecode;
+                }
+                else
+                {
+                    throw new Exception("Could not create the invite code");
+                }    
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        public void AddExerciseGroup(ExerciseGroup exercisegroup)
+        {
+            try
+            {
+                if(exercisegroup is not null)
+                {
+                    ExerciseGroups.Add(exercisegroup);
+                }
+                else
+                {
+                    throw new Exception("Could not add the exercisegroup to the course (exercisegroup is null)");
+                }
+            }
+            catch(Exception)
             {
                 throw;
             }

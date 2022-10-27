@@ -26,7 +26,7 @@ namespace P7WebApp.API.Controllers
                 }
                 else
                 {
-                    return Ok("Create Course");
+                    return Ok();
                 }
 			}
 			catch (Exception ex)
@@ -41,10 +41,10 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                var result = _mediator.Send(new GetCourseQuery(id));
+                var result = await _mediator.Send(new GetCourseQuery(id));
                 if (result == null)
                 {
-                    return BadRequest("Didn't find course");
+                    return BadRequest($"Could not find course with id {id}");
                 }
                 else
                 {
@@ -66,7 +66,7 @@ namespace P7WebApp.API.Controllers
                 var result = await _mediator.Send(request);
                 if (result == 0)
                 {
-                    return BadRequest("Couldn't update the course");
+                    return BadRequest("Could not update the course");
                 }
                 else
                 {
@@ -78,21 +78,45 @@ namespace P7WebApp.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
-                
+
+
+
         [HttpPost]
-        [Route("{id}/exercise-groups")]
-        public async Task<IActionResult> GetExerciseGroups(int id)
+        [Route("{courseId}/exercise-groups")]
+        public async Task<IActionResult> GetExerciseGroups([FromRoute]int courseId)
         {
             try
             {
-                var result = await _mediator.Send(new GetExerciseGroupsQuery(id));
+                var result = await _mediator.Send(new GetExerciseGroupsQuery(courseId));
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddExerciseGroup(CreateExerciseGroupCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if(result == 0)
+                {
+                    return BadRequest("Could not create/add the exercise group to the course.");
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpPost]

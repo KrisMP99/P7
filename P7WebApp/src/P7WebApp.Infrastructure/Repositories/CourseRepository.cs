@@ -1,17 +1,19 @@
-﻿using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+﻿using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
 using P7WebApp.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
+using P7WebApp.Infrastructure.Data;
 
 namespace P7WebApp.Infrastructure.Repositories
 {
     public class CourseRepository : ICourseRepository
     {
-        public async Task<int> AddCourse(Course course)
+        private readonly IApplicationDbContext _context;
+        public CourseRepository(IApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<int> CreateCourse(Course course)
         {
             return 1;
         }
@@ -40,11 +42,5 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             return 1;
         }
-
-        // Not implemented yet
-        //public async Task<ExerciseStatistics> GetExerciseStatistics()
-        //{
-        //    return new ExerciseStatistics();
-        //}
     }
 }
