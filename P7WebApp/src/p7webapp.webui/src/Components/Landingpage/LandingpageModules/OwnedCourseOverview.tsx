@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Table, Form, InputGroup, Button} from 'react-bootstrap';
+import { Container, Table, Form, InputGroup, Button, Pagination} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
@@ -21,9 +21,9 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
+    const [maxPages, setMaxPages] = useState<number>(1);
 
     return (
         <Container>
@@ -62,7 +62,7 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                         <tbody>
                         {props.courses.filter((item: { name: string; }) => {
                             return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
-                        }).map((item: CourseOverview) => (
+                        }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
                             <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
                                 <td>{item.name}</td>
                                 <td>{item.exerciseAmount}</td>
@@ -75,7 +75,87 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                     </Table>
                 </div>
             </div>
-            
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Pagination>
+                    <Pagination.Prev disabled={currentPage <= 0} onClick={() => setCurrentPage(currentPage - 1)} />
+
+                    <Pagination.Item active={currentPage === 0}
+                        onClick={() => {
+                            if (currentPage !== 0)
+                                setCurrentPage(0);
+                        }}>
+                        {1}
+                    </Pagination.Item>
+
+                    {currentPage >= 3 && <Pagination.Ellipsis disabled />}
+
+                    {currentPage === maxPages - 1 && maxPages > 3 &&
+                        <Pagination.Item
+                            onClick={() => {
+                                setCurrentPage(currentPage - 2)
+                            }}>
+                            {currentPage - 1}
+                        </Pagination.Item>}
+
+                    {currentPage >= 2 &&
+                        <Pagination.Item
+                            onClick={() => {
+                                setCurrentPage(currentPage - 1)
+                            }}>
+                            {currentPage}
+                        </Pagination.Item>}
+
+                    {currentPage !== 0 && currentPage !== maxPages - 1 && maxPages !== 1 &&
+                        <Pagination.Item
+                            active
+                            onClick={() => { }}>
+                            {currentPage + 1}
+                        </Pagination.Item>}
+
+                    {currentPage < maxPages - 2 &&
+                        <Pagination.Item
+                            onClick={() => {
+                                setCurrentPage(currentPage + 1);
+                            }}>
+                            {currentPage + 2}
+                        </Pagination.Item>}
+
+                    {currentPage === 0 && maxPages > 3 &&
+                        <Pagination.Item
+                            onClick={() => {
+                                setCurrentPage(currentPage + 2);
+                            }}>
+                            {currentPage + 3}
+                        </Pagination.Item>}
+
+                    {currentPage < maxPages - 3 && <Pagination.Ellipsis disabled />}
+
+                    {maxPages !== 1 &&
+                        <Pagination.Item active={currentPage === maxPages - 1}
+                            onClick={() => {
+                                setCurrentPage(maxPages - 1);
+                            }}>
+                            {maxPages}
+                        </Pagination.Item>}
+
+                    <Pagination.Next disabled={currentPage >= maxPages - 1} onClick={() => setCurrentPage(currentPage + 1)} />
+                </Pagination>
+                <div style={{ marginLeft: '5px', height: '33.5px' }}>
+                    <Form.Select size="sm" style={{ height: '100%' }} value={coursesPerPage}
+                        onChange={(e) => {
+                            setCoursesPerPage(Number(e.target.value));
+                            setMaxPages(Math.ceil(props.courses!.length / Number(e.target.value)))
+                            setCurrentPage(0);
+                        }
+                        }>
+                        <option value={5}>5 per page</option>
+                        <option value={10}>10 per page</option>
+                        <option value={25}>25 per page</option>
+                        <option value={50}>50 per page</option>
+                        <option value={100}>100 per page</option>
+                    </Form.Select>
+                </div>
+            </div>
         </Container>
     );
 }

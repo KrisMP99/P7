@@ -11,9 +11,13 @@ interface AttendedCourseOverviewProps {
 function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element {
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [coursesPerPage, setCoursesPerPage] = useState<number>(10);
+    const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
     const [maxPages, setMaxPages] = useState<number>(1);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setMaxPages(Math.ceil(props.courses.length / coursesPerPage));
+    }, [props.courses.length, coursesPerPage]);
 
     return (
         <Container>
@@ -47,7 +51,7 @@ function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element
                         <tbody>
                             {props.courses.filter((item: { name: string; }) => {
                                 return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
-                            }).map((item: CourseOverview) => (
+                            }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
                                 <tr key={item.id} onClick={() => { navigate('/course/' + item.id) }}>
                                     <td>{item.name}</td>
                                     <td>{item.exerciseAmount}</td>
@@ -67,7 +71,7 @@ function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element
                     <Pagination.Item active={currentPage === 0}
                         onClick={() => {
                             if (currentPage !== 0)
-                                setCurrentPage(currentPage - 0)
+                                setCurrentPage(0);
                         }}>
                         {1}
                     </Pagination.Item>
