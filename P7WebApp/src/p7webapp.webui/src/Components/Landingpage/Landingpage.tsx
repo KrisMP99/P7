@@ -33,6 +33,7 @@ export function Landingpage(): JSX.Element {
                         <OwnedCourseOverview
                             openCreateCourseModal={openCreateCourseModal}
                             courses={ownedCourses}
+                            deletedCourse={(courses: CourseOverview[]) => setOwnedCourses(courses)}
                         />
                     </Tab>
                     <Tab eventKey="Attending courses" title="Attending courses">
