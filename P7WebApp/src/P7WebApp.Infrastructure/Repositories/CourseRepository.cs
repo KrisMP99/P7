@@ -1,14 +1,15 @@
 ﻿using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
 using P7WebApp.Domain.Repositories;
-using P7WebApp.Infrastructure.Data;
+using P7WebApp.Infrastructure.Persistence.Repositories;
 
 namespace P7WebApp.Infrastructure.Repositories
 {
-    public class CourseRepository : ICourseRepository
+    public class CourseRepository : Repository<Course>, ICourseRepository
     {
         private readonly IApplicationDbContext _context;
-        public CourseRepository(IApplicationDbContext context)
+
+        public CourseRepository(IApplicationDbContext context) : base(context)
         {
             _context = context;
         }
