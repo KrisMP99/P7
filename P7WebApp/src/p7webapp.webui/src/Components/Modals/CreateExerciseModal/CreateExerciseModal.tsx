@@ -128,7 +128,7 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
                         Close
                     </Button>
                     <Button variant="primary" type='submit'>
-                        Save Changes
+                        Create
                     </Button>
                 </Modal.Footer>
             </form>
