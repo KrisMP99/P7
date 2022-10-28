@@ -5,8 +5,8 @@ import Navbar from './Components/Navbar/Navbar';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
-import ExerciseBoard, { BoardModuleType } from './Components/ExerciseBoard/ExerciseBoard';
-import CreateExerciseModal, { ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
+import ExerciseBoard, { ModuleType } from './Components/ExerciseBoard/ExerciseBoard';
+import CreateExerciseModal, { Layout, LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import CreateCourseModal from './Components/Modals/CreateCourseModal/CreateCourseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
 import Course from './Components/Course/Course';
@@ -19,7 +19,7 @@ export interface User {
 function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
     const openCreateCourseModalRef = useRef<ShowModal>(null);
-    const [boardLayout, setBoardLayout] = useState<BoardModuleType[][]>([[BoardModuleType.ExerciseDescription]]);
+    const [boardLayout, setBoardLayout] = useState<Layout>({layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0});
     const [user, setUser] = useState<User | null>(null);
     const navigator = useNavigate();
 
@@ -37,10 +37,11 @@ function App() {
                         <SignUp />
                     </div>
                 } />
-                <Route path="/task/1" element={
+                <Route path="/exercise/:id" element={
                     <ExerciseBoard 
-                        creatorMode={false}
+                        editMode={false}
                         boardLayout={boardLayout}
+                        
                     />
                 } />
                 <Route path="/landingpage" element={
@@ -56,9 +57,9 @@ function App() {
             {/* <Footer/> */}
             <CreateCourseModal ref={openCreateCourseModalRef}
             />
-            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(newBoard: BoardModuleType[][])=>{ 
-                setBoardLayout(newBoard);
-                navigator('/task/1');
+            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: Layout)=>{ 
+                setBoardLayout(layout);
+                navigator('/exercise/1');
             }} />
         </div>
     );

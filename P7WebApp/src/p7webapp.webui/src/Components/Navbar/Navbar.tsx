@@ -19,7 +19,7 @@ function Navbar(): JSX.Element {
                             <NavLink className="nav-link" to={'/signup'}>Signup</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link" to={'/task/1'}>Exercise</NavLink>
+                            <NavLink className="nav-link" to={'/exercise/1'}>Exercise</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" to={'/landingpage'}>Landingpage</NavLink>
