@@ -5,7 +5,7 @@ import Navbar from './Components/Navbar/Navbar';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
-import ExerciseBoard, { ModuleType } from './Components/ExerciseBoard/ExerciseBoard';
+import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
 import CreateExerciseModal, { Layout, LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import CreateCourseModal from './Components/Modals/CreateCourseModal/CreateCourseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
@@ -20,7 +20,7 @@ function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
     const openCreateCourseModalRef = useRef<ShowModal>(null);
     const [boardLayout, setBoardLayout] = useState<Layout>({layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0});
-    const [user, setUser] = useState<User | null>(null);
+    // const [user, setUser] = useState<User | null>(null);
     const navigator = useNavigate();
 
     return (
@@ -59,7 +59,7 @@ function App() {
             />
             <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: Layout)=>{ 
                 setBoardLayout(layout);
-                navigator('/exercise/1');
+                navigator('/exercise/-1');
             }} />
         </div>
     );

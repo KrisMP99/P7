@@ -1,7 +1,8 @@
-import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
-import { Modal, Button, Table, Form } from 'react-bootstrap';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 import '../../../App.css';
 import { ModuleType } from '../../ExerciseBoard/ExerciseBoard';
+import { getModuleOptions } from '../CreateExerciseModal/CreateExerciseModal';
 
 interface ChangeModuleModalProps {
     changedModule: (module: ModuleType, index: number[]) => void;
@@ -12,7 +13,6 @@ export interface ShowChangeModuleModalRef {
 
 export const ChangeModuleModal = forwardRef<ShowChangeModuleModalRef, ChangeModuleModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
-    const [updateModule, setUpdateModule] = useState<ModuleType>();
     const [module, setModule] = useState<ModuleType>(ModuleType.EMPTY);
     const [index, setIndex] = useState<number[]>([])
 
@@ -37,14 +37,14 @@ export const ChangeModuleModal = forwardRef<ShowChangeModuleModalRef, ChangeModu
                 handleClose();
             }}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Create Exercise Group:</Modal.Title>
+                    <Modal.Title>Change Ecercise Module:</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3 modal-form-field">
                         <Form.Label>Module:</Form.Label>
-                        <Form.Select>
-                            <option value={ModuleType.EMPTY} selected>Open this select menu</option>
-                            <option value={ModuleType.EXERCISE_DESCRIPTION}>One</option>
+                        <Form.Select onChange={(e) => setModule(Number(e.target.value))} value={module}>
+                            <option value={ModuleType.EMPTY}>{getModuleOptions(ModuleType.EMPTY)}</option>
+                            <option value={ModuleType.EXERCISE_DESCRIPTION}>{getModuleOptions(ModuleType.EXERCISE_DESCRIPTION)}</option>
                         </Form.Select>
                     </Form.Group>
                 </Modal.Body>

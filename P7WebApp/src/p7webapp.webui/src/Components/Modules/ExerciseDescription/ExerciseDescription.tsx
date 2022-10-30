@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
+import { ModuleType } from '../../ExerciseBoard/ExerciseBoard';
+import { ShowChangeModuleModalRef } from '../../Modals/ChangeModuleModal/ChangeModuleModal';
 import '../Module.css';
+import ModuleActionBar from '../ModuleActionBar/ModuleActionBar';
 import './ExerciseDescription.css';
 
 interface ExerciseDescriptionProps {
-    exerciseID: number;
-    title: string;
-    body: string;
+    changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef>;
+    index: number[];
+    isOwner: boolean;
 }
 
-export default function ExerciseDescriptionModule() {
+export default function ExerciseDescriptionModule(props: ExerciseDescriptionProps) {
     
-    const [bodyText, setBodyText] = useState('');
-    const [titleText, setTitle] = useState('');
+    const [bodyText, setBodyText] = useState('Description here...');
+    const [titleText, setTitle] = useState('Title here...');
     const [editMode, setEditMode] = useState(false);
 
     let editModePanel = (
@@ -30,7 +33,11 @@ export default function ExerciseDescriptionModule() {
     return (
         <>
             <div id='exercise-description-container' className='module-container'>
-                <button onClick={()=>setEditMode(!editMode)}>Edit</button>
+                {<ModuleActionBar 
+                    changeModule={()=>props.changeModuleModalRef.current?.handleShow(ModuleType.EXERCISE_DESCRIPTION, props.index)}
+                    changeEditMode={()=>setEditMode(!editMode)}
+                />}
+                {/* <button onClick={()=>setEditMode(!editMode)}>Edit</button> */}
                 {editMode ? editModePanel :
                  <div className='exercise-description-content'>
                     <p className='exercise-description-title'>{titleText}</p>

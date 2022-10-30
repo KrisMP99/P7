@@ -1,10 +1,9 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { Modal, Button, Table, Form } from 'react-bootstrap';
-import { ExerciseGroup } from '../../Course/Course';
 import '../../../App.css';
 
 interface CreateExerciseGroupModalProps {
-    
+    updateExerciseGroups: (dummyTitle: string, dummyVisibility: boolean) => void;
 }
 export interface ShowCreateExerciseGroupModal {
     handleShow: () => void;
@@ -22,6 +21,8 @@ export const CreateExerciseGroupModal = forwardRef<ShowCreateExerciseGroupModal,
         () => ({
             handleShow() {
                 setShow(true);
+                setTitle('');
+                setVisible(true);
             }
         }),
     )
@@ -30,7 +31,8 @@ export const CreateExerciseGroupModal = forwardRef<ShowCreateExerciseGroupModal,
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => { 
                 e.preventDefault();
-                console.log(title);
+                //WIP - POST TO CREATE EXERCISEGROUP
+                props.updateExerciseGroups(title, visible);
                 handleClose();
             }}>
                 <Modal.Header closeButton>

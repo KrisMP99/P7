@@ -1,11 +1,8 @@
 import { Allotment } from 'allotment';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { Routes } from 'react-router-dom';
-import { Route } from 'react-router-dom';
-import Course from '../Course/Course';
 import ChangeModuleModal, { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
-import { Layout, LayoutType } from '../Modals/CreateExerciseModal/CreateExerciseModal';
+import { Layout } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import EmptyModule from '../Modules/EmptyModule/EmptyModule';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import './ExerciseBoard.css';
@@ -24,18 +21,17 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     const params = useParams();
     const changeModuleModalRef = useRef<ShowChangeModuleModalRef>(null);
     const [modules, setModules] = useState<ModuleType[][]>([[ModuleType.EMPTY]]);
-    const [exerciseId, setExerciseId] = useState<number>(Number(params.id));
+    // const [exerciseId, setExerciseId] = useState<number>(Number(params.id));
 
     useEffect(() => {
-        //Fetch the exercise and set the module to the result
+        //WIP - Fetch the exercise and set the module to the result
         // setModules()
-        setExerciseId(Number(params.id));
+        // setExerciseId(Number(params.id));
         handleSetModules(props.boardLayout);
         
-    }, [params.id, props.boardLayout.layoutType, props.boardLayout.leftRows, props.boardLayout.rightRows])
+    }, [params.id, props.boardLayout.layoutType, props.boardLayout.leftRows, props.boardLayout.rightRows]);
 
     const handleSetModules = (layout: Layout) => {
-
         let tempModules: ModuleType[][] = [...modules];
         //Adds or removes left rows
         for (let i = 0; i < layout.leftRows - 1; i++) {
@@ -56,10 +52,10 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
         
         if (layout.rightRows > 0) {
             for (let i = 0; i < layout.rightRows - 1; i++) {
-                if (tempModules[1].length < layout.leftRows) {
+                if (tempModules[1].length < layout.rightRows) {
                     tempModules[1].push(ModuleType.EMPTY);
                 }
-                else if (tempModules[1].length > layout.leftRows) {
+                else if (tempModules[1].length > layout.rightRows) {
                     tempModules = tempModules.slice(1);
                 }  
             }
@@ -70,11 +66,11 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     const getModuleFromType = (type: ModuleType, id: number[]): React.ReactNode => {
         switch (type) {
             case ModuleType.EMPTY:
-                return (<EmptyModule changeModuleModalRef={changeModuleModalRef} id={id} />)
+                return <EmptyModule changeModuleModalRef={changeModuleModalRef} index={id} />;
             case ModuleType.EXERCISE_DESCRIPTION:
-                return <ExerciseDescriptionModule/>    
+                return <ExerciseDescriptionModule changeModuleModalRef={changeModuleModalRef} index={id} isOwner={props.editMode}/>;
             default:
-                return <ExerciseDescriptionModule/>
+                return <EmptyModule changeModuleModalRef={changeModuleModalRef} index={id} />;
         };
     }
 
@@ -94,7 +90,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             keyCounter++;
         }
     }
-    
+
     return (
         <div className='board-container'>
             <Allotment className='board-outer' separator>
@@ -103,7 +99,11 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                 })}
             </Allotment>
             <ChangeModuleModal ref={changeModuleModalRef} changedModule={(newModule: ModuleType, index: number[])=>{
-                
+                if (index.length === 2) {
+                    let temp = [...modules];
+                    temp[index[0]][index[1]] = newModule;
+                    setModules(temp);
+                }
             }} />
         </div>
     )

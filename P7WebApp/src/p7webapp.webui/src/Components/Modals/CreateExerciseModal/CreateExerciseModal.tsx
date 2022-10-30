@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
-import { Modal, Button, Table, Form } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import { ModuleType } from '../../ExerciseBoard/ExerciseBoard';
 import './CreateExerciseModal.css';
 import '../../../App.css';
@@ -47,7 +47,7 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
     const [show, setShow] = useState(false);
     const [exerciseGroupId, setExerciseGroupId] = useState<number>(-1);
     const [title, setTitle] = useState<string>('');
-    const [layout, setLayout] = useState<Layout>({layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0});
+    const [layout, setLayout] = useState<Layout>({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
 
     const handleClose = () => setShow(false);
 
@@ -64,11 +64,11 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
 
     useEffect((() => {
         setTitle('');
-        setLayout({layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0});
+        setLayout({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
     }), [exerciseGroupId, show]);
 
     const handleChooseLayout = (type: LayoutType, left: number, right: number) => {
-        setLayout({layoutType: type, leftRows: left, rightRows: right});
+        setLayout({ layoutType: type, leftRows: left, rightRows: right });
     }
 
     return (
@@ -76,10 +76,9 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
             <form onSubmit={(e) => {
                 e.preventDefault();
                 props.created(layout);
-                console.log(layout)
                 handleClose();
             }}>
-                <Modal.Header style={{maxWidth:'650px'}} closeButton>
+                <Modal.Header closeButton>
                     <Modal.Title>Create exercise:</Modal.Title>
                 </Modal.Header>
                 <Modal.Body >
@@ -136,10 +135,12 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
     )
 });
 
-function getModuleOptions(id: number) {
+export function getModuleOptions(id: number) {
     switch (id) {
         case ModuleType.EXERCISE_DESCRIPTION:
             return 'Exercise Description';
+        case ModuleType.EMPTY:
+            return 'Empty';
         default:
             return 'Error';
     }

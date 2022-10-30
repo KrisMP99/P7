@@ -36,7 +36,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
 
         }).map((value, index) => {
 
-            //Creates the exercise elements below:
+            //Creates the exercise elements under each accordion:
             const exerciseElements: JSX.Element[] = course.exercises.filter((val) => {
 
                 return val.exerciseGroupId === value.id && (!isOwner ? val.isVisible : true);
@@ -48,6 +48,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                 return (
                     <div key={id} className={'exercise-container d-flex ' + (!val.isVisible && 'is-invisible')} onClick={(e) => {
                         console.log("Opening exercise");
+                        //WIP - navigate to the exercise and fetch it there
                     }}>
                         <div className='exercise-title'>{val.title}</div>
                         {isOwner &&
@@ -81,7 +82,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
             });
 
             return (
-                <Accordion key={index}>
+                <Accordion key={index} defaultActiveKey={index+''}>
                     <div className='d-flex align-items-center flex-grow-1'>
                         <AccordionHeader className={'flex-grow-1' + (value.isVisible ? '' : ' is-invisible')}>
                             <input
