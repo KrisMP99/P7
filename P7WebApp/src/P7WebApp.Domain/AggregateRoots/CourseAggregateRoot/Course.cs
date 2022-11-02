@@ -1,4 +1,5 @@
-﻿using P7WebApp.SharedKernel;
+﻿using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
+using P7WebApp.SharedKernel;
 using P7WebApp.SharedKernel.Interfaces;
 
 namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot

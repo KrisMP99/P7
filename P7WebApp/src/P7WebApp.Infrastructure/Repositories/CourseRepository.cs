@@ -1,5 +1,7 @@
 ﻿using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
+using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
 using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Infrastructure.Repositories
