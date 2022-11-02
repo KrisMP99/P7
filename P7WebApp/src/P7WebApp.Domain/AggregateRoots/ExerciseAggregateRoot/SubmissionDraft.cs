@@ -1,9 +1,6 @@
-﻿using P7WebApp.SharedKernel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules;
+using P7WebApp.SharedKernel;
+
 
 namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
 {
@@ -15,6 +12,8 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
         }
         
         public string Title { get; set; }
+        public List<Module> Modules { get; set; }
+
 
         public void Submit()
         {

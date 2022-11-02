@@ -1,8 +1,7 @@
-﻿using P7WebApp.Domain.Common;
+﻿using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules;
+using P7WebApp.Domain.Common;
 using P7WebApp.SharedKernel;
 using P7WebApp.SharedKernel.Interfaces;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 
 namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
 {
@@ -30,6 +29,7 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
         public DateTime LastModifiedDate { get; set; }
         public ExerciseLayout Layout { get; set; }
         public ExerciseType Type { get; set; }
+        public List<Module> Modules { get; set; }
 
         public void UpdateInformation(string newTitle, bool visibility, int exerciseNumber, DateTime newStartDate, DateTime newEndDate)
         {
