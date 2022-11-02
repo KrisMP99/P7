@@ -4,15 +4,16 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
 {
     public class ExerciseGroup : EntityBase
     {
+
         public ExerciseGroup() { }
-        public ExerciseGroup(string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime becomeVisibleAt, List<Exercise> exercises)
+        public ExerciseGroup(string title, string description, bool isVisible, int exerciseGroupNumber, DateTime becomeVisibleAt, List<Exercise> exercises)
         {
             Title = title;
             Description = description;
             IsVisible = isVisible;
             ExerciseGroupNumber = exerciseGroupNumber;
-            CreatedDate = createdDate;
-            LastModifiedDate = lastModifiedDate;
+            CreatedDate = DateTime.Now;
+            LastModifiedDate = CreatedDate;
             BecomeVisibleAt = becomeVisibleAt;
             Exercises = exercises;
         }
