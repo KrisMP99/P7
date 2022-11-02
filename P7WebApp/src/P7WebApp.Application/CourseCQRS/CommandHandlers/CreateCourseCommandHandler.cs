@@ -26,7 +26,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 var course = CourseMapper.Mapper.Map<Course>(request);
-                var rowsAffected = await _courseReposity.AddCourse(course);
+                var rowsAffected = await _courseReposity.CreateCourse(course);
                 return rowsAffected;
             }
             catch (Exception)

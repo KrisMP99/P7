@@ -7,6 +7,7 @@ using P7WebApp.Infrastructure.Data;
 using P7WebApp.Infrastructure.Identity;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Repositories;
+using P7WebApp.Infrastructure.Persistence;
 
 namespace P7WebApp.Infrastructure
 {
@@ -27,6 +28,7 @@ namespace P7WebApp.Infrastructure
             //services.AddAuthentication()
             //    .AddIdentityServerJwt();
 
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ICourseRepository, CourseRepository>();
 
             return services;

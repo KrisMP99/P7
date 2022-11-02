@@ -1,4 +1,5 @@
-﻿using P7WebApp.SharedKernel;
+﻿using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
+using P7WebApp.SharedKernel;
 using P7WebApp.SharedKernel.Interfaces;
 
 namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
@@ -11,13 +12,12 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int OwnerId { get; set; }
+        public InviteCode? InviteCode { get; set; }
         public List<ExerciseGroup> ExerciseGroups { get; set; }
 
-        public void UpdateInformation(string newTitle, string newDescription, bool newVisibility)
+        public void EditInformation(string newTitle, string newDescription, bool newVisibility)
         {
-            Title = string.IsNullOrEmpty(newTitle) ? Title : newTitle;
-            Description = string.IsNullOrEmpty(newDescription) ? Description : Description == newDescription ? Description : newDescription;
-            IsPrivate = IsPrivate && newVisibility ? IsPrivate : newVisibility;
+            throw new NotImplementedException();
         }
 
         public ExerciseGroup GetExerciseGroup(int groupId)
@@ -36,6 +36,59 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
                 }
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void CreateInviteCode(InviteCode invitecode)
+        {
+            try
+            {
+                if(invitecode is not null)
+                {
+                    InviteCode = invitecode;
+                }
+                else
+                {
+                    throw new Exception("Could not create the invite code");
+                }    
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        public void RemoveInviteCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddAttendee()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAttendee()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateExerciseGroup(ExerciseGroup exercisegroup)
+        {
+            try
+            {
+                if(exercisegroup is not null)
+                {
+                    ExerciseGroups.Add(exercisegroup);
+                }
+                else
+                {
+                    throw new Exception("Could not add the exercisegroup to the course (exercisegroup is null)");
+                }
+            }
+            catch(Exception)
             {
                 throw;
             }
