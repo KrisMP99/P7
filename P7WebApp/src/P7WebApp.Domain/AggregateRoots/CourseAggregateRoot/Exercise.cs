@@ -35,12 +35,12 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
             throw new NotImplementedException();
         }
 
-        public Module AddModule(string title, DateTime createdDate, ExerciseLayout layout)
+        public void AddModule(string title, DateTime createdDate, ExerciseLayout layout)
         {
             throw new NotImplementedException();
         }
 
-        public Module DeleteModule(string title)
+        public void DeleteModule(string title)
         {
             throw new NotImplementedException();
         }
