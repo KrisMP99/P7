@@ -29,6 +29,7 @@ namespace P7WebApp.Infrastructure
             //    .AddIdentityServerJwt();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<ICourseRepository, CourseRepository>();
 
             return services;
         }

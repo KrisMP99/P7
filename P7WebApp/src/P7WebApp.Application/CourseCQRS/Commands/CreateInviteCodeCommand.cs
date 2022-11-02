@@ -1,15 +1,10 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.Commands
 {
-    public class CreateInviteCommand : IRequest<int>
+    public class CreateInviteCodeCommand : IRequest<int>
     {
-        public CreateInviteCommand(int courseId, bool isActive, DateTime useableFrom, DateTime useableTo)
+        public CreateInviteCodeCommand(int courseId, bool isActive, DateTime useableFrom, DateTime useableTo)
         {
             CourseId = courseId;
             IsActive = isActive;

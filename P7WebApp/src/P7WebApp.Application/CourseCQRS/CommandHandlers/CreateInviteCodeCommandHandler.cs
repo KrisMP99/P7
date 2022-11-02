@@ -6,16 +6,16 @@ using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
-    public class CreateInviteCommandHandler : IRequestHandler<CreateInviteCommand, int>
+    public class CreateInviteCodeCommandHandler : IRequestHandler<CreateInviteCodeCommand, int>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateInviteCommandHandler(IUnitOfWork unitOfWork)
+        public CreateInviteCodeCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(CreateInviteCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateInviteCodeCommand request, CancellationToken cancellationToken)
         {
             try
             {

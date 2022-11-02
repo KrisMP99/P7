@@ -36,8 +36,8 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("{courseId}")]
-        public async Task<IActionResult> CreateInviteCode(CreateInviteCommand request)
+        [Route("{courseId}/invite-code")]
+        public async Task<IActionResult> CreateInviteCode(CreateInviteCodeCommand request)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace P7WebApp.API.Controllers
 
         
         [HttpPost]
-        [Route("{id}")]
+        [Route("{courseId}/update")]
         public async Task<IActionResult> UpdateCourse(UpdateCourseCommand request)
         {
             try
@@ -120,6 +120,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
+        [Route("{courseId}/add-exercise-group")]
         public async Task<IActionResult> AddExerciseGroup(CreateExerciseGroupCommand request)
         {
             try
