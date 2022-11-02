@@ -7,7 +7,9 @@
 
         }
 
-        public string Name { get; private set; }
+        public string RoleName { get; private set; }
+
+        public List<Permission> Permissons;
 
         public void AddPermission()
         {
@@ -21,7 +23,7 @@
 
         public void EditInformation(string name)
         {
-            Name = name;
+            RoleName = name;
         }
 
     }
