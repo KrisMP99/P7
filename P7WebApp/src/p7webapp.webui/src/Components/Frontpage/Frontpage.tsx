@@ -1,10 +1,36 @@
-import React from 'react';
-import { Container } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container} from 'react-bootstrap';
 import './Frontpage.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 
 function Frontpage() {
+
+    const [{username, password}, setCredentials] = useState({
+        username: '',
+        password: ''
+    })
+
+    const users = [ { username: 'Kristian', password: '1234'}, 
+                    { username: 'Jonas', password: '1234'}];
+
+    const [error, setError]=useState<string>();
+    const [loggedIn, setLoggedIn ] = useState(false)
+
+    const navigate = useNavigate();
+
+    const login = (event: React.FormEvent) => {
+        event.preventDefault();
+        const account = users.find((user) => user.username === username);
+
+        if(account && account.password === password) {
+            setLoggedIn(true)
+            navigate("/landingpage");
+        } else {
+            setLoggedIn(false)
+            setError('Invalid Username or Password')
+        }
+    }
 
     return (
         <Container>
@@ -31,25 +57,36 @@ function Frontpage() {
                         </div>
                     </div>
 
-
-
+                    
 
                     {/* Right side of page */}
                     <div className="col login-wrapper">
-                        <form >
+                        <form onSubmit={login}>
                             <div className="row mt-3">
-                                <label>Email or username:</label>
-                                <input type="text" />
+                                <label>Username:</label>
+                                <input type="text" name='username' 
+                                    value={username} 
+                                    onChange={(event) => setCredentials( {
+                                        username: event.target.value,
+                                        password
+                                    })}/>
                             </div>
 
                             <div className="row mt-3">
                                 <label>Password:</label>
-                                <input type="password" />
+                                <input type="password" name='password'
+                                    value={password} 
+                                    onChange={(event) => setCredentials( {
+                                        username,
+                                        password: event.target.value
+                                    })}/>
                             </div>
-
                             <div className="row mt-4">
                                 <input className="button rounded" type="submit" value="Login" />
                             </div>
+                                <div className='error-box mt-4 rounded'>
+                                    {error}
+                                </div>
                         </form>
                         <div className="row mt-2">
                             <p>Not registered? <NavLink to="/signup">Sign up here!</NavLink> </p>
