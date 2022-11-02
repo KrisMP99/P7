@@ -2,7 +2,7 @@
 using P7WebApp.SharedKernel;
 using System.Reflection.Metadata.Ecma335;
 
-namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
+namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
 {
     public class Exercise : EntityBase
     {

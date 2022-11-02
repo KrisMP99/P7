@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
 using System;
 using System.Collections.Generic;
 using System.Linq;

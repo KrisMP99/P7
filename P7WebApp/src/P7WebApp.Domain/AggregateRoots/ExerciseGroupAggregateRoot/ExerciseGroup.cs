@@ -1,6 +1,7 @@
-﻿using P7WebApp.SharedKernel;
+﻿using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
+using P7WebApp.SharedKernel;
 
-namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
+namespace P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot
 {
     public class ExerciseGroup : EntityBase
     {

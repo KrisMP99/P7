@@ -1,4 +1,5 @@
 ﻿using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
 using System;
 using System.Collections.Generic;
 using System.Linq;

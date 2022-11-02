@@ -2,7 +2,7 @@
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
 using P7WebApp.Domain.Repositories;
 using System;
 using System.Collections.Generic;
