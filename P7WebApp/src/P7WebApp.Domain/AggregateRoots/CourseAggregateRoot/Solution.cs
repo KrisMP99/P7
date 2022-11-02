@@ -1,9 +1,10 @@
-﻿using P7WebApp.SharedKernel;
+﻿using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules;
+using P7WebApp.SharedKernel;
 
 
 namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
 {
-    public class Solution
+    public class Solution : EntityBase
     {
         public Solution(bool isVisible, DateTime visibleFromDate) 
         { 
@@ -13,6 +14,8 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
 
         public bool IsVisible { get; set; }
         public DateTime VisibleFromDate { get; set; }
+        public List<Module> Modules { get; set; }
+
 
         public void ChangeVisibility(bool isVisible)
         {
