@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
+namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
 {
     public class ExerciseLayout
     {
