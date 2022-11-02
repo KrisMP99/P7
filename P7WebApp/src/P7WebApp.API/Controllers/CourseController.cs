@@ -20,13 +20,13 @@ namespace P7WebApp.API.Controllers
 			try
 			{
                 var result = await _mediator.Send(request);
-                if (result == 0)
+                if (result > 0)
                 {
-                    return BadRequest("Could not create course");
+                    return Ok();
                 }
                 else
                 {
-                    return Ok();
+                    return BadRequest("Could not create course");
                 }
 			}
 			catch (Exception ex)

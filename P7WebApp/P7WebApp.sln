@@ -19,6 +19,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "p7webapp.webui", "src\p7web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7WebApp.Infrastructure.Tests", "tests\P7WebApp.Infrastructure.Tests\P7WebApp.Infrastructure.Tests.csproj", "{30F37AD1-DB41-4454-B537-94FA4F43C70D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P7WebApp.API.Tests", "tests\P7WebApp.API.Tests\P7WebApp.API.Tests.csproj", "{00A5EA2D-DCE4-47F4-948B-61F170B25BA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{30F37AD1-DB41-4454-B537-94FA4F43C70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30F37AD1-DB41-4454-B537-94FA4F43C70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30F37AD1-DB41-4454-B537-94FA4F43C70D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00A5EA2D-DCE4-47F4-948B-61F170B25BA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00A5EA2D-DCE4-47F4-948B-61F170B25BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00A5EA2D-DCE4-47F4-948B-61F170B25BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00A5EA2D-DCE4-47F4-948B-61F170B25BA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

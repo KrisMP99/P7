@@ -1,9 +1,8 @@
 ﻿using Moq;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Infrastructure.Data;
 using P7WebApp.Infrastructure.Persistence;
 
-namespace P7WebApp.Infrastructure.Tests.UnitTests
+namespace P7WebApp.Infrastructure.Tests.UnitTests.UnitOfWorkTests
 {
     public class UnitOfWorkTests
     {
