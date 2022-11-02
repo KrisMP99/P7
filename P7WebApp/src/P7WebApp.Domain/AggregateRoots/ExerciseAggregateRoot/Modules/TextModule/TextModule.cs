@@ -9,7 +9,7 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules.TextModul
     public class TextModule : Module
     {
         public string Text { get; set; }
-        public List<Image> images;
+        public List<Image> Images;
 
         public void AddImage()
         {

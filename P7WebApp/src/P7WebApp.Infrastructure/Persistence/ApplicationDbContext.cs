@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
 using P7WebApp.Infrastructure.Common;
 using P7WebApp.Infrastructure.Identity;
 
@@ -19,6 +21,9 @@ namespace P7WebApp.Infrastructure.Data
         {
             _mediator = mediator;
         }
+
+        public DbSet<Course> Courses => Set<Course>();
+        public DbSet<ExerciseGroup> ExerciseGroups => Set<ExerciseGroup>();
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

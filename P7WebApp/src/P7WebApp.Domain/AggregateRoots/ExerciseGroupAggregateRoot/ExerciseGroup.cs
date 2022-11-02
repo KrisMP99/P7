@@ -1,14 +1,16 @@
 ﻿using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
 using P7WebApp.SharedKernel;
+using P7WebApp.SharedKernel.Interfaces;
 
 namespace P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot
 {
-    public class ExerciseGroup : EntityBase
+    public class ExerciseGroup : EntityBase, IAggregateRoot
     {
 
         public ExerciseGroup() { }
-        public ExerciseGroup(string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime visibleFromDate, List<Exercise> exercises)
+        public ExerciseGroup(int courseId, string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime visibleFromDate, List<Exercise> exercises)
         {
+            CourseId = courseId;
             Title = title;
             Description = description;
             ExerciseGroupNumber = exerciseGroupNumber;
@@ -19,6 +21,7 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot
             Exercises = exercises;
         }
 
+        public int CourseId { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
         public int ExerciseGroupNumber { get; private set; }
