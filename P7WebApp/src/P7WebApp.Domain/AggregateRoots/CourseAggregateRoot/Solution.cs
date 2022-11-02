@@ -3,7 +3,7 @@
 
 namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
 {
-    public class Solution
+    public class Solution : EntityBase
     {
         public Solution(bool isVisible, DateTime visibleFromDate) 
         { 
