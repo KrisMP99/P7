@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules.TextModule
 {
-    public class TextModule
+    public class TextModule : Module
     {
         public string Text { get; set; }
         public List<Image> images;

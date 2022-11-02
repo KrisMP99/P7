@@ -1,11 +1,12 @@
 ﻿using P7WebApp.Domain.Common;
 using P7WebApp.SharedKernel;
+using P7WebApp.SharedKernel.Interfaces;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 
 namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
 {
-    public class Exercise : EntityBase 
+    public class Exercise : EntityBase, IAggregateRoot
     {
         public Exercise() { }
         public Exercise(string title, bool isVisible, int exerciseNumber, DateTime startDate, DateTime endDate, DateTime createdDate, DateTime lastModifiedDate, ExerciseLayout layout)

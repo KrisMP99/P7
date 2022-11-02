@@ -1,6 +1,8 @@
-﻿namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
+﻿using P7WebApp.SharedKernel;
+
+namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
 {
-    public class CourseRole
+    public class CourseRole : EntityBase
     {
         public CourseRole()
         {
