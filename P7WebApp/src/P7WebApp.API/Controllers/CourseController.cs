@@ -85,14 +85,14 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                var result = await _mediator.Send(new GetCourseQuery(courseId));
-                if (result == null)
+                var result = await _mediator.Send(new GetListOfCoursesQuery(amount));
+                if (result.Any())
                 {
-                    return BadRequest($"Could not find course with id {courseId}");
+                    return Ok(result);
                 }
                 else
                 {
-                    return Ok(result);
+                    return BadRequest($"Could not find course with id {amount}");
                 }
             }
             catch (Exception ex)
