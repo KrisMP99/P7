@@ -8,6 +8,7 @@ using P7WebApp.Infrastructure.Identity;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Repositories;
 using P7WebApp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace P7WebApp.Infrastructure
 {
@@ -15,6 +16,8 @@ namespace P7WebApp.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
             //services
