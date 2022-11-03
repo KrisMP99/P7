@@ -32,7 +32,11 @@ function App() {
         <div className='main-container'>
             <Navbar
                 user={user}
-                logOut={() => setUser(null)}
+                logOut={() => {
+                    setUser(null);
+                    setLoggedIn(false);
+                    navigator('/');
+                }}
             />
             <Routes>
                 <Route path="/" element={
