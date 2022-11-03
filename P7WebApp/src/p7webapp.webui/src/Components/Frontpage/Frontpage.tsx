@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container} from 'react-bootstrap';
 import './Frontpage.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 interface LoginProps {
     loggedIn: () => void;
+    alreadyLoggedIn: boolean;
 }
 
 function Frontpage(props: LoginProps) {
+    const navigate = useNavigate();
+    useEffect(() => {
+        if(props.alreadyLoggedIn) {
+            navigate('/home');
+        }
+    })
 
     const [{username, password}, setCredentials] = useState({
         username: '',
@@ -20,7 +27,7 @@ function Frontpage(props: LoginProps) {
     const [error, setError]=useState<string>();
     // const [loggedIn, setLoggedIn ] = useState(false)
 
-    const navigate = useNavigate();
+    
 
     const login = (event: React.FormEvent) => {
         event.preventDefault();

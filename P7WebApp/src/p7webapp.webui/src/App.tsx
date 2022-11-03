@@ -23,24 +23,25 @@ function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
     const openCreateCourseModalRef = useRef<ShowModal>(null);
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
-    const [boardLayout, setBoardLayout] = useState<Layout>({layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0});
+    const [boardLayout, setBoardLayout] = useState<Layout>({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
     const [user, setUser] = useState<User | null>(null);
     const navigator = useNavigate();
 
     return (
         <div className='main-container'>
-            <Navbar 
+            <Navbar
                 user={user}
-                logOut={()=>setUser(null)}
+                logOut={() => setUser(null)}
             />
             <Routes>
                 <Route path="/" element={
                     <div className="space-from-navbar">
-                        <Frontpage 
-                            loggedIn={()=> {
+                        <Frontpage
+                            loggedIn={() => {
                                 setLoggedIn(true);
-                                setUser({id: 0, firstname: "Jonas", lastname: "Noermark", email: "dummy@mail.dk", username: "jonse"});
+                                setUser({ id: 0, firstname: "Jonas", lastname: "Noermark", email: "dummy@mail.dk", username: "jonse" });
                             }}
+                            alreadyLoggedIn={loggedIn}
                         />
                     </div>
                 } />
@@ -50,26 +51,26 @@ function App() {
                     </div>
                 } />
                 {user && loggedIn && <><Route path="/exercise/:id" element={
-                    <ExerciseBoard 
+                    <ExerciseBoard
                         editMode={false}
                         boardLayout={boardLayout}
-                        
+
                     />
                 } />
-                <Route path="/home" element={
-                    <Landingpage />
-                } />
-                <Route path="/course/:id" element={
-                    <Course 
-                        user={user!}
-                        openCreateExerciseModalRef={openCreateExerciseModalRef}
-                    />
-                } /></>}
+                    <Route path="/home" element={
+                        <Landingpage />
+                    } />
+                    <Route path="/course/:id" element={
+                        <Course
+                            user={user!}
+                            openCreateExerciseModalRef={openCreateExerciseModalRef}
+                        />
+                    } /></>}
             </Routes>
             {/* <Footer/> */}
             <CreateCourseModal ref={openCreateCourseModalRef}
             />
-            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: Layout)=>{ 
+            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: Layout) => {
                 setBoardLayout(layout);
                 navigator('/exercise/-1');
             }} />
