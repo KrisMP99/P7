@@ -103,10 +103,9 @@ namespace P7WebApp.API.Controllers
         }
 
 
-
         [HttpPost]
         [Route("{courseId}/exercise-groups")]
-        public async Task<IActionResult> GetExerciseGroups([FromRoute]int courseId)
+        public async Task<IActionResult> GetExerciseGroupsByCourseId([FromRoute]int courseId)
         {
             try
             {
@@ -137,6 +136,29 @@ namespace P7WebApp.API.Controllers
                 }
             }
             catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{courseId}/delete-exercise-group/{exerciseGroupId}")]
+        public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int exerciseGroupId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new DeleteExerciseGroupCommand(exerciseGroupId));
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not create/add the exercise group to the course.");
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
