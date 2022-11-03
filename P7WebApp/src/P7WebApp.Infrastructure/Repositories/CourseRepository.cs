@@ -40,6 +40,12 @@ namespace P7WebApp.Infrastructure.Repositories
             return new List<ExerciseGroup>().AsEnumerable(); 
         }
 
+        public async Task<IEnumerable<Course>> GetListOfCourses(int amount)
+        {
+            IEnumerable<Course> courses = new List<Course> { new Course { Id = 1 }, new Course { Id = 2 } };
+            return courses;
+        }
+
         public async Task<int> UpdateCourse(Course course)
         {
             return 1;

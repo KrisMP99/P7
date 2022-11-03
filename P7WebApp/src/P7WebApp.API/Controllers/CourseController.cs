@@ -17,44 +17,22 @@ namespace P7WebApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCourse(CreateCourseCommand request)
         {
-			try
+            try
 			{
                 var result = await _mediator.Send(request);
-                if (result == 0)
+                if (result > 0)
                 {
-                    return BadRequest("Could not create course");
+                    return Ok();
                 }
                 else
                 {
-                    return Ok();
+                    return BadRequest("Could not create course");
                 }
 			}
 			catch (Exception ex)
 			{
                 return BadRequest(ex.Message);
 			}
-        }
-
-        [HttpPost]
-        [Route("delete-course/{courseId}")]
-        public async Task<IActionResult> DeleteCourse([FromRoute]int courseId)
-        {
-            try
-            {
-                var result = await _mediator.Send(new DeleteCourseCommand(courseId));
-                if (result > 0)
-                {
-                    return Ok($"Succesfully deleted course with id {courseId}");
-                }
-                else
-                {
-                    return BadRequest("Could not delete course");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
 
         [HttpPost]
@@ -101,7 +79,29 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        
+        [HttpPost]
+        [Route("{amount}")]
+        public async Task<IActionResult> GetListOfCourses([FromRoute] int amount)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCourseQuery(courseId));
+                if (result == null)
+                {
+                    return BadRequest($"Could not find course with id {courseId}");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpPost]
         [Route("{courseId}/update")]
         public async Task<IActionResult> UpdateCourse(UpdateCourseCommand request)
