@@ -15,6 +15,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 {
     public class CourseControllerTests
     {
+        // Course Related Tests
         [Fact]
         public async Task CreateCourse_ReturnsOK_ResultIsGreaterThanZero()
         {
@@ -62,7 +63,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
         {
             var mockMediator = new Mock<IMediator>();
             var courseController = new CourseController(mockMediator.Object);
-            IEnumerable<CourseResponse> courseResponses = new List<CourseResponse> { new CourseResponse { Id = 1 } }
+            IEnumerable<CourseResponse> courseResponses = new List<CourseResponse> { new CourseResponse { Id = 1 } };
             mockMediator.Setup(m => m.Send(It.IsAny<GetListOfCoursesQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(courseResponses);
 
@@ -70,5 +71,34 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 
             result.Should().BeOfType<OkObjectResult>();
         }
+
+
+
+
+        // Exercise Groups Related Tests
+        [Fact]
+        public async Task GetExerciseGroupsByCourseId_ReturnsOkObject()
+        {
+            // Arrange
+            var mockMediator = new Mock<IMediator>();
+            var courseController = new CourseController(mockMediator.Object);
+            IEnumerable<ExerciseGroupResponse> exerciseGroupResponses = new List<ExerciseGroupResponse> { new ExerciseGroupResponse(), new ExerciseGroupResponse() };
+            mockMediator.Setup(m => m.Send(It.IsAny<GetExerciseGroupsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(exerciseGroupResponses);
+
+            // Act
+            var result = await courseController.GetExerciseGroupsByCourseId(1);
+
+            // Assert
+            result
+                .Should()
+                .BeOfType<OkObjectResult>();
+
+            OkObjectResult objectResult = (OkObjectResult)result;
+        }
+
+
+        // Exercise Related Tests
+
     }
 }
