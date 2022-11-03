@@ -59,6 +59,5 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             
             result.Should().BeOfType<BadRequestObjectResult>();
         }
-
     }
 }
