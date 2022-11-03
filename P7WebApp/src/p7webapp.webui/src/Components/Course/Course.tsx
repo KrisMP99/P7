@@ -138,7 +138,7 @@ export default function Course(props: CourseProps) {
                         </div>
                         <ExerciseOverview
                             course={course}
-                            changeCourse={(newCourse: Course) => { setCourse(newCourse) }}
+                            changedCourse={(newCourse: Course) => setCourse(newCourse)}
                             openDeleteExerciseModalRef={openDeleteExerciseModalRef}
                             isOwner={isOwner}
                             openCreateExerciseModalRef={props.openCreateExerciseModalRef}
