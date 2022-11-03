@@ -77,7 +77,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 
         // Exercise Groups Related Tests
         [Fact]
-        public async Task GetExerciseGroupsByCourseId_ReturnsOkObject()
+        public async Task GetExerciseGroupsByCourseId_ReturnsOkObject_And_ContainsTwoExerciseGroupReponses()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
@@ -87,14 +87,31 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
                 .ReturnsAsync(exerciseGroupResponses);
 
             // Act
-            var result = await courseController.GetExerciseGroupsByCourseId(1);
+            var actionResult = await courseController.GetExerciseGroupsByCourseId(1);
 
             // Assert
-            result
+            var resultObject = (OkObjectResult)actionResult;
+            IEnumerable<ExerciseGroupResponse>? result = resultObject.Value as IEnumerable<ExerciseGroupResponse>;
+
+            resultObject
+                .Should()
+                .NotBeNull();
+
+            resultObject
                 .Should()
                 .BeOfType<OkObjectResult>();
 
-            OkObjectResult objectResult = (OkObjectResult)result;
+            result
+                .Should()
+                .NotBeNull();
+
+            result
+                .Should()
+                .BeOfType(typeof(List<ExerciseGroupResponse>));
+
+            result
+                .Should()
+                .HaveCount(2);
         }
 
 
