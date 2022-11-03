@@ -19,14 +19,14 @@ import selectedTwoLeftTwoRightImg from '../../../Images/LayoutSelected/selected_
 import { Layout, LayoutType, ShowModal } from '../CreateExerciseModal/CreateExerciseModal';
 
 interface ChangeLayoutProps {
-    changedLayout: (layout: Layout) => void;
-    currentLayout: Layout;
+    changedLayout: (layout: LayoutType) => void;
+    currentLayout: LayoutType;
 }
 
 
 export const ChangeLayoutModal = forwardRef<ShowModal, ChangeLayoutProps>((props, ref) => {
     const [show, setShow] = useState(false);
-    const [layout, setLayout] = useState<Layout>({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
+    const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
 
     const handleClose = () => setShow(false);
 
@@ -42,7 +42,7 @@ export const ChangeLayoutModal = forwardRef<ShowModal, ChangeLayoutProps>((props
     );
 
     const handleChooseLayout = (type: LayoutType, left: number, right: number) => {
-        setLayout({ layoutType: type, leftRows: left, rightRows: right });
+        setLayout(type);
     }
 
     return (
@@ -60,29 +60,29 @@ export const ChangeLayoutModal = forwardRef<ShowModal, ChangeLayoutProps>((props
                         <div className='layout-row'>
                             <label>
                                 <input type="radio" name="layout" value={LayoutType.SINGLE} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 0) }} />
-                                <img src={layout.layoutType === LayoutType.SINGLE ? selectedSingleImg : defaultSingleImg} alt="Single page" />
+                                <img src={layout === LayoutType.SINGLE ? selectedSingleImg : defaultSingleImg} alt="Single page" />
                             </label>
                             <label>
                                 <input type="radio" name="layout" value={LayoutType.TWO_HORIZONTAL} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 0) }} />
-                                <img src={layout.layoutType === LayoutType.TWO_HORIZONTAL ? selectedTwoHorizontalImg : defaultTwoHorizontalImg} alt="Single page" />
+                                <img src={layout === LayoutType.TWO_HORIZONTAL ? selectedTwoHorizontalImg : defaultTwoHorizontalImg} alt="Single page" />
                             </label>
                             <label>
                                 <input type="radio" name="layout" value={LayoutType.TWO_VERTICAL} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 1) }} />
-                                <img src={layout.layoutType === LayoutType.TWO_VERTICAL ? selectedTwoVertivalImg : defaultTwoVertivalImg} alt="Single page" />
+                                <img src={layout === LayoutType.TWO_VERTICAL ? selectedTwoVertivalImg : defaultTwoVertivalImg} alt="Single page" />
                             </label>
                         </div>
                         <div className='layout-row'>
                             <label>
                                 <input type="radio" name="layout" value={LayoutType.ONE_LEFT_TWO_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 2) }} />
-                                <img src={layout.layoutType === LayoutType.ONE_LEFT_TWO_RIGHT ? selectedOneLeftTwoRightImg : defaultOneLeftTwoRightImg} alt="Single page" />
+                                <img src={layout === LayoutType.ONE_LEFT_TWO_RIGHT ? selectedOneLeftTwoRightImg : defaultOneLeftTwoRightImg} alt="Single page" />
                             </label>
                             <label>
                                 <input type="radio" name="layout" value={LayoutType.TWO_LEFT_ONE_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 1) }} />
-                                <img src={layout.layoutType === LayoutType.TWO_LEFT_ONE_RIGHT ? selectedTwoLeftOneRightImg : defaultTwoLeftOneRightImg} alt="Single page" />
+                                <img src={layout === LayoutType.TWO_LEFT_ONE_RIGHT ? selectedTwoLeftOneRightImg : defaultTwoLeftOneRightImg} alt="Single page" />
                             </label>
                             <label>
                                 <input type="radio" name="layout" value={LayoutType.TWO_LEFT_TWO_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 2) }} />
-                                <img src={layout.layoutType === LayoutType.TWO_LEFT_TWO_RIGHT ? selectedTwoLeftTwoRightImg : defaultTwoLeftTwoRightImg} alt="Single page" />
+                                <img src={layout === LayoutType.TWO_LEFT_TWO_RIGHT ? selectedTwoLeftTwoRightImg : defaultTwoLeftTwoRightImg} alt="Single page" />
                             </label>
                         </div>
                     </div>

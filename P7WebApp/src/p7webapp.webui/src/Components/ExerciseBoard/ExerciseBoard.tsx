@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap';
 import { ArrowLeft } from 'react-bootstrap-icons';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
+import { Exercise } from '../Course/Course';
 import { ChangeLayoutModal } from '../Modals/ChangeLayoutModal/ChangeLayoutModal';
 import ChangeModuleModal, { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
 import { Layout, LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
@@ -22,8 +23,9 @@ export interface ExerciseModule {
 }
 
 interface ExerciseBoardProps {
-    boardLayout: Layout;
+    boardLayout: LayoutType;
     editMode: boolean;
+    newExercise: Exercise | null;
 }
 
 export default function ExerciseBoard(props: ExerciseBoardProps) {
@@ -31,8 +33,9 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     const changeModuleModalRef = useRef<ShowChangeModuleModalRef>(null);
     const changeLayoutModalRef = useRef<ShowModal>(null);
     const [modules, setModules] = useState<ExerciseModule[]>([{id: 0, position: 1, type: ModuleType.EMPTY}]);
-    const [layout, setLayout] = useState<Layout>({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
+    const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const navigator = useNavigate();
+    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, exerciseGroupId: 0, isVisible: true})
 
     useEffect(() => {
         //WIP - Fetch the exercise and set the module to the result
@@ -40,20 +43,22 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
         // setExerciseId(Number(params.id));
         setLayout(props.boardLayout);
         handleSetModules(layout);
-    }, [params.id, props.boardLayout.layoutType, props.boardLayout.leftRows, props.boardLayout.rightRows]);
+        if(props.newExercise !== null) {
+            setExercise({...props.newExercise});
+        }
+    }, [params.id, props.boardLayout, props.editMode]);
     useEffect(() => {
         handleSetModules(layout);
-    }, [layout.layoutType, layout.leftRows, layout.rightRows])
+    }, [layout])
 
-    const handleSetModules = (layout: Layout) => {
+    const handleSetModules = (layout: LayoutType) => {
         let tempModules: ExerciseModule[] = [...modules]; 
         let tempEmpty: ExerciseModule = {id: 0, position: 0, type: ModuleType.EMPTY};
         //Adds or removes left rows
-        switch (layout.layoutType) {
+        switch (layout) {
             case LayoutType.SINGLE:
                 if (!tempModules.find((val) => val.position === 1)) {tempModules.push({...tempEmpty, position: 1})};
                 tempModules = tempModules.filter((val) => val.position <= 1);
-                console.log(JSON.stringify(tempModules));
                 break;
             case LayoutType.TWO_HORIZONTAL:
                 if (!tempModules.find((val) => val.position === 2)) tempModules.push({...tempEmpty, position: 2});
@@ -119,6 +124,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             <div className='board-actions-container'>
                 <Button onClick={() => navigator(-1)}><ArrowLeft /></Button>
                 <Button onClick={() => changeLayoutModalRef.current?.handleShow()}>Change layout</Button>
+                <span className='place-right exercise-title-text'>{exercise.title}</span>
                 <Button className='place-right' variant='success'>
                     Save exercise
                 </Button>
@@ -160,7 +166,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             <ChangeLayoutModal
                 ref={changeLayoutModalRef}
                 currentLayout={layout}
-                changedLayout={(newLayout: Layout) => setLayout(newLayout)}
+                changedLayout={(newLayout: LayoutType) => setLayout(newLayout)}
             />
         </div>
     )

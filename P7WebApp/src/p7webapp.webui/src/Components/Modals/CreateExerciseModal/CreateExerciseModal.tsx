@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { ModuleType } from '../../ExerciseBoard/ExerciseBoard';
 import './CreateExerciseModal.css';
 import '../../../App.css';
@@ -17,9 +17,10 @@ import selectedTwoHorizontalImg from '../../../Images/LayoutSelected/selected_ho
 import selectedTwoLeftOneRightImg from '../../../Images/LayoutSelected/selected_2left_1right.svg';
 import selectedOneLeftTwoRightImg from '../../../Images/LayoutSelected/selected_1left_2right.svg';
 import selectedTwoLeftTwoRightImg from '../../../Images/LayoutSelected/selected_2left_2right.svg';
+import { Exercise } from '../../Course/Course';
 
 interface CreateExerciseModalProps {
-    created: (layout: Layout) => void;
+    created: (layout: LayoutType, exercise: Exercise) => void;
 }
 export interface ShowModal {
     handleShow(): void;
@@ -45,9 +46,9 @@ export interface Layout {
 
 export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExerciseModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
-    const [exerciseGroupId, setExerciseGroupId] = useState<number>(-1);
-    const [title, setTitle] = useState<string>('');
-    const [layout, setLayout] = useState<Layout>({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
+    // const [exerciseGroupId, setExerciseGroupId] = useState<number>(-1);
+    const [exercise, setExercise] = useState<Exercise>({id: 0, exerciseGroupId: 0, title:'', isVisible: false});
+    const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
 
     const handleClose = () => setShow(false);
 
@@ -57,25 +58,25 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
         () => ({
             handleShow(exerciseGroupId: number) {
                 setShow(true);
-                setExerciseGroupId(exerciseGroupId);
+                setExercise({...exercise, exerciseGroupId: exerciseGroupId});
             }
         }),
     );
 
     useEffect((() => {
-        setTitle('');
-        setLayout({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
-    }), [exerciseGroupId, show]);
+        setExercise({...exercise, title: ''});
+        setLayout(LayoutType.SINGLE);
+    }), [exercise.exerciseGroupId, show]);
 
     const handleChooseLayout = (type: LayoutType, left: number, right: number) => {
-        setLayout({ layoutType: type, leftRows: left, rightRows: right });
+        setLayout(type);
     }
 
     return (
         <Modal show={show} onHide={handleClose} size='lg'>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                props.created(layout);
+                props.created(layout, exercise);
                 handleClose();
             }}>
                 <Modal.Header closeButton>
@@ -84,39 +85,45 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
                 <Modal.Body >
                     <div className="mb-3 form-group modal-form-field">
                         <label>Name:</label>
-                        <input className='modal-form-field-text form-control' type="text" required value={title} maxLength={35} onChange={(e) => {
-                            setTitle(e.target.value);
+                        <input className='modal-form-field-text form-control' type="text" required value={exercise.title} maxLength={35} onChange={(e) => {
+                            setExercise({...exercise, title: e.target.value});
                         }} />
                     </div>
+                    <Form.Group className="mb-3 modal-form-field">
+                        <Form.Label>Visible:</Form.Label>
+                        <Form.Check type="switch" checked={exercise.isVisible} onChange={(e)=>{
+                            setExercise({...exercise, isVisible: !exercise.isVisible});
+                        }}/>
+                    </Form.Group>
                     <div className="mb-3">
                         <label>Layout:</label>
                         <div>
                             <div className='layout-row'>
                                 <label>
                                     <input type="radio" name="layout" value={LayoutType.SINGLE} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 0) }} />
-                                    <img src={layout.layoutType === LayoutType.SINGLE ? selectedSingleImg : defaultSingleImg} alt="Single page" />
+                                    <img src={layout === LayoutType.SINGLE ? selectedSingleImg : defaultSingleImg} alt="Single page" />
                                 </label>
                                 <label>
                                     <input type="radio" name="layout" value={LayoutType.TWO_HORIZONTAL} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 0) }} />
-                                    <img src={layout.layoutType === LayoutType.TWO_HORIZONTAL ? selectedTwoHorizontalImg : defaultTwoHorizontalImg} alt="Single page" />
+                                    <img src={layout === LayoutType.TWO_HORIZONTAL ? selectedTwoHorizontalImg : defaultTwoHorizontalImg} alt="Single page" />
                                 </label>
                                 <label>
                                     <input type="radio" name="layout" value={LayoutType.TWO_VERTICAL} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 1) }} />
-                                    <img src={layout.layoutType === LayoutType.TWO_VERTICAL ? selectedTwoVertivalImg : defaultTwoVertivalImg} alt="Single page" />
+                                    <img src={layout === LayoutType.TWO_VERTICAL ? selectedTwoVertivalImg : defaultTwoVertivalImg} alt="Single page" />
                                 </label>
                             </div>
                             <div className='layout-row'>
                                 <label>
                                     <input type="radio" name="layout" value={LayoutType.ONE_LEFT_TWO_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 2) }} />
-                                    <img src={layout.layoutType === LayoutType.ONE_LEFT_TWO_RIGHT ? selectedOneLeftTwoRightImg : defaultOneLeftTwoRightImg} alt="Single page" />
+                                    <img src={layout === LayoutType.ONE_LEFT_TWO_RIGHT ? selectedOneLeftTwoRightImg : defaultOneLeftTwoRightImg} alt="Single page" />
                                 </label>
                                 <label>
                                     <input type="radio" name="layout" value={LayoutType.TWO_LEFT_ONE_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 1) }} />
-                                    <img src={layout.layoutType === LayoutType.TWO_LEFT_ONE_RIGHT ? selectedTwoLeftOneRightImg : defaultTwoLeftOneRightImg} alt="Single page" />
+                                    <img src={layout === LayoutType.TWO_LEFT_ONE_RIGHT ? selectedTwoLeftOneRightImg : defaultTwoLeftOneRightImg} alt="Single page" />
                                 </label>
                                 <label>
                                     <input type="radio" name="layout" value={LayoutType.TWO_LEFT_TWO_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 2) }} />
-                                    <img src={layout.layoutType === LayoutType.TWO_LEFT_TWO_RIGHT ? selectedTwoLeftTwoRightImg : defaultTwoLeftTwoRightImg} alt="Single page" />
+                                    <img src={layout === LayoutType.TWO_LEFT_TWO_RIGHT ? selectedTwoLeftTwoRightImg : defaultTwoLeftTwoRightImg} alt="Single page" />
                                 </label>
                             </div>
                         </div>

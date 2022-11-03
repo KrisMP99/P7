@@ -9,7 +9,7 @@ import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
 import CreateExerciseModal, { Layout, LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import CreateCourseModal from './Components/Modals/CreateCourseModal/CreateCourseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
-import Course from './Components/Course/Course';
+import Course, { Exercise } from './Components/Course/Course';
 
 export interface User {
     id: number;
@@ -23,8 +23,9 @@ function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
     const openCreateCourseModalRef = useRef<ShowModal>(null);
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
-    const [boardLayout, setBoardLayout] = useState<Layout>({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
+    const [boardLayout, setBoardLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const [user, setUser] = useState<User | null>(null);
+    const [newExerciseCreated, setNewExerciseCreated] = useState<Exercise | null>(null);
     const navigator = useNavigate();
 
     return (
@@ -54,7 +55,7 @@ function App() {
                     <ExerciseBoard
                         editMode={false}
                         boardLayout={boardLayout}
-
+                        newExercise={newExerciseCreated}
                     />
                 } />
                     <Route path="/home" element={
@@ -70,8 +71,9 @@ function App() {
             {/* <Footer/> */}
             <CreateCourseModal ref={openCreateCourseModalRef}
             />
-            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: Layout) => {
+            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: LayoutType, exercise: Exercise) => {
                 setBoardLayout(layout);
+                setNewExerciseCreated(exercise);
                 navigator('/exercise/-1');
             }} />
         </div>

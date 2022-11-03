@@ -21,3 +21,7 @@
 .place-right {
     margin-left: auto;
 }
+.exercise-title-text {
+    font-size: 1.5em;
+    font-weight: bold;
+}
