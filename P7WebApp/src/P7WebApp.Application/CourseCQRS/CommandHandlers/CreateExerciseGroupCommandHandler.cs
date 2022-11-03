@@ -28,7 +28,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 var exerciseGroup = CourseMapper.Mapper.Map<ExerciseGroup>(request);
                 var course = await _unitOfWork.CourseRepository.GetCourse(exerciseGroup.Id);
 
-                course.AddExerciseGroup(exerciseGroup);
+                course.CreateExerciseGroup(exerciseGroup);
                 await _unitOfWork.CourseRepository.UpdateCourse(course);
 
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);

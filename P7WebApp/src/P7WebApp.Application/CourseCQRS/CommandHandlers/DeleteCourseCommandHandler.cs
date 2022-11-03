@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
-    public class DeleteCourseCommandHandler : IRequestHandler<DeleteCourseCommand, bool>
+    public class DeleteCourseCommandHandler : IRequestHandler<DeleteCourseCommand, int>
     {
         private readonly ICourseRepository _courseRepository;
 
@@ -19,12 +19,12 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             _courseRepository = courseRepository;
         }
 
-        public async Task<bool> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 int courseId = CourseMapper.Mapper.Map<int>(request);
-                bool deleted = await _courseRepository.DeleteCourse(courseId);
+                int deleted = await _courseRepository.DeleteCourse(courseId);
                 return deleted;
             }
             catch (Exception)

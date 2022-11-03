@@ -42,7 +42,7 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(new DeleteCourseCommand(courseId));
-                if (result)
+                if (result > 0)
                 {
                     return Ok($"Succesfully deleted course with id {courseId}");
                 }
