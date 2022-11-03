@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Domain.Repositories;
@@ -12,11 +13,11 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
     public class DeleteCourseCommandHandler : IRequestHandler<DeleteCourseCommand, int>
     {
-        private readonly ICourseRepository _courseRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteCourseCommandHandler(ICourseRepository courseRepository)
+        public DeleteCourseCommandHandler(IUnitOfWork unitOfWork)
         {
-            _courseRepository = courseRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<int> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
@@ -24,7 +25,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 int courseId = CourseMapper.Mapper.Map<int>(request);
-                int deleted = await _courseRepository.DeleteCourse(courseId);
+                int deleted = await _unitOfWork.CourseRepository.DeleteCourse(courseId);
                 return deleted;
             }
             catch (Exception)
