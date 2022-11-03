@@ -20,9 +20,9 @@ namespace P7WebApp.Infrastructure.Repositories
             return 1;
         }
 
-        public async Task<bool> DeleteCourse(int courseId)
+        public async Task<int> DeleteCourse(int courseId)
         {
-            return true;
+            return courseId;
         }
 
         public async Task<Course> GetCourse(int id)
@@ -32,7 +32,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
         {
-            return new Course() { Id = 1, ExerciseGroups = new List<ExerciseGroup>() { new ExerciseGroup() { Id = 1, Exercises = new List<Exercise>() { new Exercise() { Id = 1 } } } } };
+            return new Course();
         }
 
         public async Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id)
