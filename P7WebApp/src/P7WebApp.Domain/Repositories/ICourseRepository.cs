@@ -6,6 +6,7 @@ namespace P7WebApp.Domain.Repositories
     public interface ICourseRepository
     {
         Task<int> CreateCourse(Course course);
+        Task<bool> DeleteCourse(int courseId);
         Task<Course> GetCourse(int id);
         Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId);
         Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id);

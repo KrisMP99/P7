@@ -20,6 +20,11 @@ namespace P7WebApp.Infrastructure.Repositories
             return 1;
         }
 
+        public async Task<bool> DeleteCourse(int courseId)
+        {
+            return true;
+        }
+
         public async Task<Course> GetCourse(int id)
         {
             return new Course() { Id = id};

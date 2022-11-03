@@ -36,6 +36,28 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
+        [Route("delete-course/{courseId}")]
+        public async Task<IActionResult> DeleteCourse([FromRoute]int courseId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new DeleteCourseCommand(courseId));
+                if (result)
+                {
+                    return Ok($"Succesfully deleted course with id {courseId}");
+                }
+                else
+                {
+                    return BadRequest("Could not delete course");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
         [Route("{courseId}/invite-code")]
         public async Task<IActionResult> CreateInviteCode(CreateInviteCodeCommand request)
         {
