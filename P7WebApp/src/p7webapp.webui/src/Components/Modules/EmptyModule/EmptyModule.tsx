@@ -5,7 +5,7 @@ import { ShowChangeModuleModalRef } from '../../Modals/ChangeModuleModal/ChangeM
 import '../Module.css';
 
 interface EmptyModuleProps {
-    index: number[];
+    position: number;
     changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef>;
 }
 
@@ -18,7 +18,7 @@ export default function EmptyModule(props: EmptyModuleProps) {
                 <div 
                     className={'d-flex align-items-center justify-content-center flex-grow-1'} 
                 >
-                    <Plus size={70} className='scale-transition' onClick={()=>{props.changeModuleModalRef.current?.handleShow(ModuleType.EMPTY, props.index)}}/>
+                    <Plus size={70} className='scale-transition' onClick={()=>{props.changeModuleModalRef.current?.handleShow(ModuleType.EMPTY, props.position)}}/>
                 </div>
             </div>
         </>

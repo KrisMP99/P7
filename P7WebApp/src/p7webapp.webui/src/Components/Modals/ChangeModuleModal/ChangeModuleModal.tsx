@@ -5,26 +5,26 @@ import { ModuleType } from '../../ExerciseBoard/ExerciseBoard';
 import { getModuleOptions } from '../CreateExerciseModal/CreateExerciseModal';
 
 interface ChangeModuleModalProps {
-    changedModule: (module: ModuleType, index: number[]) => void;
+    changedModule: (module: ModuleType, position: number) => void;
 }
 export interface ShowChangeModuleModalRef {
-    handleShow: (updateModule: ModuleType, index: number[]) => void;
+    handleShow: (updateModule: ModuleType, position: number) => void;
 }
 
 export const ChangeModuleModal = forwardRef<ShowChangeModuleModalRef, ChangeModuleModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
     const [module, setModule] = useState<ModuleType>(ModuleType.EMPTY);
-    const [index, setIndex] = useState<number[]>([])
+    const [index, setIndex] = useState<number>(0)
 
     const handleClose = () => setShow(false);
 
     useImperativeHandle(
         ref,
         () => ({
-            handleShow(module: ModuleType, index: number[]) {
+            handleShow(module: ModuleType, position: number) {
                 setShow(true);
                 setModule(module);
-                setIndex(index);
+                setIndex(position);
             }
         }),
     )
@@ -37,7 +37,7 @@ export const ChangeModuleModal = forwardRef<ShowChangeModuleModalRef, ChangeModu
                 handleClose();
             }}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Change Ecercise Module:</Modal.Title>
+                    <Modal.Title>Change Exercise Module:</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3 modal-form-field">

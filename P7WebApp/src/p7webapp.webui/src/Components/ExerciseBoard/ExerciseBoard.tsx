@@ -1,8 +1,12 @@
 import { Allotment } from 'allotment';
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from 'react-bootstrap';
+import { ArrowLeft } from 'react-bootstrap-icons';
 import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+import { ChangeLayoutModal } from '../Modals/ChangeLayoutModal/ChangeLayoutModal';
 import ChangeModuleModal, { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
-import { Layout } from '../Modals/CreateExerciseModal/CreateExerciseModal';
+import { Layout, LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import EmptyModule from '../Modules/EmptyModule/EmptyModule';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import './ExerciseBoard.css';
@@ -10,6 +14,11 @@ import './ExerciseBoard.css';
 export enum ModuleType {
     EMPTY,
     EXERCISE_DESCRIPTION,
+}
+export interface ExerciseModule {
+    id: number;
+    position: number;
+    type: ModuleType;
 }
 
 interface ExerciseBoardProps {
@@ -20,91 +29,139 @@ interface ExerciseBoardProps {
 export default function ExerciseBoard(props: ExerciseBoardProps) {
     const params = useParams();
     const changeModuleModalRef = useRef<ShowChangeModuleModalRef>(null);
-    const [modules, setModules] = useState<ModuleType[][]>([[ModuleType.EMPTY]]);
-    // const [exerciseId, setExerciseId] = useState<number>(Number(params.id));
+    const changeLayoutModalRef = useRef<ShowModal>(null);
+    const [modules, setModules] = useState<ExerciseModule[]>([{id: 0, position: 1, type: ModuleType.EMPTY}]);
+    const [layout, setLayout] = useState<Layout>({ layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0 });
+    const navigator = useNavigate();
 
     useEffect(() => {
         //WIP - Fetch the exercise and set the module to the result
         // setModules()
         // setExerciseId(Number(params.id));
-        handleSetModules(props.boardLayout);
-        
+        setLayout(props.boardLayout);
+        handleSetModules(layout);
     }, [params.id, props.boardLayout.layoutType, props.boardLayout.leftRows, props.boardLayout.rightRows]);
+    useEffect(() => {
+        handleSetModules(layout);
+    }, [layout.layoutType, layout.leftRows, layout.rightRows])
 
     const handleSetModules = (layout: Layout) => {
-        let tempModules: ModuleType[][] = [...modules];
+        let tempModules: ExerciseModule[] = [...modules]; 
+        let tempEmpty: ExerciseModule = {id: 0, position: 0, type: ModuleType.EMPTY};
         //Adds or removes left rows
-        for (let i = 0; i < layout.leftRows - 1; i++) {
-            if (tempModules[0].length < layout.leftRows) {
-                tempModules[0].push(ModuleType.EMPTY);
-            }
-            else if (tempModules[0].length > layout.leftRows) {
-                tempModules = tempModules.slice(1);
-            }  
-        }
-        //Adds or removes right rows + right col
-        if (layout.rightRows === 0 && tempModules.length !== 1) {
-            tempModules = tempModules.slice(1);
-        }
-        else if (layout.rightRows > 0 && tempModules.length === 1) {
-            tempModules.push([ModuleType.EMPTY]);
+        switch (layout.layoutType) {
+            case LayoutType.SINGLE:
+                if (!tempModules.find((val) => val.position === 1)) {tempModules.push({...tempEmpty, position: 1})};
+                tempModules = tempModules.filter((val) => val.position <= 1);
+                console.log(JSON.stringify(tempModules));
+                break;
+            case LayoutType.TWO_HORIZONTAL:
+                if (!tempModules.find((val) => val.position === 2)) tempModules.push({...tempEmpty, position: 2});
+                tempModules = tempModules.filter((val) => val.position <= 2);
+                break;
+            case LayoutType.TWO_VERTICAL:
+                if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
+                tempModules = tempModules.filter((val) => val.position <= 3 && val.position !== 2);
+                break;
+            case LayoutType.ONE_LEFT_TWO_RIGHT:
+                if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
+                if (!tempModules.find((val) => val.position === 4)) tempModules.push({...tempEmpty, position: 4});
+                tempModules = tempModules.filter((val) => val.position <= 4 && val.position !== 2);
+                break;
+            case LayoutType.TWO_LEFT_TWO_RIGHT:
+                if (!tempModules.find((val) => val.position === 2)) tempModules.push({...tempEmpty, position: 2});
+                if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
+                if (!tempModules.find((val) => val.position === 4)) tempModules.push({...tempEmpty, position: 4});
+                tempModules = tempModules.filter((val) => val.position <= 4);
+                break;
+            case LayoutType.TWO_LEFT_ONE_RIGHT:
+                if (!tempModules.find((val) => val.position === 2)) tempModules.push({...tempEmpty, position: 2});
+                if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
+                tempModules = tempModules.filter((val) => val.position <= 3);
+                break;
+            default:
+                break;
         }
         
-        if (layout.rightRows > 0) {
-            for (let i = 0; i < layout.rightRows - 1; i++) {
-                if (tempModules[1].length < layout.rightRows) {
-                    tempModules[1].push(ModuleType.EMPTY);
-                }
-                else if (tempModules[1].length > layout.rightRows) {
-                    tempModules = tempModules.slice(1);
-                }  
-            }
-        }
-        setModules(tempModules);
-    } 
+        setModules([...tempModules.sort((a, b) => a.position - b.position)]);
+    }
 
-    const getModuleFromType = (type: ModuleType, id: number[]): React.ReactNode => {
+    const getModuleFromType = (type: ModuleType, position: number): React.ReactNode => {
         switch (type) {
             case ModuleType.EMPTY:
-                return <EmptyModule changeModuleModalRef={changeModuleModalRef} index={id} />;
+                return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
             case ModuleType.EXERCISE_DESCRIPTION:
-                return <ExerciseDescriptionModule changeModuleModalRef={changeModuleModalRef} index={id} isOwner={props.editMode}/>;
+                return <ExerciseDescriptionModule changeModuleModalRef={changeModuleModalRef} position={position} isOwner={props.editMode} />;
             default:
-                return <EmptyModule changeModuleModalRef={changeModuleModalRef} index={id} />;
+                return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
         };
     }
 
     let columns: JSX.Element[] = []
     let colElements = [];
     if (modules.length !== 0) {
-        let keyCounter = 0;
-        for (let i = 0; i < modules.length; i++) {
-            for (let j = 0; j < modules[i].length; j++) {
-                colElements.push((<Allotment.Pane key={keyCounter}>
-                    {getModuleFromType(modules[i][j], [i,j])}
+        for (let i = 0; i < 4; i++) {
+            let temp = modules.find((val) => val.position === i+1);
+            if (temp !== undefined) {
+                colElements.push((<Allotment.Pane key={i}>
+                    {getModuleFromType(temp.type, temp.position)}
                 </Allotment.Pane>));
-                keyCounter++;
             }
-            columns[i] = (<Allotment separator vertical key={keyCounter}>{colElements}</Allotment>);
-            colElements = [];
-            keyCounter++;
+            if ((i === 1  && modules.find((val) => val.position>2)) || i == 3) {
+                columns[i] = (<Allotment separator vertical key={i}>{colElements}</Allotment>);
+                colElements = [];
+            }
         }
     }
 
     return (
-        <div className='board-container'>
-            <Allotment className='board-outer' separator>
-                {columns.map((col) => {
-                    return col;
-                })}
-            </Allotment>
-            <ChangeModuleModal ref={changeModuleModalRef} changedModule={(newModule: ModuleType, index: number[])=>{
-                if (index.length === 2) {
+        <div className='exercise-wrapper'>
+            <div className='board-actions-container'>
+                <Button onClick={() => navigator(-1)}><ArrowLeft /></Button>
+                <Button onClick={() => changeLayoutModalRef.current?.handleShow()}>Change layout</Button>
+                <Button className='place-right' variant='success'>
+                    Save exercise
+                </Button>
+                <Button variant='danger' onClick={() => navigator(-1)}>
+                    Cancel
+                </Button>
+            </div>
+            <div className='board-container'>
+                <Allotment className='board-outer' separator>
+                    {columns.map((col) => {
+                        return col;
+                    })}
+                </Allotment>
+                {/* {props.editMode && <div className="position-fixed bottom-0 end-0 p-3" style={{ zIndex: "11", width: '260px' }}>
+                    <div id="liveToast" className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div className="toast-body">
+                            <Button variant='success' style={{ marginRight: '10px' }}>
+                                Save exercise
+                            </Button>
+                            <Button variant='danger' onClick={() => navigator(-1)}>
+                                Cancel
+                            </Button>
+                        </div>
+                    </div>
+                </div>} */}
+            </div>
+            <ChangeModuleModal ref={changeModuleModalRef} changedModule={(newModule: ModuleType, position: number) => {
+                if (position > 0 && position <= 4) {
                     let temp = [...modules];
-                    temp[index[0]][index[1]] = newModule;
+                    temp = temp.map((val) => {
+                        if (val.position === position) {
+                            return {...val, type: newModule}
+                        }
+                        return val;
+                    });
                     setModules(temp);
                 }
             }} />
+            <ChangeLayoutModal
+                ref={changeLayoutModalRef}
+                currentLayout={layout}
+                changedLayout={(newLayout: Layout) => setLayout(newLayout)}
+            />
         </div>
     )
 }

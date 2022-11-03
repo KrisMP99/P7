@@ -3,8 +3,11 @@ import { Container} from 'react-bootstrap';
 import './Frontpage.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 
+interface LoginProps {
+    loggedIn: () => void;
+}
 
-function Frontpage() {
+function Frontpage(props: LoginProps) {
 
     const [{username, password}, setCredentials] = useState({
         username: '',
@@ -15,7 +18,7 @@ function Frontpage() {
                     { username: 'Jonas', password: '1234'}];
 
     const [error, setError]=useState<string>();
-    const [loggedIn, setLoggedIn ] = useState(false)
+    // const [loggedIn, setLoggedIn ] = useState(false)
 
     const navigate = useNavigate();
 
@@ -24,10 +27,9 @@ function Frontpage() {
         const account = users.find((user) => user.username === username);
 
         if(account && account.password === password) {
-            setLoggedIn(true)
-            navigate("/landingpage");
+            props.loggedIn();
+            navigate("/home");
         } else {
-            setLoggedIn(false)
             setError('Invalid Username or Password')
         }
     }

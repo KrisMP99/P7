@@ -13,23 +13,35 @@ import Course from './Components/Course/Course';
 
 export interface User {
     id: number;
-    name: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    username: string;
 }
 
 function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
     const openCreateCourseModalRef = useRef<ShowModal>(null);
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [boardLayout, setBoardLayout] = useState<Layout>({layoutType: LayoutType.SINGLE, leftRows: 1, rightRows: 0});
-    // const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const navigator = useNavigate();
 
     return (
         <div className='main-container'>
-            <Navbar />
+            <Navbar 
+                user={user}
+                logOut={()=>setUser(null)}
+            />
             <Routes>
                 <Route path="/" element={
                     <div className="space-from-navbar">
-                        <Frontpage />
+                        <Frontpage 
+                            loggedIn={()=> {
+                                setLoggedIn(true);
+                                setUser({id: 0, firstname: "Jonas", lastname: "Noermark", email: "dummy@mail.dk", username: "jonse"});
+                            }}
+                        />
                     </div>
                 } />
                 <Route path="/signup" element={
@@ -37,22 +49,22 @@ function App() {
                         <SignUp />
                     </div>
                 } />
-                <Route path="/exercise/:id" element={
+                {user && loggedIn && <><Route path="/exercise/:id" element={
                     <ExerciseBoard 
                         editMode={false}
                         boardLayout={boardLayout}
                         
                     />
                 } />
-                <Route path="/landingpage" element={
+                <Route path="/home" element={
                     <Landingpage />
                 } />
                 <Route path="/course/:id" element={
                     <Course 
-                        user={{id: 0, name:'Kristian Morsing'}}
+                        user={user!}
                         openCreateExerciseModalRef={openCreateExerciseModalRef}
                     />
-                } />
+                } /></>}
             </Routes>
             {/* <Footer/> */}
             <CreateCourseModal ref={openCreateCourseModalRef}

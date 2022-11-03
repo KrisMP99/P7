@@ -8,7 +8,7 @@ import './ExerciseDescription.css';
 
 interface ExerciseDescriptionProps {
     changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef>;
-    index: number[];
+    position: number;
     isOwner: boolean;
 }
 
@@ -34,7 +34,7 @@ export default function ExerciseDescriptionModule(props: ExerciseDescriptionProp
         <>
             <div id='exercise-description-container' className='module-container'>
                 {<ModuleActionBar 
-                    changeModule={()=>props.changeModuleModalRef.current?.handleShow(ModuleType.EXERCISE_DESCRIPTION, props.index)}
+                    changeModule={()=>props.changeModuleModalRef.current?.handleShow(ModuleType.EXERCISE_DESCRIPTION, props.position)}
                     changeEditMode={()=>setEditMode(!editMode)}
                 />}
                 {/* <button onClick={()=>setEditMode(!editMode)}>Edit</button> */}
