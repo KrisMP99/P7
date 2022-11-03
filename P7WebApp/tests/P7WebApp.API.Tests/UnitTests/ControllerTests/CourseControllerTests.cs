@@ -10,14 +10,6 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 {
     public class CourseControllerTests
     {
-        //Mock<Mediator> mockMediator;
-        //CourseController courseController;
-        //public CourseControllerTests()
-        //{
-        //    mockMediator = new Mock<Mediator>();
-        //    courseController = new CourseController(mockMediator.Object);
-        //}
-
         [Fact]
         public async Task CreateCourse_ReturnsOK_ResultIsGreaterThanZero()
         {

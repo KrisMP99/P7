@@ -74,7 +74,7 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
             throw new NotImplementedException();
         }
 
-        public void CreateExerciseGroup(ExerciseGroup exercisegroup)
+        public void AddExerciseGroup(ExerciseGroup exercisegroup)
         {
             try
             {
