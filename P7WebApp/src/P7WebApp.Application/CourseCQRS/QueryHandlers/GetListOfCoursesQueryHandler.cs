@@ -26,7 +26,7 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
         {
             try
             {
-                var courses = await _unitOfWork.CourseRepository.GetListOfCourses(request.Amount);
+                var courses = await _unitOfWork.CourseRepository.GetListOfCourses();
                 var response = CourseMapper.Mapper.Map<IEnumerable<CourseResponse>>(courses);
                 return response; 
             }

@@ -11,10 +11,5 @@ namespace P7WebApp.Application.CourseCQRS.Queries
     public class GetListOfCoursesQuery : IRequest<IEnumerable<CourseResponse>>
     {
 
-        public GetListOfCoursesQuery(int amount)
-        {
-            Amount = amount;
-        }
-        public int Amount { get; set; }
     }
 }

@@ -80,19 +80,19 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("{amount}")]
-        public async Task<IActionResult> GetListOfCourses([FromRoute] int amount)
+        [Route("get-courses/{amount}")]
+        public async Task<IActionResult> GetListOfCourses()
         {
             try
             {
-                var result = await _mediator.Send(new GetListOfCoursesQuery(amount));
-                if (result.Any())
+                var result = await _mediator.Send(new GetListOfCoursesQuery());
+                if (result.Count() > 0)
                 {
                     return Ok(result);
                 }
                 else
                 {
-                    return BadRequest($"Could not find course with id {amount}");
+                    return BadRequest($"Could not find course with id");
                 }
             }
             catch (Exception ex)

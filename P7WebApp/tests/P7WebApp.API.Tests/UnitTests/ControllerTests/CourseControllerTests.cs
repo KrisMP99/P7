@@ -9,6 +9,7 @@ using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
 using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
 using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
+using System.Collections.Generic;
 
 namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 {
@@ -61,13 +62,13 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
         {
             var mockMediator = new Mock<IMediator>();
             var courseController = new CourseController(mockMediator.Object);
-            var getListOfCoursesQuery = new GetListOfCoursesQuery(1);
-            mockMediator.Setup(m => m.Send(getListOfCoursesQuery, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<CourseResponse> { new CourseResponse { Id = 1 }}.AsEnumerable<CourseResponse>);
+            IEnumerable<CourseResponse> courseResponses = new List<CourseResponse> { new CourseResponse { Id = 1 } }
+            mockMediator.Setup(m => m.Send(It.IsAny<GetListOfCoursesQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(courseResponses);
 
-            var result =  await courseController.GetListOfCourses(1);
+            var result =  await courseController.GetListOfCourses();
 
-            result.Should().BeOfType<OkResult>();
+            result.Should().BeOfType<OkObjectResult>();
         }
     }
 }
