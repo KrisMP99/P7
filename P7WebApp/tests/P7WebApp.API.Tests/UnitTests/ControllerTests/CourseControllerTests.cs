@@ -10,6 +10,14 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 {
     public class CourseControllerTests
     {
+        //Mock<Mediator> mockMediator;
+        //CourseController courseController;
+        //public CourseControllerTests()
+        //{
+        //    mockMediator = new Mock<Mediator>();
+        //    courseController = new CourseController(mockMediator.Object);
+        //}
+
         [Fact]
         public async Task CreateCourse_ReturnsOK_ResultIsGreaterThanZero()
         {
@@ -26,7 +34,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
         [InlineData(0)]
         [InlineData(-1)]
         [InlineData(-100)]
-        public async Task CreateCourse_ReturnsBadRequest_ResultIslesOrEqualToZero(int value)
+        public async Task CreateCourse_ReturnsBadRequest_ResultIsLessOrEqualToZero(int value)
         {
             var mockMediator = new Mock<IMediator>();
             var courseController = new CourseController(mockMediator.Object);
@@ -36,5 +44,18 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             var result = await courseController.CreateCourse(createCourseCommand);
             result.Should().BeOfType<BadRequestObjectResult>();
         }
+
+        [Fact]
+        public async Task CreateCourse_ReturnsBadRequest_ResultIsNull()
+        {
+            var mockMediator = new Mock<IMediator>();
+            var courseController = new CourseController(mockMediator.Object);
+            var createCourseCommand = new CreateCourseCommand("test", "test", false, new List<Exercise> { });
+            mockMediator.Setup(m => m.Send(createCourseCommand, It.IsAny<CancellationToken>())).ReturnsAsync(null);
+
+            var result = await courseController.CreateCourse(createCourseCommand);
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
     }
 }
