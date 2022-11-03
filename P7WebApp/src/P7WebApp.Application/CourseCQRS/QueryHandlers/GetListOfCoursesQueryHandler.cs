@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
@@ -13,18 +14,19 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
 {
     public class GetListOfCoursesQueryHandler : IRequestHandler<GetListOfCoursesQuery, IEnumerable<CourseResponse>>
     {
-        ICourseRepository _courseRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        
 
-        public GetListOfCoursesQueryHandler(ICourseRepository courseRepository)
+        public GetListOfCoursesQueryHandler(IUnitOfWork unitOfWork)
         {
-            _courseRepository = courseRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async  Task<IEnumerable<CourseResponse>> Handle(GetListOfCoursesQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var courses = await _courseRepository.GetListOfCourses(request.Amount);
+                var courses = await _unitOfWork.CourseRepository.GetListOfCourses(request.Amount);
                 var response = CourseMapper.Mapper.Map<IEnumerable<CourseResponse>>(courses);
                 return response; 
             }
