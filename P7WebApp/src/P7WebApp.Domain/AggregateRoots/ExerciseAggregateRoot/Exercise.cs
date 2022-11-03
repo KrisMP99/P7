@@ -31,7 +31,7 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
         public ExerciseType Type { get; set; }
         public List<Module> Modules { get; set; }
 
-        public void UpdateInformation(string newTitle, bool visibility, int exerciseNumber, DateTime newStartDate, DateTime newEndDate)
+        public void EditExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime newStartDate, DateTime newEndDate)
         {
             throw new NotImplementedException();
         }
