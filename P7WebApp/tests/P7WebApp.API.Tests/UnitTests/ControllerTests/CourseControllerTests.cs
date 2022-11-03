@@ -56,6 +56,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             mockMediator.Setup(m => m.Send(createCourseCommand, It.IsAny<CancellationToken>())).ReturnsAsync(null);
 
             var result = await courseController.CreateCourse(createCourseCommand);
+            
             result.Should().BeOfType<BadRequestObjectResult>();
         }
 
