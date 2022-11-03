@@ -43,7 +43,7 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot
                 }
                 else
                 {
-                    throw new Exception("Could not find an exercise with the specified Id");
+                    throw new Exception("Could not find an exercise with the specified id");
                 }
             }
             catch (Exception)
@@ -52,19 +52,50 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot
             }
         }
 
-        public void EditInformation(string newTitle, string newDescription, int newExerciseGroupNumber, DateTime newBecomeVisibleAt)
+        public IEnumerable<Exercise> GetAllExercises()
         {
-            throw new NotImplementedException();
+            return Exercises;
+        }
+
+        public void EditInformation(string newTitle, string newDescription, int newExerciseGroupNumber, bool isVisible, DateTime newBecomeVisibleAt)
+        {
+            Title = String.IsNullOrEmpty(newTitle) ? throw new ArgumentNullException("Title has not been set.") : newTitle;
+            Description = String.IsNullOrEmpty(newDescription) ? throw new ArgumentNullException("Description has not been set.") : newDescription;
+            ExerciseGroupNumber = ExerciseGroupNumber < 0 ? throw new ArgumentOutOfRangeException("Exercisegroup number cannot be negative.") : newExerciseGroupNumber;
+            IsVisible = isVisible;
+            VisibleFromDate = newBecomeVisibleAt;
+            LastModifiedDate = DateTime.Now;
         }
 
         public void AddExercise(Exercise newExercise)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if(newExercise == null)
+                {
+                    throw new Exception("Could not add exercise (Exercise is null)");
+                } 
+                else
+                {
+                    Exercises.Add(newExercise);
+                }
+            } 
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public void RemoveExercise(int exerciseId)
+        public void RemoveExerciseById(int exerciseId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Exercises.Remove(GetExercise(exerciseId));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

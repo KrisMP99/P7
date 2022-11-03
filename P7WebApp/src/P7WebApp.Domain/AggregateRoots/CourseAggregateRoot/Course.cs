@@ -75,13 +75,13 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
             throw new NotImplementedException();
         }
 
-        public void AddExerciseGroup(ExerciseGroup exercisegroup)
+        public void AddExerciseGroup(ExerciseGroup exerciseGroup)
         {
             try
             {
-                if(exercisegroup is not null)
+                if(exerciseGroup is not null)
                 {
-                    ExerciseGroups.Add(exercisegroup);
+                    ExerciseGroups.Add(exerciseGroup);
                 }
                 else
                 {
@@ -93,5 +93,18 @@ namespace P7WebApp.Domain.AggregateRoots.CourseAggregateRoot
                 throw;
             }
         }
+
+        public void RemoveExerciseGroup(int exerciseGroupId)
+        {
+            try
+            {
+                ExerciseGroups.Remove(GetExerciseGroup(exerciseGroupId));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

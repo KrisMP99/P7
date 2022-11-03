@@ -27,7 +27,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
         {
-            return new Course() { Id = 1};
+            return new Course();
         }
 
         public async Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id)

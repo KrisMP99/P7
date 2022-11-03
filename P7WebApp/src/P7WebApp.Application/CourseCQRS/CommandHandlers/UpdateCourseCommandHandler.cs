@@ -1,24 +1,24 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Exceptions;
+using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
     public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, int>
     {
-        private readonly ICourseRepository _courseRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateCourseCommandHandler(ICourseRepository courseRepository)
+        public UpdateCourseCommandHandler(IUnitOfWork unitOfWork)
         {
-            _courseRepository = courseRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<int> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var course = await _courseRepository.GetCourse(request.Id);
+                var course = await _unitOfWork.CourseRepository.GetCourse(request.Id);
 
                 if (course is null)
                 {
@@ -27,11 +27,10 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 else
                 {
                     course.EditInformation(newTitle: request.Title, newDescription: request.Description, newVisibility: request.IsPrivate);
-                    int rowsAffected = await _courseRepository.UpdateCourse(course);
+                    int rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
                     return rowsAffected;
                 }
-
             }
             catch (Exception)
             {

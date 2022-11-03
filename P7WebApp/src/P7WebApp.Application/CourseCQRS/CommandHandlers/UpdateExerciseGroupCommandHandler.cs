@@ -32,7 +32,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 else
                 {
                     course.GetExerciseGroup(request.ExerciseGroupId)
-                        .EditInformation(newTitle: request.Title, newDescription: request.Description, newBecomeVisibleAt: request.BecomesVisibleAt, newExerciseGroupNumber: request.ExerciseGroupNumber);
+                        .EditInformation(newTitle: request.Title, newDescription: request.Description, isVisible: request.IsVisible, newBecomeVisibleAt: request.BecomesVisibleAt, newExerciseGroupNumber: request.ExerciseGroupNumber);
 
                     int affectedRows = await _courseRepository.UpdateCourse(course);
 

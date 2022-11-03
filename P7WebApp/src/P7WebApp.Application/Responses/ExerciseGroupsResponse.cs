@@ -1,6 +1,6 @@
 ﻿namespace P7WebApp.Application.Responses
 {
-    public class ExerciseGroupsResponse
+    public class ExerciseGroupResponse
     {
         public string Title { get; set; }
         public string Description { get; set; }

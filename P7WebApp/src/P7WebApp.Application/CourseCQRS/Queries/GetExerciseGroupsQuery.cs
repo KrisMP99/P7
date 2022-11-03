@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.Queries
 {
-    public class GetExerciseGroupsQuery : IRequest<IEnumerable<ExerciseGroupsResponse>>
+    public class GetExerciseGroupsQuery : IRequest<IEnumerable<ExerciseGroupResponse>>
     {
         public GetExerciseGroupsQuery(int id)
         {
