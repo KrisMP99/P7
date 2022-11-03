@@ -1,9 +1,6 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
-using P7WebApp.Domain.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,27 +9,26 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
-    public class CreateExerciseGroupCommandHandler : IRequestHandler<CreateExerciseGroupCommand, int>
+    public class DeleteExerciseGroupCommandHandler : IRequestHandler<DeleteExerciseGroupCommand, int>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateExerciseGroupCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteExerciseGroupCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(CreateExerciseGroupCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteExerciseGroupCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var exerciseGroup = CourseMapper.Mapper.Map<ExerciseGroup>(request);
-                var course = await _unitOfWork.CourseRepository.GetCourse(request.CourseId);
-
-                course.AddExerciseGroup(exerciseGroup);
+                var course = await _unitOfWork.CourseRepository.GetCourseFromExerciseGroupId(request.ExerciseGroupId);
+                course.RemoveExerciseGroup(request.ExerciseGroupId);
 
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
                 return rowsAffected;
+                
             }
             catch(Exception)
             {
