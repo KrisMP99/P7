@@ -104,7 +104,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
 
     let columns: JSX.Element[] = []
     let colElements = [];
-    if (modules.length !== 0) {
+    if (modules.length > 0) {
         for (let i = 0; i < 4; i++) {
             let temp = modules.find((val) => val.position === i+1);
             if (temp !== undefined) {
