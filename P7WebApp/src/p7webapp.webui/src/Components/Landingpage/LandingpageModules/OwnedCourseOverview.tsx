@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Container, Table, Form, InputGroup, Button, Pagination} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
+import { Trash } from 'react-bootstrap-icons';
+import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 
 export interface CourseOverview {
     id: number;
@@ -15,11 +17,13 @@ export interface CourseOverview {
 interface OwnedCourseOverviewProps {
     openCreateCourseModal: React.RefObject<ShowModal>;
     courses: CourseOverview[];
+    deletedCourse: (courses: CourseOverview[]) => void;
 }
 
 function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
+    const deleteCourseModalRef = useRef<ShowDeleteConfirmModal>(null);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
@@ -57,6 +61,7 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                                 <th>Exercises</th>
                                 <th>Members</th>
                                 <th>Owner</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,6 +73,14 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                                 <td>{item.exerciseAmount}</td>
                                 <td>{item.membersAmount}</td>
                                 <td>{item.owner}</td>
+                                <td>
+                                    <Button variant='danger' onClick={(e)=>{
+                                        e.stopPropagation();
+                                        deleteCourseModalRef.current?.handleShow(item.name, item.id, DeleteElementType.COURSE);
+                                    }}>
+                                        <Trash/>
+                                    </Button>
+                                </td>
                             </tr>
                         ))}
 
@@ -156,6 +169,12 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                     </Form.Select>
                 </div>
             </div>
+            <DeleteConfirmModal 
+                ref={deleteCourseModalRef}
+                confirmDelete={(id: number, type: DeleteElementType)=>{
+                    props.deletedCourse(props.courses.filter((course) => course.id !== id));
+                }}                
+            />
         </Container>
     );
 }

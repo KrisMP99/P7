@@ -1,19 +1,54 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { Modal, Button, Table } from 'react-bootstrap';
-import { BoardModuleType } from '../../ExerciseBoard/ExerciseBoard';
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
+import { ModuleType } from '../../ExerciseBoard/ExerciseBoard';
 import './CreateExerciseModal.css';
+import '../../../App.css';
+
+import defaultSingleImg from '../../../Images/LayoutDefault/default_single.svg';
+import defaultTwoVertivalImg from '../../../Images/LayoutDefault/default_vertical.svg';
+import defaultTwoHorizontalImg from '../../../Images/LayoutDefault/default_horizontal.svg';
+import defaultTwoLeftOneRightImg from '../../../Images/LayoutDefault/default_2left_1right.svg';
+import defaultOneLeftTwoRightImg from '../../../Images/LayoutDefault/default_1left_2right.svg';
+import defaultTwoLeftTwoRightImg from '../../../Images/LayoutDefault/default_2left_2right.svg';
+
+import selectedSingleImg from '../../../Images/LayoutSelected/selected_single.svg';
+import selectedTwoVertivalImg from '../../../Images/LayoutSelected/selected_vertical.svg';
+import selectedTwoHorizontalImg from '../../../Images/LayoutSelected/selected_horizontal.svg';
+import selectedTwoLeftOneRightImg from '../../../Images/LayoutSelected/selected_2left_1right.svg';
+import selectedOneLeftTwoRightImg from '../../../Images/LayoutSelected/selected_1left_2right.svg';
+import selectedTwoLeftTwoRightImg from '../../../Images/LayoutSelected/selected_2left_2right.svg';
+import { Exercise } from '../../Course/Course';
 
 interface CreateExerciseModalProps {
-    created: (cols: BoardModuleType[][]) => void;
+    created: (layout: LayoutType, exercise: Exercise) => void;
 }
 export interface ShowModal {
     handleShow(): void;
 }
+export interface ShowCreateExerciseModal {
+    handleShow: (exerciseGroupId: number) => void;
+}
 
-export const CreateExerciseModal = forwardRef<ShowModal, CreateExerciseModalProps>((props, ref) => {
+export enum LayoutType {
+    SINGLE = 0,
+    TWO_VERTICAL = 1,
+    TWO_HORIZONTAL = 2,
+    TWO_LEFT_ONE_RIGHT = 3,
+    ONE_LEFT_TWO_RIGHT = 4,
+    TWO_LEFT_TWO_RIGHT = 5
+}
+
+export interface Layout {
+    layoutType: LayoutType;
+    leftRows: number;
+    rightRows: number;
+}
+
+export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExerciseModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
-    const [columnCount, setColumnCount] = useState(1);
-    const [rowCount, setRowCount] = useState<number[]>([1]);
+    // const [exerciseGroupId, setExerciseGroupId] = useState<number>(-1);
+    const [exercise, setExercise] = useState<Exercise>({id: 0, exerciseGroupId: 0, title:'', isVisible: false});
+    const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
 
     const handleClose = () => setShow(false);
 
@@ -21,116 +56,101 @@ export const CreateExerciseModal = forwardRef<ShowModal, CreateExerciseModalProp
     useImperativeHandle(
         ref,
         () => ({
-            handleShow() {
+            handleShow(exerciseGroupId: number) {
                 setShow(true);
+                setExercise({...exercise, exerciseGroupId: exerciseGroupId});
             }
         }),
     );
 
-    let rows: JSX.Element[] = [];
-    let rowTables: JSX.Element[] = [];
-    for (let i = 0; i < columnCount; i++) {
-        rows.push((
-            <div className='row-input-container' key={i}>
-                <label>Rows for column {i + 1}:</label>
-                <input type={'number'} min={1} max={5}
-                    value={rowCount[i]}
-                    onKeyDown={(e) => e.preventDefault()}
-                    onChange={(e) => {
-                        setRowCount(rowCount.map((val, index) => {
-                            if (i === index) return Number(e.currentTarget.value);
-                            return val;
-                        }));
-                    }}
-                />
-            </div>
-        ));
-        let tableRow = [];
-        for (let j = 0; j < rowCount[i]; j++) {
-            tableRow.push((
-                <tbody key={j}>
-                    <tr>
-                        <td>{j+1}</td>
-                        <td>
-                            <select>
-                                <option>{getModuleOptions(BoardModuleType.ExerciseDescription)}</option>
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            ));
-        }
-        rowTables.push(
-            <div key={i}>
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Row Content:</th>
-                        </tr>
-                    </thead>
-                    { tableRow }
-                </Table>
-            </div>
-        )
+    useEffect((() => {
+        setExercise({...exercise, title: ''});
+        setLayout(LayoutType.SINGLE);
+    }), [exercise.exerciseGroupId, show]);
+
+    const handleChooseLayout = (type: LayoutType, left: number, right: number) => {
+        setLayout(type);
     }
 
     return (
         <Modal show={show} onHide={handleClose} size='lg'>
-            <Modal.Header closeButton>
-                <Modal.Title>Create exercise:</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div>
-                    <label>Colums:</label>
-                    <input type={'number'} min={1} max={3} onKeyDown={(e) => e.preventDefault()} value={columnCount} onChange={(e) => {
-                        if (Number(e.target.value) > columnCount) {
-                            setRowCount([...rowCount, 1]);
-                        }
-                        else if (Number(e.target.value) < columnCount) {
-                            setRowCount(rowCount.slice(0, Number(e.target.value)));
-                        }
-                        setColumnCount(Number(e.target.value));
-                    }} />
-                </div>
-                <div className='flex-space-evenly'>
-                    {rows}
-                </div>
-                <div className='flex-space-evenly'>
-                    {rowTables}
-                </div>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-                <Button variant="primary" onClick={
-                    () => {
-                        let columns: BoardModuleType[][] = [];
-                        for (let i = 0; i < columnCount; i++) {
-                            columns.push([]);
-                            for (let j = 0; j < rowCount[i]; j++) {
-                                columns[i].push(BoardModuleType.ExerciseDescription);
-                            }
-                        }
-                        props.created(columns);
-                        handleClose();
-                    }
-                }>
-                    Save Changes
-                </Button>
-            </Modal.Footer>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                props.created(layout, exercise);
+                handleClose();
+            }}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create exercise:</Modal.Title>
+                </Modal.Header>
+                <Modal.Body >
+                    <div className="mb-3 form-group modal-form-field">
+                        <label>Name:</label>
+                        <input className='modal-form-field-text form-control' type="text" required value={exercise.title} maxLength={35} onChange={(e) => {
+                            setExercise({...exercise, title: e.target.value});
+                        }} />
+                    </div>
+                    <Form.Group className="mb-3 modal-form-field">
+                        <Form.Label>Visible:</Form.Label>
+                        <Form.Check type="switch" checked={exercise.isVisible} onChange={(e)=>{
+                            setExercise({...exercise, isVisible: !exercise.isVisible});
+                        }}/>
+                    </Form.Group>
+                    <div className="mb-3">
+                        <label>Layout:</label>
+                        <div>
+                            <div className='layout-row'>
+                                <label>
+                                    <input type="radio" name="layout" value={LayoutType.SINGLE} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 0) }} />
+                                    <img src={layout === LayoutType.SINGLE ? selectedSingleImg : defaultSingleImg} alt="Single page" />
+                                </label>
+                                <label>
+                                    <input type="radio" name="layout" value={LayoutType.TWO_HORIZONTAL} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 0) }} />
+                                    <img src={layout === LayoutType.TWO_HORIZONTAL ? selectedTwoHorizontalImg : defaultTwoHorizontalImg} alt="Single page" />
+                                </label>
+                                <label>
+                                    <input type="radio" name="layout" value={LayoutType.TWO_VERTICAL} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 1) }} />
+                                    <img src={layout === LayoutType.TWO_VERTICAL ? selectedTwoVertivalImg : defaultTwoVertivalImg} alt="Single page" />
+                                </label>
+                            </div>
+                            <div className='layout-row'>
+                                <label>
+                                    <input type="radio" name="layout" value={LayoutType.ONE_LEFT_TWO_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 1, 2) }} />
+                                    <img src={layout === LayoutType.ONE_LEFT_TWO_RIGHT ? selectedOneLeftTwoRightImg : defaultOneLeftTwoRightImg} alt="Single page" />
+                                </label>
+                                <label>
+                                    <input type="radio" name="layout" value={LayoutType.TWO_LEFT_ONE_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 1) }} />
+                                    <img src={layout === LayoutType.TWO_LEFT_ONE_RIGHT ? selectedTwoLeftOneRightImg : defaultTwoLeftOneRightImg} alt="Single page" />
+                                </label>
+                                <label>
+                                    <input type="radio" name="layout" value={LayoutType.TWO_LEFT_TWO_RIGHT} onChange={(e) => { handleChooseLayout(Number(e.target.value), 2, 2) }} />
+                                    <img src={layout === LayoutType.TWO_LEFT_TWO_RIGHT ? selectedTwoLeftTwoRightImg : defaultTwoLeftTwoRightImg} alt="Single page" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" type='submit'>
+                        Create
+                    </Button>
+                </Modal.Footer>
+            </form>
         </Modal>
     )
 });
 
-function getModuleOptions(id: number) {
+export function getModuleOptions(id: number) {
     switch (id) {
-        case BoardModuleType.ExerciseDescription:
+        case ModuleType.EXERCISE_DESCRIPTION:
             return 'Exercise Description';
+        case ModuleType.EMPTY:
+            return 'Empty';
         default:
             return 'Error';
     }
-} 
+}
 
 export default CreateExerciseModal;

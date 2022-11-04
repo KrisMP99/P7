@@ -8,6 +8,7 @@ import { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import ExerciseOverview from './ExerciseOverview/ExerciseOverview';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import { Gear, Plus } from 'react-bootstrap-icons';
+import CreateExerciseGroupModal, { ShowCreateExerciseGroupModal } from '../Modals/CreateExerciseGroupModal/CreateExerciseGroupModal';
 
 export interface ExerciseGroup {
     id: number;
@@ -36,17 +37,11 @@ interface CourseProps {
 }
 
 export default function Course(props: CourseProps) {
-    const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
-    const [editedCourse, setEditedCourse] = useState<Course | null>(null);
-    const [isOwner, setIsOwner] = useState<boolean>(false);
-    const [isEditMode, setIsEditMode] = useState<boolean>(false);
-    const [course, setCourse] = useState<Course | null>(null);
-
     //DUMMY DATA:
     const exGroups: ExerciseGroup[] = [
-        { id: 0, title: "Session 1", isVisible: true }, 
-        { id: 1, title: "Session 2", isVisible: true }, 
-        { id: 2, title: "Session 3", isVisible: true }, 
+        { id: 0, title: "Session 1", isVisible: true },
+        { id: 1, title: "Session 2", isVisible: true },
+        { id: 2, title: "Session 3", isVisible: true },
         { id: 3, title: "Session 4", isVisible: true }
     ];
     const ex: Exercise[] = [
@@ -62,13 +57,22 @@ export default function Course(props: CourseProps) {
         { id: 9, exerciseGroupId: 3, title: 'Exercise 4', isVisible: true }
     ]
 
+    const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
+    const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
+
+    const [course, setCourse] = useState<Course>({ title: 'Course Title', description: 'Course description very specific to course', exerciseGroups: exGroups, exercises: ex, ownerId: 0 });
+    const [editedCourse, setEditedCourse] = useState<Course>({...course});
+    const [isOwner, setIsOwner] = useState<boolean>(false);
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+
+
 
     useEffect(() => {
-        //Fetch course here and set it
+        //WIP - Fetch course here and set it
         if (props.user.id === course?.ownerId && !isOwner) {
             setIsOwner(true);
         }
-        setCourse({ title: 'Course Title', description: 'Course description very specific to course', exerciseGroups: exGroups, exercises: ex, ownerId: 0 });
         setEditedCourse(course);
     }, [course?.ownerId]);
     return (
@@ -84,32 +88,32 @@ export default function Course(props: CourseProps) {
                     }}
                     readOnly={!isEditMode}
                 />
+                {isOwner && (
+                    <div style={{ float: 'right' }}>
+                        {isEditMode &&
+                            <>
+                                <Button className='btn-1' variant='success' onClick={() => {
+                                    setCourse(editedCourse);
+                                    setIsEditMode(false);
+                                }}>
+                                    Save Changes
+                                </Button>
+                                <Button onClick={() => {
+                                    setEditedCourse(course);
+                                    setIsEditMode(false);
+                                }}>
+                                    Cancel
+                                </Button>
+                            </>
+                        }
+                        {!isEditMode &&
+                            <Button style={{ height: '50px', width: '50px' }} onClick={() => setIsEditMode(true)}>
+                                <Gear />
+                            </Button>
+                        }
+                    </div>
+                )}
             </div>
-            {isOwner && (
-                <div>
-                    {isEditMode && 
-                        <>
-                            <Button className='btn-1' variant='success' onClick={()=> {
-                                setCourse(editedCourse);
-                                setIsEditMode(false);
-                            }}>
-                                Save Changes
-                            </Button>
-                            <Button onClick={()=> {
-                                setEditedCourse(course);
-                                setIsEditMode(false);
-                            }}>
-                                Cancel
-                            </Button>
-                        </>
-                    }                
-                    {!isEditMode &&
-                        <Button style={{height:'50px', width:'50px'}} onClick={()=>setIsEditMode(true)}>
-                            <Gear/>
-                        </Button>
-                    }
-                </div>
-            )}
             <div className='course-description-container'>
                 <textarea
                     className='text-area'
@@ -125,54 +129,55 @@ export default function Course(props: CourseProps) {
             <div className='course-exercises-container'>
                 <Tabs defaultActiveKey={'exercises'} fill={isOwner}>
                     <Tab eventKey={'exercises'} title={'Exercises'}>
-                        <div className={'d-flex' + (isEditMode?'':' d-none')}>
+                        <div className={'d-flex' + (isOwner ? '' : ' d-none')}>
                             <Button className={'create-btns'} onClick={() => {
-                                let groups = [...editedCourse?.exerciseGroups!,
-                                {
-                                    id: Math.max(...editedCourse!.exerciseGroups?.map(o => o.id), 0) + 1,
-                                    title: 'New group added',
-                                    isVisible: true
-                                }];
-                                setEditedCourse({ ...editedCourse!, exerciseGroups: groups });
+                                createExerciseGroupModalRef.current?.handleShow();
                             }}>
-                                <Plus/>ExerciseGroup
-                            </Button>
-                            <Button className={'create-btns'} onClick={() => {
-                                props.openCreateExerciseModalRef.current?.handleShow();
-                            }}>
-                                <Plus/>Exercise
+                                <Plus />ExerciseGroup
                             </Button>
                         </div>
                         <ExerciseOverview
-                            course={editedCourse}
-                            changeCourse={(newCourse: Course) => { setEditedCourse(newCourse) }}
+                            course={course}
+                            changedCourse={(newCourse: Course) => setCourse(newCourse)}
                             openDeleteExerciseModalRef={openDeleteExerciseModalRef}
                             isOwner={isOwner}
-                            isEditMode={isEditMode}
+                            openCreateExerciseModalRef={props.openCreateExerciseModalRef}
                         />
                     </Tab>
-                    <Tab eventKey={'members'} title={'Members'} tabClassName={!isOwner?'d-none':''}>
+                    <Tab eventKey={'members'} title={'Members'} tabClassName={!isOwner ? 'd-none' : ''}>
                         <p>Member overview here.</p>
                     </Tab>
-                    <Tab eventKey={'statistics'} title={'Statistics'} tabClassName={!isOwner?'d-none':''}>
+                    <Tab eventKey={'statistics'} title={'Statistics'} tabClassName={!isOwner ? 'd-none' : ''}>
                         <p>Statistics overview here.</p>
                     </Tab>
                 </Tabs>
             </div>
-            <DeleteConfirmModal 
-                ref={openDeleteExerciseModalRef} 
+            <DeleteConfirmModal
+                ref={openDeleteExerciseModalRef}
                 confirmDelete={(id: number, type: DeleteElementType) => {
-                    if(editedCourse) {
-                        if(type === DeleteElementType.EXERCISE) {
-                            let newExercises = editedCourse.exercises.filter((ex) => ex.id !== id);
-                            setEditedCourse({...editedCourse, exercises: newExercises});
+                    if (course) {
+                        if (type === DeleteElementType.EXERCISE) {
+                            let newExercises = course.exercises.filter((ex) => ex.id !== id);
+                            //WIP - MAKE POST TO DELETE EXERCISE
+                            //WIP - REFETCH COURSE
+                            setCourse({ ...course, exercises: newExercises });
                         }
                         else if (type === DeleteElementType.EXERCISEGROUP) {
-                            let newExerciseGroups = editedCourse.exerciseGroups.filter((group) => group.id !== id)
-                            setEditedCourse({...editedCourse, exerciseGroups: newExerciseGroups});
+                            let newExerciseGroups = course.exerciseGroups.filter((group) => group.id !== id)
+                            //WIP - MAKE POST TO DELETE EXERCISEGROUP
+                            //WIP - REFETCH COURSE
+                            setCourse({ ...course, exerciseGroups: newExerciseGroups });
                         }
                     }
-                }} 
+                }}
+            />
+            <CreateExerciseGroupModal
+                ref={createExerciseGroupModalRef}
+                updateExerciseGroups={(dummyTitle: string, dummyVisibility: boolean) => {
+                    //WIP - Fetch exercisegroups again
+                    let dummyGroup = {id: course.exerciseGroups.length, title: dummyTitle, isVisible: dummyVisibility}
+                    setCourse({...course, exerciseGroups: [...course.exerciseGroups, dummyGroup]})
+                }}
             />
         </Container>
     )
