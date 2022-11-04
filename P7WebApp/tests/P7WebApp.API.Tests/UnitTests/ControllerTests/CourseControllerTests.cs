@@ -95,22 +95,16 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 
             resultObject
                 .Should()
-                .NotBeNull();
-
-            resultObject
-                .Should()
+                .NotBeNull()
+                .And
                 .BeOfType<OkObjectResult>();
 
             result
                 .Should()
-                .NotBeNull();
-
-            result
-                .Should()
-                .BeOfType(typeof(List<ExerciseGroupResponse>));
-
-            result
-                .Should()
+                .NotBeNull()
+                .And
+                .BeOfType(typeof(List<ExerciseGroupResponse>))
+                .And
                 .HaveCount(2);
         }
 
