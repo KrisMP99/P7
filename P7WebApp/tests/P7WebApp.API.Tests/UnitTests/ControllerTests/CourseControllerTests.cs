@@ -77,12 +77,35 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 
         // Exercise Groups Related Tests
         [Fact]
-        public async Task GetExerciseGroupsByCourseId_ReturnsOkObject_And_ContainsTwoExerciseGroupReponses()
+        public async Task GetExerciseGroupsByCourseId_ReturnsOkObject_GivenAListOfExerciseGroupsResponses()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             var courseController = new CourseController(mockMediator.Object);
             IEnumerable<ExerciseGroupResponse> exerciseGroupResponses = new List<ExerciseGroupResponse> { new ExerciseGroupResponse(), new ExerciseGroupResponse() };
+            mockMediator.Setup(m => m.Send(It.IsAny<GetExerciseGroupsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(exerciseGroupResponses);
+
+            // Act
+            var actionResult = await courseController.GetExerciseGroupsByCourseId(1);
+
+            // Assert
+            var resultObject = (OkObjectResult)actionResult;
+
+            resultObject
+                .Should()
+                .NotBeNull()
+                .And
+                .BeOfType<OkObjectResult>();
+        }
+
+        [Fact]
+        public async Task GetExerciseGroupsByCourseId_ReturnsOkObjectWithIEnumberableOfExerciseGroupResponses_GivenListOfExerciseGroupResponses()
+        {
+            // Arrange
+            var mockMediator = new Mock<IMediator>();
+            var courseController = new CourseController(mockMediator.Object);
+            IEnumerable<ExerciseGroupResponse> exerciseGroupResponses = new List<ExerciseGroupResponse> { new ExerciseGroupResponse(), new ExerciseGroupResponse() }.AsEnumerable<ExerciseGroupResponse>();
             mockMediator.Setup(m => m.Send(It.IsAny<GetExerciseGroupsQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(exerciseGroupResponses);
 
@@ -103,9 +126,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
                 .Should()
                 .NotBeNull()
                 .And
-                .BeOfType(typeof(List<ExerciseGroupResponse>))
-                .And
-                .HaveCount(2);
+                .BeOfType<List<ExerciseGroupResponse>>();
         }
 
 
