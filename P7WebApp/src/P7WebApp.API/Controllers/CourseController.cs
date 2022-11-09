@@ -28,11 +28,11 @@ namespace P7WebApp.API.Controllers
                 {
                     return BadRequest("Could not create course");
                 }
-			}
-			catch (Exception ex)
-			{
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
-			}
+            }
         }
 
         [HttpPost]
