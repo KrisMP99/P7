@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container, Table, Form, InputGroup, Button, Pagination} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './OwnedCourseOverview.css';
@@ -28,6 +28,12 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
     const [maxPages, setMaxPages] = useState<number>(1);
+
+    useEffect(() => {
+        setMaxPages(Math.ceil(props.courses.filter((item: { name: string; }) => {
+            return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
+        }).length / coursesPerPage));
+    }, [props.courses.length, coursesPerPage, search]);
 
     return (
         <Container>

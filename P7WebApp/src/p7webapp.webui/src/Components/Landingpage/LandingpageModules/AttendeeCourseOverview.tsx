@@ -16,8 +16,10 @@ function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element
     const navigate = useNavigate();
 
     useEffect(() => {
-        setMaxPages(Math.ceil(props.courses.length / coursesPerPage));
-    }, [props.courses.length, coursesPerPage]);
+        setMaxPages(Math.ceil(props.courses.filter((item: { name: string; }) => {
+            return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
+        }).length / coursesPerPage));
+    }, [props.courses.length, coursesPerPage, search]);
 
     return (
         <Container>
@@ -27,7 +29,9 @@ function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element
                 <div className='row col-7'>
                     <Form>
                         <InputGroup className='my-3'>
-                            <Form.Control onChange={(e) => setSearch(e.target.value.toLowerCase())} placeholder='Search for course name' />
+                            <Form.Control placeholder='Search for course name' onChange={(e) => { 
+                                setSearch(e.target.value.toLowerCase());
+                            }} />
                         </InputGroup>
                     </Form>
                 </div>
