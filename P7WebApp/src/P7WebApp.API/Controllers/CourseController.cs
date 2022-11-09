@@ -191,7 +191,7 @@ namespace P7WebApp.API.Controllers
 
         [HttpPost]
         [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-module")]
-        public async Task<IActionResult> AddModule(CreateExerciseModuleCommand request)
+        public async Task<IActionResult> AddModule(CreateModuleCommand request)
         {
             try
             {
@@ -215,7 +215,7 @@ namespace P7WebApp.API.Controllers
 
         [HttpPost]
         [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-module/{moduleId}")]
-        public async Task<IActionResult> DeleteModule(DeleteExerciseModuleCommand request)
+        public async Task<IActionResult> DeleteModule(DeleteModuleCommand request)
         {
             try
             {

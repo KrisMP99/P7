@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
-    public class CreateExerciseModuleCommandHandler : IRequestHandler<CreateExerciseModuleCommand, int>
+    public class CreateModuleCommandHandler : IRequestHandler<CreateModuleCommand, int>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateExerciseModuleCommandHandler(IUnitOfWork unitOfWork)
+        public CreateModuleCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(CreateExerciseModuleCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateModuleCommand request, CancellationToken cancellationToken)
         {
             try
             {

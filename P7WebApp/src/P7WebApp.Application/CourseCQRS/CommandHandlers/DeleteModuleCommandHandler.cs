@@ -4,17 +4,17 @@ using P7WebApp.Application.CourseCQRS.Commands;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
-    public class DeleteExerciseModuleCommandHandler : IRequestHandler<DeleteExerciseModuleCommand, int>
+    public class DeleteModuleCommandHandler : IRequestHandler<DeleteModuleCommand, int>
     {
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteExerciseModuleCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteModuleCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(DeleteExerciseModuleCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteModuleCommand request, CancellationToken cancellationToken)
         {
             try
             {
