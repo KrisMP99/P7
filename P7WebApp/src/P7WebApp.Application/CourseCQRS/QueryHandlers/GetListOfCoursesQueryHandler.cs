@@ -31,8 +31,7 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
                 return response; 
             }
             catch (Exception)
-            {
-
+            
                 throw;
             }
         }

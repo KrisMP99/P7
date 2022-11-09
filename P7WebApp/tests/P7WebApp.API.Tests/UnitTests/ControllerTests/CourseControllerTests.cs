@@ -62,7 +62,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
         {
             var mockMediator = new Mock<IMediator>();
             var courseController = new CourseController(mockMediator.Object);
-            IEnumerable<CourseResponse> courseResponses = new List<CourseResponse> { new CourseResponse { Id = 1 } }
+            IEnumerable<CourseResponse> courseResponses = new List<CourseResponse> { new CourseResponse { Id = 1 } };
             mockMediator.Setup(m => m.Send(It.IsAny<GetListOfCoursesQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(courseResponses);
 
