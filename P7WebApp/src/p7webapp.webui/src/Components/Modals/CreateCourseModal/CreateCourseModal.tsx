@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Course } from '../../Course/Course';
 import './OwnedCourseModal.css';
@@ -34,6 +34,12 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
             }
         }),
     );
+
+    useEffect(() => {
+        if (show) {
+            setCourse({...emptyCourse});
+        }
+    }, [show])
 
     return (
         <Modal show={show} onHide={handleClose}>
