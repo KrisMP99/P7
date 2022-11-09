@@ -73,11 +73,9 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
         }
 
 
-
-
         // Exercise Groups Related Tests
         [Fact]
-        public async Task GetExerciseGroupsByCourseId_ReturnsOkObject_And_ContainsTwoExerciseGroupReponses()
+        public async Task GetExerciseGroupsByCourseId_ReturnsOkObject_GivenListOfExerciseGroupResponses()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
@@ -91,7 +89,6 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 
             // Assert
             var resultObject = (OkObjectResult)actionResult;
-            IEnumerable<ExerciseGroupResponse>? result = resultObject.Value as IEnumerable<ExerciseGroupResponse>;
 
             resultObject
                 .Should()
@@ -99,13 +96,27 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
                 .And
                 .BeOfType<OkObjectResult>();
 
-            result
+        }
+
+
+        public async Task GetExerciseGroupsByCourseId_ReturnBadRequestObjectResult()
+        {
+            // Arrange
+            var mockMediator = new Mock<IMediator>();
+            var courseController = new CourseController(mockMediator.Object);
+            IEnumerable<ExerciseGroupResponse> exerciseGroupResponses = new List<ExerciseGroupResponse> { new ExerciseGroupResponse() { CourseId = 1 } };
+            mockMediator.Setup(m => m.Send(exerciseGroupResponses, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(exerciseGroupResponses);
+
+            // Act
+            var actionResult = await courseController.GetExerciseGroupsByCourseId(1);
+
+            // Assert
+            actionResult
                 .Should()
-                .NotBeNull()
-                .And
-                .BeOfType(typeof(List<ExerciseGroupResponse>))
-                .And
-                .HaveCount(2);
+                .BeOfType<BadRequestObjectResult>();
+               
+                
         }
 
 
