@@ -95,7 +95,6 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
                 .NotBeNull()
                 .And
                 .BeOfType<OkObjectResult>();
-
         }
 
 
@@ -115,8 +114,6 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             actionResult
                 .Should()
                 .BeOfType<BadRequestObjectResult>();
-               
-                
         }
 
 
