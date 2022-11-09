@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using P7WebApp.API.Controllers;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 
 namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 {

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
 using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers

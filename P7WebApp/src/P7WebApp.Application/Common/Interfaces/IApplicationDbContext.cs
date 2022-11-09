@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
-using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
+using P7WebApp.Domain.Aggregates.CourseAggregate;
+using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 
 namespace P7WebApp.Application.Common.Interfaces
 {

@@ -1,4 +1,4 @@
-﻿using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
+﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 
 namespace P7WebApp.Application.Responses
 {

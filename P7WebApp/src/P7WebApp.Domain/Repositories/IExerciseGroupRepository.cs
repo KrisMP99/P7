@@ -1,4 +1,4 @@
-﻿using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
+﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 
 namespace P7WebApp.Domain.Repositories
 {

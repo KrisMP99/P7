@@ -20,16 +20,16 @@ namespace P7WebApp.Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-            //services
-            //    .AddDefaultIdentity<ApplicationUser>()
-            //    .AddRoles<IdentityRole>()
-            //    .AddUserStore<ApplicationDbContext>();
-            //
-            //services.AddIdentityServer()
-            //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-            //
-            //services.AddAuthentication()
-            //    .AddIdentityServerJwt();
+            services
+                .AddDefaultIdentity<ApplicationUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddIdentityServer()
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ICourseRepository, CourseRepository>();
