@@ -9,7 +9,6 @@ namespace P7WebApp.Application.CourseCQRS.Commands
 {
     public class DeleteCourseCommand : IRequest<int>
     {
-
         public DeleteCourseCommand(int id)
         {
             Id = id;

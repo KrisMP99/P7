@@ -15,8 +15,6 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
     public class GetListOfCoursesQueryHandler : IRequestHandler<GetListOfCoursesQuery, IEnumerable<CourseResponse>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        
-
         public GetListOfCoursesQueryHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -31,7 +29,7 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
                 return response; 
             }
             catch (Exception)
-            
+            {
                 throw;
             }
         }
