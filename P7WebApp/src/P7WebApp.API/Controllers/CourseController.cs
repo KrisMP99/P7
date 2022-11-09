@@ -190,7 +190,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-modules")]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-module")]
         public async Task<IActionResult> AddModule(CreateExerciseModuleCommand request)
         {
             try
@@ -205,6 +205,123 @@ namespace P7WebApp.API.Controllers
                 {
                     return Ok(result);
 
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-module/{moduleId}")]
+        public async Task<IActionResult> DeleteModule(DeleteExerciseModuleCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not delete modules");
+                }
+                else
+                {
+                    return Ok(result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/create-solution")]
+        public async Task<IActionResult> CreateSolution(CreateSolutionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not create solution");
+                }
+                else
+                {
+                    return Ok(result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-solution/{solutionId}")]
+        public async Task<IActionResult> DeleteSolution(CreateSolutionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not delete solution");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/create-submission")]
+        public async Task<IActionResult> CreateSubmission(CreateSubmissionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not create submission");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-submission/{submissionId}")]
+        public async Task<IActionResult> DeleteSubmission(DeleteSubmissionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not delete submission");
+                }
+                else
+                {
+                    return Ok(result);
                 }
             }
             catch (Exception ex)

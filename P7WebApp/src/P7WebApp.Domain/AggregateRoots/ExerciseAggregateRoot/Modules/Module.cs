@@ -10,16 +10,16 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules
 {
     public abstract class Module : EntityBase, IAggregateRoot
     {
-        public Module(int exerciseId, string description, double height, double width, int position) 
-        { 
-            ExerciseId = exerciseId;
+        public Module(int moduleId, string description, double height, double width, int position) 
+        {
+            ModuleId = moduleId;
             Description = description;
             Height = height;
             Width = width;
             Posititon = position;
         }
 
-        public int ExerciseId { get; set; }
+        public int ModuleId { get; set; }
         public string Description { get; set; }
         public double Height { get; set; }
         public double Width { get; set; }

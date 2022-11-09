@@ -13,14 +13,17 @@ namespace P7WebApp.Domain.Repositories
 
         Task<int> CreateModule(Module module);
         Task<int> DeleteModule(Module module);
+        Task<Exercise> GetExerciseFromModuleId(int moduleId); 
 
 
         Task<int> CreateSolution(Solution solution);
         Task<int> DeleteSolution(Solution solution);
+        Task<Exercise> GetExerciseFromSolutionId(int id);
 
 
         Task<int> Createsubmission(Submission submission);
-        Task<int> DeleteSubmission(Submission submission);  
+        Task<int> DeleteSubmission(Submission submission);
+        Task<Exercise> GetExerciseFromSubmissionId(int id);
 
 
     }
