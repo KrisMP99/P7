@@ -1,4 +1,5 @@
 ﻿using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules;
+using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
 using P7WebApp.Domain.Common;
 using P7WebApp.SharedKernel;
 using P7WebApp.SharedKernel.Interfaces;
@@ -31,13 +32,28 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot
         public ExerciseType Type { get; set; }
         public List<Module> Modules { get; set; }
 
-        public void EditExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime newStartDate, DateTime newEndDate)
+        public void UpdateExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime newStartDate, DateTime newEndDate)
         {
             throw new NotImplementedException();
         }
 
-        public void AddModule(string title, DateTime createdDate, ExerciseLayout layout)
+        public void AddModule(Module module)
         {
+            try
+            {
+                if (module is not null)
+                {
+                    Modules.Add(module);
+                } else
+                {
+                    throw new Exception("Could not add modules");
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             throw new NotImplementedException();
         }
 

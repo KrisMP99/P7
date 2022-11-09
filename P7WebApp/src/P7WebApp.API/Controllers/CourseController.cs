@@ -190,6 +190,30 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-modules")]
+        public async Task<IActionResult> AddModule(CreateExerciseModuleCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not create modules");
+                }
+                else
+                {
+                    return Ok(result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
         [Route("{courseId}/exercise-groups/{exerciseGroupId}")]
         public async Task<IActionResult> UpdateExerciseGroup(UpdateExerciseGroupCommand request)
         {

@@ -10,7 +10,11 @@ namespace P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules.QuizModul
     {
         public string Text { get; private set; }
         public List<Choice> Choices;
-            
+
+        public QuizModule(int exerciseId, string description, double height, double width, int position) : base(exerciseId, description, height, width, position)
+        {
+        }
+
         public void UpdateText(string text)
         {
             Text = text;

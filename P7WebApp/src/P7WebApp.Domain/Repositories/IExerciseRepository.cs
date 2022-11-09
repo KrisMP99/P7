@@ -7,12 +7,21 @@ namespace P7WebApp.Domain.Repositories
 {
     public interface IExerciseRepository
     {
-        Task<Exercise> EditExerciseInformation(Exercise exercise);
-        Task<Module> AddModule(Module module);
-        Task<Module> DeleteModule(Module module);
-        Task<Solution> AddSolution(Solution solution);
-        Task<Solution> DeleteSolution(Solution solution);
-        Task<Submission> AddSubmission(Submission submission);
-        Task<Submission> DeleteSubmission(Submission submission);
+        Task<int> UpdateExercise(Exercise exercise);
+        Task<Exercise> GetExerciseById(int id);
+
+
+        Task<int> CreateModule(Module module);
+        Task<int> DeleteModule(Module module);
+
+
+        Task<int> CreateSolution(Solution solution);
+        Task<int> DeleteSolution(Solution solution);
+
+
+        Task<int> Createsubmission(Submission submission);
+        Task<int> DeleteSubmission(Submission submission);  
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.Responses;
 using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
 
 namespace P7WebApp.Application.Common.Mappings.Profiles
@@ -9,6 +10,7 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
         public ExerciseMappingProfile() 
         { 
             CreateMap<UpdateExerciseCommand, Exercise>();
+            CreateMap<CreateExerciseModuleCommand, ExerciseResponse>();
         }
     }
 }

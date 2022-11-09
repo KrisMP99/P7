@@ -21,39 +21,44 @@ namespace P7WebApp.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task<Module> AddModule(int moduleId)
+        public async Task<int> CreateModule(Module module)
+        {
+            return 1;
+        }
+
+        public Task<int> CreateSolution(Solution solution)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Solution> AddSolution(Solution solution)
+        public Task<int> Createsubmission(Submission submission)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Submission> AddSubmission(Submission submission)
+        public async Task<int> DeleteModule(Module module)
+        {
+            return 1;
+        }
+
+        public Task<int> DeleteSolution(Solution solution)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Module> DeleteModule(Module module)
+        public Task<int> DeleteSubmission(Submission submission)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Solution> DeleteSolution(Solution solution)
+        public async Task<Exercise> GetExerciseById(int id)
         {
-            throw new NotImplementedException();
+            return new Exercise() { Id = id };
         }
 
-        public Task<Submission> DeleteSubmission(Submission submission)
+        public async Task<int> UpdateExercise(Exercise exercise)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Exercise> UpdateInformation(Exercise exercise)
-        {
-            throw new NotImplementedException();
+            return 1;
         }
     }
 }
