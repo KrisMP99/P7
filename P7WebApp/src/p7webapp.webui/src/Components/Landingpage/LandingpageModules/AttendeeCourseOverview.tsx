@@ -63,7 +63,6 @@ function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element
                                     <td>{item.owner}</td>
                                 </tr>
                             ))}
-
                         </tbody>
                     </Table>
                 </div>

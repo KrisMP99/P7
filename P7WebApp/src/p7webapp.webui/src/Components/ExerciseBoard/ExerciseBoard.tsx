@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Exercise } from '../Course/Course';
 import { ChangeLayoutModal } from '../Modals/ChangeLayoutModal/ChangeLayoutModal';
 import ChangeModuleModal, { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
-import { Layout, LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
+import { LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import EmptyModule from '../Modules/EmptyModule/EmptyModule';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import './ExerciseBoard.css';
@@ -46,7 +46,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
         if(props.newExercise !== null) {
             setExercise({...props.newExercise});
         }
-    }, [params.id, props.boardLayout, props.editMode]);
+    }, [params.id, props.boardLayout, props.editMode, props.newExercise]);
     useEffect(() => {
         handleSetModules(layout);
     }, [layout])
@@ -96,7 +96,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             case ModuleType.EMPTY:
                 return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
             case ModuleType.EXERCISE_DESCRIPTION:
-                return <ExerciseDescriptionModule changeModuleModalRef={changeModuleModalRef} position={position} isOwner={props.editMode} />;
+                return <ExerciseDescriptionModule changeModuleModalRef={changeModuleModalRef} position={position} isOwner={true} />;
             default:
                 return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
         };
@@ -112,7 +112,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                     {getModuleFromType(temp.type, temp.position)}
                 </Allotment.Pane>));
             }
-            if ((i === 1  && modules.find((val) => val.position>2)) || i == 3) {
+            if ((i === 1  && modules.find((val) => val.position>2)) || i === 3) {
                 columns[i] = (<Allotment separator vertical key={i}>{colElements}</Allotment>);
                 colElements = [];
             }

@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { Modal, Button, Table } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 
 interface DeleteConfirmModalProps {
     confirmDelete: (id: number, type: DeleteElementType) => void;

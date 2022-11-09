@@ -56,7 +56,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                         <div className='exercise-title'>{val.title}</div>
                         {isOwner &&
                             <div className={'exercise-owner-container'}>
-                                <Button onClick={(e) => {
+                                <Button size='sm' className='btn-3' onClick={(e) => {
                                     e.stopPropagation();
                                     let updatedExercises = course.exercises.map((ex) => {
                                         if (ex.id === val.id) return { ...ex, isVisible: !ex.isVisible }
@@ -66,13 +66,13 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                                 }}>
                                     {visibilityElement}
                                 </Button>
-                                <Button onClick={(e) => {
+                                <Button size='sm' className='btn-3' onClick={(e) => {
                                     e.stopPropagation();
                                     openEditExerciseGroupModalRef.current?.handleShow(value, index);
                                 }}>
                                     <Pencil />
                                 </Button>
-                                <Button variant='danger' onClick={(e) => {
+                                <Button size='sm' className='btn-3' variant='danger' onClick={(e) => {
                                     e.stopPropagation();
                                     props.openDeleteExerciseModalRef.current?.handleShow(val.title, val.id, DeleteElementType.EXERCISE);
                                 }}>
@@ -102,7 +102,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                             />
                         </AccordionHeader>
                         {isOwner &&
-                            (<div>
+                            (<div className='group-owner-buttons'>
                                 {/* <Button className={'btn-2'} onClick={(e) => {
                                     e.stopPropagation();
                                     let updatedGroups = course.exerciseGroups.map((group) => {
@@ -113,13 +113,13 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                                 }}>
                                     {value.isVisible ? (<Eye />) : (<EyeSlash />)}
                                 </Button> */}
-                                <Button className={'btn-2'} onClick={(e) => {
+                                <Button size='sm' className={'btn-3'} onClick={(e) => {
                                     e.stopPropagation();
                                     openEditExerciseGroupModalRef.current?.handleShow(value, index);
                                 }}>
                                     <Pencil />
                                 </Button>
-                                <Button className='btn-2' variant='danger' onClick={(e) => {
+                                <Button size='sm' className='btn-3' variant='danger' onClick={(e) => {
                                     e.stopPropagation();
                                     props.openDeleteExerciseModalRef.current?.handleShow(value.title, value.id, DeleteElementType.EXERCISEGROUP)
                                 }}>
@@ -128,7 +128,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                             </div>)
                         }
                     </div>
-                    <AccordionBody>
+                    <AccordionBody className='exercise-container-box'>
                         <Button className={'create-btns'} onClick={() => {
                                 props.openCreateExerciseModalRef.current?.handleShow(value.id);
                         }}>

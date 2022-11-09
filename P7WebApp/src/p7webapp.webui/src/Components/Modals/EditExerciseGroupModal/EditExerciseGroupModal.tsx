@@ -1,5 +1,5 @@
-import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
-import { Modal, Button, Table, Form } from 'react-bootstrap';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 import '../../../App.css';
 import { ExerciseGroup } from '../../Course/Course';
 

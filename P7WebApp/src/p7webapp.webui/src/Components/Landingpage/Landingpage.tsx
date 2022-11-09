@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Container, Form, Pagination } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import OwnedCourseOverview, { CourseOverview } from './LandingpageModules/OwnedCourseOverview';
@@ -10,16 +10,10 @@ import { dummyDataOwned } from './dummyDataOwned';
 import { dummyDataAttendee } from './dummyDataAttendee';
 
 export function Landingpage(): JSX.Element {
-    const openCreateCourseModal = useRef<ShowModal>(null);
+    const openCreateCourseModalRef = useRef<ShowModal>(null);
 
     const [ownedCourses, setOwnedCourses] = useState<CourseOverview[]>(dummyDataOwned);
     const [attendedCourses, setAttendedCourses] = useState<CourseOverview[]>(dummyDataAttendee);
-
-    const [ownedCoursesCurrentPage, setOwnedCoursesCurrentPage] = useState<number>(0);
-    const [attendedCoursesCurrentPage, setAttendedCoursesCurrentPage] = useState<number>(0);
-
-    const [ownedCoursesPerPage, setOwnedCoursesPerPage] = useState<number>(10);
-    const [attendedCoursesPerPage, setAttendedCoursesPerPage] = useState<number>(10);
 
     return (
         <Container>
@@ -31,7 +25,7 @@ export function Landingpage(): JSX.Element {
                     fill>
                     <Tab eventKey="My courses" title="My courses">
                         <OwnedCourseOverview
-                            openCreateCourseModal={openCreateCourseModal}
+                            openCreateCourseModal={openCreateCourseModalRef}
                             courses={ownedCourses}
                             deletedCourse={(courses: CourseOverview[]) => setOwnedCourses(courses)}
                         />
@@ -44,7 +38,12 @@ export function Landingpage(): JSX.Element {
                     </Tab>
                 </Tabs>
             </div>
-            <CreateCourseModal ref={openCreateCourseModal} />
+            <CreateCourseModal 
+                ref={openCreateCourseModalRef}
+                createdCourse={() => {
+                    
+                }}
+            />
         </Container>
     );
 }

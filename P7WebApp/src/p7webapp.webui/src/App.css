@@ -40,6 +40,7 @@
 .main-container {
   height: 100%;
   width: 100%;
+  padding-bottom: 20px;
 }
 .space-from-navbar {
     margin-top: 8%;
@@ -53,6 +54,10 @@
   height: 40px;
   margin: 0 2px;
 }
+.btn-3 {
+  height: 33px;
+  margin: 0 2px;
+}
 .modal-form-field {
   display: flex;
   justify-content: space-between;
@@ -62,5 +67,8 @@
 .modal-form-field-text {
   height: 30px;
   max-width: 350px;
-  margin: 0 35px;
+  /* margin: 0 35px; */
+}
+.form-label {
+  min-width: 150px !important;
 }
