@@ -3,9 +3,8 @@ using P7WebApp.SharedKernel.Interfaces;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules
 {
-    public abstract class Module : EntityBase, IAggregateRoot
+    public abstract class Module : EntityBase
     {
-        public int BelongsToId { get; private set; }
         public string Description { get; private set; }
         public double Height { get; private set; }
         public double Width { get; private set; }

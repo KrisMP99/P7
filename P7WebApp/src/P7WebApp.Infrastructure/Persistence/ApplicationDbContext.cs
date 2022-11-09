@@ -13,7 +13,6 @@ using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Infrastructure.Common;
 using P7WebApp.Infrastructure.Identity;
-using System.Reflection.Emit;
 
 namespace P7WebApp.Infrastructure.Data
 {
@@ -38,9 +37,10 @@ namespace P7WebApp.Infrastructure.Data
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<TextModule> TextModules { get; set; }
         public DbSet<CodeEditorModule> CodeEditorModules { get; set; }
-        public DbSet<TestCase> TestCases { get; set; }
         public DbSet<QuizModule> QuizModules { get; set; }
+        public DbSet<TestCase> TestCases { get; set; }
         public DbSet<Choice> Choices { get; set; }
+        public DbSet<Module> Modules { get; set; }
 
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -52,7 +52,9 @@ namespace P7WebApp.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
+            //builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
+
+            builder.Entity<Module>().UseTpcMappingStrategy();
             
             base.OnModelCreating(builder);
         }

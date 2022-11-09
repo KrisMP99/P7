@@ -12,17 +12,20 @@ using P7WebApp.Infrastructure.Data;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221109134051_addTables")]
-    partial class addTables
+    [Migration("20221109195203_test")]
+    partial class test
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "7.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.HasSequence("ModuleSequence");
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
                 {
@@ -482,7 +485,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.ToTable("Exercises");
                 });
 
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module", b =>
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.TestCase", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -490,13 +493,32 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BelongsToId")
+                    b.Property<int>("CodeEditorModuleId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Test")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CodeEditorModuleId");
+
+                    b.ToTable("TestCases");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValueSql("nextval('\"ModuleSequence\"')");
+
+                    NpgsqlPropertyBuilderExtensions.UseSequence(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("ExerciseId")
                         .HasColumnType("integer");
@@ -516,20 +538,10 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<int?>("SubmissionId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TempId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TempId2")
-                        .HasColumnType("integer");
-
                     b.Property<double>("Width")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("TempId");
-
-                    b.HasAlternateKey("TempId2");
 
                     b.HasIndex("ExerciseId");
 
@@ -539,7 +551,56 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("SubmissionId");
 
-                    b.ToTable("Module");
+                    b.ToTable((string)null);
+
+                    b.UseTpcMappingStrategy();
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Choice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Choices");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("QuizModuleId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizModuleId");
+
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
@@ -724,14 +785,14 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("CodeEditorModules", (string)null);
+                    b.ToTable("CodeEditorModules");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", b =>
                 {
                     b.HasBaseType("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module");
 
-                    b.ToTable("QuizModules", (string)null);
+                    b.ToTable("QuizModules");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", b =>
@@ -742,7 +803,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("TextModules", (string)null);
+                    b.ToTable("TextModules");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -832,6 +893,15 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.TestCase", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.CodeEditorModule", null)
+                        .WithMany("TestCases")
+                        .HasForeignKey("CodeEditorModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Exercise", null)
@@ -849,6 +919,24 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Submission", null)
                         .WithMany("Modules")
                         .HasForeignKey("SubmissionId");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Choice", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Question", null)
+                        .WithMany("Choices")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Question", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Submission", b =>
@@ -875,146 +963,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.CodeEditorModule", b =>
-                {
-                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module", null)
-                        .WithOne()
-                        .HasForeignKey("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.CodeEditorModule", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsMany("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.TestCase", "TestCases", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<int>("CodeEditorModuleId")
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("Test")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("CodeEditorModuleId");
-
-                            b1.ToTable("TestCases", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("CodeEditorModuleId");
-                        });
-
-                    b.Navigation("TestCases");
-                });
-
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", b =>
-                {
-                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module", null)
-                        .WithOne()
-                        .HasForeignKey("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsMany("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Question", "Questions", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<int>("QuizModuleId")
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("Text")
-                                .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("QuizModuleId");
-
-                            b1.ToTable("Questions", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("QuizModuleId");
-
-                            b1.OwnsMany("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Choice", "Choices", b2 =>
-                                {
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b2.Property<int>("Id"));
-
-                                    b2.Property<bool>("IsCorrect")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<int>("QuestionId")
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Text")
-                                        .IsRequired()
-                                        .HasMaxLength(500)
-                                        .HasColumnType("character varying(500)");
-
-                                    b2.HasKey("Id");
-
-                                    b2.HasIndex("QuestionId");
-
-                                    b2.ToTable("Choices", (string)null);
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("QuestionId");
-                                });
-
-                            b1.Navigation("Choices");
-                        });
-
-                    b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", b =>
-                {
-                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module", null)
-                        .WithOne()
-                        .HasForeignKey("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsMany("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.Image", "Images", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<byte[]>("File")
-                                .IsRequired()
-                                .HasColumnType("bytea");
-
-                            b1.Property<int>("TextModuleId")
-                                .HasColumnType("integer");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("TextModuleId");
-
-                            b1.ToTable("Images", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("TextModuleId");
-                        });
-
-                    b.Navigation("Images");
-                });
-
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
                 {
                     b.Navigation("CourseRoles");
@@ -1037,6 +985,11 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Navigation("Submissions");
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Question", b =>
+                {
+                    b.Navigation("Choices");
+                });
+
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
                 {
                     b.Navigation("Modules");
@@ -1057,6 +1010,16 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseGroupAggregate.ExerciseGroup", b =>
                 {
                     b.Navigation("Exercises");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.CodeEditorModule", b =>
+                {
+                    b.Navigation("TestCases");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", b =>
+                {
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

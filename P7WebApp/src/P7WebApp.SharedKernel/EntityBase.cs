@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P7WebApp.SharedKernel
 {
     public class EntityBase
     {
+        [Key]
         public int Id { get; set; }
 
         private List<DomainEventBase> _domainEvents = new();
