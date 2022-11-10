@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Collections;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -7,9 +6,7 @@ using P7WebApp.API.Controllers;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
-using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
-using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
-using System.Collections.Generic;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 
 namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 {
