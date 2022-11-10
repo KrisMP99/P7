@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Accordion, Button } from 'react-bootstrap';
 import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
-import { Course } from '../Course';
-import '../Course.css';
+import { Course } from '../CourseView';
+import '../CourseView.css';
 import { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import '../../../App.css';
 import { Eye, EyeSlash, Pencil, Plus, Trash } from 'react-bootstrap-icons';

@@ -3,7 +3,7 @@ import { Button, Container, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { User } from '../../App';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import './Course.css';
+import './CourseView.css';
 import { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import ExerciseOverview from './ExerciseOverview/ExerciseOverview';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../Modals/DeleteConfirmModal/DeleteConfirmModal';
@@ -29,7 +29,7 @@ export interface Course {
     description: string;
     exerciseGroups: ExerciseGroup[];
     exercises: Exercise[];
-    private: undefined | boolean;
+    private: boolean;
 }
 
 interface CourseProps {

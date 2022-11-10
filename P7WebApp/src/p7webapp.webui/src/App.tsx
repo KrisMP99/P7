@@ -7,7 +7,11 @@ import SignUp from './Components/SignUp/SignUp';
 import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
 import CreateExerciseModal, { LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
-import CourseView, { Exercise } from './Components/Course/Course';
+import CourseView, { Exercise } from './Components/Course/CourseView';
+
+export function getApiRoot() {
+    return 'https://localhost:7001/api/';
+}
 
 export interface User {
     id: number;

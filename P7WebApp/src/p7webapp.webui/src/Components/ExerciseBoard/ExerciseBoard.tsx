@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import { ArrowLeft } from 'react-bootstrap-icons';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import { Exercise } from '../Course/Course';
+import { Exercise } from '../Course/CourseView';
 import { ChangeLayoutModal } from '../Modals/ChangeLayoutModal/ChangeLayoutModal';
 import ChangeModuleModal, { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
 import { LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
