@@ -15,11 +15,12 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./P7WebApp
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK '6.x'
-        working-directory: ./P7WebApp
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.x'
