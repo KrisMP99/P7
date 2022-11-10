@@ -52,7 +52,7 @@ namespace P7WebApp.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
+            builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
 
             builder.Entity<Module>().UseTpcMappingStrategy();
             
