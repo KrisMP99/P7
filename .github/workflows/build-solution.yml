@@ -1,0 +1,27 @@
+name: Test application
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+      - github-actions
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+       dotnet-version: '6.x'
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup dotnet '6.x'
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.x'
+      - name: Install dependencies
+        run: dotnet restore
+      - build: dotnet build
+      - name: Test application
+        test: dotnet test
