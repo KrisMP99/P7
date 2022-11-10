@@ -39,7 +39,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 
             var result = await courseController.CreateCourse(createCourseCommand);
             
-            result.Should().BeOfType<BadRequestResult>();
+            result.Should().BeOfType<BadRequestObjectResult>();
         }
 
         [Fact]
