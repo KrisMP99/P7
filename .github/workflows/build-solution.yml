@@ -24,7 +24,7 @@ jobs:
           dotnet-version: '6.x'
       - name: Install dependencies
         run: dotnet restore
-        working-directory: ../P7WebApp
+        working-directory: P7WebApp
       - name: Build
         run: dotnet build 
       - name: Test
