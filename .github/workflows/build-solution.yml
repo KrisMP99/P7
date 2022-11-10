@@ -23,8 +23,8 @@ jobs:
         with:
           dotnet-version: '6.x'
       - name: Install dependencies
-        run: dotnet restore --configuration Release P7WebApp.sln 
+        run: dotnet restore 
       - name: Build 
-        run: dotnet build --configuration Release P7WebApp.sln
+        run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet test --configuration Release P7WebApp.sln
+        run: dotnet test --no-restore --verbosity normal
