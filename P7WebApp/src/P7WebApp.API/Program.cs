@@ -28,6 +28,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapControllers();
