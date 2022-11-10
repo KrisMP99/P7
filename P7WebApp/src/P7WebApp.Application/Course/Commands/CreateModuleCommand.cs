@@ -9,7 +9,6 @@ namespace P7WebApp.Application.CourseCQRS.Commands
 {
     public class CreateModuleCommand : IRequest<int>
     {
-
         public int ExerciseId { get; set; }
         public string Title { get; set; }
         public bool IsVisible { get; set; }
