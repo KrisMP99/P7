@@ -8,6 +8,7 @@ using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Data;
 using P7WebApp.Infrastructure.Identity;
 using P7WebApp.Infrastructure.Persistence;
+using P7WebApp.Infrastructure.Persistence.Intercepters;
 using P7WebApp.Infrastructure.Repositories;
 using P7WebApp.Infrastructure.Services;
 
@@ -38,6 +39,7 @@ namespace P7WebApp.Infrastructure
             services.AddTransient<ICourseRepository, CourseRepository>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IDateTime, DateTimeService>();
+            services.AddTransient<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
 
             return services;
         }

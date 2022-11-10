@@ -6,7 +6,7 @@ using P7WebApp.SharedKernel.Interfaces;
 
 namespace P7WebApp.Infrastructure.Persistence.Intercepters
 {
-    public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
+    public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor, IAuditableEntitySaveChangesInterceptor
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
