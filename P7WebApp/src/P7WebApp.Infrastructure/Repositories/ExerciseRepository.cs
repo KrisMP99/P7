@@ -1,7 +1,6 @@
 ﻿using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
-using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
-using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Infrastructure.Repositories
@@ -73,6 +72,29 @@ namespace P7WebApp.Infrastructure.Repositories
         }
 
         public async Task<Exercise> GetExerciseFromSubmissionId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        Task<Exercise> IExerciseRepository.GetExerciseById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Exercise> IExerciseRepository.GetExerciseFromModuleId(int moduleId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        Task<Exercise> IExerciseRepository.GetExerciseFromSolutionId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+ 
+        Task<Exercise> IExerciseRepository.GetExerciseFromSubmissionId(int id)
         {
             throw new NotImplementedException();
         }
