@@ -1,12 +1,7 @@
-﻿using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
-using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules;
-using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
-using P7WebApp.Domain.Common;
-﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+﻿
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.SharedKernel;
 using P7WebApp.SharedKernel.Interfaces;
-using System.Reflection;
-using Module = P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules.Module;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
@@ -22,8 +17,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             EndDate = endDate;
             CreatedDate = createdDate;
             LastModifiedDate = lastModifiedDate;
-            Layout = layout;
-            Solution = solution;
         }
 
         public string Title { get; private set; }
@@ -34,7 +27,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
         public ExerciseLayout Layout { get; private set; }
-        public ExerciseType Type { get; private set; }
         public List<Module> Modules { get; private set; }
         public List<Solution> Solution { get; private set; }
         public List<Submission> Submissions { get; private set; }
