@@ -9,7 +9,6 @@ namespace P7WebApp.Application.CourseCQRS.Commands
 {
     public class CreateSolutionCommand : IRequest<int>
     {
-
         public int SolutionId { get; set; }
         public bool IsVisible { get; set; }
         public DateTime VisibleFromDate { get; set; }
