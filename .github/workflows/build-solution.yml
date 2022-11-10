@@ -16,7 +16,6 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
-      matrix:
         dotnet-version: '6.x'
 
     steps:
