@@ -2,7 +2,7 @@
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
+using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 var exerciseGroup = CourseMapper.Mapper.Map<ExerciseGroup>(request);
                 var course = await _unitOfWork.CourseRepository.GetCourse(request.CourseId);
 
-                course.AddExerciseGroup(exerciseGroup);
+                //course.AddExerciseGroup(exerciseGroup);
 
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
