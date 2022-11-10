@@ -15,8 +15,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    strategy:
-        dotnet-version: '6.x'
 
     steps:
       - uses: actions/checkout@v3
