@@ -23,9 +23,8 @@ jobs:
         with:
           dotnet-version: '6.x'
       - name: Install dependencies
-        run: dotnet restore
-        working-directory: P7WebApp.sln
-      - name: Build
-        run: dotnet build 
+        run: dotnet restore --configuration Release P7WebApp.sln 
+      - name: Build 
+        run: dotnet build --configuration Release P7WebApp.sln
       - name: Test
-        run: dotnet test 
+        run: dotnet test --configuration Release P7WebApp.sln
