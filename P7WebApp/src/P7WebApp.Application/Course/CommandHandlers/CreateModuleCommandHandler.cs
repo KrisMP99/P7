@@ -2,14 +2,7 @@
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot;
-using P7WebApp.Domain.AggregateRoots.ExerciseAggregateRoot.Modules;
-using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
@@ -27,7 +20,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 var module = ExerciseMapper.Mapper.Map<Module>(request);
-                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseById(module.ModuleId);
+                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseById(module.Id);
 
                 exercise.AddModule(module);
 
