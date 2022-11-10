@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap';
 import { ArrowLeft } from 'react-bootstrap-icons';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../../App';
 import { Exercise } from '../Course/CourseView';
 import { ChangeLayoutModal } from '../Modals/ChangeLayoutModal/ChangeLayoutModal';
 import ChangeModuleModal, { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
@@ -23,6 +24,7 @@ export interface ExerciseModule {
 }
 
 interface ExerciseBoardProps {
+    user: User;
     boardLayout: LayoutType;
     editMode: boolean;
     newExercise: Exercise | null;

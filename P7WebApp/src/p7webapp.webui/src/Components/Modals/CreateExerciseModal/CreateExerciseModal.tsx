@@ -70,6 +70,7 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
         <Modal show={show} onHide={handleClose} size='lg'>
             <form onSubmit={(e) => {
                 e.preventDefault();
+                //WIP - Create exercise?? Or open in edit mode??
                 props.created(layout, exercise);
                 handleClose();
             }}>
