@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using P7WebApp.API.Services;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Infrastructure.Data;
@@ -27,7 +29,23 @@ namespace P7WebApp.API
                 options.SuppressModelStateInvalidFilter = true);
 
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            //services.AddSwaggerGen();
+
+            
+
+            services.AddOpenApiDocument(configure =>
+            {
+                configure.Title = "CleanArchitecture API";
+                configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
+                });
+
+                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            });
 
             return services;
         }
