@@ -24,9 +24,11 @@ namespace P7WebApp.Infrastructure.Data
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
             IOptions<OperationalStoreOptions> operationalStoreOptions, 
-            IMediator mediator) : base(options, operationalStoreOptions)
+            IMediator mediator,
+            AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options, operationalStoreOptions)
         {
             _mediator = mediator;
+            _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         }
 
         public DbSet<Course> Courses { get; set; }
@@ -44,6 +46,10 @@ namespace P7WebApp.Infrastructure.Data
         public DbSet<Choice> Choices { get; set; }
         public DbSet<Module> Modules { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

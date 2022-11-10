@@ -6,7 +6,6 @@ using P7WebApp.Application.CourseCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
 {
-    [Authorize(Roles ="hej")]
     public class CourseController : BaseController
     {
         private readonly IMediator _mediator;
