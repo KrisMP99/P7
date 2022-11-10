@@ -125,10 +125,9 @@ namespace P7WebApp.API.Controllers
         }
 
 
-
         [HttpPost]
         [Route("{courseId}/exercise-groups")]
-        public async Task<IActionResult> GetExerciseGroups([FromRoute]int courseId)
+        public async Task<IActionResult> GetExerciseGroupsByCourseId([FromRoute]int courseId)
         {
             try
             {
@@ -162,6 +161,29 @@ namespace P7WebApp.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost]
+        [Route("{courseId}/delete-exercise-group/{exerciseGroupId}")]
+        public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int exerciseGroupId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new DeleteExerciseGroupCommand(exerciseGroupId));
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not create/add the exercise group to the course.");
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
 
@@ -181,6 +203,147 @@ namespace P7WebApp.API.Controllers
                 {
                 return Ok(result);
 
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-module")]
+        public async Task<IActionResult> AddModule(CreateModuleCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not create modules");
+                }
+                else
+                {
+                    return Ok(result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-module/{moduleId}")]
+        public async Task<IActionResult> DeleteModule(DeleteModuleCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not delete modules");
+                }
+                else
+                {
+                    return Ok(result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/create-solution")]
+        public async Task<IActionResult> CreateSolution(CreateSolutionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not create solution");
+                }
+                else
+                {
+                    return Ok(result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-solution/{solutionId}")]
+        public async Task<IActionResult> DeleteSolution(CreateSolutionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not delete solution");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/create-submission")]
+        public async Task<IActionResult> CreateSubmission(CreateSubmissionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not create submission");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-submission/{submissionId}")]
+        public async Task<IActionResult> DeleteSubmission(DeleteSubmissionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result == 0)
+                {
+                    return BadRequest("Could not delete submission");
+                }
+                else
+                {
+                    return Ok(result);
                 }
             }
             catch (Exception ex)

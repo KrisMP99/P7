@@ -2,8 +2,8 @@
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
-using P7WebApp.Domain.AggregateRoots.CourseAggregateRoot;
-using P7WebApp.Domain.AggregateRoots.ExerciseGroupAggregateRoot;
+using P7WebApp.Domain.Aggregates.CourseAggregate;
+using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 
 namespace P7WebApp.Application.Common.Mappings.Profiles
 {
@@ -13,8 +13,9 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
         {
             CreateMap<CreateCourseCommand, Course>();
             CreateMap<Course, CourseResponse>();
-            CreateMap<ExerciseGroup, ExerciseGroupsResponse>();
+            CreateMap<ExerciseGroup, ExerciseGroupResponse>();
             CreateMap<InviteCode, InviteCodeResponse>();
+            CreateMap<CreateExerciseGroupCommand, ExerciseGroup>();
         }
     }
 }

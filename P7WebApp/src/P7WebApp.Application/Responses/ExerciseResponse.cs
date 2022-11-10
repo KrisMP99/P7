@@ -8,5 +8,12 @@ namespace P7WebApp.Application.Responses
 {
     public class ExerciseResponse
     {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public bool IsVisible { get; set; }
+        public int ExerciseNumber { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
