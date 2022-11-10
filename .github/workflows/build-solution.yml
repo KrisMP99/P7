@@ -23,6 +23,6 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - build: Dotnet build
-        run: dotnet build --configuration Release
+        run: dotnet build 
       - name: Test application
-        run: dotnet test --configuration Release --no-build
+        run: dotnet test 
