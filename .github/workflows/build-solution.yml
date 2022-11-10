@@ -12,17 +12,18 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
-       dotnet-version: '6.x'
+      matrix:
+        dotnet-version: '6.x'
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup dotnet '6.x'
+      - name: Setup .NET Core SDK '6.x'
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.x'
       - name: Install dependencies
         run: dotnet restore
-      - build: Dotnet build
-        run: dotnet build --configuration Release
-      - name: Test application
-        run: dotnet test  
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
