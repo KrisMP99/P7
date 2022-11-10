@@ -16,3 +16,9 @@
     padding: 2%;
 }
 
+.error-box {
+    background-color: red;
+    text-align: center;
+    color: white;
+}
+

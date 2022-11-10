@@ -9,11 +9,10 @@ namespace P7WebApp.Application.CourseCQRS.Commands
 {
     public class DeleteCourseCommand : IRequest<int>
     {
-        public int Id { get; set; }
-
         public DeleteCourseCommand(int id)
         {
             Id = id;
         }
+        public int Id { get; set; }
     }
 }

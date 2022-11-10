@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Accordion, Button } from 'react-bootstrap';
 import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
@@ -6,26 +6,28 @@ import { Course } from '../Course';
 import '../Course.css';
 import { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import '../../../App.css';
-import { Eye, EyeSlash, Pencil, Trash } from 'react-bootstrap-icons';
+import { Eye, EyeSlash, Pencil, Plus, Trash } from 'react-bootstrap-icons';
+import { ShowCreateExerciseModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
+import EditExerciseGroupModal, { ShowEditExerciseGroupModal } from '../../Modals/EditExerciseGroupModal/EditExerciseGroupModal';
 
 interface ExerciseOverviewProps {
-    changeCourse: (course: Course) => void;
+    changedCourse: (course: Course) => void;
     course: Course | null;
-    openDeleteExerciseModalRef: React.RefObject<ShowDeleteConfirmModal>;
     isOwner: boolean;
-    isEditMode: boolean;
+    openDeleteExerciseModalRef: React.RefObject<ShowDeleteConfirmModal>;
+    openCreateExerciseModalRef: React.RefObject<ShowCreateExerciseModal>;
 }
 
 export default function ExerciseOverview(props: ExerciseOverviewProps) {
     const [course, setCourse] = useState<Course | null>(props.course);
     const [isOwner, setIsOwner] = useState<boolean>(props.isOwner);
-    const [isEditMode, setIsEditMode] = useState<boolean>(false);
+    
+    const openEditExerciseGroupModalRef = useRef<ShowEditExerciseGroupModal>(null);
 
     useEffect(() => {
         setCourse(props.course);
         setIsOwner(props.isOwner);
-        setIsEditMode(props.isEditMode);
-    }, [props.isOwner, props.isEditMode, props.course?.exerciseGroups, props.course?.exercises]);
+    }, [props.isOwner, props.course?.exerciseGroups, props.course?.exercises]);
 
     //Goes through every group and finds all exercises with a coresponding ID
     //Afterwards we create each group and places the exercises inside.
@@ -37,7 +39,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
 
         }).map((value, index) => {
 
-            //Creates the exercise elements below:
+            //Creates the exercise elements under each accordion:
             const exerciseElements: JSX.Element[] = course.exercises.filter((val) => {
 
                 return val.exerciseGroupId === value.id && (!isOwner ? val.isVisible : true);
@@ -49,27 +51,28 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                 return (
                     <div key={id} className={'exercise-container d-flex ' + (!val.isVisible && 'is-invisible')} onClick={(e) => {
                         console.log("Opening exercise");
+                        //WIP - navigate to the exercise and fetch it there
                     }}>
                         <div className='exercise-title'>{val.title}</div>
-                        {isOwner && isEditMode &&
+                        {isOwner &&
                             <div className={'exercise-owner-container'}>
-                                <Button onClick={(e) => {
+                                <Button size='sm' className='btn-3' onClick={(e) => {
                                     e.stopPropagation();
                                     let updatedExercises = course.exercises.map((ex) => {
                                         if (ex.id === val.id) return { ...ex, isVisible: !ex.isVisible }
                                         else return ex;
                                     })
-                                    props.changeCourse({ ...course, exercises: updatedExercises })
+                                    props.changedCourse({ ...course, exercises: updatedExercises });
                                 }}>
                                     {visibilityElement}
                                 </Button>
-                                <Button onClick={(e) => {
+                                <Button size='sm' className='btn-3' onClick={(e) => {
                                     e.stopPropagation();
-                                    console.log("Opening exercise in edit mode");
+                                    openEditExerciseGroupModalRef.current?.handleShow(value, index);
                                 }}>
                                     <Pencil />
                                 </Button>
-                                <Button variant='danger' onClick={(e) => {
+                                <Button size='sm' className='btn-3' variant='danger' onClick={(e) => {
                                     e.stopPropagation();
                                     props.openDeleteExerciseModalRef.current?.handleShow(val.title, val.id, DeleteElementType.EXERCISE);
                                 }}>
@@ -82,7 +85,7 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
             });
 
             return (
-                <Accordion key={index}>
+                <Accordion key={index} defaultActiveKey={index+''}>
                     <div className='d-flex align-items-center flex-grow-1'>
                         <AccordionHeader className={'flex-grow-1' + (value.isVisible ? '' : ' is-invisible')}>
                             <input
@@ -95,22 +98,28 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                                         setCourse({ ...course, exerciseGroups: exerciseGroups });
                                     }
                                 }}
-                                readOnly={!props.isOwner}
+                                readOnly={true}
                             />
                         </AccordionHeader>
-                        {isOwner && isEditMode &&
-                            (<div>
-                                <Button className={'btn-2'} onClick={(e) => {
+                        {isOwner &&
+                            (<div className='group-owner-buttons'>
+                                {/* <Button className={'btn-2'} onClick={(e) => {
                                     e.stopPropagation();
                                     let updatedGroups = course.exerciseGroups.map((group) => {
                                         if (group.id === value.id) return { ...group, isVisible: !group.isVisible }
                                         else return group;
                                     })
-                                    props.changeCourse({ ...course, exerciseGroups: updatedGroups });
+                                    props.changedCourse({ ...course, exerciseGroups: updatedGroups });
                                 }}>
                                     {value.isVisible ? (<Eye />) : (<EyeSlash />)}
+                                </Button> */}
+                                <Button size='sm' className={'btn-3'} onClick={(e) => {
+                                    e.stopPropagation();
+                                    openEditExerciseGroupModalRef.current?.handleShow(value, index);
+                                }}>
+                                    <Pencil />
                                 </Button>
-                                <Button className='btn-2' variant='danger' onClick={(e) => {
+                                <Button size='sm' className='btn-3' variant='danger' onClick={(e) => {
                                     e.stopPropagation();
                                     props.openDeleteExerciseModalRef.current?.handleShow(value.title, value.id, DeleteElementType.EXERCISEGROUP)
                                 }}>
@@ -119,7 +128,12 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
                             </div>)
                         }
                     </div>
-                    <AccordionBody>
+                    <AccordionBody className='exercise-container-box'>
+                        <Button className={'create-btns'} onClick={() => {
+                                props.openCreateExerciseModalRef.current?.handleShow(value.id);
+                        }}>
+                            <Plus /> Exercise
+                        </Button>
                         {exerciseElements}
                     </AccordionBody>
                 </Accordion>)
@@ -127,6 +141,18 @@ export default function ExerciseOverview(props: ExerciseOverviewProps) {
     }
 
     return (
-        <div>{exerciseGroupElements}</div>
+        <div>
+            {exerciseGroupElements}
+            <EditExerciseGroupModal 
+                ref={openEditExerciseGroupModalRef} 
+                updateExerciseGroup={(newGroup, index) => {
+                    if (course) {
+                        let tempGroups = [...course.exerciseGroups];
+                        tempGroups[index] = newGroup;
+                        props.changedCourse({...course, exerciseGroups: tempGroups});
+                    }
+                }}
+            />
+        </div>
     )
 }
