@@ -73,10 +73,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             throw new NotImplementedException();
         }
 
-
-
-
-
         public void AddSolution(Solution solution)
         {
             try
@@ -113,9 +109,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             throw new NotImplementedException();
         }
-
-
-
 
         public void AddSubmission(Submission submission)
         {
