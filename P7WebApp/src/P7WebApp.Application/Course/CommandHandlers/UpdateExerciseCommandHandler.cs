@@ -20,7 +20,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 var course = await _courseRepository.GetCourseFromExerciseGroupId(request.ExerciseGroupId);
                 course.GetExerciseGroup(request.ExerciseGroupId)
                     .GetExercise(request.Id)
-                    .UpdateInformation(newTitle: request.Title, visibility: request.IsVisible, exerciseNumber: request.ExerciseNumber, newStartDate: request.StartDate, newEndDate: request.EndDate);
+                    .UpdateExerciseInformation(newTitle: request.Title, visibility: request.IsVisible, exerciseNumber: request.ExerciseNumber, newStartDate: request.StartDate, newEndDate: request.EndDate);
 
                 var affectedRows = await _courseRepository.UpdateCourse(course);
 

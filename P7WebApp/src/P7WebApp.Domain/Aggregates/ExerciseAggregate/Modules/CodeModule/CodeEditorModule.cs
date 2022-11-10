@@ -2,6 +2,12 @@
 {
     public class CodeEditorModule : Module
     {
+        public CodeEditorModule(string code, List<TestCase> testCases)
+        {
+            Code = code;
+            TestCases = testCases;
+        }
+
         public string Code { get; set; }
         public List<TestCase> TestCases { get; private set; }
 
