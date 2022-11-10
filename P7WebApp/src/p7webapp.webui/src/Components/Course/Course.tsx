@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { User } from '../../App';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -29,6 +29,7 @@ export interface Course {
     description: string;
     exerciseGroups: ExerciseGroup[];
     exercises: Exercise[];
+    private: undefined | boolean;
 }
 
 interface CourseProps {
@@ -36,7 +37,7 @@ interface CourseProps {
     openCreateExerciseModalRef: React.RefObject<ShowModal>;
 }
 
-export default function Course(props: CourseProps) {
+export default function CourseView(props: CourseProps) {
     //DUMMY DATA:
     const exGroups: ExerciseGroup[] = [
         { id: 0, title: "Session 1", isVisible: true },
@@ -60,7 +61,7 @@ export default function Course(props: CourseProps) {
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
 
-    const [course, setCourse] = useState<Course>({ title: 'Course Title', description: 'Course description very specific to course', exerciseGroups: exGroups, exercises: ex, ownerId: 0 });
+    const [course, setCourse] = useState<Course>({ title: 'Course Title', description: 'Course description very specific to course', exerciseGroups: exGroups, exercises: ex, ownerId: 0, private: true });
     const [editedCourse, setEditedCourse] = useState<Course>({...course});
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -74,12 +75,12 @@ export default function Course(props: CourseProps) {
             setIsOwner(true);
         }
         setEditedCourse(course);
-    }, [course?.ownerId]);
+    }, [course?.ownerId, props.user.id, isOwner]);
     return (
         <Container>
             <div className='course-title-container'>
                 <input
-                    className='input-field course-title'
+                    className={'course-title ' + (!isEditMode && 'input-field')}
                     value={editedCourse ? editedCourse.title : 'Title'}
                     onChange={(e) => {
                         if (editedCourse && e.target.value !== editedCourse?.title) {
@@ -92,13 +93,13 @@ export default function Course(props: CourseProps) {
                     <div style={{ float: 'right' }}>
                         {isEditMode &&
                             <>
-                                <Button className='btn-1' variant='success' onClick={() => {
+                                <Button size='sm' className='btn-3' variant='success' onClick={() => {
                                     setCourse(editedCourse);
                                     setIsEditMode(false);
                                 }}>
                                     Save Changes
                                 </Button>
-                                <Button onClick={() => {
+                                <Button size='sm' className='btn-3' onClick={() => {
                                     setEditedCourse(course);
                                     setIsEditMode(false);
                                 }}>
@@ -107,16 +108,26 @@ export default function Course(props: CourseProps) {
                             </>
                         }
                         {!isEditMode &&
-                            <Button style={{ height: '50px', width: '50px' }} onClick={() => setIsEditMode(true)}>
-                                <Gear />
-                            </Button>
+                            <OverlayTrigger
+                                placement='top'
+                                overlay={
+                                    <Tooltip>
+                                        Edit title and/or description
+                                    </Tooltip>
+                                }
+                            >
+                                <Button size='sm' className='btn-3' onClick={() => setIsEditMode(true)}>
+                                    <Gear />
+                                </Button>
+                            </OverlayTrigger>
                         }
                     </div>
                 )}
             </div>
             <div className='course-description-container'>
-                <textarea
-                    className='text-area'
+                {isEditMode ? (
+                    <textarea
+                    className={'course-description'}
                     value={editedCourse ? editedCourse.description : 'Description here'}
                     onChange={(e) => {
                         if (editedCourse && e.target.value !== editedCourse?.description) {
@@ -124,7 +135,11 @@ export default function Course(props: CourseProps) {
                         }
                     }}
                     readOnly={!isEditMode}
-                />
+                    />
+                ) :(
+                    <span className='course-description'>{editedCourse ? editedCourse.description : 'Description here'}</span>
+                )
+                }
             </div>
             <div className='course-exercises-container'>
                 <Tabs defaultActiveKey={'exercises'} fill={isOwner}>

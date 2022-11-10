@@ -64,7 +64,7 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
     );
 
     useEffect((() => {
-        setExercise({...exercise, title: ''});
+        setExercise(e => ({ ...e, title: ''}));
         setLayout(LayoutType.SINGLE);
     }), [exercise.exerciseGroupId, show]);
 

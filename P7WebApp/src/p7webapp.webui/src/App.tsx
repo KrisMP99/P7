@@ -1,15 +1,13 @@
 import React, { useRef, useState } from 'react';
 import './App.css';
-import Footer from './Components/Footer/Footer';
 import Navbar from './Components/Navbar/Navbar';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
 import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
-import CreateExerciseModal, { Layout, LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
-import CreateCourseModal from './Components/Modals/CreateCourseModal/CreateCourseModal';
+import CreateExerciseModal, { LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
-import Course, { Exercise } from './Components/Course/Course';
+import CourseView, { Exercise } from './Components/Course/Course';
 
 export interface User {
     id: number;
@@ -21,7 +19,7 @@ export interface User {
 
 function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
-    const openCreateCourseModalRef = useRef<ShowModal>(null);
+    
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [boardLayout, setBoardLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const [user, setUser] = useState<User | null>(null);
@@ -66,15 +64,13 @@ function App() {
                         <Landingpage />
                     } />
                     <Route path="/course/:id" element={
-                        <Course
+                        <CourseView
                             user={user!}
                             openCreateExerciseModalRef={openCreateExerciseModalRef}
                         />
                     } /></>}
             </Routes>
             {/* <Footer/> */}
-            <CreateCourseModal ref={openCreateCourseModalRef}
-            />
             <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: LayoutType, exercise: Exercise) => {
                 setBoardLayout(layout);
                 setNewExerciseCreated(exercise);

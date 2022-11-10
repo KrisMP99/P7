@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import './ChangeLayoutModal.css';
 import '../../../App.css';
@@ -16,7 +16,7 @@ import selectedTwoHorizontalImg from '../../../Images/LayoutSelected/selected_ho
 import selectedTwoLeftOneRightImg from '../../../Images/LayoutSelected/selected_2left_1right.svg';
 import selectedOneLeftTwoRightImg from '../../../Images/LayoutSelected/selected_1left_2right.svg';
 import selectedTwoLeftTwoRightImg from '../../../Images/LayoutSelected/selected_2left_2right.svg';
-import { Layout, LayoutType, ShowModal } from '../CreateExerciseModal/CreateExerciseModal';
+import { LayoutType, ShowModal } from '../CreateExerciseModal/CreateExerciseModal';
 
 interface ChangeLayoutProps {
     changedLayout: (layout: LayoutType) => void;

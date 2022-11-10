@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Container } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 import { ModuleType } from '../../ExerciseBoard/ExerciseBoard';
 import { ShowChangeModuleModalRef } from '../../Modals/ChangeModuleModal/ChangeModuleModal';
 import '../Module.css';
@@ -14,9 +13,15 @@ interface ExerciseDescriptionProps {
 
 export default function ExerciseDescriptionModule(props: ExerciseDescriptionProps) {
     
-    const [bodyText, setBodyText] = useState('Description here...');
-    const [titleText, setTitle] = useState('Title here...');
-    const [editMode, setEditMode] = useState(false);
+    const [bodyText, setBodyText] = useState<string>('Description here...');
+    const [titleText, setTitle] = useState<string>('Title here...');
+    const [editMode, setEditMode] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(props.isOwner) {
+            setEditMode(true);
+        }
+    }, [props.isOwner]);
 
     let editModePanel = (
         <div className='exercise-description-content'>
