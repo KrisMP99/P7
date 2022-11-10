@@ -17,7 +17,7 @@ namespace P7WebApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCourse(CreateCourseCommand request)
         {
-			try
+            try
 			{
                 var result = await _mediator.Send(request);
                 if (result > 0)
@@ -79,7 +79,29 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        
+        [HttpPost]
+        [Route("get-courses/{amount}")]
+        public async Task<IActionResult> GetListOfCourses()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetListOfCoursesQuery());
+                if (result.Count() > 0)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest($"Could not find course with id");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpPost]
         [Route("{courseId}/update")]
         public async Task<IActionResult> UpdateCourse(UpdateCourseCommand request)
