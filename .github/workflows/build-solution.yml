@@ -25,4 +25,4 @@ jobs:
       - build: Dotnet build
         run: dotnet build --configuration Release
       - name: Test application
-        run: dotnet test --configuration Release --no-build 
+        # run: dotnet test --configuration Release --no-build 
