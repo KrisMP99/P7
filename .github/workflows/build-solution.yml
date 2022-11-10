@@ -24,7 +24,7 @@ jobs:
           dotnet-version: '6.x'
       - name: Install dependencies
         run: dotnet restore
-        working-directory: src
+        working-directory: P7WebApp.sln
       - name: Build
         run: dotnet build 
       - name: Test
