@@ -92,7 +92,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
                 .And
                 .BeOfType<OkObjectResult>();
         }
-
+        [Fact]
         public async Task GetExerciseGroupsByCourseId_ReturnBadRequestObjectResult()
         {
             // Arrange
