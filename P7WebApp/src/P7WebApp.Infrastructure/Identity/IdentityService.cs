@@ -29,12 +29,12 @@ namespace P7WebApp.Infrastructure.Identity
             return user.UserName;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<(Result Result, string UserId)> CreateUserAsync(string username, string email, string password)
         {
             var user = new ApplicationUser
             {
-                UserName = userName,
-                Email = userName,
+                UserName = username,
+                Email = email,
             };
 
             var result = await _userManager.CreateAsync(user, password);
