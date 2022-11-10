@@ -51,7 +51,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
