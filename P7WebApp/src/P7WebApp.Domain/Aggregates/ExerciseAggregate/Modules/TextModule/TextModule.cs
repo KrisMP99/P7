@@ -5,14 +5,11 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule
 {
     public class TextModule : Module
     {
+        public TextModule(string description, double height, double width, int position) : base(description, height, width, position)
+        {
+        }
         public string Text { get; set; }
         public List<Image> Images;
-
-        public TextModule(string text, List<Image> images)
-        {
-            Text = text;
-            Images = images;
-        }
 
         public void AddImage()
         {

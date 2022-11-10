@@ -9,6 +9,12 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule
 {
     public class Image : EntityBase
     {
+        public Image(int textModuleId, byte[] file)
+        {
+            TextModuleId = textModuleId;
+            File = file;
+        }
+
         public int TextModuleId { get; private set; }
         public byte[] File { get; private set; }
     }

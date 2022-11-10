@@ -4,14 +4,11 @@ using P7WebApp.SharedKernel.Interfaces;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
-    public class Course : EntityBase, IAggregateRoot
+    public class Course : AuditableEntityBase, IAggregateRoot
     {
         public string Title { get; private set; }
         public string Description { get; private set; }
         public bool IsPrivate { get; private set; }
-        public DateTime CreatedDate { get; private set; }
-        public DateTime ModifiedDate { get; private set; }
-        public int OwnerId { get; private set; }
         public InviteCode? InviteCode { get; private set; }
         public List<ExerciseGroup> ExerciseGroups { get; private set; }
         public List<CourseRole> CourseRoles { get; private set; }

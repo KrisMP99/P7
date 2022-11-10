@@ -1,5 +1,4 @@
-﻿
-using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.SharedKernel;
 using P7WebApp.SharedKernel.Interfaces;
 
@@ -26,7 +25,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime EndDate { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
-        public ExerciseLayout Layout { get; private set; }
+        public int LayoutId { get; private set; }
         public List<Module> Modules { get; private set; }
         public List<Solution> Solution { get; private set; }
         public List<Submission> Submissions { get; private set; }

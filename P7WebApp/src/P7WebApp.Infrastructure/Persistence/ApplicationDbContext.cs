@@ -13,12 +13,14 @@ using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Infrastructure.Common;
 using P7WebApp.Infrastructure.Identity;
+using P7WebApp.Infrastructure.Persistence.Intercepters;
 
 namespace P7WebApp.Infrastructure.Data
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
     {
         private IMediator _mediator;
+        private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
             IOptions<OperationalStoreOptions> operationalStoreOptions, 
@@ -52,10 +54,7 @@ namespace P7WebApp.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
-
             builder.Entity<Module>().UseTpcMappingStrategy();
-            
             base.OnModelCreating(builder);
         }
     }
