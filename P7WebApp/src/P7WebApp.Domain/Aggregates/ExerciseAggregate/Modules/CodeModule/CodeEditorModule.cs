@@ -2,6 +2,10 @@
 {
     public class CodeEditorModule : Module
     {
+        public CodeModule(int exerciseId, string description, double height, double width, int position) : base(exerciseId, description, height, width, position)
+        {
+        }
+
         public string Code { get; set; }
         public List<TestCase> TestCases { get; private set; }
 
