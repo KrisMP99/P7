@@ -1,0 +1,7 @@
+.action-bar-container {
+    height: 40px;
+    padding: 4px;
+    border-bottom: 1px solid gray;
+    display: flex;
+    align-items: center;
+}

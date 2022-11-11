@@ -69,7 +69,6 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             result.Should().BeOfType<OkObjectResult>();
         }
 
-
         // Exercise Groups Related Tests
         [Fact]
         public async Task GetExerciseGroupsByCourseId_ReturnsOkObject_GivenListOfExerciseGroupResponses()
@@ -93,7 +92,6 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
                 .And
                 .BeOfType<OkObjectResult>();
         }
-
 
         public async Task GetExerciseGroupsByCourseId_ReturnBadRequestObjectResult()
         {

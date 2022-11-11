@@ -8,7 +8,6 @@
 
         public List<Question> Questions { get; private set; }
 
-
         public void AddQuestion()
         {
             throw new NotImplementedException();

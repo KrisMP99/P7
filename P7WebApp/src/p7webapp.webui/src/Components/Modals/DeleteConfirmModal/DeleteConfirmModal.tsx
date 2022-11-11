@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { Modal, Button, Table } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 
 interface DeleteConfirmModalProps {
     confirmDelete: (id: number, type: DeleteElementType) => void;
@@ -10,7 +10,8 @@ export interface ShowDeleteConfirmModal {
 
 export enum DeleteElementType {
     EXERCISE,
-    EXERCISEGROUP
+    EXERCISEGROUP,
+    COURSE
 }
 
 export const DeleteConfirmModal = forwardRef<ShowDeleteConfirmModal, DeleteConfirmModalProps>((props, ref) => {
@@ -35,7 +36,7 @@ export const DeleteConfirmModal = forwardRef<ShowDeleteConfirmModal, DeleteConfi
 
 
     return (
-        <Modal show={show} onHide={handleClose} size='sm'>
+        <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Warning!</Modal.Title>
             </Modal.Header>

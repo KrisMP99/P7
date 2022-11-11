@@ -50,7 +50,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -71,10 +70,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             throw new NotImplementedException();
         }
-
-
-
-
 
         public void AddSolution(Solution solution)
         {
@@ -112,9 +107,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             throw new NotImplementedException();
         }
-
-
-
 
         public void AddSubmission(Submission submission)
         {

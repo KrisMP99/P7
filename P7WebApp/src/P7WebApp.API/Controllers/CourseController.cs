@@ -19,7 +19,7 @@ namespace P7WebApp.API.Controllers
         public async Task<IActionResult> CreateCourse(CreateCourseCommand request)
         {
             try
-			{
+            {
                 var result = await _mediator.Send(request);
                 if (result > 0)
                 {
@@ -29,11 +29,11 @@ namespace P7WebApp.API.Controllers
                 {
                     return BadRequest("Could not create course");
                 }
-			}
-			catch (Exception ex)
-			{
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
-			}
+            }
         }
 
         [HttpPost]

@@ -34,11 +34,6 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
-
- 
-
-        
-
         public async Task<int> UpdateExercise(Exercise exercise)
         {
             return 1;
@@ -59,8 +54,6 @@ namespace P7WebApp.Infrastructure.Repositories
             return 1;
         }
 
-
-
         public async Task<Exercise> GetExerciseFromModuleId(int moduleId)
         {
             throw new NotImplementedException();
@@ -75,7 +68,6 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
-
 
         Task<Exercise> IExerciseRepository.GetExerciseById(int id)
         {

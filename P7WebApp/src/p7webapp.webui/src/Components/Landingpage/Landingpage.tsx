@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Container, Form, Pagination } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import { Container } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import OwnedCourseOverview, { CourseOverview } from './LandingpageModules/OwnedCourseOverview';
@@ -8,18 +8,25 @@ import CreateCourseModal from '../Modals/CreateCourseModal/CreateCourseModal';
 import { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import { dummyDataOwned } from './dummyDataOwned';
 import { dummyDataAttendee } from './dummyDataAttendee';
+import { getApiRoot, User } from '../../App';
 
-export function Landingpage(): JSX.Element {
-    const openCreateCourseModal = useRef<ShowModal>(null);
+interface LandingpageProps {
+    user: User;
+}
+
+export default function Landingpage(props: LandingpageProps): JSX.Element {
+    const openCreateCourseModalRef = useRef<ShowModal>(null);
 
     const [ownedCourses, setOwnedCourses] = useState<CourseOverview[]>(dummyDataOwned);
     const [attendedCourses, setAttendedCourses] = useState<CourseOverview[]>(dummyDataAttendee);
 
-    const [ownedCoursesCurrentPage, setOwnedCoursesCurrentPage] = useState<number>(0);
-    const [attendedCoursesCurrentPage, setAttendedCoursesCurrentPage] = useState<number>(0);
+    const [hasFetchCourses, setHasFetchCourses] = useState<boolean>(true);
 
-    const [ownedCoursesPerPage, setOwnedCoursesPerPage] = useState<number>(10);
-    const [attendedCoursesPerPage, setAttendedCoursesPerPage] = useState<number>(10);
+    useEffect(() => {
+        if (hasFetchCourses) {
+            // fetchAssignedCoursesOverview(0); //WIP - Add the correct userID to fetch courses for
+        }
+    }, [hasFetchCourses]);
 
     return (
         <Container>
@@ -31,8 +38,9 @@ export function Landingpage(): JSX.Element {
                     fill>
                     <Tab eventKey="My courses" title="My courses">
                         <OwnedCourseOverview
-                            openCreateCourseModal={openCreateCourseModal}
+                            openCreateCourseModal={openCreateCourseModalRef}
                             courses={ownedCourses}
+                            deletedCourse={(courses: CourseOverview[]) => setOwnedCourses(courses)}
                         />
                     </Tab>
                     <Tab eventKey="Attending courses" title="Attending courses">
@@ -43,99 +51,41 @@ export function Landingpage(): JSX.Element {
                     </Tab>
                 </Tabs>
             </div>
-            <CreateCourseModal ref={openCreateCourseModal} />
+            <CreateCourseModal 
+                ref={openCreateCourseModalRef}
+                createdCourse={() => {
+                    
+                }}
+            />
         </Container>
     );
 }
 
-// interface ListPaginationProps {
-
-// }
-
-// function ListPagination(courses: CourseOverview, currentPage: number, elementsPerPage: number) {
-//     const
-
-//     return (
-//         <div style={{ display: 'flex', justifyContent: 'center' }}>
-//             <Pagination>
-//                 <Pagination.Prev disabled={currentPage <= 0} onClick={() => this.setState({ currentPage: this.state.currentPage - 1 })} />
-
-//                 <Pagination.Item active={this.state.currentPage === 0}
-//                     onClick={() => {
-//                         if (this.state.currentPage !== 0)
-//                             this.setState({ currentPage: 0 });
-//                     }}>
-//                     {1}
-//                 </Pagination.Item>
-
-//                 {this.state.currentPage >= 3 && <Pagination.Ellipsis disabled />}
-
-//                 {this.state.currentPage === this.state.maxPages - 1 && this.state.maxPages > 3 &&
-//                     <Pagination.Item
-//                         onClick={() => {
-//                             this.setState({ currentPage: this.state.currentPage - 2 });
-//                         }}>
-//                         {this.state.currentPage - 1}
-//                     </Pagination.Item>}
-
-//                 {this.state.currentPage >= 2 &&
-//                     <Pagination.Item
-//                         onClick={() => {
-//                             this.setState({ currentPage: this.state.currentPage - 1 });
-//                         }}>
-//                         {this.state.currentPage}
-//                     </Pagination.Item>}
-
-//                 {this.state.currentPage !== 0 && this.state.currentPage !== this.state.maxPages - 1 && this.state.maxPages !== 1 &&
-//                     <Pagination.Item
-//                         active
-//                         onClick={() => { }}>
-//                         {this.state.currentPage + 1}
-//                     </Pagination.Item>}
-
-//                 {this.state.currentPage < this.state.maxPages - 2 &&
-//                     <Pagination.Item
-//                         onClick={() => {
-//                             this.setState({ currentPage: this.state.currentPage + 1 });
-//                         }}>
-//                         {this.state.currentPage + 2}
-//                     </Pagination.Item>}
-
-//                 {this.state.currentPage === 0 && this.state.maxPages > 3 &&
-//                     <Pagination.Item
-//                         onClick={() => {
-//                             this.setState({ currentPage: this.state.currentPage + 2 });
-//                         }}>
-//                         {this.state.currentPage + 3}
-//                     </Pagination.Item>}
-
-//                 {this.state.currentPage < this.state.maxPages - 3 && <Pagination.Ellipsis disabled />}
-
-//                 {this.state.maxPages !== 1 &&
-//                     <Pagination.Item active={this.state.currentPage === this.state.maxPages - 1}
-//                         onClick={() => {
-//                             this.setState({ currentPage: this.state.maxPages - 1 });
-//                         }}>
-//                         {this.state.maxPages}
-//                     </Pagination.Item>}
-
-//                 <Pagination.Next disabled={this.state.currentPage >= this.state.maxPages - 1} onClick={() => this.setState({ currentPage: this.state.currentPage + 1 })} />
-//             </Pagination>
-//             <div style={{ marginLeft: '5px', height: '33.5px' }}>
-//                 <Form.Select size="sm" style={{ height: '100%' }} value={this.state.licensePerPage}
-//                     onChange={(e) => {
-//                         this.setState({ licensePerPage: Number(e.target.value), maxPages: Math.ceil(this.state.visibleLicenses!.length / Number(e.target.value)), currentPage: 0 });
-//                     }
-//                     }>
-//                     <option value={5}>5 per page</option>
-//                     <option value={10}>10 per page</option>
-//                     <option value={25}>25 per page</option>
-//                     <option value={50}>50 per page</option>
-//                     <option value={100}>100 per page</option>
-//                 </Form.Select>
-//             </div>
-//         </div>
-//     );
-// }
-
-export default Landingpage;
+async function fetchAssignedCoursesOverview(userId: number) {
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': ''
+            },
+            body: JSON.stringify({
+                "userId": userId,
+            })
+        }
+        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log("Successfully created course!");
+                console.log(data);
+            });
+    } catch (error) {
+        alert(error);
+    }
+}

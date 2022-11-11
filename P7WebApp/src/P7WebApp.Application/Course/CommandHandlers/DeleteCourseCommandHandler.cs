@@ -24,13 +24,11 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                int courseId = CourseMapper.Mapper.Map<int>(request);
-                int deleted = await _unitOfWork.CourseRepository.DeleteCourse(courseId);
+                int deleted = await _unitOfWork.CourseRepository.DeleteCourse(request.Id);
                 return deleted;
             }
             catch (Exception)
-            {
-
+            { 
                 throw;
             }
         }
