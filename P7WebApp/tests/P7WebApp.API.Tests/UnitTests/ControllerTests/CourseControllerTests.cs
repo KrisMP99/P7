@@ -92,26 +92,6 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
                 .And
                 .BeOfType<OkObjectResult>();
         }
-        [Fact]
-        public async Task GetExerciseGroupsByCourseId_ReturnBadRequestObjectResult()
-        {
-            // Arrange
-            var mockMediator = new Mock<IMediator>();
-            var courseController = new CourseController(mockMediator.Object);
-            IEnumerable<ExerciseGroupResponse> exerciseGroupResponses = new List<ExerciseGroupResponse> { new ExerciseGroupResponse() { CourseId = 1 } };
-            mockMediator.Setup(m => m.Send(exerciseGroupResponses, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(exerciseGroupResponses);
-
-            // Act
-            var actionResult = await courseController.GetExerciseGroupsByCourseId(1);
-
-            // Assert
-            actionResult
-                .Should()
-                .BeOfType<BadRequestObjectResult>();
-        }
-
-
         // Exercise Related Tests
 
     }
