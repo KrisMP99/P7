@@ -52,7 +52,7 @@ export default function Frontpage(props: LoginProps) {
                     "password": password
                 })
             }
-            await fetch(getApiRoot() + 'Login', requestOptions)
+            await fetch(getApiRoot() + 'accounts/login', requestOptions)
                 .then((res) => {
                     if (!res.ok) {
                         throw new Error('Response not okay from backend - server unavailable');

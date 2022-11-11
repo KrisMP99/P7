@@ -9,15 +9,17 @@ namespace P7WebApp.Infrastructure.Identity
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
 
-        public IdentityService(
-            UserManager<ApplicationUser> userManager,
-            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
+        public IdentityService(UserManager<ApplicationUser> userManager, 
+            SignInManager<ApplicationUser> signInManager, 
+            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, 
             IAuthorizationService authorizationService)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
         }
@@ -29,17 +31,24 @@ namespace P7WebApp.Infrastructure.Identity
             return user.UserName;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string username, string email, string password)
+        public async Task<(Result Result, string UserId)> CreateUserAsync(string username, string email, string firstName, string lastName, string password)
         {
-            var user = new ApplicationUser
-            {
-                UserName = username,
-                Email = email,
-            };
+            var user = new ApplicationUser();
+            user.SetIdentity(username, email, firstName, lastName);
 
             var result = await _userManager.CreateAsync(user, password);
 
             return (result.ToApplicationResult(), user.Id);
+        }
+
+        public async Task<Result> LoginUserAsync(string username, string password)
+        {
+            var user = new ApplicationUser();
+            user.SetLoginCredentials(username);
+
+            var result = await _signInManager.PasswordSignInAsync(user, password, isPersistent: false, lockoutOnFailure: false);
+
+            return result.ToApplicationResult();
         }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)

@@ -25,8 +25,7 @@ namespace P7WebApp.Infrastructure
             services.AddTransient<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
             services
-                .AddDefaultIdentity<ApplicationUser>()
-                .AddRoles<IdentityRole>()
+                .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<IdentityOptions>(options =>

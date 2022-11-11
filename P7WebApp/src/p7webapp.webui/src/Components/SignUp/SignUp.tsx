@@ -39,7 +39,7 @@ export default function SignUp(): JSX.Element {
                     "lastname": newUser.lastname
                 })
             }
-            await fetch(getApiRoot() + 'SignUp', requestOptions)
+            await fetch(getApiRoot() + 'accounts/', requestOptions)
                 .then((res) => {
                     if (!res.ok) {
                         throw new Error('Response not okay from backend - server unavailable');

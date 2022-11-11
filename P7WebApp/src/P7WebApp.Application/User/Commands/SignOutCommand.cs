@@ -2,7 +2,7 @@
 
 namespace P7WebApp.Application.User.Commands
 {
-    public class SignOutCommand : IRequest<int>
+    public class LogoutCommand : IRequest<int>
     {
     }
 }

@@ -15,48 +15,6 @@ namespace P7WebApp.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost()]
-        public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-                return Ok("User was created");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("{userId}/sign-in")]
-        public async Task<IActionResult> SignIn([FromBody] SignInCommand request)
-        {
-            try
-            {
-                var result = _mediator.Send(request);
-                return Ok("User was updated");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("{userId}/sign-out")]
-        public async Task<IActionResult> SignOut([FromBody] SignOutCommand request)
-        {
-            try
-            {
-                var result = _mediator.Send(request);
-                return Ok("User was updated");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPost("api/{userId}/profile")]
         public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateUserProfileCommand request)
         {
