@@ -21,49 +21,134 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<int> DeleteCourse(int courseId)
         {
-            return courseId;
-        }
+            try
+            {
+                var course = _context.Courses.Find(courseId);
 
-        public Task<IEnumerable<CourseOverview>> GetAttendedCourses(int userId)
-        {
-            throw new NotImplementedException();
-        }
+                if (course != null)
+                {
+                    _context.Courses.Remove(course);
+                    return courseId;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
+        }
         public async Task<Course> GetCourse(int courseId)
         {
             return new Course() { Id = courseId};
         }
-
-        public async Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
+        public async Task<IEnumerable<Course>> GetAttendedCourses(int userId)
         {
-            return new Course() { Id = 1};
+            try
+            {
+                var courses = _context.Courses.Where(c => c.Id == userId);
+
+                if(courses.Any())
+                {
+                    return courses;
+
+                } else
+                {
+                    throw new Exception();
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
-        public async Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id)
+
+        public async Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int courseId)
         {
-            return new List<ExerciseGroup>().AsEnumerable(); 
+            try
+            {
+                var exerciseGroups = _context.ExerciseGroups.Where(e => e.CourseId == courseId);
+
+                if (exerciseGroups != null)
+                {
+                    return exerciseGroups.AsEnumerable();
+
+                } else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         public async Task<IEnumerable<Course>> GetListOfCourses()
         {
-            IEnumerable<Course> courses = new List<Course> { new Course { Id = 1 }, new Course { Id = 2 } };
-            return courses;
+
+            var courses = _context.Courses.ToList().AsEnumerable();
+
+            try
+            {
+                if (courses != null)
+                {
+                    return courses;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
-        public Task<IEnumerable<CourseOverview>> GetOwnedCourses(int userId)
+        public Task<IEnumerable<Course>> GetOwnedCourses(int userId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<CourseOverview>> GetPublicCourses()
+        public Task<IEnumerable<Course>> GetPublicCourses()
         {
             throw new NotImplementedException();
         }
 
         public async Task<int> UpdateCourse(Course course)
         {
-            return 1;
+            try
+            {
+                var courseUpdate = _context.Courses.Update(course);
+
+                if (courseUpdate != null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
+        public Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

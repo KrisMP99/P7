@@ -14,9 +14,10 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands
             IsVisible = isVisible;
             ExerciseGroupNumber = exerciseGroupNumber;
             BecomesVisibleAt = becomesVisibleAt;
+            CourseId = courseId;
         }
-        public int Id { get; set; }
         public int CourseId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsVisible { get; set; }

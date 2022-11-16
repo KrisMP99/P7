@@ -19,7 +19,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
         {
             try
             {
-                var course = await _unitOfWork.CourseRepository.GetCourseFromExerciseGroupId(request.Id);
+                var course = await _unitOfWork.CourseRepository.GetCourse(request.CourseId);
 
                 if (course is null)
                 {
@@ -27,7 +27,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
                 }
                 else
                 {
-                    course.GetExerciseGroup(request.Id)
+                    course.GetExerciseGroup(request.CourseId)
                         .EditInformation(newTitle: request.Title, newDescription: request.Description, isVisible: request.IsVisible, newBecomeVisibleAt: request.BecomesVisibleAt, newExerciseGroupNumber: request.ExerciseGroupNumber);
 
                     int affectedRows = await _unitOfWork.CourseRepository.UpdateCourse(course);
