@@ -31,7 +31,7 @@ namespace P7WebApp.Infrastructure.Identity.Services
 
                 if (user is not null)
                 {
-                    SignInResult signIn = await _signInManager.PasswordSignInAsync(user.NormalizedUserName, password, true, false);
+                    SignInResult signIn = await _signInManager.PasswordSignInAsync(user, password, true, false);
 
                     if (signIn.Succeeded)
                     {

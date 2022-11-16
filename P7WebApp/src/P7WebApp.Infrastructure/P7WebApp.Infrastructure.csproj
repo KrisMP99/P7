@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
@@ -44,7 +45,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\P7WebApp.Application\P7WebApp.Application.csproj" />
-    <ProjectReference Include="..\P7WebApp.SharedKernel\P7WebApp.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>
