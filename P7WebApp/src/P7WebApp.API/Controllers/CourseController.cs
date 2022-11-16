@@ -221,54 +221,6 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-module")]
-        public async Task<IActionResult> AddModule(CreateModuleCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not create modules");
-                }
-                else
-                {
-                    return Ok(result);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-module/{moduleId}")]
-        public async Task<IActionResult> DeleteModule(DeleteModuleCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not delete modules");
-                }
-                else
-                {
-                    return Ok(result);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
         [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/create-solution")]
         public async Task<IActionResult> CreateSolution(CreateSolutionCommand request)
         {
