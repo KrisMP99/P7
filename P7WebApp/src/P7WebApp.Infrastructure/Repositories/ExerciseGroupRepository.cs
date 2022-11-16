@@ -1,4 +1,5 @@
 ﻿using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
 using System;
@@ -16,6 +17,11 @@ namespace P7WebApp.Infrastructure.Repositories
         public ExerciseGroupRepository(IApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public Task<int> CreateExercise(Exercise exercise)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<int> CreateExerciseGroup(ExerciseGroup course)

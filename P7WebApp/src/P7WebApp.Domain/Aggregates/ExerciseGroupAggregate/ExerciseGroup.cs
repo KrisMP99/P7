@@ -8,7 +8,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
     {
 
         public ExerciseGroup() { }
-        public ExerciseGroup(int courseId, string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime visibleFromDate, List<Exercise> exercises)
+        public ExerciseGroup(int courseId, string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime visibleFromDate, List<ExerciseOverview> exercises)
         {
             CourseId = courseId;
             Title = title;
@@ -29,9 +29,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         public DateTime LastModifiedDate { get; private set; }
         public bool IsVisible { get; private set; }
         public DateTime VisibleFromDate { get; private set; }
-        public List<Exercise> Exercises { get; private set; }
+        public List<ExerciseOverview> Exercises { get; private set; }
 
-        public Exercise GetExercise(int exerciseId)
+        public ExerciseOverview GetExerciseOverview(int exerciseId)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             }
         }
 
-        public IEnumerable<Exercise> GetAllExercises()
+        public IEnumerable<ExerciseOverview> GetAllExercises()
         {
             return Exercises;
         }
@@ -67,7 +67,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             LastModifiedDate = DateTime.Now;
         }
 
-        public void AddExercise(Exercise newExercise)
+        public void AddExercise(ExerciseOverview newExercise)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         {
             try
             {
-                Exercises.Remove(GetExercise(exerciseId));
+                Exercises.Remove(GetExerciseOverview(exerciseId));
             }
             catch (Exception)
             {

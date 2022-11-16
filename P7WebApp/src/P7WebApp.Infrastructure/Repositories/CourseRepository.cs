@@ -24,9 +24,14 @@ namespace P7WebApp.Infrastructure.Repositories
             return courseId;
         }
 
-        public async Task<Course> GetCourse(int id)
+        public Task<IEnumerable<CourseOverview>> GetAttendedCourses(int userId)
         {
-            return new Course() { Id = id};
+            throw new NotImplementedException();
+        }
+
+        public async Task<Course> GetCourse(int courseId)
+        {
+            return new Course() { Id = courseId};
         }
 
         public async Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
@@ -45,9 +50,20 @@ namespace P7WebApp.Infrastructure.Repositories
             return courses;
         }
 
+        public Task<IEnumerable<CourseOverview>> GetOwnedCourses(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<CourseOverview>> GetPublicCourses()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<int> UpdateCourse(Course course)
         {
             return 1;
         }
+
     }
 }
