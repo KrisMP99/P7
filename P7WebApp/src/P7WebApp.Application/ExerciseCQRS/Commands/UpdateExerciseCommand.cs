@@ -4,7 +4,7 @@ namespace P7WebApp.Application.ExerciseCQRS.Commands
 {
     public class UpdateExerciseCommand : IRequest<int>
     {
-        public UpdateExerciseCommand(int id, string title, bool isVisible, int exerciseNumber, DateTime startDate, DateTime endDate)
+        public UpdateExerciseCommand(string title, bool isVisible, int exerciseNumber, DateTime startDate, DateTime endDate, int id)
         {
             Id = id;
             Title = title;

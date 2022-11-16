@@ -17,7 +17,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
         {
             try
             {
-                var course = await _courseRepository.GetCourseFromExerciseGroupId(request.ExerciseGroupId);
+                var course = await _courseRepository.GetCourse(request.Id);
                 course.GetExerciseGroup(request.ExerciseGroupId)
                     .GetExercise(request.Id)
                     .UpdateExerciseInformation(newTitle: request.Title,

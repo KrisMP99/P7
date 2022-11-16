@@ -22,7 +22,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                var course = await _unitOfWork.CourseRepository.GetCourseFromExerciseGroupId(request.ExerciseGroupId);
+                var course = await _unitOfWork.CourseRepository.GetCourse(request.CourseId);
                 course.RemoveExerciseGroup(request.ExerciseGroupId);
 
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
