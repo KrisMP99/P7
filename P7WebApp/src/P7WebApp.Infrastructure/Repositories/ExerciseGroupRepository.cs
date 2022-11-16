@@ -1,11 +1,6 @@
 ﻿using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace P7WebApp.Infrastructure.Repositories
 {
@@ -18,29 +13,36 @@ namespace P7WebApp.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task<int> CreateExerciseGroup(ExerciseGroup course)
+        public async Task<ExerciseGroup> GetExerciseGroupByGroupId(int exerciseGroupId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var exerciseGroup = await _context.ExerciseGroups.FindAsync(exerciseGroupId);
+                return exerciseGroup;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<ExerciseGroup> GetExerciseGroupByCourseId(int courseId)
+        public async Task<IAsyncEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                var courses = await _context.Courses.FindAsync(courseId);
+                
+                if(courses is not null)
+                {
+                    return (IAsyncEnumerable<ExerciseGroup>)courses.ExerciseGroups;
+                }
 
-        public Task<ExerciseGroup> GetExerciseGroupByGroupId(int exerciseGroupId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> UpdateExerciseGroup(ExerciseGroup course)
-        {
-            throw new NotImplementedException();
+                return null;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
     }
 }
