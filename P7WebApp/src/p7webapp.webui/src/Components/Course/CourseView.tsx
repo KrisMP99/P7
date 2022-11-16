@@ -5,15 +5,23 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import './CourseView.css';
 import { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
-import ExerciseOverview from './ExerciseOverview/ExerciseOverview';
+import ExerciseGroupsOverview from './ExerciseGroupsOverview/ExerciseGroupsOverview';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import { Gear, Plus } from 'react-bootstrap-icons';
 import CreateExerciseGroupModal, { ShowCreateExerciseGroupModal } from '../Modals/CreateExerciseGroupModal/CreateExerciseGroupModal';
+import { useNavigate, useParams } from 'react-router-dom';
+
+export interface ExerciseOverview {
+    id: number;
+    title: string;
+    isVisible: boolean;
+}
 
 export interface ExerciseGroup {
     id: number;
     title: string;
     isVisible: boolean;
+    exercises: ExerciseOverview[];
 }
 
 export interface Exercise {
@@ -38,47 +46,38 @@ interface CourseProps {
 }
 
 export default function CourseView(props: CourseProps) {
-    //DUMMY DATA:
-    const exGroups: ExerciseGroup[] = [
-        { id: 0, title: "Session 1", isVisible: true },
-        { id: 1, title: "Session 2", isVisible: true },
-        { id: 2, title: "Session 3", isVisible: true },
-        { id: 3, title: "Session 4", isVisible: true }
-    ];
-    const ex: Exercise[] = [
-        { id: 0, exerciseGroupId: 0, title: 'Exercise 1', isVisible: true },
-        { id: 1, exerciseGroupId: 1, title: 'Exercise 1', isVisible: true },
-        { id: 2, exerciseGroupId: 1, title: 'Exercise 2', isVisible: true },
-        { id: 3, exerciseGroupId: 2, title: 'Exercise 1', isVisible: true },
-        { id: 4, exerciseGroupId: 2, title: 'Exercise 2', isVisible: true },
-        { id: 5, exerciseGroupId: 2, title: 'Exercise 3', isVisible: true },
-        { id: 6, exerciseGroupId: 3, title: 'Exercise 1', isVisible: true },
-        { id: 7, exerciseGroupId: 3, title: 'Exercise 2', isVisible: true },
-        { id: 8, exerciseGroupId: 3, title: 'Exercise 3', isVisible: true },
-        { id: 9, exerciseGroupId: 3, title: 'Exercise 4', isVisible: true }
-    ]
 
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
 
-    const [course, setCourse] = useState<Course>({ title: 'Course Title', description: 'Course description very specific to course', exerciseGroups: exGroups, exercises: ex, ownerId: 0, private: true });
-    const [editedCourse, setEditedCourse] = useState<Course>({...course});
+    const [course, setCourse] = useState<Course | null>(null);
+    const [editedCourse, setEditedCourse] = useState<Course | null>({...course!});
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
-
-
+    const { paramId } = useParams();
+    const courseId = paramId ? Number(paramId) : undefined;
+    const navigator = useNavigate();
+    
+    //Checks if the Course ID isn't present in the URL (shouldn't happen)
+    useEffect(() => {
+        if (!courseId) {
+            navigator('/home')
+        }
+        else {
+            fetchCourse(courseId, (course) => {
+                setCourse(course);
+            });
+        }
+    }, [courseId]);
 
     useEffect(() => {
-        // fetchCourse(0, 0, (data) => {
-        //     console.log(data);
-        //     //WIP - SET COURSE HERE
-        // });
         if (props.user.id === course?.ownerId && !isOwner) {
             setIsOwner(true);
         }
         setEditedCourse(course);
     }, [course?.ownerId, props.user.id, isOwner]);
+
     return (
         <Container>
             <div className='course-title-container'>
@@ -154,12 +153,18 @@ export default function CourseView(props: CourseProps) {
                                 <Plus />ExerciseGroup
                             </Button>
                         </div>
-                        <ExerciseOverview
-                            course={course}
-                            changedCourse={(newCourse: Course) => setCourse(newCourse)}
+                        <ExerciseGroupsOverview
+                            exerciseGroups={course ? course.exerciseGroups : []}
                             openDeleteExerciseModalRef={openDeleteExerciseModalRef}
-                            isOwner={isOwner}
                             openCreateExerciseModalRef={props.openCreateExerciseModalRef}
+                            isOwner={isOwner}
+                            changedCourse={() => {
+                                if (courseId) {
+                                    fetchCourse(courseId, (data) => {
+                                        setCourse(data);
+                                    })
+                                }
+                            }}
                         />
                     </Tab>
                     <Tab eventKey={'members'} title={'Members'} tabClassName={!isOwner ? 'd-none' : ''}>
@@ -173,51 +178,46 @@ export default function CourseView(props: CourseProps) {
             <DeleteConfirmModal
                 ref={openDeleteExerciseModalRef}
                 confirmDelete={(id: number, type: DeleteElementType) => {
-                    if (course) {
+                    if (course && courseId) {
                         if (type === DeleteElementType.EXERCISE) {
-                            let newExercises = course.exercises.filter((ex) => ex.id !== id);
-                            //WIP - MAKE POST TO DELETE EXERCISE
-                            deleteExercise(0, 0, (data) => {
-                                fetchCourse(0, 0, (data) => {
-                                    //SET COURSE HERE
-                                })
+                            deleteExercise(courseId, id, ()=>{
+                                fetchCourse(courseId, (data) => {
+                                    setCourse(data);
+                                });
                             });
-                            //WIP - REFETCH COURSE
-                            setCourse({ ...course, exercises: newExercises });
                         }
                         else if (type === DeleteElementType.EXERCISEGROUP) {
-                            let newExerciseGroups = course.exerciseGroups.filter((group) => group.id !== id)
-                            //WIP - MAKE POST TO DELETE EXERCISEGROUP
-                            deleteExerciseGroup(0, 0, (data) => {
-                                fetchCourse(0, 0, (data) => {
-                                    //SET COURSE HERE
-                                })
+                            deleteExerciseGroup(courseId, id, ()=>{
+                                fetchCourse(courseId, (data) => {
+                                    setCourse(data);
+                                });
                             });
-                            //WIP - REFETCH COURSE
-                            setCourse({ ...course, exerciseGroups: newExerciseGroups });
                         }
                     }
                 }}
             />
             <CreateExerciseGroupModal
                 ref={createExerciseGroupModalRef}
-                updateExerciseGroups={(dummyTitle: string, dummyVisibility: boolean) => {
-                    //WIP - Fetch exercisegroups again
-                    let dummyGroup = {id: course.exerciseGroups.length, title: dummyTitle, isVisible: dummyVisibility}
-                    setCourse({...course, exerciseGroups: [...course.exerciseGroups, dummyGroup]})
-                }}
+                updateExerciseGroups={() => {
+                    if (courseId)
+                        fetchCourse(courseId, (data) => {
+                            setCourse(course);
+                        });
+                    }
+                }
             />
         </Container>
     )
 }
 
-async function deleteExercise(courseId: number, exerciseId: number, success: (data: any)=>void) {
+async function deleteExercise(courseId: number, exerciseId: number, callback: ()=>void) {
     try {
         const requestOptions = {
             method: 'POST',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
+                //WIP - SET AUTH
             },
             body: JSON.stringify({
                 "courseId": courseId,
@@ -227,74 +227,66 @@ async function deleteExercise(courseId: number, exerciseId: number, success: (da
         await fetch(getApiRoot() + 'Course/delete-exercise', requestOptions)
             .then((res) => {
                 if (!res.ok) {
-                    throw new Error('Response not okay from backend - server unavailable');
+                    throw new Error('Response not okay from backend');
                 }
                 return res.json();
             })
-            .then((data) => {
-                console.log("Successfully deleted course!");
-                console.log(data);
-                success(data);
+            .then(() => {
+                callback();
             });
     } catch (error) {
         alert(error);
     }
 }
 
-async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, success: (data: any)=>void) {
+async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, callback: ()=>void) {
     try {
         const requestOptions = {
             method: 'POST',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
+                //WIP - SET AUTH
             },
             body: JSON.stringify({
                 "courseId": courseId,
                 "exerciseGroupId": exerciseGroupId
             })
         }
-        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+        await fetch(getApiRoot() + 'Course/delete-exercisegroup', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend - server unavailable');
                 }
                 return res.json();
             })
-            .then((data) => {
-                console.log("Successfully fetched course!");
-                console.log(data);
-                success(data);
+            .then(() => {
+                callback();
             });
     } catch (error) {
         alert(error);
     }
 }
 
-async function fetchCourse(courseId: number, userId: number, success: (data: any)=>void) {
+async function fetchCourse(courseId: number, callback: (course: Course) => void) {
     try {
         const requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "userId": userId,
-                "courseId": courseId
-            })
+                //WIP - SET AUTH
+            }
         }
-        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+        await fetch(getApiRoot() + 'Course/' + courseId, requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend - server unavailable');
                 }
                 return res.json();
             })
-            .then((data) => {
-                console.log("Successfully fetched course!");
-                console.log(data);
-                success(data);
+            .then((course: Course) => {
+                callback(course);
             });
     } catch (error) {
         alert(error);
