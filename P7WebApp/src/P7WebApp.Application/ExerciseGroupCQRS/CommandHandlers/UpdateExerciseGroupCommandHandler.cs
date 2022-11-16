@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Exceptions;
-using P7WebApp.Application.ExerciseGroupQCRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Domain.Repositories;
 
-namespace P7WebApp.Application.ExerciseGroupQCRS.CommandHandlers
+namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 {
     public class UpdateExerciseGroupCommandHandler : IRequestHandler<UpdateExerciseGroupCommand, int>
     {

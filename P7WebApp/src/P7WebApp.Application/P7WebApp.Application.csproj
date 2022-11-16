@@ -9,10 +9,10 @@
   <ItemGroup>
     <Folder Include="Common\Behaviours\" />
     <Folder Include="Common\NewFolder\" />
-    <Folder Include="ExerciseQCRS\Queries\" />
-    <Folder Include="ExerciseQCRS\QueryHandlers\" />
-    <Folder Include="ExerciseGroupQCRS\QueryHandlers\" />
-    <Folder Include="ExerciseGroupQCRS\Queries\" />
+    <Folder Include="ExerciseCQRS\Queries\" />
+    <Folder Include="ExerciseCQRS\QueryHandlers\" />
+    <Folder Include="ExerciseGroupCQRS\QueryHandlers\" />
+    <Folder Include="ExerciseGroupCQRS\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

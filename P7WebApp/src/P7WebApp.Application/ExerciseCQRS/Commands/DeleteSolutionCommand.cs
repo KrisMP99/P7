@@ -1,7 +1,7 @@
 ﻿using MediatR;
 
 
-namespace P7WebApp.Application.ExerciseQCRS.Commands
+namespace P7WebApp.Application.ExerciseCQRS.Commands
 {
     public class DeleteSolutionCommand : IRequest<int>
     {

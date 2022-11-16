@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
-using P7WebApp.Application.ExerciseQCRS.Commands;
-using P7WebApp.Application.ExerciseGroupQCRS.Commands;
+using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 
 namespace P7WebApp.API.Controllers
 {

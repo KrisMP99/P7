@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Application.ExerciseQCRS.Commands;
+using P7WebApp.Application.ExerciseCQRS.Commands;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 
