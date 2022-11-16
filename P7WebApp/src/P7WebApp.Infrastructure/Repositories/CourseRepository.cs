@@ -93,10 +93,10 @@ namespace P7WebApp.Infrastructure.Repositories
 
         }
 
-        public async Task<IEnumerable<Course>> GetListOfCourses(int courseId)
+        public async Task<IEnumerable<Course>> GetListOfCourses()
         {
 
-            var courses = _context.Courses.Where(e => e.CourseId == courseId);
+            var courses = _context.Courses.ToList().AsEnumerable();
 
             try
             {
