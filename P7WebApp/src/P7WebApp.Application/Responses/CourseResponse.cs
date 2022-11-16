@@ -12,6 +12,6 @@ namespace P7WebApp.Application.Responses
         public DateTime ModifiedDate { get; set; }
         public int OwnerId { get; set; }
         public string OwnerName { get; set; }  
-        public List<ExerciseGroup> ExerciseGroups { get; set; }
+        public IEnumerable<ExerciseGroupResponse> ExerciseGroups { get; set; }
     }
 }
