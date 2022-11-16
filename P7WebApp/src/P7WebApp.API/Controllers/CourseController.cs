@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
+using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 
 namespace P7WebApp.API.Controllers
 {
@@ -209,54 +211,6 @@ namespace P7WebApp.API.Controllers
                 else
                 {
                 return Ok(result);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-module")]
-        public async Task<IActionResult> AddModule(CreateModuleCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not create modules");
-                }
-                else
-                {
-                    return Ok(result);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-module/{moduleId}")]
-        public async Task<IActionResult> DeleteModule(DeleteModuleCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not delete modules");
-                }
-                else
-                {
-                    return Ok(result);
 
                 }
             }

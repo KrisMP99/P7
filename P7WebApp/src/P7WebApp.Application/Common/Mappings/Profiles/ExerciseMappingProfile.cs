@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.ExerciseCQRS.Commands;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 
@@ -11,8 +12,6 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
         { 
             // I dont know what these do - help <3
             CreateMap<UpdateExerciseCommand, Exercise>();
-            CreateMap<CreateModuleCommand, Module>();
-            CreateMap<DeleteModuleCommand, Module>();
             CreateMap<CreateSolutionCommand, Solution>();
             CreateMap<DeleteSolutionCommand, Solution>();
             CreateMap<CreateSubmissionCommand, Submission>();
