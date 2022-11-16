@@ -25,12 +25,12 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                //var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-                request.CreatedById = user.Id;
-                request.LastModifiedById = user.Id;
-                request.CreatedBy = user;
-                request.LastModifiedBy = user;
+                //request.CreatedById = user.Id;
+                //request.LastModifiedById = user.Id;
+                //request.CreatedBy = user;
+                //request.LastModifiedBy = user;
 
 
                 var result = await _mediator.Send(request);
