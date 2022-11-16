@@ -5,6 +5,8 @@ import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
 import { Trash } from 'react-bootstrap-icons';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
+import { getApiRoot } from '../../../App';
+import CreateCourseModal from '../../Modals/CreateCourseModal/CreateCourseModal';
 
 export interface CourseOverview {
     id: number;
@@ -12,28 +14,36 @@ export interface CourseOverview {
     exerciseAmount: number;
     membersAmount: number;
     owner: string;
+    isPrivate: boolean;
 }
 
 interface OwnedCourseOverviewProps {
-    openCreateCourseModal: React.RefObject<ShowModal>;
-    courses: CourseOverview[];
-    deletedCourse: (courses: CourseOverview[]) => void;
+
 }
 
-function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
+export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
+    const openCreateCourseModalRef = useRef<ShowModal>(null);
+
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
     const deleteCourseModalRef = useRef<ShowDeleteConfirmModal>(null);
+    const [ownedCourses, setOwnedCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
     const [maxPages, setMaxPages] = useState<number>(1);
 
     useEffect(() => {
-        setMaxPages(Math.ceil(props.courses.filter((item: { name: string; }) => {
+        fetchOwnedCourses((courses) =>{
+            setOwnedCourses(courses);
+        });
+    }, []);
+
+    useEffect(() => {
+        setMaxPages(Math.ceil(ownedCourses.filter((item: { name: string; }) => {
             return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
         }).length / coursesPerPage));
-    }, [props.courses.length, coursesPerPage, search]);
+    }, [ownedCourses.length, coursesPerPage, search]);
 
     return (
         <Container>
@@ -53,7 +63,7 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                         <h3>My courses</h3>
                     </div>
                     <div className="col text-end">
-                        <Button className="rounded p-2 create-course" onClick={()=>props.openCreateCourseModal.current?.handleShow()}>
+                        <Button className="rounded p-2 create-course" onClick={()=>openCreateCourseModalRef.current?.handleShow()}>
                             Create course
                         </Button> 
                     </div>
@@ -71,7 +81,7 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                             </tr>
                         </thead>
                         <tbody>
-                        {props.courses.filter((item: { name: string; }) => {
+                        {ownedCourses.filter((item: { name: string; }) => {
                             return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
                         }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
                             <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
@@ -163,10 +173,10 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
                     <Form.Select size="sm" style={{ height: '100%' }} value={coursesPerPage}
                         onChange={(e) => {
                             setCoursesPerPage(Number(e.target.value));
-                            setMaxPages(Math.ceil(props.courses!.length / Number(e.target.value)))
+                            setMaxPages(Math.ceil(ownedCourses.length / Number(e.target.value)))
                             setCurrentPage(0);
                         }
-                        }>
+                    }>
                         <option value={5}>5 per page</option>
                         <option value={10}>10 per page</option>
                         <option value={25}>25 per page</option>
@@ -177,12 +187,73 @@ function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
             </div>
             <DeleteConfirmModal 
                 ref={deleteCourseModalRef}
-                confirmDelete={(id: number, type: DeleteElementType)=>{
-                    props.deletedCourse(props.courses.filter((course) => course.id !== id));
+                confirmDelete={(courseId: number)=>{
+                    deleteOwnedCourse(courseId, () => {
+                        fetchOwnedCourses((courses) => setOwnedCourses(courses));
+                    });
                 }}                
+            />
+            <CreateCourseModal 
+                ref={openCreateCourseModalRef}
+                createdCourse={() => {
+                    fetchOwnedCourses((courses) => {
+                        setOwnedCourses(courses);
+                    });
+                }}
             />
         </Container>
     );
 }
 
-export default OwnedCourseOverview;
+async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) {
+    try {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': '' //WIP - SET AUTH
+            }
+        }
+        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend');
+                }
+                return res.json();
+            })
+            .then((ownedCourses: CourseOverview[]) => {
+                callback(ownedCourses);
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
+async function deleteOwnedCourse(courseId: number, callback: () => void) {
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': '' //WIP - SET AUTH
+            },
+            body: JSON.stringify({
+                'id': courseId
+            })
+        }
+        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend');
+                }
+                return res.json();
+            })
+            .then(() => {
+                callback();
+            });
+    } catch (error) {
+        alert(error);
+    }
+}

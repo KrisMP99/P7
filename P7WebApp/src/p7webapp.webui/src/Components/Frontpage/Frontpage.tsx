@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import './Frontpage.css';
 import { useNavigate } from 'react-router-dom';
-import { getApiRoot } from '../../App';
+import { getApiRoot, User } from '../../App';
 
 interface LoginProps {
-    loggedIn: () => void;
+    loggedIn: (user: User) => void;
     alreadyLoggedIn: boolean;
 }
 
@@ -15,57 +15,28 @@ export default function Frontpage(props: LoginProps) {
         if (props.alreadyLoggedIn) {
             navigator('/home');
         }
-    })
+    });
 
     const [{ username, password }, setCredentials] = useState({
         username: '',
         password: ''
     })
 
-    const users = [{ username: 'Kristian', password: '1234' },
-    { username: 'Jonas', password: '1234' }];
-
     const [error, setError] = useState<string>();
 
 
 
-    const login = async (event: React.FormEvent) => {
+    const login = (event: React.FormEvent) => {
         event.preventDefault();
-        const account = users.find((user) => user.username === username);
 
-        if (account && account.password === password) {
-            props.loggedIn();
-            navigator("/home");
+        if (username && password) {
+            attemptLogin(username, password, (user) => {
+                user ? props.loggedIn(user) : setError('Incorrect Username or Password');
+            });
         } else {
-            setError('Invalid Username or Password')
+            setError('Fill out Username or Password')
         }
         return;
-        try {
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    "username": username,
-                    "password": password
-                })
-            }
-            await fetch(getApiRoot() + 'Login', requestOptions)
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error('Response not okay from backend - server unavailable');
-                    }
-                    return res.json();
-                })
-                .then((user: any) => {
-                    console.log("Successfully logged in!");
-                    console.log(user);
-                });
-        } catch (error) {
-            alert(error);
-        }
     }
 
     return (
@@ -138,4 +109,33 @@ export default function Frontpage(props: LoginProps) {
             </div>
         </Container>
     );
+}
+
+async function attemptLogin (username: string, password: string, callback: (user: User | null) => void) {
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "username": username,
+                "password": password
+            })
+        }
+        await fetch(getApiRoot() + 'Login', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then(({ user, token }: {user: User | null, token: string}) => {
+                //WIP - SAVE TOKEN IN SESSION HERE
+                callback(user);
+            });
+    } catch (error) {
+        alert(error);
+    }
 }
