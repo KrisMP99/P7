@@ -31,8 +31,10 @@ namespace P7WebApp.Infrastructure
 
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();    
+                .AddDefaultTokenProviders()
+                    .AddUserManager<UserManager<ApplicationUser>>()
+                    .AddSignInManager<SignInManager<ApplicationUser>>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<IdentityOptions>(options =>
             {
