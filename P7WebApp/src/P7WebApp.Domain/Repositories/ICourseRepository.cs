@@ -8,9 +8,8 @@ namespace P7WebApp.Domain.Repositories
         Task CreateCourse(Course course);
         Task<int> DeleteCourse(int courseId);
         Task<Course> GetCourse(int id);
-        Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId);
-        Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int id);
-        Task<IEnumerable<Course>> GetListOfCourses();
+        Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int courseId);
+        Task<IEnumerable<Course>> GetListOfCourses(int courseId);
         Task<int> UpdateCourse(Course course);
   
     }

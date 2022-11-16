@@ -133,7 +133,14 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(new GetExerciseGroupsQuery(courseId));
-                return Ok(result);
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception ex)
             {

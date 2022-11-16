@@ -23,7 +23,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                var course = await _courseRepository.GetCourseFromExerciseGroupId(request.ExerciseGroupId);
+                var course = await _courseRepository.GetCourse(request.CourseId);
 
                 if (course is null)
                 {
