@@ -102,17 +102,8 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             mockMediator.Setup(m => m.Send(exerciseGroupResponses, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(exerciseGroupResponses);
 
-            // Act
-            var actionResult = await courseController.GetExerciseGroupsByCourseId(1);
-
-            // Assert
-            actionResult
-                .Should()
-                .BeOfType<BadRequestObjectResult>();
+            // Exercise Related Tests
         }
-
-
-        // Exercise Related Tests
 
     }
 }

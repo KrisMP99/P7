@@ -1,5 +1,5 @@
-﻿using P7WebApp.Domain.Exceptions;
-using P7WebApp.SharedKernel;
+﻿using P7WebApp.Domain.Common;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {

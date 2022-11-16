@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.SharedKernel.Interfaces;
+using P7WebApp.Domain.Common;
 
 namespace P7WebApp.Infrastructure.Persistence.Intercepters
 {
@@ -41,13 +41,13 @@ namespace P7WebApp.Infrastructure.Persistence.Intercepters
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedBy = _currentUserService.UserId;
+                    entry.Entity.CreatedById = _currentUserService.UserId;
                     entry.Entity.CreatedDate = _dateTime.Now;
                 }
 
                 if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
                 {
-                    entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                    entry.Entity.LastModifiedById = _currentUserService.UserId;
                     entry.Entity.ModifiedDate = _dateTime.Now;
                 }
             }

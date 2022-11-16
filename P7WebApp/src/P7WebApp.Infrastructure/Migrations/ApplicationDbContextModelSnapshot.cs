@@ -305,7 +305,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -319,7 +319,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("LastModifiedBy")
+                    b.Property<string>("LastModifiedById")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -330,6 +330,10 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LastModifiedById");
 
                     b.ToTable("Courses");
                 });
@@ -456,7 +460,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("ExerciseGroupId")
+                    b.Property<int>("ExerciseGroupId")
                         .HasColumnType("integer");
 
                     b.Property<int>("ExerciseNumber")
@@ -715,7 +719,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.ToTable("ExerciseGroups");
                 });
 
-            modelBuilder.Entity("P7WebApp.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("P7WebApp.Domain.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -827,7 +831,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -836,7 +840,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -851,7 +855,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -860,11 +864,28 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "LastModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("LastModifiedBy");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>
@@ -898,7 +919,9 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseGroupAggregate.ExerciseGroup", null)
                         .WithMany("Exercises")
-                        .HasForeignKey("ExerciseGroupId");
+                        .HasForeignKey("ExerciseGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.TestCase", b =>

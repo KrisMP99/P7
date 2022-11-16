@@ -1,6 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
-using P7WebApp.SharedKernel;
-using P7WebApp.SharedKernel.Interfaces;
+using P7WebApp.Domain.Common;
+using P7WebApp.Domain.Common.Interfaces;
+using P7WebApp.Domain.Identity;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {

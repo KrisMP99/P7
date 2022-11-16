@@ -18,7 +18,7 @@ namespace P7WebApp.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task<int> CreateExerciseGroup(ExerciseGroup course)
+        public Task<int> CreateExerciseGroup(ExerciseGroup exerciseGroup)
         {
             throw new NotImplementedException();
         }

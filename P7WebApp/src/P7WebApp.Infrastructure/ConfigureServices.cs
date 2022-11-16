@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Domain.Identity;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Data;
 using P7WebApp.Infrastructure.Identity;

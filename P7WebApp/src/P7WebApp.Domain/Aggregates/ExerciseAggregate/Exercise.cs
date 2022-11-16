@@ -1,6 +1,8 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
-using P7WebApp.SharedKernel;
-using P7WebApp.SharedKernel.Interfaces;
+using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
+using P7WebApp.Domain.Common;
+using P7WebApp.Domain.Common.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
@@ -17,6 +19,8 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             CreatedDate = createdDate;
             LastModifiedDate = lastModifiedDate;
         }
+
+        public int ExerciseGroupId { get; private set; }
 
         public string Title { get; private set; }
         public bool IsVisible { get; private set; }

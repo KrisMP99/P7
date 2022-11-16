@@ -1,4 +1,4 @@
-﻿using P7WebApp.SharedKernel;
+﻿using P7WebApp.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
