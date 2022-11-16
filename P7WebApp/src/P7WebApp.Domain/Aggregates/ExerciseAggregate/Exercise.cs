@@ -22,17 +22,20 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public string Title { get; private set; }
         public bool IsVisible { get; private set; }
         public int ExerciseNumber { get; private set; }
-        public DateTime StartDate { get; private set; }
-        public DateTime EndDate { get; private set; }
+        public DateTime? StartDate { get; private set; }
+        public DateTime? EndDate { get; private set; }
+        public DateTime? VisableFrom { get; set; }
+        public DateTime? VisibleTo { get; set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
         public ExerciseLayout Layout { get; private set; }
-        public List<Module> Modules { get; private set; }
-        public List<Solution> Solution { get; private set; }
-        public List<Submission> Submissions { get; private set; }
+        public List<Module>? Modules { get; private set; }
+        public List<Solution>? Solution { get; private set; }
+        public List<Submission>? Submissions { get; private set; }
 
-        public void UpdateExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime newStartDate, DateTime newEndDate)
+        public void UpdateExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime? newStartDate, DateTime? newEndDate)
         {
+            // handle case that newstartdate or newenddate is null
             throw new NotImplementedException();
         }
 

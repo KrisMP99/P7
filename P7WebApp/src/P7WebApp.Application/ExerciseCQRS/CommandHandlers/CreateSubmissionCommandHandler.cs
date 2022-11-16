@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.ExerciseCQRS.Commands;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 
-namespace P7WebApp.Application.CourseCQRS.CommandHandlers
+namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
 {
     public class CreateSubmissionCommandHandler : IRequestHandler<CreateSubmissionCommand, int>
     {

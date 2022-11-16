@@ -1,29 +1,25 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Exceptions;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace P7WebApp.Application.CourseCQRS.CommandHandlers
+namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 {
     public class UpdateExerciseGroupCommandHandler : IRequestHandler<UpdateExerciseGroupCommand, int>
     {
-        private readonly ICourseRepository _courseRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateExerciseGroupCommandHandler(ICourseRepository courseRepository)
+        public UpdateExerciseGroupCommandHandler(IUnitOfWork unitOfWork)
         {
-            _courseRepository = courseRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<int> Handle(UpdateExerciseGroupCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var course = await _courseRepository.GetCourseFromExerciseGroupId(request.ExerciseGroupId);
+                var course = await _unitOfWork.CourseRepository.GetCourseFromExerciseGroupId(request.Id);
 
                 if (course is null)
                 {
@@ -31,10 +27,10 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 }
                 else
                 {
-                    course.GetExerciseGroup(request.ExerciseGroupId)
+                    course.GetExerciseGroup(request.Id)
                         .EditInformation(newTitle: request.Title, newDescription: request.Description, isVisible: request.IsVisible, newBecomeVisibleAt: request.BecomesVisibleAt, newExerciseGroupNumber: request.ExerciseGroupNumber);
 
-                    int affectedRows = await _courseRepository.UpdateCourse(course);
+                    int affectedRows = await _unitOfWork.CourseRepository.UpdateCourse(course);
 
                     return affectedRows;
                 }
