@@ -33,8 +33,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public List<Solution>? Solution { get; private set; }
         public List<Submission>? Submissions { get; private set; }
 
-        public void UpdateExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime newStartDate, DateTime newEndDate)
+        public void UpdateExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime? newStartDate, DateTime? newEndDate)
         {
+            // handle case that newstartdate or newenddate is null
             throw new NotImplementedException();
         }
 
