@@ -15,8 +15,8 @@ namespace P7WebApp.Application.CourseCQRS.Commands
         public int CourseId { get; set; }
 
         public bool IsActive { get; set; }
-        public DateTime UseableFrom { get; set; }
-        public DateTime UseableTo { get; set; }
+        public DateTime? UseableFrom { get; set; }
+        public DateTime? UseableTo { get; set; }
 
     }
 } 
