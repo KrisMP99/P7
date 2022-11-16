@@ -174,11 +174,11 @@ namespace P7WebApp.API.Controllers
 
         [HttpPost]
         [Route("{courseId}/delete-exercise-group/{exerciseGroupId}")]
-        public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int exerciseGroupId)
+        public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int courseId, [FromRoute] int exerciseGroupId)
         {
             try
             {
-                var result = await _mediator.Send(new DeleteExerciseGroupCommand(exerciseGroupId));
+                var result = await _mediator.Send(new DeleteExerciseGroupCommand(courseId, exerciseGroupId));
 
                 if (result == 0)
                 {
