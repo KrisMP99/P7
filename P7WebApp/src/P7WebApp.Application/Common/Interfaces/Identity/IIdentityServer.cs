@@ -1,6 +1,6 @@
 ﻿using P7WebApp.Application.Common.Models;
 
-namespace P7WebApp.Application.Common.Interfaces
+namespace P7WebApp.Application.Common.Interfaces.Identity
 {
     public interface IIdentityService
     {
@@ -10,9 +10,7 @@ namespace P7WebApp.Application.Common.Interfaces
 
         Task<bool> AuthorizeAsync(string userId, string policyName);
 
-        Task<Result> LoginUserAsync(string username, string password);
-
-        Task<(Result Result, string UserId)> CreateUserAsync(string firstName, string lastName, string username, string email, string password);
+        Task<Result> CreateUserAsync(string firstName, string lastName, string username, string email, string password);
 
         Task<Result> DeleteUserAsync(string userId);
     }

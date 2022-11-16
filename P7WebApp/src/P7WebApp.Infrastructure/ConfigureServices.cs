@@ -3,11 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.Services.Common;
 using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Domain.Identity;
 using P7WebApp.Domain.Repositories;
+using P7WebApp.Infrastructure.Common.Models;
 using P7WebApp.Infrastructure.Data;
 using P7WebApp.Infrastructure.Identity;
+using P7WebApp.Infrastructure.Identity.Services;
 using P7WebApp.Infrastructure.Persistence;
 using P7WebApp.Infrastructure.Persistence.Intercepters;
 using P7WebApp.Infrastructure.Repositories;
@@ -27,7 +31,8 @@ namespace P7WebApp.Infrastructure
 
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();    
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -40,6 +45,7 @@ namespace P7WebApp.Infrastructure
                 options.Password.RequiredUniqueChars = 1;
             });
 
+            services.AddHttpContextAccessor();
 
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
@@ -52,6 +58,10 @@ namespace P7WebApp.Infrastructure
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
+
+            services.AddScoped<ITokenService, TokenService>();
+
+            services.Configure<Token>(configuration.GetSection("token"));
 
             return services;
         }

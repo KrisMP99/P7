@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Common.Security;
 using System.Reflection;
 

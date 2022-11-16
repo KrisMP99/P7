@@ -38,15 +38,15 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginCommand request)
+        public async Task<IActionResult> Login([FromBody] AuthenticateCommand request)
         {
             try
             {
                 var result = await _mediator.Send(request);
 
-                if (result.Succeeded)
+                if (result is not null)
                 {
-                    return Ok("Signed in");
+                    return Ok(result);
                 }
                 else
                 {

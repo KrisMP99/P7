@@ -2,9 +2,9 @@
 
 namespace P7WebApp.Application.User.Commands.SignIn
 {
-    public class LoginCommandValidator : AbstractValidator<LoginCommand>
+    public class AuthenticateCommandValidator : AbstractValidator<AuthenticateCommand>
     {
-        public LoginCommandValidator()
+        public AuthenticateCommandValidator()
         {
             RuleFor(u => u.Username).NotEmpty().WithMessage("Username cannot be empty");
             RuleFor(u => u.Password).NotEmpty().WithMessage("Password cannot be empty");
