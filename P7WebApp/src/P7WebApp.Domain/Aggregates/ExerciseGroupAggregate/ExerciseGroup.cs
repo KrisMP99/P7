@@ -6,9 +6,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
 {
     public class ExerciseGroup : EntityBase, IAggregateRoot
     {
-
-        public ExerciseGroup() { }
-        public ExerciseGroup(int courseId, string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime visibleFromDate, List<ExerciseOverview> exercises)
+        public ExerciseGroup(int courseId, string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime visibleFromDate, List<Exercise> exercises)
         {
             CourseId = courseId;
             Title = title;
@@ -29,9 +27,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         public DateTime LastModifiedDate { get; private set; }
         public bool IsVisible { get; private set; }
         public DateTime VisibleFromDate { get; private set; }
-        public List<ExerciseOverview> Exercises { get; private set; }
+        public List<Exercise> Exercises { get; private set; }
 
-        public ExerciseOverview GetExerciseOverview(int exerciseId)
+        public Exercise GetExercise(int exerciseId)
         {
             try
             {
@@ -52,7 +50,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             }
         }
 
-        public IEnumerable<ExerciseOverview> GetAllExercises()
+        public IEnumerable<Exercise> GetAllExercises()
         {
             return Exercises;
         }
@@ -67,7 +65,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             LastModifiedDate = DateTime.Now;
         }
 
-        public void AddExercise(ExerciseOverview newExercise)
+        public void AddExercise(Exercise newExercise)
         {
             try
             {
@@ -90,7 +88,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         {
             try
             {
-                Exercises.Remove(GetExerciseOverview(exerciseId));
+                Exercises.Remove(GetExercise(exerciseId));
             }
             catch (Exception)
             {
