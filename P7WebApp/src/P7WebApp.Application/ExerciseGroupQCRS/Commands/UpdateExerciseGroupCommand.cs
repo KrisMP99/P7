@@ -1,7 +1,7 @@
 using MediatR;
 using System.Reflection.Metadata.Ecma335;
 
-namespace P7WebApp.Application.CourseCQRS.Commands
+namespace P7WebApp.Application.ExerciseGroupQCRS.Commands
 {
     public class UpdateExerciseGroupCommand : IRequest<int>
     {

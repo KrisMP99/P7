@@ -1,12 +1,12 @@
 using MediatR;
 
-namespace P7WebApp.Application.CourseCQRS.Commands
+namespace P7WebApp.Application.ExerciseQCRS.Commands
 {
     public class UpdateExerciseCommand : IRequest<int>
     {
         public UpdateExerciseCommand(int id, string title, bool isVisible, int exerciseNumber, DateTime startDate, DateTime endDate)
         {
-            Id = id;    
+            Id = id;
             Title = title;
             IsVisible = isVisible;
             ExerciseNumber = exerciseNumber;

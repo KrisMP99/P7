@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.ExerciseQCRS.Commands;
 using P7WebApp.Domain.Repositories;
 
-namespace P7WebApp.Application.CourseCQRS.CommandHandlers
+namespace P7WebApp.Application.ExerciseQCRS.CommandHandlers
 {
     public class UpdateExerciseCommandHandler : IRequestHandler<UpdateExerciseCommand, int>
     {

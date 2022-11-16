@@ -1,30 +1,30 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.ExerciseQCRS.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.Application.CourseCQRS.CommandHandlers
+namespace P7WebApp.Application.ExerciseQCRS.CommandHandlers
 {
-    public class DeleteSubmissionCommandHandler : IRequestHandler<DeleteSubmissionCommand, int>
+    public class DeleteSolutionCommandHandler : IRequestHandler<DeleteSolutionCommand, int>
     {
-
         private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteSubmissionCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteSolutionCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(DeleteSubmissionCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteSolutionCommand request, CancellationToken cancellationToken)
         {
+
             try
             {
-                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseFromSubmissionId(request.SubmissionId);
-                exercise.DeleteSubmission(request.SubmissionId);
+                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseFromSolutionId(request.SolutionId);
+                exercise.DeleteSolution(request.SolutionId);
 
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
