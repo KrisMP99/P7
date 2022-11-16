@@ -13,9 +13,9 @@ using P7WebApp.Infrastructure.Data;
 using P7WebApp.Infrastructure.Identity;
 using P7WebApp.Infrastructure.Identity.Services;
 using P7WebApp.Infrastructure.Persistence;
-using P7WebApp.Infrastructure.Persistence.Intercepters;
 using P7WebApp.Infrastructure.Repositories;
 using P7WebApp.Infrastructure.Services;
+//using P7WebApp.Infrastructure.Persistence.Intercepters;
 
 namespace P7WebApp.Infrastructure
 {
@@ -23,18 +23,31 @@ namespace P7WebApp.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            //services.AddSingleton<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
+
+            //services.AddDbContext<ApplicationDbContext>((sp,options) =>
+            //    options.UseNpgsql(
+            //        configuration.GetConnectionString("DefaultConnection"),
+            //        builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
+            //    .AddInterceptors(sp.GetService<AuditableEntitySaveChangesInterceptor>()!));
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
-                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                options.UseNpgsql(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
             services.AddTransient<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+            // Needed for PostgreSQL date times to work (we probably need to revisit this...)
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddDefaultTokenProviders()
-                    .AddUserManager<UserManager<ApplicationUser>>()
-                    .AddSignInManager<SignInManager<ApplicationUser>>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddUserManager<UserManager<ApplicationUser>>()
+                .AddSignInManager<SignInManager<ApplicationUser>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -59,7 +72,6 @@ namespace P7WebApp.Infrastructure
             services.AddTransient<ICourseRepository, CourseRepository>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IDateTime, DateTimeService>();
-            services.AddTransient<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
 
             services.AddScoped<ITokenService, TokenService>();
 

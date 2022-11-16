@@ -21,6 +21,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 var course = CourseMapper.Mapper.Map<Course>(request);
+
                 await _unitOfWork.CourseRepository.CreateCourse(course);
 
                 var result = await _unitOfWork.CommitChangesAsync(cancellationToken);

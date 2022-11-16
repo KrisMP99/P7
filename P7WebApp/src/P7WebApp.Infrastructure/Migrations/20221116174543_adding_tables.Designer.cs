@@ -12,8 +12,8 @@ using P7WebApp.Infrastructure.Data;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221116100537_p7")]
-    partial class p7
+    [Migration("20221116174543_adding_tables")]
+    partial class addingtables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
