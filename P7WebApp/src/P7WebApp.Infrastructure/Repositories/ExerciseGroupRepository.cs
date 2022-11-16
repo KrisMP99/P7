@@ -29,6 +29,12 @@ namespace P7WebApp.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public Task<int> DeleteExercise(int exerciseId)
+        {
+            //return deleted exerciseid
+            throw new NotImplementedException();
+        }
+
         public Task<ExerciseGroup> GetExerciseGroupByCourseId(int courseId)
         {
             throw new NotImplementedException();
