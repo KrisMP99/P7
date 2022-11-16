@@ -82,8 +82,6 @@ namespace P7WebApp.Infrastructure.Repositories
                 {
                     throw new Exception();
                 }
-
-
             }
             catch (Exception)
             {
