@@ -46,7 +46,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => {
                 e.preventDefault();
-                createCourse(course.title, course.description, course.private);
+                // createCourse(course.title, course.description, course.private);
                 //WIP - POST TO CREATE COURSE
                 props.createdCourse();
                 handleClose();

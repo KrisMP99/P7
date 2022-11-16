@@ -70,10 +70,10 @@ export default function CourseView(props: CourseProps) {
 
 
     useEffect(() => {
-        fetchCourse(0, 0, (data) => {
-            console.log(data);
-            //WIP - SET COURSE HERE
-        });
+        // fetchCourse(0, 0, (data) => {
+        //     console.log(data);
+        //     //WIP - SET COURSE HERE
+        // });
         if (props.user.id === course?.ownerId && !isOwner) {
             setIsOwner(true);
         }

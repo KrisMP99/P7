@@ -31,15 +31,15 @@ export default function Frontpage(props: LoginProps) {
 
     const login = async (event: React.FormEvent) => {
         event.preventDefault();
-        // const account = users.find((user) => user.username === username);
+        const account = users.find((user) => user.username === username);
 
-        // if (account && account.password === password) {
-        //     props.loggedIn();
-        //     navigate("/home");
-        // } else {
-        //     setError('Invalid Username or Password')
-        // }
-        // return;
+        if (account && account.password === password) {
+            props.loggedIn();
+            navigator("/home");
+        } else {
+            setError('Invalid Username or Password')
+        }
+        return;
         try {
             const requestOptions = {
                 method: 'POST',
