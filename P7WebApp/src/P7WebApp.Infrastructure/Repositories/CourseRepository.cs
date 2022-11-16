@@ -37,7 +37,6 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
 
@@ -82,12 +81,9 @@ namespace P7WebApp.Infrastructure.Repositories
                 {
                     throw new Exception();
                 }
-
-
             }
             catch (Exception)
             {
-
                 throw;
             }
 
@@ -111,7 +107,6 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
             
@@ -134,10 +129,8 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
     }
 }
