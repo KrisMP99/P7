@@ -1,4 +1,5 @@
-﻿using P7WebApp.Application.Common.Interfaces;
+﻿using MediatR;
+using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 {
-    public class DeleteExerciseCommandHandler
+    public class DeleteExerciseCommandHandler : IRequestHandler<DeleteExerciseCommand, int>
     {
         private readonly IUnitOfWork _unitOfWork;
 

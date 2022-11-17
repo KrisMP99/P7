@@ -1,4 +1,5 @@
-﻿using P7WebApp.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
@@ -121,13 +122,31 @@ namespace P7WebApp.Infrastructure.Repositories
             
         }
 
-        public Task<IEnumerable<Course>> GetOwnedCourses(int userId)
+        public async Task<IEnumerable<Course>> GetOwnedCourses(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var courses = _context.Courses.Where(c => c.CreatedById.Equals(userId));
+                return courses.AsEnumerable();
+            }
+            catch (Exception)
+            { 
+                throw;
+            }
         }
 
-        public Task<IEnumerable<Course>> GetPublicCourses()
+        public async Task<IEnumerable<Course>> GetPublicCourses()
         {
+            try
+            {
+                var courses = _context.Courses.Where(c => c.IsPrivate == false);
+                return courses.AsEnumerable();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             throw new NotImplementedException();
         }
 

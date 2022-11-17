@@ -7,7 +7,7 @@ namespace P7WebApp.Domain.Repositories
     {
         Task<IAsyncEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId);
         Task<int> UpdateExerciseGroup(ExerciseGroup course);
-        Task<int> CreateExercise(Exercise exercise);
+        Task CreateExercise(Exercise exercise);
         Task<int> DeleteExercise(int exerciseId);
     }
 }
