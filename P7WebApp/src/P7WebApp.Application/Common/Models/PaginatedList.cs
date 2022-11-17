@@ -12,7 +12,7 @@ namespace P7WebApp.Application.Common.Models
         public PaginatedList(List<T> items, int count, int pageNumber, int pageSize)
         {
             PageNumber = pageNumber;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            TotalPages = (int)Math.Ceiling((double)count / (double)pageSize);
             TotalCount = count;
             Items = items;
         }
