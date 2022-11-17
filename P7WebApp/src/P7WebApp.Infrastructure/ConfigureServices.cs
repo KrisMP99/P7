@@ -25,12 +25,6 @@ namespace P7WebApp.Infrastructure
         {
             services.AddSingleton<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
 
-            //services.AddDbContext<ApplicationDbContext>((sp, options) =>
-            //    options.UseNpgsql(
-            //        configuration.GetConnectionString("DefaultConnection"),
-            //        builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
-            //    .AddInterceptors(sp.GetService<AuditableEntitySaveChangesInterceptor>()!));
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
