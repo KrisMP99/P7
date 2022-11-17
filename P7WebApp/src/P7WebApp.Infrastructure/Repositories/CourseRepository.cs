@@ -54,7 +54,6 @@ namespace P7WebApp.Infrastructure.Repositories
                 if(courses.Any())
                 {
                     return courses;
-
                 } else
                 {
                     throw new Exception();
