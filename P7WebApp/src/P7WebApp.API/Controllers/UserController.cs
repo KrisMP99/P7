@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.User.Commands;
 using P7WebApp.Application.User.Queries;
@@ -6,6 +7,7 @@ using P7WebApp.Application.User.Queries;
 namespace P7WebApp.API.Controllers
 {
     [Route("api/users")]
+    [Authorize]
     public class UserController : BaseController
     {
         private readonly IMediator _mediator;
