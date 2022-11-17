@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.Responses
 {
-    public class ExerciseResponse
+    public class ExerciseOverviewResponse
     {
         public int Id { get; set; }
         public string Title { get; set; }

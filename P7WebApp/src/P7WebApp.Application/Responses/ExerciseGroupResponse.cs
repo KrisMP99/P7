@@ -12,6 +12,6 @@ namespace P7WebApp.Application.Responses
         public DateTime CreatedDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime BecomeVisibleAt { get; set; }
-        public List<ExerciseOverview> Exercises { get; set; }
+        public IEnumerable<ExerciseOverviewResponse> Exercises { get; set; }
     }
 }

@@ -4,8 +4,9 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
     public class CourseOverview :EntityBase
     {
-        public CourseOverview(string courseOwner, bool isPrivate, int numberOfExercises, int numberOfAttendees)
+        public CourseOverview(string title, string courseOwner, bool isPrivate, int numberOfExercises, int numberOfAttendees)
         {
+            Title = title;
             CourseOwner = courseOwner;
             IsPrivate = isPrivate;
             NumberOfExercises = numberOfExercises;
