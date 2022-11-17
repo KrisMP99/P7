@@ -9,7 +9,7 @@ interface CreateCourseModalProps {
 }
 
 export interface ShowCreateCourseModal {
-    handleShow: (userId: number) => void;
+    handleShow: (userId: string) => void;
 }
 
 export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseModalProps>((props, ref) => {
@@ -17,7 +17,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
     const emptyCourse: Course = {
         title: '',
         description: '',
-        ownerId: 0,
+        ownerId: '0',
         exerciseGroups: [],
         exercises: [],
         private: true,
@@ -29,7 +29,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
     useImperativeHandle(
         ref,
         () => ({
-            handleShow(userId: number) {
+            handleShow(userId: string) {
                 setCourse({...course, ownerId: userId});
                 setShow(true);
             }
@@ -46,7 +46,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => {
                 e.preventDefault();
-                // createCourse(course.title, course.description, course.private);
+                createCourse(course.title, course.description, course.private);
                 //WIP - POST TO CREATE COURSE
                 props.createdCourse();
                 handleClose();
@@ -90,13 +90,15 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
 
 
 async function createCourse(title: string, description: string, isPrivate: boolean) {
-    
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
             method: 'POST',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
+                'Authorization': jwt
             },
             body: JSON.stringify({
                 "title": title,
@@ -104,7 +106,7 @@ async function createCourse(title: string, description: string, isPrivate: boole
                 "isPrivate": isPrivate
             })
         }
-        await fetch(getApiRoot() + 'Course', requestOptions)
+        await fetch(getApiRoot() + 'courses', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend - server unavailable');
@@ -112,6 +114,8 @@ async function createCourse(title: string, description: string, isPrivate: boole
                 return null;
             })
             .then(() => {
+                // console.log(data)
+
                 console.log("Successfully created course!");
             });
     } catch (error) {

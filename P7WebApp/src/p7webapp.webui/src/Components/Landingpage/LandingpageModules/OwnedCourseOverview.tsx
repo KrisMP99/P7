@@ -40,9 +40,10 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     }, []);
 
     useEffect(() => {
-        setMaxPages(Math.ceil(ownedCourses.filter((item: { name: string; }) => {
+        let endPage = Math.ceil(ownedCourses.filter((item: { name: string; }) => {
             return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
-        }).length / coursesPerPage));
+        }).length / coursesPerPage)
+        setMaxPages(endPage === 0 ? 1 : endPage);
     }, [ownedCourses.length, coursesPerPage, search]);
 
     return (
@@ -196,6 +197,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
             <CreateCourseModal 
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
+                    console.log("HHH")
                     fetchOwnedCourses((courses) => {
                         setOwnedCourses(courses);
                     });
@@ -206,25 +208,30 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
 }
 
 async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
-            method: 'GET',
+            method: 'POST',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
-                'Authorization': '' //WIP - SET AUTH
+                'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+        await fetch(getApiRoot() + 'courses/get-courses/10', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
                 }
                 return res.json();
             })
-            .then((ownedCourses: CourseOverview[]) => {
-                callback(ownedCourses);
+            .then((data) => {
+                console.log(data);
             });
+            // .then((ownedCourses: CourseOverview[]) => {
+            //     callback(ownedCourses);
+            // });
     } catch (error) {
         alert(error);
     }

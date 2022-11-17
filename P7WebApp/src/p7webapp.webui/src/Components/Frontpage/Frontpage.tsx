@@ -111,7 +111,16 @@ export default function Frontpage(props: LoginProps) {
     );
 }
 
-async function attemptLogin (username: string, password: string, callback: (user: User | null) => void) {
+interface LoginResponse {
+    id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    username: string;
+    token: string;
+}
+
+async function attemptLogin (username: string, password: string, callback: (user: User) => void) {
     try {
         const requestOptions = {
             method: 'POST',
@@ -131,9 +140,16 @@ async function attemptLogin (username: string, password: string, callback: (user
                 }
                 return res.json();
             })
-            .then(({ user, token }: {user: User | null, token: string}) => {
-                //WIP - SAVE TOKEN IN SESSION HERE
-                callback(user);
+            .then((data: LoginResponse) => {
+                console.log("Successfully logged in!");
+                sessionStorage.setItem("jwt", data.token);
+                callback({
+                    id: data.id,
+                    firstname: data.firstname,
+                    lastname: data.lastname,
+                    email: data.email,
+                    username: data.username
+                });
             });
     } catch (error) {
         alert(error);

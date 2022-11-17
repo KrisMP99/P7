@@ -16,14 +16,6 @@ interface LandingpageProps {
 
 export default function Landingpage(props: LandingpageProps): JSX.Element {
     
-    const [hasFetchCourses, setHasFetchCourses] = useState<boolean>(true);
-
-    useEffect(() => {
-        if (hasFetchCourses) {
-            // fetchAssignedCoursesOverview(0); //WIP - Add the correct userID to fetch courses for
-        }
-    }, [hasFetchCourses]);
-
     return (
         <Container>
             <div className='tabs-container'>

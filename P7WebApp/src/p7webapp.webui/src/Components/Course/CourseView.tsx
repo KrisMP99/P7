@@ -33,7 +33,7 @@ export interface Exercise {
 
 export interface Course {
     title: string;
-    ownerId: number;
+    ownerId: string;
     description: string;
     exerciseGroups: ExerciseGroup[];
     exercises: Exercise[];

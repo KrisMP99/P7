@@ -27,9 +27,10 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     }, []);
     
     useEffect(() => {  
-        setMaxPages(Math.ceil(attendedCourses.filter((item: { name: string; }) => {
+        let endPage = Math.ceil(attendedCourses.filter((item: { name: string; }) => {
             return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
-        }).length / coursesPerPage));
+        }).length / coursesPerPage);
+        setMaxPages(endPage === 0 ? 1 : endPage);
     }, [attendedCourses.length, coursesPerPage, search]);
 
     return (
@@ -164,25 +165,31 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
 }
 
 async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
-            method: 'GET',
+            method: 'POST',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
-                'Authorization': '' //WIP - SET AUTH
+                'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+        await fetch(getApiRoot() + 'courses/get-courses/10', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
                 }
                 return res.json();
             })
-            .then((ownedCourses: CourseOverview[]) => {
-                callback(ownedCourses);
+            .then((data) => {
+                console.log("ATTENDED (CHANGE LATER IS ALL COURSES NOW)");
+                // console.log(data)
             });
+            // .then((ownedCourses: CourseOverview[]) => {
+            //     callback(ownedCourses);
+            // });
     } catch (error) {
         alert(error);
     }
