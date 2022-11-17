@@ -7,8 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\NewFolder\**" />
+    <EmbeddedResource Remove="Common\NewFolder\**" />
+    <None Remove="Common\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Common\Behaviours\" />
-    <Folder Include="Common\NewFolder\" />
     <Folder Include="ExerciseCQRS\Queries\" />
     <Folder Include="ExerciseCQRS\QueryHandlers\" />
     <Folder Include="ExerciseGroupCQRS\QueryHandlers\" />
@@ -17,14 +22,20 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.2" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.3.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.170.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\P7WebApp.Domain\P7WebApp.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UserCQRS\QueryHandlers\" />
   </ItemGroup>
 
 </Project>

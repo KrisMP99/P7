@@ -7,15 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
-    <Folder Include="Entities\" />
-    <Folder Include="Events\" />
-    <Folder Include="Enums\" />
-    <Folder Include="Value Objects\" />
+    <Compile Remove="Entities\**" />
+    <Compile Remove="Enums\**" />
+    <Compile Remove="Events\**" />
+    <Compile Remove="Value Objects\**" />
+    <EmbeddedResource Remove="Entities\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <EmbeddedResource Remove="Events\**" />
+    <EmbeddedResource Remove="Value Objects\**" />
+    <None Remove="Entities\**" />
+    <None Remove="Enums\**" />
+    <None Remove="Events\**" />
+    <None Remove="Value Objects\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\P7WebApp.SharedKernel\P7WebApp.SharedKernel.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

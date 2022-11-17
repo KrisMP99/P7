@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
@@ -7,6 +9,8 @@ using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 
 namespace P7WebApp.API.Controllers
 {
+    [Route("api/courses")]
+    [Authorize]
     public class CourseController : BaseController
     {
         private readonly IMediator _mediator;
@@ -193,7 +197,6 @@ namespace P7WebApp.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         [HttpPost]

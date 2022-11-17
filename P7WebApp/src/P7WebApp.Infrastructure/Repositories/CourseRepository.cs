@@ -14,9 +14,16 @@ namespace P7WebApp.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<int> CreateCourse(Course course)
+        public async Task CreateCourse(Course course)
         {
-            return 1;
+            try 
+            {
+                await _context.Courses.AddAsync(course);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<int> DeleteCourse(int courseId)
@@ -43,7 +50,7 @@ namespace P7WebApp.Infrastructure.Repositories
         }
         public async Task<Course> GetCourse(int courseId)
         {
-            return new Course() { Id = courseId};
+            return new Course("", "", false);
         }
         public async Task<IEnumerable<Course>> GetAttendedCourses(int userId)
         {

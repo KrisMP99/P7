@@ -1,6 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { Course } from '../../Course/Course';
+import { getApiRoot } from '../../../App';
+import { Course } from '../../Course/CourseView';
 import './OwnedCourseModal.css';
 
 interface CreateCourseModalProps {
@@ -45,6 +46,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => {
                 e.preventDefault();
+                createCourse(course.title, course.description, course.private);
                 //WIP - POST TO CREATE COURSE
                 props.createdCourse();
                 handleClose();
@@ -85,6 +87,38 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
 
     )
 });
+
+
+async function createCourse(title: string, description: string, isPrivate: boolean) {
+    
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "title": title,
+                "description": description,
+                "isPrivate": isPrivate
+            })
+        }
+        await fetch(getApiRoot() + 'Course', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return null;
+            })
+            .then(() => {
+                console.log("Successfully created course!");
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
 
 
 export default CreateCourseModal;

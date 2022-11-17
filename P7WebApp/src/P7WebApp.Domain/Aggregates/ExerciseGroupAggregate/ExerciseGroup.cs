@@ -1,22 +1,21 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate;
-using P7WebApp.SharedKernel;
-using P7WebApp.SharedKernel.Interfaces;
+using P7WebApp.Domain.Common;
+using P7WebApp.Domain.Common.Interfaces;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
 {
     public class ExerciseGroup : EntityBase, IAggregateRoot
     {
-        public ExerciseGroup(int courseId, string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime visibleFromDate, List<Exercise> exercises)
+        public ExerciseGroup(int courseId, string title, string description, int exerciseGroupNumber, bool isVisible, DateTime? visibleFromDate)
         {
             CourseId = courseId;
             Title = title;
             Description = description;
             ExerciseGroupNumber = exerciseGroupNumber;
-            CreatedDate = createdDate;
-            LastModifiedDate = lastModifiedDate;
+            CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = CreatedDate;
             IsVisible = isVisible;
-            VisibleFromDate = visibleFromDate;
-            Exercises = exercises;
+            VisibleFromDate = visibleFromDate ?? DateTime.UtcNow;
         }
 
         public int CourseId { get; private set; }
@@ -26,7 +25,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
         public bool IsVisible { get; private set; }
-        public DateTime VisibleFromDate { get; private set; }
+        public DateTime? VisibleFromDate { get; private set; }
         public List<Exercise> Exercises { get; private set; }
 
         public Exercise GetExercise(int exerciseId)

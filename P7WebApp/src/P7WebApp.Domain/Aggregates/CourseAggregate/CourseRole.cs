@@ -1,12 +1,12 @@
-﻿using P7WebApp.SharedKernel;
+﻿using P7WebApp.Domain.Common;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
     public class CourseRole : EntityBase
     {
-        public CourseRole()
+        public CourseRole(string roleName)
         {
-
+            RoleName = roleName;
         }
 
         public string RoleName { get; private set; }
@@ -28,6 +28,5 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             RoleName = name;
         }
-
     }
 }

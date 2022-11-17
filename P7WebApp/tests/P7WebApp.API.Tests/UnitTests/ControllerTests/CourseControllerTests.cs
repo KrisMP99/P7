@@ -22,7 +22,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             mockMediator.Setup(m => m.Send(createCourseCommand, It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
             var result = await courseController.CreateCourse(createCourseCommand);
-            
+
             result.Should().BeOfType<OkResult>();
         }
 
@@ -38,7 +38,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             mockMediator.Setup(m => m.Send(createCourseCommand, It.IsAny<CancellationToken>())).ReturnsAsync(value);
 
             var result = await courseController.CreateCourse(createCourseCommand);
-            
+
             result.Should().BeOfType<BadRequestObjectResult>();
         }
 
@@ -51,7 +51,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             mockMediator.Setup(m => m.Send(createCourseCommand, It.IsAny<CancellationToken>())).ReturnsAsync(null);
 
             var result = await courseController.CreateCourse(createCourseCommand);
-            
+
             result.Should().BeOfType<BadRequestObjectResult>();
         }
 
@@ -64,7 +64,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             mockMediator.Setup(m => m.Send(It.IsAny<GetListOfCoursesQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(courseResponses);
 
-            var result =  await courseController.GetListOfCourses();
+            var result = await courseController.GetListOfCourses();
 
             result.Should().BeOfType<OkObjectResult>();
         }

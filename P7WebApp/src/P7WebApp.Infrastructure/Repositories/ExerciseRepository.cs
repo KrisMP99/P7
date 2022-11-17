@@ -17,7 +17,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<Exercise> GetExerciseById(int id)
         {
-            return new Exercise() { Id = id };
+            return new Exercise(1, "", false, 1, null, null, null, null);
         }
 
         public async Task<int> CreateModule(Module module)

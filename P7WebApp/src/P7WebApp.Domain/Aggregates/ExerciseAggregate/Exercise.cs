@@ -1,37 +1,39 @@
-﻿
-using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
-using P7WebApp.SharedKernel;
-using P7WebApp.SharedKernel.Interfaces;
+﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+using P7WebApp.Domain.Common;
+using P7WebApp.Domain.Common.Interfaces;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
     public class Exercise : EntityBase, IAggregateRoot
     {
-        public Exercise() { }
-        public Exercise(string title, bool isVisible, int exerciseNumber, DateTime startDate, DateTime endDate, DateTime createdDate, DateTime lastModifiedDate)
+        public Exercise(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo)
         {
+            ExerciseGroupId = exerciseGroupId;
             Title = title;
             IsVisible = isVisible;
             ExerciseNumber = exerciseNumber;
-            StartDate = startDate;
-            EndDate = endDate;
-            CreatedDate = createdDate;
-            LastModifiedDate = lastModifiedDate;
+            StartDate = startDate ?? DateTime.UtcNow;
+            EndDate = endDate ?? DateTime.MaxValue;
+            VisibleFrom = visibleFrom ?? DateTime.UtcNow;
+            VisibleTo = visibleTo ?? DateTime.MaxValue;
+            CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = CreatedDate;
         }
 
+        public int ExerciseGroupId { get; private set; }
         public string Title { get; private set; }
         public bool IsVisible { get; private set; }
         public int ExerciseNumber { get; private set; }
         public DateTime? StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
-        public DateTime? VisableFrom { get; set; }
-        public DateTime? VisibleTo { get; set; }
+        public DateTime? VisibleFrom { get; private set; }
+        public DateTime? VisibleTo { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
-        public ExerciseLayout Layout { get; private set; }
         public List<Module>? Modules { get; private set; }
         public List<Solution>? Solution { get; private set; }
         public List<Submission>? Submissions { get; private set; }
+        public int LayoutId { get; private set; }
 
         public void UpdateExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime? newStartDate, DateTime? newEndDate)
         {

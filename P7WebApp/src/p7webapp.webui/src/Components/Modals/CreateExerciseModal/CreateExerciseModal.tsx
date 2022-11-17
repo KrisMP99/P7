@@ -17,7 +17,7 @@ import selectedTwoHorizontalImg from '../../../Images/LayoutSelected/selected_ho
 import selectedTwoLeftOneRightImg from '../../../Images/LayoutSelected/selected_2left_1right.svg';
 import selectedOneLeftTwoRightImg from '../../../Images/LayoutSelected/selected_1left_2right.svg';
 import selectedTwoLeftTwoRightImg from '../../../Images/LayoutSelected/selected_2left_2right.svg';
-import { Exercise } from '../../Course/Course';
+import { Exercise } from '../../Course/CourseView';
 
 interface CreateExerciseModalProps {
     created: (layout: LayoutType, exercise: Exercise) => void;
@@ -36,12 +36,6 @@ export enum LayoutType {
     TWO_LEFT_ONE_RIGHT = 3,
     ONE_LEFT_TWO_RIGHT = 4,
     TWO_LEFT_TWO_RIGHT = 5
-}
-
-export interface Layout {
-    layoutType: LayoutType;
-    leftRows: number;
-    rightRows: number;
 }
 
 export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExerciseModalProps>((props, ref) => {
@@ -76,6 +70,7 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
         <Modal show={show} onHide={handleClose} size='lg'>
             <form onSubmit={(e) => {
                 e.preventDefault();
+                //WIP - Create exercise?? Or open in edit mode??
                 props.created(layout, exercise);
                 handleClose();
             }}>

@@ -7,7 +7,11 @@ import SignUp from './Components/SignUp/SignUp';
 import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
 import CreateExerciseModal, { LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
-import CourseView, { Exercise } from './Components/Course/Course';
+import CourseView, { Exercise } from './Components/Course/CourseView';
+
+export function getApiRoot() {
+    return 'https://localhost:7001/api/';
+}
 
 export interface User {
     id: number;
@@ -17,7 +21,7 @@ export interface User {
     username: string;
 }
 
-function App() {
+export default function App() {
     const openCreateExerciseModalRef = useRef<ShowModal>(null);
     
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -53,22 +57,28 @@ function App() {
                         <SignUp />
                     </div>
                 } />
-                {user && loggedIn && <><Route path="/exercise/:id" element={
-                    <ExerciseBoard
-                        editMode={false}
-                        boardLayout={boardLayout}
-                        newExercise={newExerciseCreated}
-                    />
-                } />
+                {user && loggedIn && 
+                <>
+                    <Route path="/exercise/:id" element={
+                        <ExerciseBoard
+                            user={user}
+                            editMode={false}
+                            boardLayout={boardLayout}
+                            newExercise={newExerciseCreated}
+                        />
+                    } />
                     <Route path="/home" element={
-                        <Landingpage />
+                        <Landingpage 
+                            user={user}
+                        />
                     } />
                     <Route path="/course/:id" element={
                         <CourseView
-                            user={user!}
+                            user={user}
                             openCreateExerciseModalRef={openCreateExerciseModalRef}
                         />
-                    } /></>}
+                    } />
+                </>}
             </Routes>
             {/* <Footer/> */}
             <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: LayoutType, exercise: Exercise) => {
@@ -79,5 +89,3 @@ function App() {
         </div>
     );
 }
-
-export default App;

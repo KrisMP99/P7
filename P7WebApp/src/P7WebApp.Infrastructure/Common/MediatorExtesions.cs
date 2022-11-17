@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using P7WebApp.SharedKernel;
+using P7WebApp.Domain.Common;
 
 namespace P7WebApp.Infrastructure.Common
 {

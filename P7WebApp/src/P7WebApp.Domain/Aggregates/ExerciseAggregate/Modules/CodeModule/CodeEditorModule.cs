@@ -2,13 +2,11 @@
 {
     public class CodeEditorModule : Module
     {
-        public CodeEditorModule(string code, List<TestCase> testCases)
+        public CodeEditorModule(string description, double height, double width, int position, string code) : base(description, height, width, position)
         {
             Code = code;
-            TestCases = testCases;
         }
-
-        public string Code { get; set; }
+        public string Code { get; private set; }
         public List<TestCase> TestCases { get; private set; }
 
         public void RunCode()

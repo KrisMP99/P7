@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.SharedKernel
+namespace P7WebApp.Domain.Common
 {
     public abstract class Enumeration : IComparable
     {

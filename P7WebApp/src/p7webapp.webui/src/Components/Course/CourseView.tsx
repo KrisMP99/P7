@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Container, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { User } from '../../App';
+import { getApiRoot, User } from '../../App';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import './Course.css';
+import './CourseView.css';
 import { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import ExerciseOverview from './ExerciseOverview/ExerciseOverview';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../Modals/DeleteConfirmModal/DeleteConfirmModal';
@@ -29,7 +29,7 @@ export interface Course {
     description: string;
     exerciseGroups: ExerciseGroup[];
     exercises: Exercise[];
-    private: undefined | boolean;
+    private: boolean;
 }
 
 interface CourseProps {
@@ -70,7 +70,10 @@ export default function CourseView(props: CourseProps) {
 
 
     useEffect(() => {
-        //WIP - Fetch course here and set it
+        fetchCourse(0, 0, (data) => {
+            console.log(data);
+            //WIP - SET COURSE HERE
+        });
         if (props.user.id === course?.ownerId && !isOwner) {
             setIsOwner(true);
         }
@@ -174,12 +177,22 @@ export default function CourseView(props: CourseProps) {
                         if (type === DeleteElementType.EXERCISE) {
                             let newExercises = course.exercises.filter((ex) => ex.id !== id);
                             //WIP - MAKE POST TO DELETE EXERCISE
+                            deleteExercise(0, 0, (data) => {
+                                fetchCourse(0, 0, (data) => {
+                                    //SET COURSE HERE
+                                })
+                            });
                             //WIP - REFETCH COURSE
                             setCourse({ ...course, exercises: newExercises });
                         }
                         else if (type === DeleteElementType.EXERCISEGROUP) {
                             let newExerciseGroups = course.exerciseGroups.filter((group) => group.id !== id)
                             //WIP - MAKE POST TO DELETE EXERCISEGROUP
+                            deleteExerciseGroup(0, 0, (data) => {
+                                fetchCourse(0, 0, (data) => {
+                                    //SET COURSE HERE
+                                })
+                            });
                             //WIP - REFETCH COURSE
                             setCourse({ ...course, exerciseGroups: newExerciseGroups });
                         }
@@ -196,4 +209,94 @@ export default function CourseView(props: CourseProps) {
             />
         </Container>
     )
+}
+
+async function deleteExercise(courseId: number, exerciseId: number, success: (data: any)=>void) {
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "courseId": courseId,
+                "exerciseId": exerciseId
+            })
+        }
+        await fetch(getApiRoot() + 'Course/delete-exercise', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log("Successfully deleted course!");
+                console.log(data);
+                success(data);
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
+async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, success: (data: any)=>void) {
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "courseId": courseId,
+                "exerciseGroupId": exerciseGroupId
+            })
+        }
+        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log("Successfully fetched course!");
+                console.log(data);
+                success(data);
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
+async function fetchCourse(courseId: number, userId: number, success: (data: any)=>void) {
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "userId": userId,
+                "courseId": courseId
+            })
+        }
+        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log("Successfully fetched course!");
+                console.log(data);
+                success(data);
+            });
+    } catch (error) {
+        alert(error);
+    }
 }
