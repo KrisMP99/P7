@@ -62,6 +62,7 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CourseId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     IsPrivate = table.Column<bool>(type: "boolean", nullable: false),
@@ -361,8 +362,10 @@ namespace P7WebApp.Infrastructure.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
                     ExerciseNumber = table.Column<int>(type: "integer", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    VisableFrom = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    VisibleTo = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LayoutId = table.Column<int>(type: "integer", nullable: false)

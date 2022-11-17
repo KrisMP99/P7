@@ -305,6 +305,9 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedById")
                         .IsRequired()
                         .HasColumnType("text");
@@ -453,7 +456,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("ExerciseGroupId")
@@ -471,12 +474,18 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<int>("LayoutId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("VisableFrom")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("VisibleTo")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 

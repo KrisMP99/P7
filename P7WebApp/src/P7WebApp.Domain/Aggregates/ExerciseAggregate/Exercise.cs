@@ -8,17 +8,17 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
     public class Exercise : EntityBase, IAggregateRoot
     {
-        public Exercise() { }
-        public Exercise(string title, bool isVisible, int exerciseNumber, DateTime startDate, DateTime endDate, DateTime createdDate, DateTime lastModifiedDate)
-        {
-            Title = title;
-            IsVisible = isVisible;
-            ExerciseNumber = exerciseNumber;
-            StartDate = startDate;
-            EndDate = endDate;
-            CreatedDate = createdDate;
-            LastModifiedDate = lastModifiedDate;
-        }
+        //public Exercise() { }
+        //public Exercise(string title, bool isVisible, int exerciseNumber, DateTime startDate, DateTime endDate, DateTime createdDate, DateTime lastModifiedDate)
+        //{
+        //    Title = title;
+        //    IsVisible = isVisible;
+        //    ExerciseNumber = exerciseNumber;
+        //    StartDate = startDate;
+        //    EndDate = endDate;
+        //    CreatedDate = createdDate;
+        //    LastModifiedDate = lastModifiedDate;
+        //}
 
         public int ExerciseGroupId { get; private set; }
 
