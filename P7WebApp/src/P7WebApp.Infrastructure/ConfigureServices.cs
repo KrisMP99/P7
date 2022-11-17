@@ -15,7 +15,7 @@ using P7WebApp.Infrastructure.Identity.Services;
 using P7WebApp.Infrastructure.Persistence;
 using P7WebApp.Infrastructure.Repositories;
 using P7WebApp.Infrastructure.Services;
-//using P7WebApp.Infrastructure.Persistence.Intercepters;
+using P7WebApp.Infrastructure.Persistence.Intercepters;
 
 namespace P7WebApp.Infrastructure
 {
@@ -23,13 +23,7 @@ namespace P7WebApp.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddSingleton<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
-
-            //services.AddDbContext<ApplicationDbContext>((sp,options) =>
-            //    options.UseNpgsql(
-            //        configuration.GetConnectionString("DefaultConnection"),
-            //        builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
-            //    .AddInterceptors(sp.GetService<AuditableEntitySaveChangesInterceptor>()!));
+            services.AddSingleton<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(

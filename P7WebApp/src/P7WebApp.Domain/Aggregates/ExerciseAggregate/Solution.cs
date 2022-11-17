@@ -6,17 +6,17 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
     public class Solution : EntityBase
     {
-        public Solution(bool isVisible, DateTime visibleFromDate)
+        public Solution(int exerciseId, bool isVisible, DateTime? visibleFromDate)
         {
+            ExerciseId = exerciseId;
             IsVisible = isVisible;
-            VisibleFromDate = visibleFromDate;
+            VisibleFromDate = visibleFromDate ?? DateTime.UtcNow;
         }
 
         public int ExerciseId { get; private set; }
         public bool IsVisible { get; set; }
-        public DateTime VisibleFromDate { get; set; }
+        public DateTime? VisibleFromDate { get; set; }
         public List<Module> Modules { get; set; }
-
 
         public void ChangeVisibility(bool isVisible)
         {

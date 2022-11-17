@@ -7,6 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\NewFolder\**" />
+    <EmbeddedResource Remove="Common\NewFolder\**" />
+    <None Remove="Common\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Behaviours\" />
+    <Folder Include="ExerciseCQRS\Queries\" />
+    <Folder Include="ExerciseCQRS\QueryHandlers\" />
+    <Folder Include="ExerciseGroupCQRS\QueryHandlers\" />
+    <Folder Include="ExerciseGroupCQRS\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.3.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
@@ -21,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="User\QueryHandlers\" />
+    <Folder Include="UserCQRS\QueryHandlers\" />
   </ItemGroup>
 
 </Project>

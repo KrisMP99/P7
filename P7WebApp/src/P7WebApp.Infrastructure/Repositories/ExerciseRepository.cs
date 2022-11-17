@@ -17,7 +17,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<Exercise> GetExerciseById(int id)
         {
-            return new Exercise() { Id = id };
+            return new Exercise(1, "", false, 1, null, null, null, null);
         }
 
         public async Task<int> CreateModule(Module module)
@@ -65,28 +65,6 @@ namespace P7WebApp.Infrastructure.Repositories
         }
 
         public async Task<Exercise> GetExerciseFromSubmissionId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Exercise> IExerciseRepository.GetExerciseById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Exercise> IExerciseRepository.GetExerciseFromModuleId(int moduleId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        Task<Exercise> IExerciseRepository.GetExerciseFromSolutionId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
- 
-        Task<Exercise> IExerciseRepository.GetExerciseFromSubmissionId(int id)
         {
             throw new NotImplementedException();
         }

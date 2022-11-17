@@ -1,23 +1,23 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
-using P7WebApp.Domain.Identity;
-using System.Security.Claims;
+using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 
 namespace P7WebApp.API.Controllers
 {
     [Route("api/courses")]
+    [Authorize]
     public class CourseController : BaseController
     {
         private readonly IMediator _mediator;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CourseController(IMediator mediator, UserManager<ApplicationUser> userManager)
+        public CourseController(IMediator mediator)
         {
             _mediator = mediator;
-            _userManager = userManager;
         }
 
         [HttpPost]
@@ -25,14 +25,6 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                //var user = await _userManager.FindByNameAsync(User.Identity.Name);
-
-                //request.CreatedById = user.Id;
-                //request.LastModifiedById = user.Id;
-                //request.CreatedBy = user;
-                //request.LastModifiedBy = user;
-
-
                 var result = await _mediator.Send(request);
                 if (result > 0)
                 {
@@ -146,7 +138,14 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(new GetExerciseGroupsQuery(courseId));
-                return Ok(result);
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception ex)
             {
@@ -179,11 +178,11 @@ namespace P7WebApp.API.Controllers
 
         [HttpPost]
         [Route("{courseId}/delete-exercise-group/{exerciseGroupId}")]
-        public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int exerciseGroupId)
+        public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int courseId, [FromRoute] int exerciseGroupId)
         {
             try
             {
-                var result = await _mediator.Send(new DeleteExerciseGroupCommand(exerciseGroupId));
+                var result = await _mediator.Send(new DeleteExerciseGroupCommand(courseId, exerciseGroupId));
 
                 if (result == 0)
                 {
@@ -215,54 +214,6 @@ namespace P7WebApp.API.Controllers
                 else
                 {
                 return Ok(result);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-module")]
-        public async Task<IActionResult> AddModule(CreateModuleCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not create modules");
-                }
-                else
-                {
-                    return Ok(result);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-module/{moduleId}")]
-        public async Task<IActionResult> DeleteModule(DeleteModuleCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not delete modules");
-                }
-                else
-                {
-                    return Ok(result);
 
                 }
             }

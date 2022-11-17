@@ -47,8 +47,9 @@ namespace P7WebApp.Infrastructure.Identity.Services
                             new Claim("UserId", user.Id),
                             new Claim("FirstName", $"{user.FirstName}"),
                             new Claim("LastName", $"{user.FirstName}"),
+                            new Claim("UserName", user.UserName),
                             new Claim(ClaimTypes.Email, user.Email),
-                            new Claim(ClaimTypes.NameIdentifier, user.UserName)
+                            new Claim(ClaimTypes.NameIdentifier, user.Id)
                             }),
                             Expires = DateTime.UtcNow.AddMinutes(_token.Expiry),
                             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
@@ -56,7 +57,7 @@ namespace P7WebApp.Infrastructure.Identity.Services
 
                         var jwtToken = handler.CreateToken(descriptor);
 
-                        await _userManager.UpdateAsync(user);
+                        //await _userManager.UpdateAsync(user);
 
                         return (user, handler.WriteToken(jwtToken));
                     }

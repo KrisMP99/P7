@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using P7WebApp.Domain.Aggregates.CourseAggregate;
 
 namespace P7WebApp.Domain.Identity
 {

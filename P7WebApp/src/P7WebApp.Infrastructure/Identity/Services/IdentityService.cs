@@ -60,7 +60,6 @@ namespace P7WebApp.Infrastructure.Identity.Services
             }
 
             var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
-
             var result = await _authorizationService.AuthorizeAsync(principal, policyName);
 
             return result.Succeeded;

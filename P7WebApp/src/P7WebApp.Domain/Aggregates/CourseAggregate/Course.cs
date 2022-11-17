@@ -7,6 +7,13 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
     public class Course : AuditableEntityBase, IAggregateRoot
     {
+        public Course(string title, string description, bool isPrivate)
+        {
+            Title = title;
+            Description = description;
+            IsPrivate = isPrivate;
+        }
+
         public string Title { get; private set; }
         public string Description { get; private set; }
         public bool IsPrivate { get; private set; }
