@@ -24,19 +24,6 @@ namespace P7WebApp.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<ExerciseGroup> GetExerciseGroupByGroupId(int exerciseGroupId)
-        {
-            try
-            {
-                var exerciseGroup = await _context.ExerciseGroups.FindAsync(exerciseGroupId);
-                return exerciseGroup;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
-        }
-
         public async Task<IAsyncEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId)
         {
             try
