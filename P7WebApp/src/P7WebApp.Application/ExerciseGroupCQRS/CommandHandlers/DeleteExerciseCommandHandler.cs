@@ -39,6 +39,5 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
                 throw;
             }
         }
-
     }
 }
