@@ -2,11 +2,6 @@
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace P7WebApp.Infrastructure.Repositories
 {
@@ -24,30 +19,28 @@ namespace P7WebApp.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<int> CreateExerciseGroup(ExerciseGroup course)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<int> DeleteExercise(int exerciseId)
         {
-            //return deleted exerciseid
             throw new NotImplementedException();
         }
 
-        public Task<ExerciseGroup> GetExerciseGroupByCourseId(int courseId)
+        public async Task<IAsyncEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                var courses = await _context.Courses.FindAsync(courseId);
+                
+                if(courses is not null)
+                {
+                    return (IAsyncEnumerable<ExerciseGroup>)courses.ExerciseGroups;
+                }
 
-        public Task<ExerciseGroup> GetExerciseGroupByGroupId(int exerciseGroupId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId)
-        {
-            throw new NotImplementedException();
+                return null;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         public Task<int> UpdateExerciseGroup(ExerciseGroup course)
