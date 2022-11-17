@@ -18,7 +18,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime? VisibleFromDate { get; set; }
         public List<Module> Modules { get; set; }
 
-
         public void ChangeVisibility(bool isVisible)
         {
             throw new NotImplementedException();
