@@ -65,12 +65,12 @@ namespace P7WebApp.Infrastructure
 
             byte[] key = Encoding.ASCII.GetBytes(configuration.GetSection("token").GetSection("secret").Value);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(x =>
+                .AddJwtBearer(options =>
                 {
-                    x.Authority = "https://localhost:7001";
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
+                    options.Authority = "https://localhost:7001";
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
