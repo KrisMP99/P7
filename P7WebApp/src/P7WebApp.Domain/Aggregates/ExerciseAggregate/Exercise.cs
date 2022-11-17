@@ -26,8 +26,8 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public int ExerciseNumber { get; private set; }
         public DateTime? StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
-        public DateTime? VisibleFrom { get; set; }
-        public DateTime? VisibleTo { get; set; }
+        public DateTime? VisibleFrom { get; private set; }
+        public DateTime? VisibleTo { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
         public List<Module>? Modules { get; private set; }
