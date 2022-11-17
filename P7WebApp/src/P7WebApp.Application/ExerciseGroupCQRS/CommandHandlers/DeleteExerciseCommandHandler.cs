@@ -36,7 +36,6 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
