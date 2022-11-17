@@ -41,17 +41,19 @@ namespace P7WebApp.Infrastructure.Repositories
             }
 
         }
-
-        public async Task<Course> GetCourse(int id)
+        public async Task<Course> GetCourse(int courseId)
+        {
+            return new Course() { Id = courseId};
+        }
+        public async Task<IEnumerable<Course>> GetAttendedCourses(int userId)
         {
             try
             {
-                var course = _context.Courses.Find(id);
+                var courses = _context.Courses.Where(c => c.Id == userId);
 
-                if(course != null)
+                if(courses.Any())
                 {
-                    return course;
-
+                    return courses;
                 } else
                 {
                     throw new Exception();
@@ -112,6 +114,16 @@ namespace P7WebApp.Infrastructure.Repositories
             
         }
 
+        public Task<IEnumerable<Course>> GetOwnedCourses(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Course>> GetPublicCourses()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<int> UpdateCourse(Course course)
         {
             try
@@ -131,6 +143,11 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
+        }
+
+        public Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

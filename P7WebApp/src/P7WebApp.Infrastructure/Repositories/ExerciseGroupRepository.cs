@@ -1,4 +1,5 @@
 ﻿using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
 
