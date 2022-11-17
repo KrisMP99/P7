@@ -2,7 +2,7 @@
 using P7WebApp.Application.Common.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace P7WebApp.Application.User.Commands.CreateUser
+namespace P7WebApp.Application.UserCQRS.Commands.CreateUser
 {
     public class CreateUserCommand : IRequest<Result>
     {

@@ -7,8 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\NewFolder\**" />
+    <EmbeddedResource Remove="Common\NewFolder\**" />
+    <None Remove="Common\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Common\Behaviours\" />
-    <Folder Include="Common\NewFolder\" />
     <Folder Include="ExerciseCQRS\Queries\" />
     <Folder Include="ExerciseCQRS\QueryHandlers\" />
     <Folder Include="ExerciseGroupCQRS\QueryHandlers\" />
@@ -30,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="User\QueryHandlers\" />
+    <Folder Include="UserCQRS\QueryHandlers\" />
   </ItemGroup>
 
 </Project>

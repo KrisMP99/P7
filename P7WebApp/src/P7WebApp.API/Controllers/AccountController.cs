@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using P7WebApp.Application.User.Commands.CreateUser;
-using P7WebApp.Application.User.Commands.SignIn;
-using P7WebApp.Application.User.Commands;
+using P7WebApp.Application.UserCQRS.Commands;
+using P7WebApp.Application.UserCQRS.Commands.CreateUser;
+using P7WebApp.Application.UserCQRS.Commands.SignIn;
 
 namespace P7WebApp.API.Controllers
 {

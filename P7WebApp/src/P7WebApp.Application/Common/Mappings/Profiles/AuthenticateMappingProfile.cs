@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using P7WebApp.Application.Common.Models;
-using P7WebApp.Application.User.Commands.SignIn;
+using P7WebApp.Application.UserCQRS.Commands.SignIn;
 
 namespace P7WebApp.Application.Common.Mappings.Profiles
 {

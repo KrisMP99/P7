@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace P7WebApp.Application.User.Commands.CreateUser
+namespace P7WebApp.Application.UserCQRS.Commands.CreateUser
 {
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {

@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Common.Models;
-using P7WebApp.Application.User.Commands.CreateUser;
+using P7WebApp.Application.UserCQRS.Commands.CreateUser;
 
-namespace P7WebApp.Application.User.CommandHandlers
+namespace P7WebApp.Application.UserCQRS.CommandHandlers
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result>
     {

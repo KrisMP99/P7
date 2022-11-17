@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using P7WebApp.Application.User.Commands;
-using P7WebApp.Application.User.Queries;
+using P7WebApp.Application.UserCQRS.Commands;
+using P7WebApp.Application.UserCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
 {

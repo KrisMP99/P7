@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.Application.User.Queries
+namespace P7WebApp.Application.UserCQRS.Queries
 {
     public class GetUserProfileQuery { }
     

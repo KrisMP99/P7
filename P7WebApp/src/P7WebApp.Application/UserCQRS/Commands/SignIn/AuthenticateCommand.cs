@@ -2,7 +2,7 @@
 using P7WebApp.Application.Common.Models;
 using P7WebApp.Application.Responses;
 
-namespace P7WebApp.Application.User.Commands.SignIn
+namespace P7WebApp.Application.UserCQRS.Commands.SignIn
 {
     public class AuthenticateCommand : IRequest<TokenResponse>
     {

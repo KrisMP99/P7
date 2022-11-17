@@ -2,11 +2,10 @@
 using Microsoft.VisualStudio.Services.WebApi.Jwt;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Interfaces.Identity;
-using P7WebApp.Application.Common.Models;
 using P7WebApp.Application.Responses;
-using P7WebApp.Application.User.Commands.SignIn;
+using P7WebApp.Application.UserCQRS.Commands.SignIn;
 
-namespace P7WebApp.Application.User.CommandHandlers
+namespace P7WebApp.Application.UserCQRS.CommandHandlers
 {
     public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateCommand, TokenResponse>
     {
@@ -24,7 +23,7 @@ namespace P7WebApp.Application.User.CommandHandlers
             try
             {
                 (var user, var token) = await _tokenService.AuthenticateAsync(username: request.Username, password: request.Password);
-                
+
                 if (user is null || token is null)
                 {
                     throw new InvalidCredentialsException("Username or password is incorrect");
