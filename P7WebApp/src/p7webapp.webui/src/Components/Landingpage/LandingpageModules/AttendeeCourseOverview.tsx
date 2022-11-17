@@ -21,9 +21,9 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchAttendedCourses((courses) =>{
-            setAttendedCourses(courses);
-        });
+        // fetchAttendedCourses((courses) =>{
+        //     setAttendedCourses(courses);
+        // });
     }, []);
     
     useEffect(() => {  
@@ -176,7 +176,7 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'courses/get-courses/10', requestOptions)
+        await fetch(getApiRoot() + 'users/courses', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');

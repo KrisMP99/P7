@@ -34,9 +34,9 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     const [maxPages, setMaxPages] = useState<number>(1);
 
     useEffect(() => {
-        fetchOwnedCourses((courses) =>{
-            setOwnedCourses(courses);
-        });
+        // fetchOwnedCourses((courses) =>{
+        //     setOwnedCourses(courses);
+        // });
     }, []);
 
     useEffect(() => {
@@ -190,7 +190,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={deleteCourseModalRef}
                 confirmDelete={(courseId: number)=>{
                     deleteOwnedCourse(courseId, () => {
-                        fetchOwnedCourses((courses) => setOwnedCourses(courses));
+                        // fetchOwnedCourses((courses) => setOwnedCourses(courses));
                     });
                 }}                
             />
@@ -198,9 +198,9 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
                     console.log("HHH")
-                    fetchOwnedCourses((courses) => {
-                        setOwnedCourses(courses);
-                    });
+                    // fetchOwnedCourses((courses) => {
+                    //     setOwnedCourses(courses);
+                    // });
                 }}
             />
         </Container>
@@ -212,14 +212,14 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
     if (jwt === null) return;
     try {
         const requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'courses/get-courses/10', requestOptions)
+        await fetch(getApiRoot() + 'users/courses', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
