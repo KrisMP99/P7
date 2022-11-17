@@ -13,12 +13,10 @@ namespace P7WebApp.API.Controllers
     public class CourseController : BaseController
     {
         private readonly IMediator _mediator;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CourseController(IMediator mediator, UserManager<ApplicationUser> userManager)
+        public CourseController(IMediator mediator)
         {
             _mediator = mediator;
-            _userManager = userManager;
         }
 
         [HttpPost]
