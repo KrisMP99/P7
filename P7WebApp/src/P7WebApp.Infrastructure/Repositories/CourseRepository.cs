@@ -50,7 +50,7 @@ namespace P7WebApp.Infrastructure.Repositories
         }
         public async Task<Course> GetCourse(int courseId)
         {
-            return new Course() { Id = courseId};
+            return new Course("", "", false);
         }
         public async Task<IEnumerable<Course>> GetAttendedCourses(int userId)
         {

@@ -305,9 +305,6 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("CreatedById")
                         .IsRequired()
                         .HasColumnType("text");
@@ -376,10 +373,10 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("UseableFrom")
+                    b.Property<DateTime?>("UseableFrom")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UseableTo")
+                    b.Property<DateTime?>("UseableTo")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
@@ -481,7 +478,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("VisableFrom")
+                    b.Property<DateTime?>("VisibleFrom")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("VisibleTo")
@@ -626,7 +623,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("VisibleFromDate")
+                    b.Property<DateTime?>("VisibleFromDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
@@ -714,7 +711,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("VisibleFromDate")
+                    b.Property<DateTime?>("VisibleFromDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
