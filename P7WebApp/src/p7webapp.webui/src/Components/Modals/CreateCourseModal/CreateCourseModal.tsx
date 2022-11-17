@@ -95,11 +95,11 @@ async function createCourse(title: string, description: string, isPrivate: boole
     try {
         const requestOptions = {
             method: 'POST',
-            // headers: { 
-            //     // 'Accept': 'application/json', 
-            //     'Content-Type': 'application/json'
-            //     // 'Authorization': 'Bearer ' + jwt
-            // },
+             headers: { 
+                 'Accept': 'application/json', 
+                 'Content-Type': 'application/json',
+                 'Authorization': 'Bearer ' + jwt
+             },
             body: JSON.stringify({
                 'title': title,
                 'description': description,

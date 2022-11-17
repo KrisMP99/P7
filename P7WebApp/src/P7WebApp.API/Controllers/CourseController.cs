@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.ExerciseCQRS.Commands;
@@ -10,7 +12,8 @@ using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 namespace P7WebApp.API.Controllers
 {
     [Route("api/courses")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class CourseController : BaseController
     {
         private readonly IMediator _mediator;

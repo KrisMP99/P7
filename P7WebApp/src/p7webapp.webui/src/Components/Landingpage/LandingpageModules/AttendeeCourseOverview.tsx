@@ -165,32 +165,33 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
 }
 
 async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => void) {
-    let jwt = sessionStorage.getItem('jwt');
-    if (jwt === null) return;
-    try {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 
-                'Accept': 'application/json', 
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + jwt
-            }
-        }
-        await fetch(getApiRoot() + 'users/courses', requestOptions)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Response not okay from backend');
-                }
-                return res.json();
-            })
-            .then((data) => {
-                console.log("ATTENDED (CHANGE LATER IS ALL COURSES NOW)");
-                // console.log(data)
-            });
-            // .then((ownedCourses: CourseOverview[]) => {
-            //     callback(ownedCourses);
-            // });
-    } catch (error) {
-        alert(error);
-    }
+    console.log("FetchAttendedCourses");
+    //let jwt = sessionStorage.getItem('jwt');
+    //if (jwt === null) return;
+    //try {
+    //    const requestOptions = {
+    //        method: 'POST',
+    //        headers: { 
+    //            'Accept': 'application/json', 
+    //            'Content-Type': 'application/json',
+    //            'Authorization': 'Bearer ' + jwt
+    //        }
+    //    }
+    //    await fetch(getApiRoot() + 'users/courses', requestOptions)
+    //        .then((res) => {
+    //            if (!res.ok) {
+    //                throw new Error('Response not okay from backend');
+    //            }
+    //            return res.json();
+    //        })
+    //        .then((data) => {
+    //            console.log("ATTENDED (CHANGE LATER IS ALL COURSES NOW)");
+    //            // console.log(data)
+    //        });
+    //        // .then((ownedCourses: CourseOverview[]) => {
+    //        //     callback(ownedCourses);
+    //        // });
+    //} catch (error) {
+    //    alert(error);
+    //}
 }

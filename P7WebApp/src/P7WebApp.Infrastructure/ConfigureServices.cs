@@ -16,6 +16,10 @@ using P7WebApp.Infrastructure.Persistence;
 using P7WebApp.Infrastructure.Repositories;
 using P7WebApp.Infrastructure.Services;
 using P7WebApp.Infrastructure.Persistence.Intercepters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
+using System.Text;
 
 namespace P7WebApp.Infrastructure
 {
@@ -59,8 +63,22 @@ namespace P7WebApp.Infrastructure
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            byte[] key = Encoding.ASCII.GetBytes(configuration.GetSection("token").GetSection("secret").Value);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(x =>
+                {
+                    x.Authority = "https://localhost:7001";
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ICourseRepository, CourseRepository>();
