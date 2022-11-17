@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace P7WebApp.SharedKernel
+namespace P7WebApp.Domain.Common
 {
     public class EntityBase
     {

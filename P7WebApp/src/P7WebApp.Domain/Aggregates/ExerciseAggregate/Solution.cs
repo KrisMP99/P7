@@ -1,5 +1,5 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
-using P7WebApp.SharedKernel;
+using P7WebApp.Domain.Common;
 
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace P7WebApp.SharedKernel
+namespace P7WebApp.Domain.Common
 {
     [NotMapped]
     public class DomainEventBase

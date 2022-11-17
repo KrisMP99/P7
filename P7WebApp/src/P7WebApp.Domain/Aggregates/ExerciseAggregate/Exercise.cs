@@ -1,7 +1,8 @@
-﻿
-using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
-using P7WebApp.SharedKernel;
-using P7WebApp.SharedKernel.Interfaces;
+﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
+using P7WebApp.Domain.Common;
+using P7WebApp.Domain.Common.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
@@ -19,6 +20,8 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             LastModifiedDate = lastModifiedDate;
         }
 
+        public int ExerciseGroupId { get; private set; }
+
         public string Title { get; private set; }
         public bool IsVisible { get; private set; }
         public int ExerciseNumber { get; private set; }
@@ -26,7 +29,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime EndDate { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
-        public ExerciseLayout Layout { get; private set; }
+        public int LayoutId { get; private set; }
         public List<Module> Modules { get; private set; }
         public List<Solution> Solution { get; private set; }
         public List<Submission> Submissions { get; private set; }

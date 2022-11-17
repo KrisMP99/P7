@@ -1,17 +1,23 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
+using P7WebApp.Domain.Identity;
+using System.Security.Claims;
 
 namespace P7WebApp.API.Controllers
 {
+    [Route("api/courses")]
     public class CourseController : BaseController
     {
         private readonly IMediator _mediator;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CourseController(IMediator mediator)
+        public CourseController(IMediator mediator, UserManager<ApplicationUser> userManager)
         {
             _mediator = mediator;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -19,6 +25,14 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
+                //var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+                //request.CreatedById = user.Id;
+                //request.LastModifiedById = user.Id;
+                //request.CreatedBy = user;
+                //request.LastModifiedBy = user;
+
+
                 var result = await _mediator.Send(request);
                 if (result > 0)
                 {
@@ -184,7 +198,6 @@ namespace P7WebApp.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         [HttpPost]

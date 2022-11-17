@@ -27,8 +27,8 @@ export default function Frontpage(props: LoginProps) {
     const login = (event: React.FormEvent) => {
         event.preventDefault();
 
-        props.loggedIn({id: 1, username: 's', email: 'a@a', firstname: 'a', lastname: 'b'});
-        return;
+        // props.loggedIn({id: 1, username: 's', email: 'a@a', firstname: 'a', lastname: 'b'});
+        // return;
         if (username && password) {
             attemptLogin(username, password, (user) => {
                 user ? props.loggedIn(user) : setError('Incorrect Username or Password');
@@ -124,7 +124,7 @@ async function attemptLogin (username: string, password: string, callback: (user
                 "password": password
             })
         }
-        await fetch(getApiRoot() + 'Login', requestOptions)
+        await fetch(getApiRoot() + 'accounts/login', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error(res.statusText);
