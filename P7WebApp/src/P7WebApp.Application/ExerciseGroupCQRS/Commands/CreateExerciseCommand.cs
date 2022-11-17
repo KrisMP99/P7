@@ -19,6 +19,6 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands
         public DateTime? VisibleTo { get; set; }
         public int Layout { get; set; }
         public IEnumerable<Module>? Modules { get; set; }
-        public IEnumerable<Solution> Solutions { get; set; }
+        public IEnumerable<Solution>? Solutions { get; set; }
     }
 }
