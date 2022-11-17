@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
-using P7WebApp.Domain.Identity;
+using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 
 namespace P7WebApp.API.Controllers
 {
@@ -137,7 +138,14 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(new GetExerciseGroupsQuery(courseId));
-                return Ok(result);
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception ex)
             {
@@ -170,11 +178,11 @@ namespace P7WebApp.API.Controllers
 
         [HttpPost]
         [Route("{courseId}/delete-exercise-group/{exerciseGroupId}")]
-        public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int exerciseGroupId)
+        public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int courseId, [FromRoute] int exerciseGroupId)
         {
             try
             {
-                var result = await _mediator.Send(new DeleteExerciseGroupCommand(exerciseGroupId));
+                var result = await _mediator.Send(new DeleteExerciseGroupCommand(courseId, exerciseGroupId));
 
                 if (result == 0)
                 {
@@ -206,54 +214,6 @@ namespace P7WebApp.API.Controllers
                 else
                 {
                 return Ok(result);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/add-module")]
-        public async Task<IActionResult> AddModule(CreateModuleCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not create modules");
-                }
-                else
-                {
-                    return Ok(result);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-module/{moduleId}")]
-        public async Task<IActionResult> DeleteModule(DeleteModuleCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not delete modules");
-                }
-                else
-                {
-                    return Ok(result);
 
                 }
             }

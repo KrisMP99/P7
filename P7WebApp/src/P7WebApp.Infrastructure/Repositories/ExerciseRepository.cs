@@ -68,27 +68,5 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
-
-        Task<Exercise> IExerciseRepository.GetExerciseById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Exercise> IExerciseRepository.GetExerciseFromModuleId(int moduleId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        Task<Exercise> IExerciseRepository.GetExerciseFromSolutionId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
- 
-        Task<Exercise> IExerciseRepository.GetExerciseFromSubmissionId(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

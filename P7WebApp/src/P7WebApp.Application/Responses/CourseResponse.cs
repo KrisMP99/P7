@@ -1,4 +1,4 @@
-﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate;
+﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 
 namespace P7WebApp.Application.Responses
 {
@@ -11,6 +11,7 @@ namespace P7WebApp.Application.Responses
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int OwnerId { get; set; }
-        public List<Exercise> Exercises { get; set; }
+        public string OwnerName { get; set; }  
+        public IEnumerable<ExerciseGroupResponse> ExerciseGroups { get; set; }
     }
 }

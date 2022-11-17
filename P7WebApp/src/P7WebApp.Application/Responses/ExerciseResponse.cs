@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 
 namespace P7WebApp.Application.Responses
 {
@@ -12,8 +9,15 @@ namespace P7WebApp.Application.Responses
         public string Title { get; set; }
         public bool IsVisible { get; set; }
         public int ExerciseNumber { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? VisableFrom { get; set; }
+        public DateTime? VisibleTo { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public ExerciseLayout Layout { get; set; }
+        public List<Module>? Modules { get; set; }
+        public List<Solution>? Solution { get; set; }
+        public List<Submission>? Submissions { get; set; }
     }
 }
