@@ -43,6 +43,7 @@ namespace P7WebApp.Infrastructure.Persistence.Intercepters
             if (context == null) return;
 
             var userId = _currentUserService.UserId;
+            
 
             foreach (var entry in context.ChangeTracker.Entries<AuditableEntityBase>())
             {

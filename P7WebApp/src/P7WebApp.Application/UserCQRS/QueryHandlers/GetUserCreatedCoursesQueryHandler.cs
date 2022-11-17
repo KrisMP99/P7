@@ -27,6 +27,8 @@ namespace P7WebApp.Application.UserCQRS.QueryHandlers
             var courses = await _courseRepository.GetUsersCreatedCourses(userId);
             var result = CourseMapper.Mapper.Map<IEnumerable<CourseOverviewResponse>>(courses);
 
+
+
             if (result is null)
             {
                 throw new Exception("Could not map courses to course overview");

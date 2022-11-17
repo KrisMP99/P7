@@ -1,7 +1,9 @@
-﻿using P7WebApp.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
+
 
 namespace P7WebApp.Infrastructure.Repositories
 {
@@ -125,7 +127,8 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var courses = _context.Courses.Where(c => c.CreatedById == userId);
+                var courses = _context.Courses
+                    .Where(c => c.CreatedById == userId);
                 
                 if(courses is not null)
                 {
