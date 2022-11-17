@@ -6,8 +6,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
 {
     public class ExerciseGroup : EntityBase, IAggregateRoot
     {
-
-        public ExerciseGroup() { }
         public ExerciseGroup(int courseId, string title, string description, bool isVisible, int exerciseGroupNumber, DateTime createdDate, DateTime lastModifiedDate, DateTime visibleFromDate, List<Exercise> exercises)
         {
             CourseId = courseId;
