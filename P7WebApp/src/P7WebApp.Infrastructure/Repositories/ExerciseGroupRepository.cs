@@ -14,6 +14,16 @@ namespace P7WebApp.Infrastructure.Repositories
             _context = context;
         }
 
+        public Task<int> CreateExercise(Exercise exercise)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> DeleteExercise(int exerciseId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ExerciseGroup> GetExerciseGroupByGroupId(int exerciseGroupId)
         {
             try
@@ -44,6 +54,11 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
+        }
+
+        public Task<int> UpdateExerciseGroup(ExerciseGroup course)
+        {
+            throw new NotImplementedException();
         }
     }
 }
