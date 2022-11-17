@@ -10,7 +10,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule
             Text = text;
         }
         public string Text { get; private set; }
-        public List<Image> Images;
+        public List<Image> Images { get; private set; }
 
         public void AddImage()
         {
