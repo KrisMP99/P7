@@ -8,10 +8,8 @@ namespace P7WebApp.Domain.Common
     {
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public string CreatedById { get; set; }
-        public ApplicationUser CreatedBy { get; set; }
 
         public DateTime? ModifiedDate { get; set; } = DateTime.Now;
         public string? LastModifiedById { get; set; }
-        public ApplicationUser? LastModifiedBy { get; set; }
     }
 }

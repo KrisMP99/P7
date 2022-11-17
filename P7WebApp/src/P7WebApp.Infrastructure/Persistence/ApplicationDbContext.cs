@@ -26,20 +26,16 @@ namespace P7WebApp.Infrastructure.Data
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
     {
         private readonly IMediator _mediator;
-        private readonly IHttpContextAccessor _htttpContextAccessor;
-        private readonly IPrincipal _currentUser;
-        //private readonly IAuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
+        private readonly IAuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
             IOptions<OperationalStoreOptions> operationalStoreOptions,
             IMediator mediator,
-            IHttpContextAccessor htttpContextAccessor
+            IAuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor
             ) : base(options, operationalStoreOptions)
         {
             _mediator = mediator;
-            _htttpContextAccessor = htttpContextAccessor;
-            
-            //_auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
+            _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         }
 
         public DbSet<Course> Courses { get; set; }
@@ -57,35 +53,14 @@ namespace P7WebApp.Infrastructure.Data
         public DbSet<Choice> Choices { get; set; }
         public DbSet<Module> Modules { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             await _mediator.DispatchDomainEvents(this);
-
-            // TODO: For updates and deltetions too
-            // and make it better 
-            var entries = ChangeTracker
-                .Entries()
-                .Where(e => e.Entity is AuditableEntityBase &&
-                (e.State == EntityState.Added));
-
-
-            var userName = _htttpContextAccessor.HttpContext.User.Identity.Name;
-
-            var user = base.Users.FirstOrDefault(u => u.UserName == userName);
-
-
-            foreach (var entity in entries)
-            {
-                ((AuditableEntityBase)entity.Entity).CreatedById = user.Id;
-                ((AuditableEntityBase)entity.Entity).CreatedBy = user;
-                ((AuditableEntityBase)entity.Entity).LastModifiedById = user.Id;
-                ((AuditableEntityBase)entity.Entity).LastModifiedBy = user;
-            }
 
             return await base.SaveChangesAsync(cancellationToken);
         }

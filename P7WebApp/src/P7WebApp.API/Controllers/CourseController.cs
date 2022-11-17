@@ -1,14 +1,15 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Domain.Identity;
-using System.Security.Claims;
 
 namespace P7WebApp.API.Controllers
 {
     [Route("api/courses")]
+    [Authorize]
     public class CourseController : BaseController
     {
         private readonly IMediator _mediator;
@@ -25,14 +26,6 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                //var user = await _userManager.FindByNameAsync(User.Identity.Name);
-
-                //request.CreatedById = user.Id;
-                //request.LastModifiedById = user.Id;
-                //request.CreatedBy = user;
-                //request.LastModifiedBy = user;
-
-
                 var result = await _mediator.Send(request);
                 if (result > 0)
                 {

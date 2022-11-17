@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace P7WebApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addingtables : Migration
+    public partial class tables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,6 +57,25 @@ namespace P7WebApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    IsPrivate = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedById = table.Column<string>(type: "text", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModifiedById = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeviceCodes",
                 columns: table => new
                 {
@@ -66,8 +85,8 @@ namespace P7WebApp.Infrastructure.Migrations
                     SessionId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     ClientId = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Data = table.Column<string>(type: "character varying(50000)", maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
@@ -81,7 +100,7 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<int>(type: "integer", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Use = table.Column<string>(type: "text", nullable: true),
                     Algorithm = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     IsX509Certificate = table.Column<bool>(type: "boolean", nullable: false),
@@ -103,9 +122,9 @@ namespace P7WebApp.Infrastructure.Migrations
                     SessionId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     ClientId = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    ConsumedTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ConsumedTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Data = table.Column<string>(type: "character varying(50000)", maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
@@ -233,36 +252,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    IsPrivate = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<string>(type: "text", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifiedById = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Courses_AspNetUsers_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Courses_AspNetUsers_LastModifiedById",
-                        column: x => x.LastModifiedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CourseRoles",
                 columns: table => new
                 {
@@ -292,10 +281,10 @@ namespace P7WebApp.Infrastructure.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     ExerciseGroupNumber = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
-                    VisibleFromDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    VisibleFromDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -317,8 +306,8 @@ namespace P7WebApp.Infrastructure.Migrations
                     CourseId = table.Column<int>(type: "integer", nullable: false),
                     Code = table.Column<int>(type: "integer", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    UseableFrom = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UseableTo = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UseableFrom = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UseableTo = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -372,10 +361,10 @@ namespace P7WebApp.Infrastructure.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
                     ExerciseNumber = table.Column<int>(type: "integer", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LayoutId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -397,7 +386,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExerciseId = table.Column<int>(type: "integer", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
-                    VisibleFromDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    VisibleFromDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -419,7 +408,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     SubmissionDraftId = table.Column<int>(type: "integer", nullable: false),
                     ExerciseId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    SubmitDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    SubmitDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -686,16 +675,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_CreatedById",
-                table: "Courses",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Courses_LastModifiedById",
-                table: "Courses",
-                column: "LastModifiedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
                 table: "DeviceCodes",
                 column: "DeviceCode",
@@ -865,6 +844,9 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Question");
 
             migrationBuilder.DropTable(
@@ -893,9 +875,6 @@ namespace P7WebApp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Courses");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropSequence(
                 name: "ModuleSequence");
