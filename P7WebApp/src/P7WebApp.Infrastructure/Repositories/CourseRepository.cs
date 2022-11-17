@@ -121,9 +121,26 @@ namespace P7WebApp.Infrastructure.Repositories
             
         }
 
-        public Task<IEnumerable<Course>> GetOwnedCourses(int userId)
+        public async Task<IEnumerable<Course>> GetUsersCreatedCourses(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var courses = _context.Courses.Where(c => c.CreatedById == userId);
+                
+                if(courses is not null)
+                {
+                    return courses;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public Task<IEnumerable<Course>> GetPublicCourses()

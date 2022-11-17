@@ -17,7 +17,8 @@ namespace P7WebApp.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("api/{userId}/profile")]
+        [HttpPost]
+        [Route("{userId}/profile")]
         public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateUserProfileCommand request)
         {
             try
@@ -31,7 +32,8 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpGet("{userId}/profile")]
+        [HttpGet]
+        [Route("{userId}/profile")]
         public async Task<IActionResult> GetUserProfile([FromBody] GetUserProfileQuery request)
         {
             try
@@ -40,6 +42,21 @@ namespace P7WebApp.API.Controllers
                 return Ok(result);
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("courses")]
+        public async Task<IActionResult> GetUsersCreatedCourses()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetUserCreatedCoursesQuery());
+                return Ok(result);
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
