@@ -64,6 +64,28 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("{courseId}")]
+        public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new DeleteCourseCommand(courseId));
+                if (result == null)
+                {
+                    return BadRequest($"Could not find course with id {courseId}");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         [Route("{courseId}")]
         public async Task<IActionResult> GetCourse([FromRoute]int courseId)
