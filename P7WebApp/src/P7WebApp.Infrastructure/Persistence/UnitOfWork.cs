@@ -2,7 +2,7 @@
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Repositories;
 
-namespace P7WebApp.Infrastructure.Identity.Persistence
+namespace P7WebApp.Infrastructure.Persistence
 {
     public class UnitOfWork : IUnitOfWork
     {

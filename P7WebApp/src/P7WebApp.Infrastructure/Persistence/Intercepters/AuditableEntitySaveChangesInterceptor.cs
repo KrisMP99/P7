@@ -9,7 +9,7 @@ using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Identity;
 using System.Security.Claims;
 
-namespace P7WebApp.Infrastructure.Identity.Persistence.Intercepters
+namespace P7WebApp.Infrastructure.Persistence.Intercepters
 {
     public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor, IAuditableEntitySaveChangesInterceptor
     {

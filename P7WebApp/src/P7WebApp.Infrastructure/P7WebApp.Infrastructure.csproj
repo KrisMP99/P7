@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Identity\Persistence\Repositories\**" />
-    <EmbeddedResource Remove="Identity\Persistence\Repositories\**" />
-    <None Remove="Identity\Persistence\Repositories\**" />
+    <Compile Remove="Persistence\Repositories\**" />
+    <EmbeddedResource Remove="Persistence\Repositories\**" />
+    <None Remove="Persistence\Repositories\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -14,7 +14,7 @@ using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Identity;
 using P7WebApp.Infrastructure.Common;
 
-namespace P7WebApp.Infrastructure.Identity.Persistence
+namespace P7WebApp.Infrastructure.Persistence
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
     {

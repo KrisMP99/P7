@@ -5,11 +5,11 @@ using P7WebApp.Application.Common.Models;
 
 namespace P7WebApp.Application.AccountCQRS.CommandHandlers
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateAccountCommand, Result>
+    public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, Result>
     {
         private readonly IIdentityService _identityService;
 
-        public CreateUserCommandHandler(IIdentityService identityService)
+        public CreateAccountCommandHandler(IIdentityService identityService)
         {
             _identityService = identityService;
         }

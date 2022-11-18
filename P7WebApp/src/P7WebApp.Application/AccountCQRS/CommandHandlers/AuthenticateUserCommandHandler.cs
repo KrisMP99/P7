@@ -33,7 +33,7 @@ namespace P7WebApp.Application.AccountCQRS.CommandHandlers
 
                     if (response is null)
                     {
-                        throw new Exception("Issue with mapper");
+                        throw new Exception("Could not map user account to token response.");
                     }
 
                     return response;
