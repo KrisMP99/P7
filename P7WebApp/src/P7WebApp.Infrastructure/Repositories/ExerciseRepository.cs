@@ -1,4 +1,5 @@
 ﻿using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.Domain.Repositories;
@@ -17,7 +18,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<Exercise> GetExerciseById(int id)
         {
-            return new Exercise(1, "", false, 1, null, null, null, null);
+            return new Exercise(1, "", false, 1, null, null, null, null, 1);
         }
 
         public async Task<int> CreateModule(Module module)
@@ -36,7 +37,23 @@ namespace P7WebApp.Infrastructure.Repositories
         }
         public async Task<int> UpdateExercise(Exercise exercise)
         {
-            return 1;
+            try
+            {
+                var courseUpdate = _context.Exercises.Update(exercise);
+
+                if (courseUpdate != null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<int> DeleteModule(Module module)

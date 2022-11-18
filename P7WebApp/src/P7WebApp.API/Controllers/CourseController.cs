@@ -132,7 +132,7 @@ namespace P7WebApp.API.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("{courseId}/exercise-groups")]
         public async Task<IActionResult> GetExerciseGroupsByCourseId([FromRoute]int courseId)
         {

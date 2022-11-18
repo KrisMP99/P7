@@ -22,12 +22,13 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
                 exerciseGroup
                     .GetExercise(request.Id)
                     .UpdateExerciseInformation(newTitle: request.Title,
-                                               visibility: request.IsVisible,
-                                               exerciseNumber: request.ExerciseNumber,
+                                               isVisible: request.IsVisible,
+                                               newExerciseNumber: request.ExerciseNumber,
                                                newStartDate: request.StartDate,
-                                               newEndDate: request.EndDate);
+                                               newEndDate: request.EndDate,
+                                               layoutId: request.LayoutId);
 
-                var affectedRows = await _unitOfWork.ExerciseGroupRepository.UpdateExerciseGroup(exerciseGroup);
+                var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
                 return affectedRows;
             }
