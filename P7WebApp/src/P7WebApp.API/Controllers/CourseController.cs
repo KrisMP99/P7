@@ -66,7 +66,7 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("{courseId}")]
         public async Task<IActionResult> GetCourse([FromRoute]int courseId)
         {

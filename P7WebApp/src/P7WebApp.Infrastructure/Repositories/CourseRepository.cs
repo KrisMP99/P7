@@ -52,7 +52,25 @@ namespace P7WebApp.Infrastructure.Repositories
         }
         public async Task<Course> GetCourse(int courseId)
         {
-            return new Course("", "", false);
+            try
+            {
+                var course = _context.Courses.Where(c => c.Id == courseId).FirstOrDefault();
+
+                if (course is not null)
+                {
+                    return course;
+                }
+                else
+                {
+                    throw new Exception($"Course with {courseId} could not be found");
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         public async Task<IEnumerable<Course>> GetAttendedCourses(int userId)
         {
