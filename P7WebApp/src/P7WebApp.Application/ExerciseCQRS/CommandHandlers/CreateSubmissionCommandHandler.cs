@@ -20,7 +20,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
             try
             {
                 var submission = ExerciseMapper.Mapper.Map<Submission>(request);
-                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseById(request.SubmissionId);
+                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseWithSolutionsById(request.SubmissionId);
 
                 exercise.AddSubmission(submission);
 

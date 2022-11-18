@@ -246,7 +246,7 @@ namespace P7WebApp.API.Controllers
                 throw;
             }
         }
-
+        
         [HttpDelete]
         [Route("exercise-groups/{exerciseGroupId}/exercises/{id}")]
         public async Task<IActionResult> DeleteExercise([FromRoute] int exerciseGroupId, [FromRoute] int id)
@@ -318,13 +318,13 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/delete-solution/{solutionId}")]
-        public async Task<IActionResult> DeleteSolution(CreateSolutionCommand request)
+        public async Task<IActionResult> DeleteSolution([FromRoute] int solutionId, [FromRoute] int exerciseId)
         {
             try
             {
-                var result = await _mediator.Send(request);
+                var result = await _mediator.Send(new DeleteSolutionCommand() { SolutionId = solutionId, ExerciseId = exerciseId});
 
                 if (result == 0)
                 {

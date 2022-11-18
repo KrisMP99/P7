@@ -6,7 +6,8 @@ namespace P7WebApp.Domain.Repositories
     public interface IExerciseRepository
     {
         Task<int> UpdateExercise(Exercise exercise);
-        Task<Exercise> GetExerciseById(int id);
+        Task<Exercise> GetExerciseWithSolutionsById(int id);
+        Task<Exercise> GetExerciseWithModulesById(int id);
         Task<int> CreateModule(Module module);
         Task<int> DeleteModule(Module module);
         Task<Exercise> GetExerciseFromModuleId(int moduleId); 
