@@ -18,7 +18,7 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
 
         public async Task<CourseResponse> Handle(GetCourseQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _unitOfWork.CourseRepository.GetCourse(request.Id);
+            var entity = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.Id);
             var result = CourseMapper.Mapper.Map<CourseResponse>(entity);
             if (result == null)
             {
