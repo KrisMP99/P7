@@ -6,7 +6,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
     public class Exercise : EntityBase, IAggregateRoot
     {
-        public Exercise(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo)
+        public Exercise(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId)
         {
             ExerciseGroupId = exerciseGroupId;
             Title = title;
@@ -18,6 +18,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             VisibleTo = visibleTo ?? DateTime.MaxValue;
             CreatedDate = DateTime.UtcNow;
             LastModifiedDate = CreatedDate;
+            LayoutId = layoutId;
         }
 
         public int ExerciseGroupId { get; private set; }
@@ -35,10 +36,15 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public List<Submission>? Submissions { get; private set; }
         public int LayoutId { get; private set; }
 
-        public void UpdateExerciseInformation(string newTitle, bool visibility, int exerciseNumber, DateTime? newStartDate, DateTime? newEndDate)
+        public void UpdateExerciseInformation(string newTitle, bool isVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int? layoutId)
         {
-            // handle case that newstartdate or newenddate is null
-            throw new NotImplementedException();
+            Title = String.IsNullOrEmpty(newTitle) ? throw new ArgumentNullException("Title has not been set.") : newTitle;
+            ExerciseNumber = newExerciseNumber < 0 ? throw new ArgumentOutOfRangeException("Exercise number cannot be negative.") : newExerciseNumber;
+            IsVisible = isVisible;
+            VisibleFrom = newStartDate ?? VisibleFrom;
+            VisibleTo = newEndDate ?? VisibleTo;
+            LastModifiedDate = DateTime.Now;
+            LayoutId = layoutId ?? LayoutId;
         }
 
         public void AddModule(Module module)

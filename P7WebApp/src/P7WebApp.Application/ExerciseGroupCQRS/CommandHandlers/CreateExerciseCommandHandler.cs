@@ -22,7 +22,9 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
             try
             {
                 var exercise = ExerciseMapper.Mapper.Map<Exercise>(request);
-                await _unitOfWork.ExerciseGroupRepository.CreateExercise(exercise);
+                var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
+                exerciseGroup.AddExercise(exercise);
+
                 var result = await _unitOfWork.CommitChangesAsync(cancellationToken); 
 
                 return result;
