@@ -17,24 +17,20 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands
             Title = title;
             IsVisible = isVisible;
             ExerciseNumber = exerciseNumber;
-            StartDate = startDate ?? DateTime.UtcNow;
-            EndDate = endDate ?? DateTime.MaxValue;
-            VisibleFrom = visibleFrom ?? DateTime.UtcNow;
-            VisibleTo = visibleTo ?? DateTime.MaxValue;
-            CreatedDate = DateTime.UtcNow;
-            LastModifiedDate = CreatedDate;
+            StartDate = startDate;
+            EndDate = endDate;
+            VisibleFrom = visibleFrom;
+            VisibleTo = visibleTo;
             LayoutId = layoutId;
         }
-        public int ExerciseGroupId { get; private set; }
-        public string Title { get; private set; }
-        public bool IsVisible { get; private set; }
-        public int ExerciseNumber { get; private set; }
-        public DateTime? StartDate { get; private set; }
-        public DateTime? EndDate { get; private set; }
-        public DateTime? VisibleFrom { get; private set; }
-        public DateTime? VisibleTo { get; private set; }
-        public DateTime CreatedDate { get; private set; }
-        public DateTime LastModifiedDate { get; private set; }
+        public int ExerciseGroupId { get; }
+        public string Title { get; }
+        public bool IsVisible { get; }
+        public int ExerciseNumber { get; }
+        public DateTime? StartDate { get; }
+        public DateTime? EndDate { get; }
+        public DateTime? VisibleFrom { get; }
+        public DateTime? VisibleTo { get;}
         public int LayoutId { get; }
     }
         //public int Layout { get; set; }
