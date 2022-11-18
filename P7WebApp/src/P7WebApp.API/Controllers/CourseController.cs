@@ -21,7 +21,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("/add")]
+        [Route("add")]
         public async Task<IActionResult> CreateCourse([FromBody] CreateCourseCommand request)
         {
             try
@@ -155,7 +155,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("{courseId}/add-exercise-group")]
+        [Route("{courseId}/add/exercise-group")]
         public async Task<IActionResult> AddExerciseGroup([FromBody] CreateExerciseGroupCommand request)
         {
             try
@@ -178,7 +178,7 @@ namespace P7WebApp.API.Controllers
         }
         
         [HttpPost]
-        [Route("{courseId}/exercise-groups/{exerciseGroupId}")]
+        [Route("{courseId}/exercise-groups/{exerciseGroupId}/update")]
         public async Task<IActionResult> UpdateExerciseGroup([FromBody]UpdateExerciseGroupCommand request)
         {
             try
@@ -225,7 +225,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("exercise-groups/exercises/add")]
+        [Route("{courseId}/exercise-groups/{exerciseGroupId}/exercises/add")]
         public async Task<IActionResult> AddExercise([FromBody] CreateExerciseCommand request)
         {
             try

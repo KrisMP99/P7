@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.Services.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Services.Common;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Models;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
@@ -49,11 +50,11 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        public async Task<ExerciseGroup> GetExerciseGroupById(int Id)
+        public async Task<ExerciseGroup> GetExerciseGroupByIdWithExercises(int Id)
         {
             try
             {
-                var exerciseGroup = await _context.ExerciseGroups.FindAsync(Id);
+                var exerciseGroup = await _context.ExerciseGroups.Include(e => e.Exercises).FirstOrDefaultAsync();
                 
                 if (exerciseGroup is not null)
                 {
