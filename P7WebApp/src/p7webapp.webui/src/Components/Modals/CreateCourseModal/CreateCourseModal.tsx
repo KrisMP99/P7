@@ -49,9 +49,10 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => {
                 e.preventDefault();
-                createCourse(course.title, course.description, course.isPrivate);
-                props.createdCourse();
-                handleClose();
+                createCourse(course.title, course.description, course.isPrivate, () => {
+                    props.createdCourse();
+                    handleClose();
+                });
             }}>
                 <Modal.Header closeButton>
                     <Modal.Title>Create course:</Modal.Title>
@@ -91,10 +92,9 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
 });
 
 
-async function createCourse(title: string, description: string, isPrivate: boolean) {
+async function createCourse(title: string, description: string, isPrivate: boolean, callback: ()=>void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
-    console.log(title + " " + description + " " + isPrivate)
     try {
         const requestOptions = {
             method: 'POST',
@@ -116,6 +116,9 @@ async function createCourse(title: string, description: string, isPrivate: boole
                     throw new Error('Response not okay from backend - server unavailable');
                 }
                 return null;
+            })
+            .then(() => {
+                callback();
             });
     } catch (error) {
         alert(error);

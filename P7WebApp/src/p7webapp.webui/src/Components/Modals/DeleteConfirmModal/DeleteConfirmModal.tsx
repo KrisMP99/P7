@@ -42,7 +42,8 @@ export const DeleteConfirmModal = forwardRef<ShowDeleteConfirmModal, DeleteConfi
             </Modal.Header>
             <Modal.Body>
                 <span>
-                    Are you sure that you want to delete {displayName}?
+                    Are you sure that you want to delete {displayName}?<br/><br/>
+                    This action cannot be undone
                 </span>
             </Modal.Body>
             <Modal.Footer>

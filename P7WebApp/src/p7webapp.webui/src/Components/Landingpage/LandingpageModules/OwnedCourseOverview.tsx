@@ -3,7 +3,7 @@ import { Container, Table, Form, InputGroup, Button, Pagination} from 'react-boo
 import { useNavigate } from 'react-router-dom';
 import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
-import { Trash } from 'react-bootstrap-icons';
+import { ArrowCounterclockwise, Trash } from 'react-bootstrap-icons';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import { getApiRoot } from '../../../App';
 import CreateCourseModal from '../../Modals/CreateCourseModal/CreateCourseModal';
@@ -66,15 +66,15 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                         <h3>My courses</h3>
                     </div>
                     <div className="col text-end">
-                        <Button className="rounded p-2 create-course" onClick={()=>openCreateCourseModalRef.current?.handleShow()}>
+                        <Button className="btn-2" onClick={()=>openCreateCourseModalRef.current?.handleShow()}>
                             Create course
                         </Button> 
-                        <Button className="rounded p-2 create-course" onClick={()=>{
+                        <Button className="btn-2" onClick={()=>{
                             fetchOwnedCourses((courses) => {
                                 setOwnedCourses(courses);
                             })
                         }}>
-                            Refetch
+                            <ArrowCounterclockwise />
                         </Button> 
                     </div>
                 </div>
@@ -210,6 +210,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
                     fetchOwnedCourses((courses) => {
+                        console.log(courses);
                         setOwnedCourses(courses);
                     });
                 }}
@@ -246,19 +247,18 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
 }
 
 async function deleteOwnedCourse(courseId: number, callback: () => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
-            method: 'POST',
+            method: 'DELETE',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
-                'Authorization': '' //WIP - SET AUTH
-            },
-            body: JSON.stringify({
-                'id': courseId
-            })
+                'Authorization': 'Bearer ' + jwt
+            }
         }
-        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+        await fetch(getApiRoot() + 'courses/' + courseId, requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
