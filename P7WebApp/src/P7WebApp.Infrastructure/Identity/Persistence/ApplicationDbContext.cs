@@ -1,12 +1,8 @@
 ﻿using Duende.IdentityServer.EntityFramework.Options;
 using MediatR;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.Services.Users;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
@@ -15,13 +11,10 @@ using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
-using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Identity;
 using P7WebApp.Infrastructure.Common;
-using System.Security.Principal;
-//using P7WebApp.Infrastructure.Persistence.Intercepters;
 
-namespace P7WebApp.Infrastructure.Data
+namespace P7WebApp.Infrastructure.Identity.Persistence
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
     {
@@ -68,7 +61,7 @@ namespace P7WebApp.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Module>().UseTpcMappingStrategy();
-            
+
             base.OnModelCreating(builder);
         }
     }

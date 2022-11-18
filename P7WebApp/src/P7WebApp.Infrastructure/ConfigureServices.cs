@@ -9,17 +9,16 @@ using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Domain.Identity;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Common.Models;
-using P7WebApp.Infrastructure.Data;
 using P7WebApp.Infrastructure.Identity;
 using P7WebApp.Infrastructure.Identity.Services;
-using P7WebApp.Infrastructure.Persistence;
 using P7WebApp.Infrastructure.Repositories;
 using P7WebApp.Infrastructure.Services;
-using P7WebApp.Infrastructure.Persistence.Intercepters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
 using System.Text;
+using P7WebApp.Infrastructure.Identity.Persistence.Intercepters;
+using P7WebApp.Infrastructure.Identity.Persistence;
 
 namespace P7WebApp.Infrastructure
 {

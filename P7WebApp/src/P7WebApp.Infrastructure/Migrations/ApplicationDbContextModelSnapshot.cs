@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using P7WebApp.Infrastructure.Data;
+using P7WebApp.Infrastructure.Identity.Persistence;
 
 #nullable disable
 

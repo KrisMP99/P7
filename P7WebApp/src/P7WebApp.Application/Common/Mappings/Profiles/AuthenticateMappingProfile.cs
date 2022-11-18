@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using P7WebApp.Application.Common.Models;
-using P7WebApp.Application.UserCQRS.Commands.SignIn;
+using P7WebApp.Application.Responses;
+using P7WebApp.Domain.Aggregates.AccountAggregate;
 
 namespace P7WebApp.Application.Common.Mappings.Profiles
 {
@@ -8,7 +8,11 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
     {
         public AuthenticateMappingProfile()
         {
-            CreateMap<AuthenticateCommand, TokenRequest>();
+            CreateMap<Account, TokenResponse>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(a => a.UserId))
+                .ForMember(dest => dest.FirstName, src => src.MapFrom(a => a.Profile.FirstName))
+                .ForMember(dest => dest.LastName, src => src.MapFrom(a => a.Profile.LastName))
+                .ForMember(dest => dest.Email, src => src.MapFrom(a => a.Profile.Email));
         }
     }
 }

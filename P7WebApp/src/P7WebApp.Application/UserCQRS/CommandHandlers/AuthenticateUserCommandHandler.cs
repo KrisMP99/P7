@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Services.WebApi.Jwt;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Interfaces.Identity;
+using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.Responses;
 using P7WebApp.Application.UserCQRS.Commands.SignIn;
 
@@ -22,15 +23,21 @@ namespace P7WebApp.Application.UserCQRS.CommandHandlers
         {
             try
             {
-                (var user, var token) = await _tokenService.AuthenticateAsync(username: request.Username, password: request.Password);
+                var account = await _tokenService.AuthenticateAsync(username: request.Username, password: request.Password);
 
-                if (user is null || token is null)
+                if (account is null)
                 {
                     throw new InvalidCredentialsException("Username or password is incorrect");
                 }
                 else
                 {
-                    TokenResponse response = new TokenResponse(user, token);
+                    var response = AuthenticateMapper.Mapper.Map<TokenResponse>(account);
+
+                    if (response is null)
+                    {
+                        throw new Exception("Issue with mapper");
+                    }
+
                     return response;
                 }
             }

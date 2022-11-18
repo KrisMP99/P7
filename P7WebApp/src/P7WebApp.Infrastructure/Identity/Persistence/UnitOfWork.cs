@@ -1,9 +1,8 @@
-﻿
-using P7WebApp.Application.Common.Interfaces;
+﻿using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Repositories;
 
-namespace P7WebApp.Infrastructure.Persistence
+namespace P7WebApp.Infrastructure.Identity.Persistence
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -31,7 +30,7 @@ namespace P7WebApp.Infrastructure.Persistence
             {
                 return await _context.SaveChangesAsync(cancellationToken);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
