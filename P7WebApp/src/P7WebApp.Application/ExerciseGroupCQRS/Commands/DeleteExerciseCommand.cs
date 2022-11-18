@@ -9,11 +9,13 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands
 {
     public class DeleteExerciseCommand : IRequest<int>
     {
-        public DeleteExerciseCommand(int id)
+        public DeleteExerciseCommand(int id, int exerciseGroupId)
         {
-            this.id = id;
+            Id = id;
+            ExerciseGroupId= exerciseGroupId;
         }
 
-        public int id { get; set; }
+        public int Id { get; set; }
+        public int ExerciseGroupId { get; set; }
     }
 }

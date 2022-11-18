@@ -247,13 +247,13 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("exercise-groups/exercises/delete")]
-        public async Task<IActionResult> DeleteExercise([FromBody] DeleteExerciseCommand request)
+        [HttpDelete]
+        [Route("exercise-groups/{exerciseGroupId}/exercises/{id}")]
+        public async Task<IActionResult> DeleteExercise([FromRoute] int exerciseGroupId, [FromRoute] int id)
         {
             try
             {
-                var result = await _mediator.Send(request);
+                var result = await _mediator.Send(new DeleteExerciseCommand(id, exerciseGroupId));
                 if (result != 0)
                 {
                     return Ok(result);
