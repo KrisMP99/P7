@@ -6,6 +6,7 @@ namespace P7WebApp.Domain.Repositories
     public interface IExerciseGroupRepository
     {
         Task<IAsyncEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId);
+        Task<ExerciseGroup> GetExerciseGroupById(int Id);
         Task<int> UpdateExerciseGroup(ExerciseGroup course);
         Task CreateExercise(Exercise exercise);
         Task<int> DeleteExercise(int exerciseId);

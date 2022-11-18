@@ -55,7 +55,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.ExerciseGroups).FirstOrDefaultAsync();
+                var course = await _context.Courses.Include(c => c.ExerciseGroups).FirstOrDefaultAsync();
                 if (course != null)
                 {
                     return course;
@@ -158,7 +158,7 @@ namespace P7WebApp.Infrastructure.Repositories
             try
             {
                 var courses = _context.Courses.Where(c => c.IsPrivate == false);
-                return courses.AsEnumerable();
+                return courses;
             }
             catch (Exception)
             {
@@ -187,11 +187,6 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-        }
-
-        public Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

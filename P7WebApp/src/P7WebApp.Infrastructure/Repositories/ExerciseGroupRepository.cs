@@ -49,6 +49,28 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
+        public async Task<ExerciseGroup> GetExerciseGroupById(int Id)
+        {
+            try
+            {
+                var exerciseGroup = await _context.ExerciseGroups.FindAsync(Id);
+                
+                if (exerciseGroup is not null)
+                {
+                    return exerciseGroup;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<IAsyncEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId)
         {
             try

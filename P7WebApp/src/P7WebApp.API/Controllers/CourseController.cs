@@ -162,13 +162,13 @@ namespace P7WebApp.API.Controllers
             {
                 var result = await _mediator.Send(request);
 
-                if(result == 0)
+                if(result != 0)
                 {
-                    return BadRequest("Could not create/add the exercise group to the course.");
+                    return Ok();
                 }
                 else
                 {
-                    return Ok();
+                    return BadRequest("Could not create/add the exercise group to the course.");
                 }
             }
             catch(Exception ex)
