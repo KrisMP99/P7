@@ -77,7 +77,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var courses = _context.Courses.Include(c => c.Attendes.Any(a => a.UserId == userId));
+                var courses = _context.Courses.Include(c => c.Attendes).Where(c => c.Attendes.Any(a => a.UserId == userId));
 
                 return courses;
 
