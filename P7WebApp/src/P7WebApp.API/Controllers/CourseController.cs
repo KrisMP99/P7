@@ -1,9 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.ExerciseCQRS.Commands;
@@ -24,7 +22,6 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("/add")]
         public async Task<IActionResult> CreateCourse([FromBody] CreateCourseCommand request)
         {
             try
