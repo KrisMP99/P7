@@ -29,7 +29,6 @@ namespace P7WebApp.API
                 options.SuppressModelStateInvalidFilter = true);
 
             services.AddEndpointsApiExplorer();
-            //services.AddSwaggerGen();
 
             services.AddOpenApiDocument(configure =>
             {

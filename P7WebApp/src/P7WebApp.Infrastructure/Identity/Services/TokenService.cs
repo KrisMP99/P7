@@ -33,7 +33,7 @@ namespace P7WebApp.Infrastructure.Identity.Services
 
                     if (signIn.Succeeded)
                     {
-                        var account = new Account(user.Id, user.UserName, new AccountProfile(user.FirstName, user.LastName, user.Email, password));
+                        var account = new Account(user.Id, user.UserName, new AccountProfile(user.FirstName, user.LastName, user.Email));
 
                         byte[] secret = Encoding.ASCII.GetBytes(_token.Secret);
 
