@@ -10,6 +10,5 @@ namespace P7WebApp.Application.UserCQRS.Queries
 {
     public class GetUserAttendedCoursesQuery : IRequest<IEnumerable<CourseOverviewResponse>>
     { 
-        public string UserId { get; set; }
     }
 }
