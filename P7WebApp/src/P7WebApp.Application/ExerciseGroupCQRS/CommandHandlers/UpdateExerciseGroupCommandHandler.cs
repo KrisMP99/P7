@@ -27,12 +27,11 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
                 }
                 else
                 {
-                    course.GetExerciseGroup(request.CourseId)
+                    course.GetExerciseGroup(request.Id)
                         .EditInformation(newTitle: request.Title, newDescription: request.Description, isVisible: request.IsVisible, newBecomeVisibleAt: request.BecomesVisibleAt, newExerciseGroupNumber: request.ExerciseGroupNumber);
+                    int rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
-                    int affectedRows = await _unitOfWork.CourseRepository.UpdateCourse(course);
-
-                    return affectedRows;
+                    return rowsAffected;
                 }
             }
             catch (Exception)

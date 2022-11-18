@@ -176,12 +176,10 @@ namespace P7WebApp.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpPost]
-        [Route("{courseId}/delete-exercise-group/{exerciseGroupId}")]
+        
         [HttpPost]
         [Route("{courseId}/exercise-groups/{exerciseGroupId}")]
-        public async Task<IActionResult> UpdateExerciseGroup(UpdateExerciseGroupCommand request)
+        public async Task<IActionResult> UpdateExerciseGroup([FromBody]UpdateExerciseGroupCommand request)
         {
             try
             {
@@ -202,11 +200,14 @@ namespace P7WebApp.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete]
+        [Route("course/{courseId}/exercise-group/{exerciseGroupId}")]
         public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int courseId, [FromRoute] int exerciseGroupId)
         {
             try
             {
-                var result = await _mediator.Send(new DeleteExerciseGroupCommand(courseId, exerciseGroupId));
+                    var result = await _mediator.Send(new DeleteExerciseGroupCommand(courseId, exerciseGroupId));
 
                 if (result == 0)
                 {
@@ -214,7 +215,7 @@ namespace P7WebApp.API.Controllers
                 }
                 else
                 {
-                    return Ok();
+                    return Ok(result);
                 }
             }
             catch (Exception ex)
