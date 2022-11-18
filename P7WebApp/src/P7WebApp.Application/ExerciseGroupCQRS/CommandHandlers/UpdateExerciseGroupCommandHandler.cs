@@ -19,7 +19,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
         {
             try
             {
-                var course = await _unitOfWork.CourseRepository.GetCourse(request.CourseId);
+                var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.CourseId);
 
                 if (course is null)
                 {
@@ -37,7 +37,6 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

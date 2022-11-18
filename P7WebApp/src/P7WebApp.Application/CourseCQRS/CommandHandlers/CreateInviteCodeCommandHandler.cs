@@ -20,7 +20,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 var inviteCode = CourseMapper.Mapper.Map<InviteCode>(request);
-                var course = await _unitOfWork.CourseRepository.GetCourse(inviteCode.CourseId);
+                var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(inviteCode.CourseId);
                 
                 course.CreateInviteCode(inviteCode);
                 await _unitOfWork.CourseRepository.UpdateCourse(course);

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace P7WebApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addtables : Migration
+    public partial class Tables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -588,6 +589,26 @@ namespace P7WebApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Image",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TextModuleId = table.Column<int>(type: "integer", nullable: false),
+                    File = table.Column<byte[]>(type: "bytea", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Image", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Image_TextModules_TextModuleId",
+                        column: x => x.TextModuleId,
+                        principalTable: "TextModules",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Choices",
                 columns: table => new
                 {
@@ -695,6 +716,11 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "IX_Exercises_ExerciseGroupId",
                 table: "Exercises",
                 column: "ExerciseGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_TextModuleId",
+                table: "Image",
+                column: "TextModuleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InviteCode_CourseId",
@@ -824,6 +850,9 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
+                name: "Image");
+
+            migrationBuilder.DropTable(
                 name: "InviteCode");
 
             migrationBuilder.DropTable(
@@ -839,9 +868,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "TestCases");
 
             migrationBuilder.DropTable(
-                name: "TextModules");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -849,6 +875,9 @@ namespace P7WebApp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Question");
+
+            migrationBuilder.DropTable(
+                name: "TextModules");
 
             migrationBuilder.DropTable(
                 name: "CourseRoles");

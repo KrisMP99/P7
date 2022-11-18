@@ -1,7 +1,6 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
-using P7WebApp.Domain.Identity;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
@@ -20,6 +19,8 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         public InviteCode? InviteCode { get; private set; }
         public List<ExerciseGroup> ExerciseGroups { get; private set; }
         public List<CourseRole> CourseRoles { get; private set; }
+        public List<Attendee> Attendes { get; private set; }
+        
 
         public void EditInformation(string newTitle, string newDescription, bool newVisibility)
         {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.UserCQRS.Commands;
 using P7WebApp.Application.UserCQRS.Queries;
 
