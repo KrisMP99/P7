@@ -4,7 +4,7 @@ import { getApiRoot, User } from '../../App';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import './CourseView.css';
-import { ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
+import { LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import ExerciseGroupsOverview from './ExerciseGroupsOverview/ExerciseGroupsOverview';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import { Gear, Plus } from 'react-bootstrap-icons';
@@ -15,6 +15,15 @@ export interface ExerciseOverview {
     id: number;
     title: string;
     isVisible: boolean;
+    exerciseGroupId: number;
+    exerciseNumber: number;
+    startDate: Date | null;
+    endDate: Date | null;
+    visibleFrom: Date | null;
+    visibleTo: Date | null;
+    createdDate: Date | null;
+    lastModifiedDate: Date | null;
+    layoutId: LayoutType;
 }
 
 export interface ExerciseGroup {
