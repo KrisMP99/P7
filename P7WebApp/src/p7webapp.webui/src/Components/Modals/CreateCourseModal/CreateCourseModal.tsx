@@ -109,22 +109,16 @@ async function createCourse(title: string, description: string, isPrivate: boole
                 'isPrivate': isPrivate
             })
         }
-        await fetch("https://localhost:7001/api/courses", requestOptions)
+        await fetch(getApiRoot() + "courses", requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     console.log(res.text);
                     throw new Error('Response not okay from backend - server unavailable');
                 }
                 return null;
-            })
-            .then(() => {
-                // console.log(data)
-
-                console.log("Successfully created course!");
             });
     } catch (error) {
-        console.log("LLLOOOL")
-        // alert(error);
+        alert(error);
     }
 }
 
