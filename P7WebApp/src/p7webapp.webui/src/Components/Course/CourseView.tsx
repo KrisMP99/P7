@@ -50,13 +50,15 @@ export default function CourseView(props: CourseProps) {
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
 
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const [course, setCourse] = useState<Course | null>(null);
     const [editedCourse, setEditedCourse] = useState<Course | null>({...course!});
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
-    const { paramId } = useParams();
-    const courseId = paramId ? Number(paramId) : undefined;
+    const params = useParams();
+    const courseId = params.courseId ? Number(params.courseId) : undefined;
     const navigator = useNavigate();
     
     //Checks if the Course ID isn't present in the URL (shouldn't happen)
@@ -65,8 +67,10 @@ export default function CourseView(props: CourseProps) {
             navigator('/home')
         }
         else {
+            setIsLoading(true);
             fetchCourse(courseId, (course) => {
                 setCourse(course);
+                setIsLoading(false);
             });
         }
     }, [courseId]);
@@ -78,8 +82,9 @@ export default function CourseView(props: CourseProps) {
         setEditedCourse(course);
     }, [course?.ownerId, props.user.id, isOwner]);
 
-    return (
-        <Container>
+    return isLoading ? 
+        <></> :
+        (<Container>
             <div className='course-title-container'>
                 <input
                     className={'course-title ' + (!isEditMode && 'input-field')}
@@ -91,8 +96,8 @@ export default function CourseView(props: CourseProps) {
                     }}
                     readOnly={!isEditMode}
                 />
-                {isOwner && (
-                    <div style={{ float: 'right' }}>
+                {isOwner && 
+                    (<div style={{ float: 'right' }}>
                         {isEditMode &&
                             <>
                                 <Button size='sm' className='btn-3' variant='success' onClick={() => {
@@ -206,8 +211,7 @@ export default function CourseView(props: CourseProps) {
                     }
                 }
             />
-        </Container>
-    )
+        </Container>)
 }
 
 async function deleteExercise(courseId: number, exerciseId: number, callback: ()=>void) {
@@ -269,25 +273,28 @@ async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, ca
 }
 
 async function fetchCourse(courseId: number, callback: (course: Course) => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
             method: 'GET',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
-                //WIP - SET AUTH
+                'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'Course/' + courseId, requestOptions)
+        await fetch(getApiRoot() + 'courses/' + courseId, requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend - server unavailable');
                 }
                 return res.json();
             })
-            .then((course: Course) => {
-                callback(course);
-            });
+            .then((data) => console.log(data));
+            // .then((course: Course) => {
+            //     callback(course);
+            // });
     } catch (error) {
         alert(error);
     }
