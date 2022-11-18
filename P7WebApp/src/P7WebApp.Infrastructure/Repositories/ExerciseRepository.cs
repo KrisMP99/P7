@@ -144,7 +144,25 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<int> DeleteSubmission(Submission submission)
         {
-            return 1;
+            try
+            {
+                var exercise = await GetExerciseWithSubmissionsById(submission.ExerciseId);
+                if (exercise is not null)
+                {
+                    exercise.RemoveSubmission(submission.Id);
+                    return 1;
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<Exercise> GetExerciseFromModuleId(int moduleId)
