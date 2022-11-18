@@ -1,22 +1,20 @@
 ﻿using MediatR;
 using Microsoft.VisualStudio.Services.WebApi.Jwt;
+using P7WebApp.Application.AccountCQRS.Commands.SignIn;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.Responses;
-using P7WebApp.Application.UserCQRS.Commands.SignIn;
 
-namespace P7WebApp.Application.UserCQRS.CommandHandlers
+namespace P7WebApp.Application.AccountCQRS.CommandHandlers
 {
     public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateCommand, TokenResponse>
     {
         private readonly ITokenService _tokenService;
-        private readonly ICurrentUserService _currentUserService;
 
-        public AuthenticateUserCommandHandler(ITokenService tokenService, ICurrentUserService currentUserService)
+        public AuthenticateUserCommandHandler(ITokenService tokenService)
         {
             _tokenService = tokenService;
-            _currentUserService = currentUserService;
         }
 
         public async Task<TokenResponse> Handle(AuthenticateCommand request, CancellationToken cancellationToken)

@@ -22,7 +22,7 @@ namespace P7WebApp.Domain.Aggregates.AccountAggregate
         public AccountProfile Profile { get; private set; }
         public string Token { get; private set; }
 
-        public void EditProfile(AccountProfile profile)
+        public void EditProfileInformation(AccountProfile profile)
         {
             try
             {
@@ -45,6 +45,11 @@ namespace P7WebApp.Domain.Aggregates.AccountAggregate
             }
         }
 
+        public void EditPassword(string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetToken(string issuer, string audience, int expires, byte[] secret)
         {
             try
@@ -65,7 +70,7 @@ namespace P7WebApp.Domain.Aggregates.AccountAggregate
                             new Claim("UserId", this.UserId),
                             new Claim("FirstName", $"{this.Profile.FirstName}"),
                             new Claim("LastName", $"{this.Profile.LastName}"),
-                            new Claim("UserName", this.Username),
+                            new Claim("Username", this.Username),
                             new Claim(ClaimTypes.Email, this.Profile.Email),
                             new Claim(ClaimTypes.NameIdentifier, this.UserId)
                         }),

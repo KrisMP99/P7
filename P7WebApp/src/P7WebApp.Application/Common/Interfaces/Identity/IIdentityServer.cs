@@ -1,4 +1,5 @@
 ﻿using P7WebApp.Application.Common.Models;
+using P7WebApp.Domain.Aggregates.AccountAggregate;
 
 namespace P7WebApp.Application.Common.Interfaces.Identity
 {
@@ -9,5 +10,7 @@ namespace P7WebApp.Application.Common.Interfaces.Identity
         Task<bool> AuthorizeAsync(string userId, string policyName);
         Task<Result> CreateUserAsync(string firstName, string lastName, string username, string email, string password);
         Task<Result> DeleteUserAsync(string userId);
+        Task<Account> GetUserAccount(string userId);
+        Task<Result> UpdateAccountProfile(Account account);
     }
 }

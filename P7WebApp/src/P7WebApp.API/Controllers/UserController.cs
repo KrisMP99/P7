@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using P7WebApp.Application.UserCQRS.Commands;
+using P7WebApp.Application.AccountCQRS.Commands.UpdateAccountProfile;
 using P7WebApp.Application.UserCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
@@ -19,7 +19,7 @@ namespace P7WebApp.API.Controllers
 
         [HttpPost]
         [Route("{userId}/profile")]
-        public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateUserProfileCommand request)
+        public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateAccountProfileCommand request)
         {
             try
             {
