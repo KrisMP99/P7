@@ -72,6 +72,8 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
+
+        // TODO: Implement correctly
         public async Task<IEnumerable<Course>> GetAttendedCourses(int userId)
         {
             try
@@ -81,7 +83,8 @@ namespace P7WebApp.Infrastructure.Repositories
                 if(courses.Any())
                 {
                     return courses;
-                } else
+                } 
+                else
                 {
                     throw new Exception();
                 }
