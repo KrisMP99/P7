@@ -157,7 +157,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 
         }
 
-        public void DeleteSubmission(int submissionId)
+        public void RemoveSubmission(int submissionId)
         {
             try
             {
@@ -171,7 +171,23 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 
         public Submission GetSubmission(int submissionId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = Submissions.Where(s => s.Id == submissionId).FirstOrDefault();
+                if (result is not null)
+                {
+                    return result;
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
