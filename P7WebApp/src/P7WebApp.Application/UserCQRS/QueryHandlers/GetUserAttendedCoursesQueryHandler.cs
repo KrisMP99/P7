@@ -29,7 +29,7 @@ namespace P7WebApp.Application.UserCQRS.QueryHandlers
 
             if (userId is null) throw new Exception("User not found.");
 
-            var courses = await _courseRepository.GetAttendedCourses(22);
+            var courses = await _courseRepository.GetAttendedCourses(request.UserId);
             var result = CourseMapper.Mapper.Map<IEnumerable<CourseOverviewResponse>>(courses);
 
             return result;
