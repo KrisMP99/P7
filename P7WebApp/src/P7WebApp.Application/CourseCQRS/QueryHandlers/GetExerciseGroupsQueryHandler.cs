@@ -20,7 +20,7 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
         {
             try
             {
-                var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupsByCourseId(request.Id);
+                var exerciseGroup = await _unitOfWork.CourseRepository.GetExerciseGroupsWithExercises(request.Id);
                 var response = CourseMapper.Mapper.Map<IEnumerable<ExerciseGroupResponse>>(exerciseGroup);
                 return response;
             }
