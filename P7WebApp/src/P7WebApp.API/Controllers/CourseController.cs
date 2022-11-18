@@ -155,7 +155,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        [Route("{courseId}/add/exercise-group")]
+        [Route("exercise-group")]
         public async Task<IActionResult> AddExerciseGroup([FromBody] CreateExerciseGroupCommand request)
         {
             try

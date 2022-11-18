@@ -73,11 +73,11 @@ namespace P7WebApp.Infrastructure.Repositories
         }
 
         // TODO: Implement correctly
-        public async Task<IEnumerable<Course>> GetAttendedCourses(int userId)
+        public async Task<IEnumerable<Course>> GetAttendedCourses(string userId)
         {
             try
             {
-                var courses = _context.Courses.Where(c => c.Id == userId);
+                var courses = _context.Courses.Where(c => c.CreatedById == userId);
 
                 if(courses.Any())
                 {

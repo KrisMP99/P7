@@ -210,7 +210,6 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
                     fetchOwnedCourses((courses) => {
-                        console.log(courses);
                         setOwnedCourses(courses);
                     });
                 }}
@@ -239,6 +238,7 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
                 return res.json();
             })
             .then((courses: CourseOverview[]) => {
+                console.log(courses);
                 callback(courses);
             });
     } catch (error) {

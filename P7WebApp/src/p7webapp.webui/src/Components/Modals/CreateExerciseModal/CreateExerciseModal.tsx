@@ -89,7 +89,6 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
                 })
                 .then((user: any) => {
                     console.log("Successfully created exercise!");
-                    console.log(user);
                 });
         } catch (error) {
             alert(error);

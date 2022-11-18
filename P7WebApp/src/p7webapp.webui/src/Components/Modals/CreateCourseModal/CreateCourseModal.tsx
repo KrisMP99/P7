@@ -18,7 +18,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         id: 0,
         title: '',
         description: '',
-        ownerId: 'undefined',
+        createdById: 'undefined',
         ownerName: 'undefined',
         exerciseGroups: [],
         isPrivate: true,
@@ -33,7 +33,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         ref,
         () => ({
             handleShow(userId: string) {
-                setCourse({...course, ownerId: userId});
+                setCourse({...course, createdById: userId});
                 setShow(true);
             }
         }),
@@ -112,7 +112,6 @@ async function createCourse(title: string, description: string, isPrivate: boole
         await fetch(getApiRoot() + "courses", requestOptions)
             .then((res) => {
                 if (!res.ok) {
-                    console.log(res.text);
                     throw new Error('Response not okay from backend - server unavailable');
                 }
                 return null;

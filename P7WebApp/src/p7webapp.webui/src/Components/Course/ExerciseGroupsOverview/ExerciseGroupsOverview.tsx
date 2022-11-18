@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Accordion, Button } from 'react-bootstrap';
 import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
-import { Course, ExerciseGroup, ExerciseOverview } from '../CourseView';
+import { ExerciseGroup, ExerciseOverview } from '../CourseView';
 import '../CourseView.css';
 import { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import '../../../App.css';
@@ -26,6 +26,7 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
     const openEditExerciseGroupModalRef = useRef<ShowEditExerciseGroupModal>(null);
 
     useEffect(() => {
+        console.log(props.exerciseGroups)
         if (changesHasBeenMade) {
             props.changedCourse();
             changesHasBeenMade = false;
@@ -36,14 +37,8 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
                                                    openEditExerciseGroupModalRef, //WIP - CHANGE THIS
                                                    props.openDeleteExerciseModalRef,
                                                    props.openCreateExerciseModalRef));
-    }, [props.exerciseGroups.length, changesHasBeenMade])
+    }, [props.exerciseGroups.length, changesHasBeenMade, props.exerciseGroups])
 
-    // useEffect(() => {
-    //     setCourse(props.course);
-    //     setIsOwner(props.isOwner);
-    // }, [props.isOwner, props.course?.exerciseGroups, props.course?.exercises]);
-
-    //Goes through every group and finds all exercises with a coresponding ID
     return (
         <div>
             {groupElements}
@@ -70,17 +65,8 @@ function makeExerciseGroupElements (exercisegroups: ExerciseGroup[],
                                     ): JSX.Element[] {
 
         let exerciseGroupElements: JSX.Element[] = [];
-        if(exercisegroups.length < 1) return exerciseGroupElements;
 
-        exerciseGroupElements = exercisegroups.filter((exGroup: ExerciseGroup) => {
-
-            if (!isOwner) {
-                return exGroup.isVisible;
-            }
-
-        })
-        .map((exGroup: ExerciseGroup, index: number) => {
-
+        exerciseGroupElements = exercisegroups.filter((exGroup: ExerciseGroup) => isOwner ? true : exGroup.isVisible).map((exGroup: ExerciseGroup, index: number, _arr: ExerciseGroup[]) => {
             let exerciseElements: JSX.Element[] = [];
             exerciseElements = exGroup.exercises.filter((exercise) => {
 
@@ -88,13 +74,12 @@ function makeExerciseGroupElements (exercisegroups: ExerciseGroup[],
                     return exGroup.isVisible;
                 }
 
-            })
-            .map((exercise: ExerciseOverview, id: number) => {
+            }).map((exercise: ExerciseOverview, id: number) => {
 
                 let visibilityElement: JSX.Element = exercise.isVisible ? (<Eye />) : (<EyeSlash />);
                 return (
                     <div key={id} className={'exercise-container d-flex ' + (!exercise.isVisible && 'is-invisible')} onClick={(e) => {
-                        console.log("Opening exercise");
+                        console.log("Opening exercise dummy");
                         //WIP - navigate to the exercise and fetch it there
                     }}>
                         <div className='exercise-title'>{exercise.title}</div>
@@ -164,79 +149,15 @@ function makeExerciseGroupElements (exercisegroups: ExerciseGroup[],
                         }
                     </div>
                     <AccordionBody className='exercise-container-box'>
+                        {isOwner &&
                         <Button className={'create-btns'} onClick={() => {
                                 createExerciseModalRef.current?.handleShow(exGroup.id);
                         }}>
                             <Plus /> Exercise
-                        </Button>
+                        </Button>}
                         {exerciseElements}
                     </AccordionBody>
                 </Accordion>)
-        });
-
-        // if (course && course.exerciseGroups.length > 0 && course.exercises) {
-        //     exerciseGroupElements = course.exerciseGroups.filter((group) => {
-    
-        //         return (!isOwner ? group.isVisible : true);
-    
-        //     }).map((value, index) => {
-    
-        //         //Creates the exercise elements under each accordion:
-        //         const exerciseElements: JSX.Element[] = course.exercises.filter((val) => {
-    
-        //             return val.exerciseGroupId === value.id && (!isOwner ? val.isVisible : true);
-    
-        //         }).map((val, id) => {
-    
-                    
-    
-                    
-        //         });
-                // return (
-                //     <Accordion key={index} defaultActiveKey={index+''}>
-                //         <div className='d-flex align-items-center flex-grow-1'>
-                //             <AccordionHeader className={'flex-grow-1' + (value.isVisible ? '' : ' is-invisible')}>
-                //                 <input
-                //                     className='input-field'
-                //                     value={value.title}
-                //                     onChange={(e) => {
-                //                         if (course && e.target.value !== value.title) {
-                //                             let exerciseGroups = [...course.exerciseGroups]
-                //                             exerciseGroups[exerciseGroups.findIndex((val) => val.id === value.id)].title = e.target.value;
-                //                             setCourse({ ...course, exerciseGroups: exerciseGroups });
-                //                         }
-                //                     }}
-                //                     readOnly={true}
-                //                 />
-                //             </AccordionHeader>
-                //             {isOwner &&
-                //                 (<div className='group-owner-buttons'>
-                //                     <Button size='sm' className={'btn-3'} onClick={(e) => {
-                //                         e.stopPropagation();
-                //                         openEditExerciseGroupModalRef.current?.handleShow(value, index);
-                //                     }}>
-                //                         <Pencil />
-                //                     </Button>
-                //                     <Button size='sm' className='btn-3' variant='danger' onClick={(e) => {
-                //                         e.stopPropagation();
-                //                         props.openDeleteExerciseModalRef.current?.handleShow(value.title, value.id, DeleteElementType.EXERCISEGROUP)
-                //                     }}>
-                //                         <Trash />
-                //                     </Button>
-                //                 </div>)
-                //             }
-                //         </div>
-                //         <AccordionBody className='exercise-container-box'>
-                //             <Button className={'create-btns'} onClick={() => {
-                //                     props.openCreateExerciseModalRef.current?.handleShow(value.id);
-                //             }}>
-                //                 <Plus /> Exercise
-                //             </Button>
-                //             {exerciseElements}
-                //         </AccordionBody>
-                //     </Accordion>)
-            // });
-        // }
-
+            });
         return exerciseGroupElements;
 }

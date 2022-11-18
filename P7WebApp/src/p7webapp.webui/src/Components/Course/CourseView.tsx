@@ -36,7 +36,7 @@ export interface Course {
     title: string;
     description: string;
     isPrivate: boolean;
-    ownerId: string;
+    createdById: string;
     ownerName: string | null;
     exerciseGroups: ExerciseGroup[];
     createdDate: Date | null;
@@ -80,11 +80,12 @@ export default function CourseView(props: CourseProps) {
     }, []);
 
     useEffect(() => {
-        if (props.user.id === course?.ownerId && !isOwner) {
+        if (props.user.id === course?.createdById && !isOwner) {
             setIsOwner(true);
         }
+        // setIsOwner(true)
         setEditedCourse(course);
-    }, [course?.ownerId, props.user.id, isOwner]);
+    }, [course?.createdById, props.user.id, isOwner]);
 
     return isLoading ? 
         (<></>) :
@@ -157,7 +158,7 @@ export default function CourseView(props: CourseProps) {
                     <Tab eventKey={'exercises'} title={'Exercises'}>
                         <div className={'d-flex' + (isOwner ? '' : ' d-none')}>
                             <Button className={'create-btns'} onClick={() => {
-                                createExerciseGroupModalRef.current?.handleShow();
+                                createExerciseGroupModalRef.current?.handleShow(course?.id!);
                             }}>
                                 <Plus />ExerciseGroup
                             </Button>
@@ -210,7 +211,7 @@ export default function CourseView(props: CourseProps) {
                 updateExerciseGroups={() => {
                     if (courseId)
                         fetchCourse(courseId, (data) => {
-                            setCourse(course);
+                            setCourse(data);
                         });
                     }
                 }
@@ -219,13 +220,15 @@ export default function CourseView(props: CourseProps) {
 }
 
 async function deleteExercise(courseId: number, exerciseId: number, callback: ()=>void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
             method: 'POST',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
-                //WIP - SET AUTH
+                'Authorization': 'Bearer ' + jwt
             },
             body: JSON.stringify({
                 "courseId": courseId,
@@ -248,13 +251,15 @@ async function deleteExercise(courseId: number, exerciseId: number, callback: ()
 }
 
 async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, callback: ()=>void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
             method: 'POST',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
-                //WIP - SET AUTH
+                'Authorization': 'Bearer ' + jwt
             },
             body: JSON.stringify({
                 "courseId": courseId,
@@ -298,7 +303,6 @@ async function fetchCourse(courseId: number, callback: (course: Course) => void)
             .then((course: Course) => {
                 console.log(course)
                 callback(course);
-                
             });
     } catch (error) {
         alert(error);

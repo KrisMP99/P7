@@ -186,19 +186,16 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                'Authorization': 'Bearer ' + jwt
            }
        }
-       await fetch(getApiRoot() + 'users/courses/attended', requestOptions)
+       await fetch(getApiRoot() + 'users/courses/created', requestOptions)
            .then((res) => {
                if (!res.ok) {
                    throw new Error('Response not okay from backend');
                }
                return res.json();
            })
-           .then((date) => {
-            console.log(date)
-           })
-        //    .then((courses: CourseOverview[]) => {
-        //        callback(courses);
-        //    });
+           .then((courses: CourseOverview[]) => {
+               callback(courses);
+           });
     } catch (error) {
        alert(error);
     }
