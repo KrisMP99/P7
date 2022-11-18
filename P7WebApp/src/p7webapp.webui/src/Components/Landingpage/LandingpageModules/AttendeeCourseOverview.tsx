@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Form, InputGroup, Pagination } from 'react-bootstrap';
+import { Container, Table, Form, InputGroup, Pagination, Button } from 'react-bootstrap';
+import { ArrowCounterclockwise } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import { getApiRoot } from '../../../App';
 import { CourseOverview } from './OwnedCourseOverview';
@@ -51,6 +52,15 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                 <div className='row col-9 m-2'>
                     <div className='col text-start'>
                         <h3>Attended courses</h3>
+                    </div>
+                    <div className="col text-end">
+                        <Button className="btn-2" onClick={()=>{
+                            fetchAttendedCourses((courses) => {
+                                setAttendedCourses(courses);
+                            })
+                        }}>
+                            <ArrowCounterclockwise />
+                        </Button> 
                     </div>
                 </div>
 
@@ -176,16 +186,19 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                'Authorization': 'Bearer ' + jwt
            }
        }
-       await fetch(getApiRoot() + 'users/courses/created', requestOptions)
+       await fetch(getApiRoot() + 'users/courses/attended', requestOptions)
            .then((res) => {
                if (!res.ok) {
                    throw new Error('Response not okay from backend');
                }
                return res.json();
            })
-           .then((courses: CourseOverview[]) => {
-               callback(courses);
-           });
+           .then((date) => {
+            console.log(date)
+           })
+        //    .then((courses: CourseOverview[]) => {
+        //        callback(courses);
+        //    });
     } catch (error) {
        alert(error);
     }
