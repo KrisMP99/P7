@@ -15,20 +15,20 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     const [attendedCourses, setAttendedCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
+    const [coursesPerPage, setCoursesPerPage] = useState<number>(10);
     const [maxPages, setMaxPages] = useState<number>(1);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        // fetchAttendedCourses((courses) =>{
-        //     setAttendedCourses(courses);
-        // });
+        fetchAttendedCourses((courses) =>{
+            setAttendedCourses(courses);
+        });
     }, []);
     
     useEffect(() => {  
-        let endPage = Math.ceil(attendedCourses.filter((item: { name: string; }) => {
-            return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
+        let endPage = Math.ceil(attendedCourses.filter((item: { title: string; }) => {
+            return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
         }).length / coursesPerPage);
         setMaxPages(endPage === 0 ? 1 : endPage);
     }, [attendedCourses.length, coursesPerPage, search]);
@@ -55,7 +55,7 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                 </div>
 
                 <div className='col-9'>
-                    <Table striped bordered hover>
+                    <Table striped size='sm' bordered hover>
                         <thead>
                             <tr>
                                 <th>Course name</th>
@@ -65,14 +65,14 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                             </tr>
                         </thead>
                         <tbody>
-                            {attendedCourses.filter((item: { name: string; }) => {
-                                return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
+                            {attendedCourses.filter((item: { title: string; }) => {
+                                return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
                             }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
                                 <tr key={item.id} onClick={() => { navigate('/course/' + item.id) }}>
-                                    <td>{item.name}</td>
-                                    <td>{item.exerciseAmount}</td>
-                                    <td>{item.membersAmount}</td>
-                                    <td>{item.owner}</td>
+                                    <td>{item.title}</td>
+                                    <td>{item.numberOfExercises ?? 0}</td>
+                                    <td>{item.numberOfMembers ?? 0}</td>
+                                    <td>{item.ownerName ?? 'Missing'}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -166,32 +166,28 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
 
 async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => void) {
     console.log("FetchAttendedCourses");
-    //let jwt = sessionStorage.getItem('jwt');
-    //if (jwt === null) return;
-    //try {
-    //    const requestOptions = {
-    //        method: 'POST',
-    //        headers: { 
-    //            'Accept': 'application/json', 
-    //            'Content-Type': 'application/json',
-    //            'Authorization': 'Bearer ' + jwt
-    //        }
-    //    }
-    //    await fetch(getApiRoot() + 'users/courses', requestOptions)
-    //        .then((res) => {
-    //            if (!res.ok) {
-    //                throw new Error('Response not okay from backend');
-    //            }
-    //            return res.json();
-    //        })
-    //        .then((data) => {
-    //            console.log("ATTENDED (CHANGE LATER IS ALL COURSES NOW)");
-    //            // console.log(data)
-    //        });
-    //        // .then((ownedCourses: CourseOverview[]) => {
-    //        //     callback(ownedCourses);
-    //        // });
-    //} catch (error) {
-    //    alert(error);
-    //}
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+       const requestOptions = {
+           method: 'GET',
+           headers: { 
+               'Accept': 'application/json', 
+               'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + jwt
+           }
+       }
+       await fetch(getApiRoot() + 'users/courses/attended', requestOptions)
+           .then((res) => {
+               if (!res.ok) {
+                   throw new Error('Response not okay from backend');
+               }
+               return res.json();
+           })
+           .then((courses: CourseOverview[]) => {
+               callback(courses);
+           });
+    } catch (error) {
+       alert(error);
+    }
 }

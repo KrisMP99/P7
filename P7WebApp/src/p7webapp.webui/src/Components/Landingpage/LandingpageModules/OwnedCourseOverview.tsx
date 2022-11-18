@@ -10,11 +10,13 @@ import CreateCourseModal from '../../Modals/CreateCourseModal/CreateCourseModal'
 
 export interface CourseOverview {
     id: number;
-    name: string;
-    exerciseAmount: number;
-    membersAmount: number;
-    owner: string;
+    title: string;
+    numberOfExercises: number;
+    numberOfMembers: number;
+    ownerName: string | null;
     isPrivate: boolean;
+    createdDate: Date;
+    modifiedDate: Date;
 }
 
 interface OwnedCourseOverviewProps {
@@ -30,20 +32,22 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     const [ownedCourses, setOwnedCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
+    const [coursesPerPage, setCoursesPerPage] = useState<number>(10);
     const [maxPages, setMaxPages] = useState<number>(1);
 
     useEffect(() => {
-        // fetchOwnedCourses((courses) =>{
-        //     setOwnedCourses(courses);
-        // });
+        fetchOwnedCourses((courses) =>{
+            setOwnedCourses(courses);
+        });
+        console.log(ownedCourses);
     }, []);
 
     useEffect(() => {
-        let endPage = Math.ceil(ownedCourses.filter((item: { name: string; }) => {
-            return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
+        let endPage = Math.ceil(ownedCourses.filter((item: { title: string; }) => {
+            return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
         }).length / coursesPerPage)
         setMaxPages(endPage === 0 ? 1 : endPage);
+        console.log(ownedCourses)
     }, [ownedCourses.length, coursesPerPage, search]);
 
     return (
@@ -67,11 +71,18 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                         <Button className="rounded p-2 create-course" onClick={()=>openCreateCourseModalRef.current?.handleShow()}>
                             Create course
                         </Button> 
+                        <Button className="rounded p-2 create-course" onClick={()=>{
+                            fetchOwnedCourses((courses) => {
+                                setOwnedCourses(courses);
+                            })
+                        }}>
+                            Refetch
+                        </Button> 
                     </div>
                 </div>
 
                 <div className='col-9'>
-                    <Table striped bordered hover>
+                    <Table striped size='sm' bordered hover>
                         <thead>
                             <tr>
                                 <th>Course name</th>
@@ -82,25 +93,28 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                             </tr>
                         </thead>
                         <tbody>
-                        {ownedCourses.filter((item: { name: string; }) => {
-                            return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
-                        }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
-                            <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
-                                <td>{item.name}</td>
-                                <td>{item.exerciseAmount}</td>
-                                <td>{item.membersAmount}</td>
-                                <td>{item.owner}</td>
-                                <td>
-                                    <Button variant='danger' onClick={(e)=>{
-                                        e.stopPropagation();
-                                        deleteCourseModalRef.current?.handleShow(item.name, item.id, DeleteElementType.COURSE);
-                                    }}>
-                                        <Trash/>
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
-
+                        {
+                            ownedCourses.filter((item: { title: string; }) => {
+                                return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
+                            })
+                            .slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage)
+                            .map((item: CourseOverview) => (
+                                <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
+                                    <td>{item.title}</td>
+                                    <td>{item.numberOfExercises ?? 0}</td>
+                                    <td>{item.numberOfMembers ?? 0}</td>
+                                    <td>{item.ownerName ?? 'Missing'}</td>
+                                    <td>
+                                        <Button variant='danger' size='sm' onClick={(e)=>{
+                                            e.stopPropagation();
+                                            deleteCourseModalRef.current?.handleShow(item.title, item.id, DeleteElementType.COURSE);
+                                        }}>
+                                            <Trash/>
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))
+                        }
                         </tbody>
                     </Table>
                 </div>
@@ -190,7 +204,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={deleteCourseModalRef}
                 confirmDelete={(courseId: number)=>{
                     deleteOwnedCourse(courseId, () => {
-                        // fetchOwnedCourses((courses) => setOwnedCourses(courses));
+                        fetchOwnedCourses((courses) => setOwnedCourses(courses));
                     });
                 }}                
             />
@@ -198,9 +212,9 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
                     console.log("HHH")
-                    // fetchOwnedCourses((courses) => {
-                    //     setOwnedCourses(courses);
-                    // });
+                    fetchOwnedCourses((courses) => {
+                        setOwnedCourses(courses);
+                    });
                 }}
             />
         </Container>
@@ -219,19 +233,16 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'users/courses', requestOptions)
+        await fetch(getApiRoot() + 'users/courses/created', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
                 }
                 return res.json();
             })
-            .then((data) => {
-                console.log(data);
+            .then((courses: CourseOverview[]) => {
+                callback(courses);
             });
-            // .then((ownedCourses: CourseOverview[]) => {
-            //     callback(ownedCourses);
-            // });
     } catch (error) {
         alert(error);
     }
