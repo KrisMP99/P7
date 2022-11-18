@@ -49,9 +49,10 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => {
                 e.preventDefault();
-                createCourse(course.title, course.description, course.isPrivate);
-                props.createdCourse();
-                handleClose();
+                createCourse(course.title, course.description, course.isPrivate, () => {
+                    props.createdCourse();
+                    handleClose();
+                });
             }}>
                 <Modal.Header closeButton>
                     <Modal.Title>Create course:</Modal.Title>
@@ -91,10 +92,9 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
 });
 
 
-async function createCourse(title: string, description: string, isPrivate: boolean) {
+async function createCourse(title: string, description: string, isPrivate: boolean, callback: ()=>void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
-    console.log(title + " " + description + " " + isPrivate)
     try {
         const requestOptions = {
             method: 'POST',
@@ -109,7 +109,7 @@ async function createCourse(title: string, description: string, isPrivate: boole
                 'isPrivate': isPrivate
             })
         }
-        await fetch("https://localhost:7001/api/courses", requestOptions)
+        await fetch(getApiRoot() + "courses", requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     console.log(res.text);
@@ -118,13 +118,10 @@ async function createCourse(title: string, description: string, isPrivate: boole
                 return null;
             })
             .then(() => {
-                // console.log(data)
-
-                console.log("Successfully created course!");
+                callback();
             });
     } catch (error) {
-        console.log("LLLOOOL")
-        // alert(error);
+        alert(error);
     }
 }
 
