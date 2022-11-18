@@ -13,7 +13,7 @@ namespace P7WebApp.Domain.Repositories
         Task<int> UpdateCourse(Course course);
         Task<IEnumerable<Course>> GetAttendedCourses(int userId);
         Task<IEnumerable<Course>> GetPublicCourses();
-        Task<IEnumerable<Course>> GetUsersCreatedCourses(string userId);
+        Task<IEnumerable<Course>> GetCreatedCourses(string userId);
 
 
 

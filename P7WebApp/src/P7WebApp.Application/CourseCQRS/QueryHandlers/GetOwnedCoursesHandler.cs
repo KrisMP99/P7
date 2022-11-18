@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.QueryHandlers
 {
-    public class GetOwnedCoursesHandler : IRequestHandler<GetOwnedCoursesQuery,IEnumerable<CourseResponse>>
+    public class GetCreatedCoursesHandler : IRequestHandler<GetOwnedCoursesQuery,IEnumerable<CourseResponse>>
     {
 		private readonly IUnitOfWork _unitOfWork;
 
-        public GetOwnedCoursesHandler(IUnitOfWork unitOfWork)
+        public GetCreatedCoursesHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -24,7 +24,7 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
         {
 			try
 			{
-                var courses = await _unitOfWork.CourseRepository.GetOwnedCourses(request.userId);
+                var courses = await _unitOfWork.CourseRepository.GetCreatedCourses(request.userId);
                 var response = CourseMapper.Mapper.Map<IEnumerable<CourseResponse>>(courses);
                 return response;
 			}
