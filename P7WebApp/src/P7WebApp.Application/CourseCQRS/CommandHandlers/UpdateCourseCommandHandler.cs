@@ -18,7 +18,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                var course = await _unitOfWork.CourseRepository.GetCourse(request.Id);
+                var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.Id);
 
                 if (course is null)
                 {

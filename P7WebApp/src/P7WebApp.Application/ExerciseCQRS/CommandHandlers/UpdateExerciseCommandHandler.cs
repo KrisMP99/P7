@@ -18,8 +18,8 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
         {
             try
             { 
-                var course = await _unitOfWork.CourseRepository.GetCourseFromExerciseGroupId(request.ExerciseGroupId);
-                course.GetExerciseGroup(request.ExerciseGroupId)
+                var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupById(request.ExerciseGroupId);
+                exerciseGroup
                     .GetExercise(request.Id)
                     .UpdateExerciseInformation(newTitle: request.Title,
                                                visibility: request.IsVisible,
@@ -27,7 +27,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
                                                newStartDate: request.StartDate,
                                                newEndDate: request.EndDate);
 
-                var affectedRows = await _unitOfWork.CourseRepository.UpdateCourse(course);
+                var affectedRows = await _unitOfWork.ExerciseGroupRepository.UpdateExerciseGroup(exerciseGroup);
 
                 return affectedRows;
             }
