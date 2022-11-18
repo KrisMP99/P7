@@ -36,6 +36,29 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
+
+        public async Task<Exercise> GetExerciseWithSubmissionsById(int id)
+        {
+
+            try
+            {
+                var exercise = await _context.Exercises.Include(e => e.Submissions).FirstOrDefaultAsync();
+                if (exercise is not null) 
+                { 
+                    return exercise;
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<Exercise> GetExerciseWithModulesById(int id)
         {
             try
