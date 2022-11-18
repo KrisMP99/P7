@@ -341,6 +341,28 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+        [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/solutions/{solutionId}/update")]
+        public async Task<IActionResult> UpdateSoltuion(UpdateSolutionCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+
+                if (result != 0)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest("Could not update the exercise");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/create-submission")]
         public async Task<IActionResult> CreateSubmission(CreateSubmissionCommand request)
