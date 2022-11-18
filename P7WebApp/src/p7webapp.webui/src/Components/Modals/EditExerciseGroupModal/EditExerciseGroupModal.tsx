@@ -12,7 +12,7 @@ export interface ShowEditExerciseGroupModal {
 
 export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, EditExerciseGroupModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
-    const [exGroup, setExGroup] = useState<ExerciseGroup>();
+    const [exGroup, setExGroup] = useState<ExerciseGroup | null>(null);
 
     const handleClose = () => setShow(false);
 
@@ -21,13 +21,14 @@ export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, Edi
         () => ({
             handleShow(exerciseGroup: ExerciseGroup, index: number) {
                 setShow(true);
+                if (exerciseGroup === null) return;
                 setExGroup(exerciseGroup);
             }
         }),
     )
 
-    return (
-        <Modal show={show} onHide={handleClose}>
+    return (!exGroup ? (<></>) :
+        (<Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => { 
                 e.preventDefault();
                 //WIP - POST TO EDIT EXERCISEGROUP
@@ -60,8 +61,10 @@ export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, Edi
                     </Button>
                 </Modal.Footer>
             </Form>
-        </Modal>
-    )
+        </Modal>)
+    );
 });
+    
+
 
 export default EditExerciseGroupModal;

@@ -15,12 +15,15 @@ export interface ShowCreateCourseModal {
 export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
     const emptyCourse: Course = {
+        id: 0,
         title: '',
         description: '',
-        ownerId: '0',
+        ownerId: 'undefined',
+        ownerName: 'undefined',
         exerciseGroups: [],
-        exercises: [],
-        private: true,
+        isPrivate: true,
+        createdDate: null,
+        modifiedDate: null
     };
     const [course, setCourse] = useState<Course>(emptyCourse);
     
@@ -46,7 +49,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => {
                 e.preventDefault();
-                createCourse(course.title, course.description, course.private);
+                createCourse(course.title, course.description, course.isPrivate);
                 props.createdCourse();
                 handleClose();
             }}>
@@ -62,8 +65,8 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
                     </Form.Group>
                     <Form.Group className="mb-3 modal-form-field">
                         <Form.Label>Private:</Form.Label>
-                        <Form.Check type="switch" checked={course.private} onChange={(e) => {
-                            setCourse({...course, private: e.target.checked});
+                        <Form.Check type="switch" checked={course.isPrivate} onChange={(e) => {
+                            setCourse({...course, isPrivate: e.target.checked});
                         }} />
                     </Form.Group>
                     <Form.Group className="mb-3">

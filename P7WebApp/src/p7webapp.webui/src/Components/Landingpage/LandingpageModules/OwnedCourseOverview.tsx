@@ -39,7 +39,6 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
         fetchOwnedCourses((courses) =>{
             setOwnedCourses(courses);
         });
-        console.log(ownedCourses);
     }, []);
 
     useEffect(() => {
@@ -47,7 +46,6 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
             return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
         }).length / coursesPerPage)
         setMaxPages(endPage === 0 ? 1 : endPage);
-        console.log(ownedCourses)
     }, [ownedCourses.length, coursesPerPage, search]);
 
     return (
@@ -211,7 +209,6 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
             <CreateCourseModal 
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
-                    console.log("HHH")
                     fetchOwnedCourses((courses) => {
                         setOwnedCourses(courses);
                     });

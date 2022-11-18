@@ -165,7 +165,6 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
 }
 
 async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => void) {
-    console.log("FetchAttendedCourses");
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {

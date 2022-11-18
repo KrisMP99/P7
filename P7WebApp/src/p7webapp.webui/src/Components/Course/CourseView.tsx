@@ -32,12 +32,15 @@ export interface Exercise {
 }
 
 export interface Course {
+    id: number;
     title: string;
-    ownerId: string;
     description: string;
+    isPrivate: boolean;
+    ownerId: string;
+    ownerName: string | null;
     exerciseGroups: ExerciseGroup[];
-    exercises: Exercise[];
-    private: boolean;
+    createdDate: Date | null;
+    modifiedDate: Date | null;
 }
 
 interface CourseProps {
@@ -50,10 +53,10 @@ export default function CourseView(props: CourseProps) {
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const [course, setCourse] = useState<Course | null>(null);
-    const [editedCourse, setEditedCourse] = useState<Course | null>({...course!});
+    const [editedCourse, setEditedCourse] = useState<Course | null>(null);
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
@@ -70,10 +73,11 @@ export default function CourseView(props: CourseProps) {
             setIsLoading(true);
             fetchCourse(courseId, (course) => {
                 setCourse(course);
-                setIsLoading(false);
+                setEditedCourse(course);
+                setIsLoading(false)
             });
         }
-    }, [courseId]);
+    }, []);
 
     useEffect(() => {
         if (props.user.id === course?.ownerId && !isOwner) {
@@ -83,12 +87,12 @@ export default function CourseView(props: CourseProps) {
     }, [course?.ownerId, props.user.id, isOwner]);
 
     return isLoading ? 
-        <></> :
+        (<></>) :
         (<Container>
             <div className='course-title-container'>
                 <input
                     className={'course-title ' + (!isEditMode && 'input-field')}
-                    value={editedCourse ? editedCourse.title : 'Title'}
+                    value={editedCourse?.title ? editedCourse.title : 'Title'}
                     onChange={(e) => {
                         if (editedCourse && e.target.value !== editedCourse?.title) {
                             setEditedCourse({ ...editedCourse, title: e.target.value });
@@ -291,10 +295,11 @@ async function fetchCourse(courseId: number, callback: (course: Course) => void)
                 }
                 return res.json();
             })
-            .then((data) => console.log(data));
-            // .then((course: Course) => {
-            //     callback(course);
-            // });
+            .then((course: Course) => {
+                console.log(course)
+                callback(course);
+                
+            });
     } catch (error) {
         alert(error);
     }

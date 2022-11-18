@@ -70,6 +70,7 @@ function makeExerciseGroupElements (exercisegroups: ExerciseGroup[],
                                     ): JSX.Element[] {
 
         let exerciseGroupElements: JSX.Element[] = [];
+        if(exercisegroups.length < 1) return exerciseGroupElements;
 
         exerciseGroupElements = exercisegroups.filter((exGroup: ExerciseGroup) => {
 
