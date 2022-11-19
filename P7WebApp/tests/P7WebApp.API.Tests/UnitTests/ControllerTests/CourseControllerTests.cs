@@ -64,7 +64,7 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
             mockMediator.Setup(m => m.Send(It.IsAny<GetListOfCoursesQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(courseResponses);
 
-            var result = await courseController.GetListOfCourses();
+            var result = await courseController.GetListOfCourses(5);
 
             result.Should().BeOfType<OkObjectResult>();
         }

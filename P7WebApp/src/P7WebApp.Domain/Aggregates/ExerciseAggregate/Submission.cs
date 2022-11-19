@@ -6,24 +6,21 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
     public class Submission : EntityBase
     {
-        public Submission(int submissionDraftId, int exerciseId, string title)
+        public Submission(int userId, int exerciseId, bool isSubmitted, string title)
         {
-            SubmissionDraftId = submissionDraftId;
+            UserId = userId;
             ExerciseId = exerciseId;
+            IsSubmitted = isSubmitted;
             Title = title;
             SubmitDate = DateTime.UtcNow;
         }
 
-        public int SubmissionDraftId { get; private set; }
+        public int UserId { get; set; }
         public int ExerciseId { get; private set; }
         public string Title { get; private set; }
+        public bool IsSubmitted { get; set; }
         public DateTime SubmitDate { get; private set; }
         public List<Module> Modules { get; private set; }
 
-
-        public void DeleteSubmission()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

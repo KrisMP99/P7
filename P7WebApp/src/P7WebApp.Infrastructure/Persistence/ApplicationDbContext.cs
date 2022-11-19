@@ -37,7 +37,6 @@ namespace P7WebApp.Infrastructure.Data
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<CourseRole> CourseRoles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
-        public DbSet<SubmissionDraft> SubmissionsDrafts { get; set; }
         public DbSet<Submission> Submissions { get; set; }
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<TextModule> TextModules { get; set; }

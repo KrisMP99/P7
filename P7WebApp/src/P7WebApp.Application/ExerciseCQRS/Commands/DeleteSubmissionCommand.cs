@@ -9,6 +9,7 @@ namespace P7WebApp.Application.ExerciseCQRS.Commands
 {
     public class DeleteSubmissionCommand : IRequest<int>
     {
+        public int ExerciseId { get; set; }
         public int SubmissionId { get; set; }
     }
 }

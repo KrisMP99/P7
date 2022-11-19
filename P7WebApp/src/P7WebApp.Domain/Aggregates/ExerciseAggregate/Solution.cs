@@ -37,6 +37,10 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             throw new NotImplementedException();
         }
-
+        public void EditInformation(bool isVisible, DateTime? visibleFromDate)
+        {
+            IsVisible = isVisible;
+            VisibleFromDate = visibleFromDate ?? VisibleFromDate;
+        }
     }
 }

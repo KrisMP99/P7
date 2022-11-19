@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using P7WebApp.Infrastructure.Data;
@@ -11,9 +12,11 @@ using P7WebApp.Infrastructure.Data;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221118131843_RemovedSubmissionDraft")]
+    partial class RemovedSubmissionDraft
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,30 +300,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Attendee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Attendees");
-                });
-
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -354,10 +333,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("LastModifiedById");
 
                     b.ToTable("Courses");
                 });
@@ -902,38 +877,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Attendee", b =>
-                {
-                    b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
-                        .WithMany("Attendes")
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
-                {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "LastModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("LastModifiedById");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("LastModifiedBy");
-                });
-
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
@@ -1050,8 +993,6 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
                 {
-                    b.Navigation("Attendes");
-
                     b.Navigation("CourseRoles");
 
                     b.Navigation("ExerciseGroups");

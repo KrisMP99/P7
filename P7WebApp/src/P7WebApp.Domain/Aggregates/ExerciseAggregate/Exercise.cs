@@ -103,7 +103,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
         }
 
-        public void DeleteSolution(int solutionId)
+        public void RemoveSolution(int solutionId)
         {
             try
             {
@@ -111,13 +111,29 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
             catch (Exception)
             {
-                throw new NotImplementedException();
+                throw;
             }
         }
 
         public Solution GetSolution(int solutionId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = Solution.Where(s => s.Id == solutionId).FirstOrDefault();
+                if (result is not null)
+                {
+                    return result;
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public void AddSubmission(Submission submission)
@@ -141,7 +157,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 
         }
 
-        public void DeleteSubmission(int submissionId)
+        public void RemoveSubmission(int submissionId)
         {
             try
             {
@@ -155,7 +171,23 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 
         public Submission GetSubmission(int submissionId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = Submissions.Where(s => s.Id == submissionId).FirstOrDefault();
+                if (result is not null)
+                {
+                    return result;
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
