@@ -12,7 +12,7 @@ export default function PublicCourses() {
     const [publicCourses, setPublicCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [coursesPerPage, setCoursesPerPage] = useState<number>(10);
+    const [coursesPerPage, setCoursesPerPage] = useState<number>(25);
     const [maxPages, setMaxPages] = useState<number>(1);
 
     const navigate = useNavigate();

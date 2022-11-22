@@ -22,7 +22,7 @@ function Navbar(props: NavbarProps): JSX.Element {
                             <NavLink className="nav-link" to={ props.user ? 'home' : '/' }>Home</NavLink>
                         </li>
                         {props.user && <li className="nav-item">
-                            <NavLink className="nav-link" to={ props.user ? 'home' : '/public-courses' }>All Courses</NavLink>
+                            <NavLink className="nav-link" to={ props.user ? 'public-courses' : '/' }>All Courses</NavLink>
                         </li>}
                         {!props.user ?
                             <li className="nav-item">

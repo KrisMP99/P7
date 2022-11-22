@@ -80,11 +80,6 @@ export default function App() {
                             newExercise={newExerciseCreated}
                         />
                     } />
-                    <Route path="/home" element={
-                        <Landingpage 
-                            user={user}
-                        />
-                    } />
                     <Route path="/public-courses" element={
                         <PublicCourses />
                     } />
