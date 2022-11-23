@@ -11,7 +11,6 @@ namespace P7WebApp.API.Controllers
 {
     [Route("api/courses")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class CourseController : BaseController
     {
         private readonly IMediator _mediator;
@@ -214,7 +213,6 @@ namespace P7WebApp.API.Controllers
                 else
                 {
                     return Ok(result);
-
                 }
             }
             catch (Exception ex)
@@ -264,7 +262,6 @@ namespace P7WebApp.API.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

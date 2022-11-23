@@ -50,7 +50,6 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-
         }
         public async Task<Course> GetCourseWithExerciseGroups(int courseId)
         {
@@ -132,7 +131,6 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-            
         }
 
         public async Task<IEnumerable<Course>> GetCreatedCourses(string userId)
