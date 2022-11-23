@@ -8,7 +8,10 @@ using P7WebApp.Application.CourseCQRS.Commands.CreateInviteCode;
 using P7WebApp.Application.CourseCQRS.Commands.UpdateCourse;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.ExerciseCQRS.Commands;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.UserCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
 {
@@ -125,6 +128,21 @@ namespace P7WebApp.API.Controllers
                 {
                     return BadRequest($"Could not find course with id");
                 }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("public")]
+        public async Task<IActionResult> GetPublicCourses()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetPublicCoursesQuery());
+                return Ok(result);
             }
             catch (Exception ex)
             {

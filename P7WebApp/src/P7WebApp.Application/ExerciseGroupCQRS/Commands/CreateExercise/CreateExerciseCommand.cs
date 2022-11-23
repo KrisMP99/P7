@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.Application.ExerciseGroupCQRS.Commands
+namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
 {
     public class CreateExerciseCommand : IRequest<int>
     {
@@ -30,10 +30,10 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands
         public DateTime? StartDate { get; }
         public DateTime? EndDate { get; }
         public DateTime? VisibleFrom { get; }
-        public DateTime? VisibleTo { get;}
+        public DateTime? VisibleTo { get; }
         public int LayoutId { get; }
     }
-        //public int Layout { get; set; }
-        //public IEnumerable<Module>? Modules { get; set; }
-        //public IEnumerable<Solution>? Solutions { get; set; 
+    //public int Layout { get; set; }
+    //public IEnumerable<Module>? Modules { get; set; }
+    //public IEnumerable<Solution>? Solutions { get; set; 
 }
