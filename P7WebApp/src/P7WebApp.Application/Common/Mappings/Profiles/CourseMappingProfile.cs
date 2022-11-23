@@ -17,8 +17,9 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
             CreateMap<ExerciseGroup, ExerciseGroupResponse>();
             CreateMap<CreateInviteCodeCommand, InviteCode>();
             CreateMap<CreateExerciseGroupCommand, ExerciseGroup>();
-            CreateMap<Course, CourseOverviewResponse>()
-                .ForMember(dest => dest.OwnerName, src => src.MapFrom(c => c.CreatedBy.FirstName + " " + c.CreatedBy.LastName));
+            CreateMap<Course, CourseOverviewResponse>();
+            CreateMap<String, CourseOverviewResponse>().
+                ForMember(dest => dest.OwnerName, src => src.ToString());
         }
     }
 }

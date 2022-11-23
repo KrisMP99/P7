@@ -107,7 +107,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("Use");
 
-                    b.ToTable("Keys", (string)null);
+                    b.ToTable("Keys");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.PersistedGrant", b =>
@@ -316,8 +316,6 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Attendees");
                 });
 
@@ -344,6 +342,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastModifiedById")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -354,10 +353,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("LastModifiedById");
 
                     b.ToTable("Courses");
                 });
@@ -381,7 +376,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseRoles", (string)null);
+                    b.ToTable("CourseRoles");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.InviteCode", b =>
@@ -412,7 +407,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.HasIndex("CourseId")
                         .IsUnique();
 
-                    b.ToTable("InviteCode", (string)null);
+                    b.ToTable("InviteCode");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Permission", b =>
@@ -467,7 +462,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.HasIndex("CourseRoleId")
                         .IsUnique();
 
-                    b.ToTable("Permissions", (string)null);
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Exercise", b =>
@@ -516,7 +511,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("ExerciseGroupId");
 
-                    b.ToTable("Exercises", (string)null);
+                    b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule.TestCase", b =>
@@ -538,7 +533,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("CodeEditorModuleId");
 
-                    b.ToTable("TestCases", (string)null);
+                    b.ToTable("TestCases");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module", b =>
@@ -607,7 +602,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Choices", (string)null);
+                    b.ToTable("Choices");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Question", b =>
@@ -629,7 +624,29 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("QuizModuleId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Question");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("File")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<int>("TextModuleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TextModuleId");
+
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
@@ -653,7 +670,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.ToTable("Solutions", (string)null);
+                    b.ToTable("Solutions");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Submission", b =>
@@ -725,10 +742,10 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("ExerciseGroups", (string)null);
+                    b.ToTable("ExerciseGroups");
                 });
 
-            modelBuilder.Entity("P7WebApp.Domain.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("P7WebApp.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -808,14 +825,14 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("CodeEditorModules", (string)null);
+                    b.ToTable("CodeEditorModules");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", b =>
                 {
                     b.HasBaseType("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module");
 
-                    b.ToTable("QuizModules", (string)null);
+                    b.ToTable("QuizModules");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", b =>
@@ -826,7 +843,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("TextModules", (string)null);
+                    b.ToTable("TextModules");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -840,7 +857,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -849,7 +866,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -864,7 +881,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -873,7 +890,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -885,31 +902,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
                         .WithMany("Attendes")
                         .HasForeignKey("CourseId");
-
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
-                {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "LastModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("LastModifiedById");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("LastModifiedBy");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>
@@ -986,6 +978,15 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", null)
                         .WithMany("Questions")
                         .HasForeignKey("QuizModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.Image", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", null)
+                        .WithMany("Images")
+                        .HasForeignKey("TextModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1071,6 +1072,11 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

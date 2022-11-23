@@ -11,7 +11,9 @@ namespace P7WebApp.API.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public string? UserId => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        public string? UserId => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value;
         public string? Username => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "Username")?.Value;
+        public string? FirstName => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "FirstName")?.Value;
+        public string? LastName => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "LastName")?.Value;
     }
 }
