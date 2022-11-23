@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseCQRS.Commands.CreateSolution;
+using P7WebApp.Application.ExerciseCQRS.Commands.CreateSubmission;
+using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSubmission;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Application.Responses;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
