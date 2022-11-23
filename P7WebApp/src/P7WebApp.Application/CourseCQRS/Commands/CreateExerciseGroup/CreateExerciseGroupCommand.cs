@@ -1,5 +1,6 @@
 ﻿using MediatR;
-namespace P7WebApp.Application.CourseCQRS.Commands
+
+namespace P7WebApp.Application.CourseCQRS.Commands.CreateExerciseGroup
 {
     public class CreateExerciseGroupCommand : IRequest<int>
     {
@@ -12,12 +13,12 @@ namespace P7WebApp.Application.CourseCQRS.Commands
             IsVisible = isVisible;
             VisibleFromDate = visibleFromDate;
         }
-        public int CourseId { get;  }
-        public string Title { get;  }
-        public string Description { get;  }
-        public int ExerciseGroupNumber { get;  }
-        public bool IsVisible { get;  }
-        public DateTime? VisibleFromDate { get;}
+        public int CourseId { get; }
+        public string Title { get; }
+        public string Description { get; }
+        public int ExerciseGroupNumber { get; }
+        public bool IsVisible { get; }
+        public DateTime? VisibleFromDate { get; }
 
     }
 }

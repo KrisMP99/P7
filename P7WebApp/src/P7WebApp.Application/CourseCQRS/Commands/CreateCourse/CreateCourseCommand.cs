@@ -1,10 +1,6 @@
 ﻿using MediatR;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate;
-using P7WebApp.Domain.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-namespace P7WebApp.Application.CourseCQRS.Commands
+
+namespace P7WebApp.Application.CourseCQRS.Commands.CreateCourse
 {
     public class CreateCourseCommand : IRequest<int>
     {
