@@ -46,9 +46,9 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseRouting();
 app.UseCors("CorsAllowSpecific");
 
+app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseIdentityServer();
 
 app.MapControllers();
 

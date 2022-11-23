@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.AccountCQRS.Commands.UpdateAccountProfile;
-using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.UserCQRS.Queries;
+using P7WebApp.Application.CourseCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
 {
@@ -50,12 +50,12 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpGet]
-        [Route("courses/created")]
+        [Route("{userId}/courses")]
         public async Task<IActionResult> GetUsersCreatedCourses()
         {
             try
             {
-                var result = await _mediator.Send(new GetUserCreatedCoursesQuery());
+                var result = await _mediator.Send(new GetCreatedCoursesQuery());
                 return Ok(result);
             }
             catch(Exception ex)

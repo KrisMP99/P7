@@ -3,8 +3,7 @@ using P7WebApp.Application.Responses;
 
 namespace P7WebApp.Application.CourseCQRS.Queries
 {
-    public class GetPublicCoursesQuery : IRequest<IEnumerable<CourseOverviewResponse>>
+    public class GetCreatedCoursesQuery : IRequest<IEnumerable<CourseOverviewResponse>>
     {
-
     }
 }
