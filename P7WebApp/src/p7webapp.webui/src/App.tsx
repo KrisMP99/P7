@@ -8,6 +8,7 @@ import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
 import CreateExerciseModal, { LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
 import CourseView, { Exercise } from './Components/Course/CourseView';
+import PublicCourses from './Components/PublicCourses/PublicCourses';
 
 export function getApiRoot() {
     return 'https://localhost:7001/api/';
@@ -79,13 +80,8 @@ export default function App() {
                             newExercise={newExerciseCreated}
                         />
                     } />
-                    <Route path="/exercise" element={
-                        <ExerciseBoard
-                            user={user}
-                            editMode={true}
-                            boardLayout={boardLayout}
-                            newExercise={newExerciseCreated}
-                        />
+                    <Route path="/public-courses" element={
+                        <PublicCourses />
                     } />
                 </>}
             </Routes>
