@@ -17,7 +17,6 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
             CreateMap<CreateInviteCodeCommand, InviteCode>();
             CreateMap<CreateExerciseGroupCommand, ExerciseGroup>();
             CreateMap<Course, CourseOverviewResponse>();
-
         }
     }
 }
