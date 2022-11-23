@@ -14,7 +14,7 @@ export function getApiRoot() {
 }
 
 export interface User {
-    id: number;
+    id: string;
     firstname: string;
     lastname: string;
     email: string;
@@ -44,9 +44,10 @@ export default function App() {
                 <Route path="/" element={
                     <div className="space-from-navbar">
                         <Frontpage
-                            loggedIn={() => {
+                            loggedIn={(user: User) => {
+                                //WIP - SET TOKEN BEFORE THIS FUNCTION IS CALLED
                                 setLoggedIn(true);
-                                setUser({ id: 0, firstname: "Jonas", lastname: "Noermark", email: "dummy@mail.dk", username: "jonse" });
+                                setUser(user);
                             }}
                             alreadyLoggedIn={loggedIn}
                         />
@@ -59,6 +60,17 @@ export default function App() {
                 } />
                 {user && loggedIn && 
                 <>
+                    <Route path="/home" element={
+                        <Landingpage 
+                            user={user}
+                        />
+                    } />
+                    <Route path="/course/:courseId" element={
+                        <CourseView
+                            user={user}
+                            openCreateExerciseModalRef={openCreateExerciseModalRef}
+                        />
+                    } />
                     <Route path="/exercise/:id" element={
                         <ExerciseBoard
                             user={user}
@@ -67,15 +79,12 @@ export default function App() {
                             newExercise={newExerciseCreated}
                         />
                     } />
-                    <Route path="/home" element={
-                        <Landingpage 
+                    <Route path="/exercise" element={
+                        <ExerciseBoard
                             user={user}
-                        />
-                    } />
-                    <Route path="/course/:id" element={
-                        <CourseView
-                            user={user}
-                            openCreateExerciseModalRef={openCreateExerciseModalRef}
+                            editMode={true}
+                            boardLayout={boardLayout}
+                            newExercise={newExerciseCreated}
                         />
                     } />
                 </>}
@@ -84,7 +93,7 @@ export default function App() {
             <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: LayoutType, exercise: Exercise) => {
                 setBoardLayout(layout);
                 setNewExerciseCreated(exercise);
-                navigator('/exercise/-1');
+                navigator('/exercise');
             }} />
         </div>
     );

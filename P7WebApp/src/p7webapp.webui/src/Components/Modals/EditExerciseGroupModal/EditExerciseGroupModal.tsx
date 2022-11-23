@@ -4,7 +4,7 @@ import '../../../App.css';
 import { ExerciseGroup } from '../../Course/CourseView';
 
 interface EditExerciseGroupModalProps {
-    updateExerciseGroup: (newExGroup: ExerciseGroup, index: number) => void;
+    updateExerciseGroup: (newExGroup: ExerciseGroup) => void;
 }
 export interface ShowEditExerciseGroupModal {
     handleShow: (exerciseGroup: ExerciseGroup, index: number) => void;
@@ -12,12 +12,7 @@ export interface ShowEditExerciseGroupModal {
 
 export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, EditExerciseGroupModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
-    const [index, setIndex] = useState<number>(0);
-    const [exGroup, setExGroup] = useState<ExerciseGroup>({
-        id: 0, title: '', isVisible: true
-    });
-    // const [title, setTitle] = useState<string>('');
-    // const [visible, setVisible] = useState<boolean>(true);
+    const [exGroup, setExGroup] = useState<ExerciseGroup | null>(null);
 
     const handleClose = () => setShow(false);
 
@@ -26,18 +21,18 @@ export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, Edi
         () => ({
             handleShow(exerciseGroup: ExerciseGroup, index: number) {
                 setShow(true);
+                if (exerciseGroup === null) return;
                 setExGroup(exerciseGroup);
-                setIndex(index);
             }
         }),
     )
 
-    return (
-        <Modal show={show} onHide={handleClose}>
+    return (!exGroup ? (<></>) :
+        (<Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => { 
                 e.preventDefault();
                 //WIP - POST TO EDIT EXERCISEGROUP
-                props.updateExerciseGroup(exGroup, index);
+                props.updateExerciseGroup(exGroup!);
                 handleClose();
             }}>
                 <Modal.Header closeButton>
@@ -46,14 +41,14 @@ export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, Edi
                 <Modal.Body>
                     <Form.Group className="mb-3 modal-form-field">
                         <Form.Label>Name:</Form.Label>
-                        <Form.Control className='modal-form-field-text' type="text" required value={exGroup.title} maxLength={30} onChange={(e)=>{
-                            setExGroup({...exGroup, title: e.target.value});
+                        <Form.Control className='modal-form-field-text' type="text" required value={exGroup!.title} maxLength={30} onChange={(e)=>{
+                            setExGroup({...exGroup!, title: e.target.value});
                         }}/>
                     </Form.Group>
                     <Form.Group className="mb-3 modal-form-field">
                         <Form.Label>Visible:</Form.Label>
-                        <Form.Check type="switch" checked={exGroup.isVisible} onChange={(e)=>{
-                            setExGroup({...exGroup, isVisible: !exGroup.isVisible});
+                        <Form.Check type="switch" checked={exGroup!.isVisible} onChange={(e)=>{
+                            setExGroup({...exGroup!, isVisible: !exGroup!.isVisible});
                         }}/>
                     </Form.Group>
                 </Modal.Body>
@@ -66,8 +61,10 @@ export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, Edi
                     </Button>
                 </Modal.Footer>
             </Form>
-        </Modal>
-    )
+        </Modal>)
+    );
 });
+    
+
 
 export default EditExerciseGroupModal;

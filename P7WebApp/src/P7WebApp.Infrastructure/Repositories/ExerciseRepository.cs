@@ -1,4 +1,6 @@
-﻿using P7WebApp.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.Domain.Repositories;
@@ -15,9 +17,65 @@ namespace P7WebApp.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Exercise> GetExerciseById(int id)
+        public async Task<Exercise> GetExerciseWithSolutionsById(int id)
         {
-            return new Exercise(1, "", false, 1, null, null, null, null);
+            try
+            {
+                var exercise = await _context.Exercises.Include(e => e.Solution).FirstOrDefaultAsync();
+                if (exercise is not null)
+                {
+                    return exercise;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Exercise> GetExerciseWithSubmissionsById(int id)
+        {
+            try
+            {
+                var exercise = await _context.Exercises.Include(e => e.Submissions).FirstOrDefaultAsync();
+                if (exercise is not null) 
+                { 
+                    return exercise;
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<Exercise> GetExerciseWithModulesById(int id)
+        {
+            try
+            {
+                var exercise = await _context.Exercises.Include(e => e.Modules).FirstOrDefaultAsync();
+                if (exercise is not null)
+                {
+                    return exercise;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<int> CreateModule(Module module)
@@ -36,7 +94,23 @@ namespace P7WebApp.Infrastructure.Repositories
         }
         public async Task<int> UpdateExercise(Exercise exercise)
         {
-            return 1;
+            try
+            {
+                var courseUpdate = _context.Exercises.Update(exercise);
+
+                if (courseUpdate != null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<int> DeleteModule(Module module)
@@ -46,12 +120,48 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<int> DeleteSolution(Solution solution)
         {
-            return 1;
+            try
+            {
+                var exercise = await GetExerciseWithSolutionsById(solution.ExerciseId);
+                if (exercise is not null)
+                {
+                    exercise.RemoveSolution(solution.Id);
+                    return 1;
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<int> DeleteSubmission(Submission submission)
         {
-            return 1;
+            try
+            {
+                var exercise = await GetExerciseWithSubmissionsById(submission.ExerciseId);
+                if (exercise is not null)
+                {
+                    exercise.RemoveSubmission(submission.Id);
+                    return 1;
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<Exercise> GetExerciseFromModuleId(int moduleId)

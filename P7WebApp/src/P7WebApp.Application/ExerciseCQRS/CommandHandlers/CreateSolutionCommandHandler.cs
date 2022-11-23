@@ -21,7 +21,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
             try
             {
                 var solution = ExerciseMapper.Mapper.Map<Solution>(request);
-                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseById(request.SolutionId);
+                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseWithSolutionsById(request.ExerciseId);
 
                 exercise.AddSolution(solution);
 

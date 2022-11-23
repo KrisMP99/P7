@@ -9,18 +9,21 @@ interface CreateCourseModalProps {
 }
 
 export interface ShowCreateCourseModal {
-    handleShow: (userId: number) => void;
+    handleShow: (userId: string) => void;
 }
 
 export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
     const emptyCourse: Course = {
+        id: 0,
         title: '',
         description: '',
-        ownerId: 0,
+        createdById: 'undefined',
+        ownerName: 'undefined',
         exerciseGroups: [],
-        exercises: [],
-        private: true,
+        isPrivate: true,
+        createdDate: null,
+        modifiedDate: null
     };
     const [course, setCourse] = useState<Course>(emptyCourse);
     
@@ -29,8 +32,8 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
     useImperativeHandle(
         ref,
         () => ({
-            handleShow(userId: number) {
-                setCourse({...course, ownerId: userId});
+            handleShow(userId: string) {
+                setCourse({...course, createdById: userId});
                 setShow(true);
             }
         }),
@@ -46,10 +49,10 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => {
                 e.preventDefault();
-                createCourse(course.title, course.description, course.private);
-                //WIP - POST TO CREATE COURSE
-                props.createdCourse();
-                handleClose();
+                createCourse(course.title, course.description, course.isPrivate, () => {
+                    props.createdCourse();
+                    handleClose();
+                });
             }}>
                 <Modal.Header closeButton>
                     <Modal.Title>Create course:</Modal.Title>
@@ -63,8 +66,8 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
                     </Form.Group>
                     <Form.Group className="mb-3 modal-form-field">
                         <Form.Label>Private:</Form.Label>
-                        <Form.Check type="switch" checked={course.private} onChange={(e) => {
-                            setCourse({...course, private: e.target.checked});
+                        <Form.Check type="switch" checked={course.isPrivate} onChange={(e) => {
+                            setCourse({...course, isPrivate: e.target.checked});
                         }} />
                     </Form.Group>
                     <Form.Group className="mb-3">
@@ -89,22 +92,24 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
 });
 
 
-async function createCourse(title: string, description: string, isPrivate: boolean) {
-    
+async function createCourse(title: string, description: string, isPrivate: boolean, callback: ()=>void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
             method: 'POST',
-            headers: { 
-                'Accept': 'application/json', 
-                'Content-Type': 'application/json',
-            },
+             headers: { 
+                 'Accept': 'application/json', 
+                 'Content-Type': 'application/json',
+                 'Authorization': 'Bearer ' + jwt
+             },
             body: JSON.stringify({
-                "title": title,
-                "description": description,
-                "isPrivate": isPrivate
+                'title': title,
+                'description': description,
+                'isPrivate': isPrivate
             })
         }
-        await fetch(getApiRoot() + 'Course', requestOptions)
+        await fetch(getApiRoot() + "courses", requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend - server unavailable');
@@ -112,7 +117,7 @@ async function createCourse(title: string, description: string, isPrivate: boole
                 return null;
             })
             .then(() => {
-                console.log("Successfully created course!");
+                callback();
             });
     } catch (error) {
         alert(error);

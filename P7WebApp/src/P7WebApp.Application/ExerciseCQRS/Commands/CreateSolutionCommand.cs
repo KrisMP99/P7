@@ -9,8 +9,14 @@ namespace P7WebApp.Application.ExerciseCQRS.Commands
 {
     public class CreateSolutionCommand : IRequest<int>
     {
-        public int SolutionId { get; set; }
+        public CreateSolutionCommand(bool isVisible, int exerciseId, DateTime visibleFromDate)
+        {
+            IsVisible = isVisible;
+            ExerciseId = exerciseId;
+            VisibleFromDate = visibleFromDate;
+        }
         public bool IsVisible { get; set; }
+        public int ExerciseId { get; set; }
         public DateTime VisibleFromDate { get; set; }
     }
 }

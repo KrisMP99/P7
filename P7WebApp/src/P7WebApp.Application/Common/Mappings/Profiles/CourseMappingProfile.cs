@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
@@ -14,8 +15,10 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
             CreateMap<CreateCourseCommand, Course>();
             CreateMap<Course, CourseResponse>();
             CreateMap<ExerciseGroup, ExerciseGroupResponse>();
-            CreateMap<InviteCode, InviteCodeResponse>();
+            CreateMap<CreateInviteCodeCommand, InviteCode>();
             CreateMap<CreateExerciseGroupCommand, ExerciseGroup>();
+            CreateMap<Course, CourseOverviewResponse>()
+                .ForMember(dest => dest.OwnerName, src => src.MapFrom(c => c.CreatedBy.FirstName + " " + c.CreatedBy.LastName));
         }
     }
 }

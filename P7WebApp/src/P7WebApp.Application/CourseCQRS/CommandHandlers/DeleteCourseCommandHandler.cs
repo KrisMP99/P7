@@ -24,8 +24,9 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                int deleted = await _unitOfWork.CourseRepository.DeleteCourse(request.Id);
-                return deleted;
+                await _unitOfWork.CourseRepository.DeleteCourse(request.Id);
+                int rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
+                return rowsAffected;
             }
             catch (Exception)
             { 

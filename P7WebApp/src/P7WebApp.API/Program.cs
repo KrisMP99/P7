@@ -50,8 +50,8 @@ app.UseRouting();
 app.UseCors("CorsAllowSpecific");
 
 app.UseAuthentication();
-app.UseIdentityServer();
 app.UseAuthorization();
+app.UseIdentityServer();
 
 app.MapControllers();
 

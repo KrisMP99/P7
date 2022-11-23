@@ -22,38 +22,6 @@ export default function SignUp(): JSX.Element {
         setErrorTxt(null);
         setNewUser(emptyUser);
     }
-    const signUp = async () => {
-        console.warn("HEYO I SHOULD NOT BE RUNNING AUTOMATICALLY WITHOUT A PRESS TO SIGN UP");
-        try {
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    "username": newUser.username,
-                    "password": newUser.password,
-                    "email": newUser.email,
-                    "firstname": newUser.firstname,
-                    "lastname": newUser.lastname
-                })
-            }
-            await fetch(getApiRoot() + 'accounts/', requestOptions)
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error('Response not okay from backend - server unavailable');
-                    }
-                    return res.json();
-                })
-                .then((resp: any) => {
-                    console.log("Successfully signed up!");
-                    console.log(resp);
-                });
-        } catch (error) {
-            alert(error);
-        }
-    }
     
     return (
         <div className="col login-wrapper">
@@ -66,7 +34,9 @@ export default function SignUp(): JSX.Element {
                     setErrorTxt('Passwords do not match');
                 } 
                 else {
-                    //WIP - signup
+                    attemptSignUp(newUser, () => {
+                        navigator('/');
+                    });
                 }
             }}>
                 <div className="row mt-3">
@@ -113,4 +83,36 @@ export default function SignUp(): JSX.Element {
             </div>
         </div>
     );
+}
+
+async function attemptSignUp(newUser: NewUserForm, callback: () => void) {
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "username": newUser.username,
+                "password": newUser.password,
+                "email": newUser.email,
+                "firstname": newUser.firstname,
+                "lastname": newUser.lastname
+            })
+        }
+        await fetch(getApiRoot() + 'accounts', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then(() => {
+                console.log("Successfully signed up!");
+                callback();
+            });
+    } catch (error) {
+        alert(error);
+    }
 }

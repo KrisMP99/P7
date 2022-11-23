@@ -18,16 +18,17 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
         {
             try
             { 
-                var course = await _unitOfWork.CourseRepository.GetCourseFromExerciseGroupId(request.ExerciseGroupId);
-                course.GetExerciseGroup(request.ExerciseGroupId)
+                var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
+                exerciseGroup
                     .GetExercise(request.Id)
                     .UpdateExerciseInformation(newTitle: request.Title,
-                                               visibility: request.IsVisible,
-                                               exerciseNumber: request.ExerciseNumber,
+                                               isVisible: request.IsVisible,
+                                               newExerciseNumber: request.ExerciseNumber,
                                                newStartDate: request.StartDate,
-                                               newEndDate: request.EndDate);
+                                               newEndDate: request.EndDate,
+                                               layoutId: request.LayoutId);
 
-                var affectedRows = await _unitOfWork.CourseRepository.UpdateCourse(course);
+                var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
                 return affectedRows;
             }

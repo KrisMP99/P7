@@ -34,8 +34,4 @@
     <ProjectReference Include="..\P7WebApp.Domain\P7WebApp.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UserCQRS\QueryHandlers\" />
-  </ItemGroup>
-
 </Project>

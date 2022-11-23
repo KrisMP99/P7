@@ -1,25 +1,27 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { getApiRoot } from '../../../App';
 import '../../../App.css';
 
 interface CreateExerciseGroupModalProps {
-    updateExerciseGroups: (dummyTitle: string, dummyVisibility: boolean) => void;
+    updateExerciseGroups: () => void;
 }
 export interface ShowCreateExerciseGroupModal {
-    handleShow: () => void;
+    handleShow: (courseId: number) => void;
 }
 
 export const CreateExerciseGroupModal = forwardRef<ShowCreateExerciseGroupModal, CreateExerciseGroupModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
     const [title, setTitle] = useState<string>('');
     const [visible, setVisible] = useState<boolean>(true);
-
+    const [courseId, setCourseId] = useState<number>(-1);
     const handleClose = () => setShow(false);
 
     useImperativeHandle(
         ref,
         () => ({
-            handleShow() {
+            handleShow(currCourseId: number) {
+                setCourseId(currCourseId);
                 setShow(true);
                 setTitle('');
                 setVisible(true);
@@ -27,13 +29,49 @@ export const CreateExerciseGroupModal = forwardRef<ShowCreateExerciseGroupModal,
         }),
     )
 
+    const createExerciseGroup = async () => {
+        let jwt = sessionStorage.getItem('jwt');
+        if (jwt === null) return;
+        try {
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + jwt
+                },
+                body: JSON.stringify({
+                    "courseId": courseId,
+                    "title": title,
+                    "description": "s",
+                    "exerciseGroupNumber": 0,
+                    "isVisible": visible,
+                    "visibleFromDate": null
+                })
+            }
+            
+            await fetch(getApiRoot() + 'courses/exercise-group', requestOptions)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('Failed to create exercise group - server unavailable');
+                    }
+                    return;
+                })
+                .then(() => {
+                    console.log("Successfully created exercise group!");
+                    props.updateExerciseGroups();
+                    handleClose();
+                });
+        } catch (error) {
+            alert(error);
+        }
+    }
+
     return (
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => { 
                 e.preventDefault();
-                //WIP - POST TO CREATE EXERCISEGROUP
-                props.updateExerciseGroups(title, visible);
-                handleClose();
+                createExerciseGroup();
             }}>
                 <Modal.Header closeButton>
                     <Modal.Title>Create Exercise Group:</Modal.Title>

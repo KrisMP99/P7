@@ -17,7 +17,8 @@ import selectedTwoHorizontalImg from '../../../Images/LayoutSelected/selected_ho
 import selectedTwoLeftOneRightImg from '../../../Images/LayoutSelected/selected_2left_1right.svg';
 import selectedOneLeftTwoRightImg from '../../../Images/LayoutSelected/selected_1left_2right.svg';
 import selectedTwoLeftTwoRightImg from '../../../Images/LayoutSelected/selected_2left_2right.svg';
-import { Exercise } from '../../Course/CourseView';
+import { Exercise, ExerciseOverview } from '../../Course/CourseView';
+import { getApiRoot } from '../../../App';
 
 interface CreateExerciseModalProps {
     created: (layout: LayoutType, exercise: Exercise) => void;
@@ -41,7 +42,21 @@ export enum LayoutType {
 export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExerciseModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
     // const [exerciseGroupId, setExerciseGroupId] = useState<number>(-1);
-    const [exercise, setExercise] = useState<Exercise>({id: 0, exerciseGroupId: 0, title:'', isVisible: false});
+    // const [exercise, setExercise] = useState<Exercise>({id: 0, exerciseGroupId: 0, title:'', isVisible: false});
+    const [exercise, setExercise] = useState<ExerciseOverview>({
+        id: 0,
+        title: '',
+        isVisible: true,
+        exerciseGroupId: 0,
+        exerciseNumber: 1,
+        startDate: null,
+        endDate: null,
+        visibleFrom: null,
+        visibleTo: null,
+        createdDate: null,
+        lastModifiedDate: null,
+        layoutId: LayoutType.SINGLE
+    });
     const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
 
     const handleClose = () => setShow(false);
@@ -64,6 +79,46 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
 
     const handleChooseLayout = (type: LayoutType, left: number, right: number) => {
         setLayout(type);
+    }
+
+    const createExercise = async () => {
+        let jwt = sessionStorage.getItem('jwt');
+        if (jwt === null) return;
+        try {
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + jwt
+                },
+                body: JSON.stringify({
+                    "exerciseGroupId": '',
+                    "title": '',
+                    "isVisible": '',
+                    "exerciseNumber": '',
+                    "startDate": '',
+                    "endDate": '',
+                    "visibleFrom": '',
+                    "visibleTo": '',
+                    "createdDate": '',
+                    "lastModifiedDate": '',
+                    "layoutId": '',
+                })
+            }
+            await fetch(getApiRoot() + 'Exercise', requestOptions)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('Response not okay from backend - server unavailable');
+                    }
+                    return res.json();
+                })
+                .then((user: any) => {
+                    console.log("Successfully created exercise!");
+                });
+        } catch (error) {
+            alert(error);
+        }
     }
 
     return (

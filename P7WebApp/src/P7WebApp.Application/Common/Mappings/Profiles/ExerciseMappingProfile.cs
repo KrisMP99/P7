@@ -12,10 +12,8 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
     {
         public ExerciseMappingProfile() 
         { 
-            // I dont know what these do - help <3
             CreateMap<UpdateExerciseCommand, Exercise>();
             CreateMap<CreateSolutionCommand, Solution>();
-            CreateMap<DeleteSolutionCommand, Solution>();
             CreateMap<CreateSubmissionCommand, Submission>();
             CreateMap<DeleteSubmissionCommand, Submission>();
             CreateMap<CreateExerciseCommand, Exercise>();
