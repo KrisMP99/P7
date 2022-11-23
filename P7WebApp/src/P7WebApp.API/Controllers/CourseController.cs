@@ -214,7 +214,6 @@ namespace P7WebApp.API.Controllers
                 else
                 {
                     return Ok(result);
-
                 }
             }
             catch (Exception ex)
