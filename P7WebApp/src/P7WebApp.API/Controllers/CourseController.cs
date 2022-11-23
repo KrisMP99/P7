@@ -229,7 +229,7 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                    var result = await _mediator.Send(new DeleteExerciseGroupCommand(courseId, exerciseGroupId));
+                var result = await _mediator.Send(new DeleteExerciseGroupCommand(courseId, exerciseGroupId));
 
                 if (result == 0)
                 {
@@ -287,7 +287,6 @@ namespace P7WebApp.API.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
