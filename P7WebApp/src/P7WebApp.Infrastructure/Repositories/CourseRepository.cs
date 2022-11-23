@@ -131,7 +131,6 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-            
         }
 
         public async Task<IEnumerable<Course>> GetCreatedCourses(string userId)
