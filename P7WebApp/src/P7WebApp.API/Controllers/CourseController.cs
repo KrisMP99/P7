@@ -11,6 +11,13 @@ using P7WebApp.Application.ExerciseCQRS.Commands;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.ExerciseCQRS.Commands.CreateSolution;
+using P7WebApp.Application.ExerciseCQRS.Commands.CreateSubmission;
+using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSolution;
+using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSubmission;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateSolution;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Application.UserCQRS.Queries;
 
 namespace P7WebApp.API.Controllers

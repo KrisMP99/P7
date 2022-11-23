@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
 using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers

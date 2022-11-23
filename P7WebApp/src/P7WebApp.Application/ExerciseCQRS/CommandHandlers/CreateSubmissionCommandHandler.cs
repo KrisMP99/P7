@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
-using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseCQRS.Commands.CreateSubmission;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 
 namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
