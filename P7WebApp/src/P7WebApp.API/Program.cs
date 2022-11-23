@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
 
     options.AddPolicy("CorsAllowSpecific",
         p => p.AllowAnyHeader()
-            .WithMethods("POST")
+            .WithMethods("POST", "GET", "DELETE")
             .AllowAnyOrigin()
         );
 });

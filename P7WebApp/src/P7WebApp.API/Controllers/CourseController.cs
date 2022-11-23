@@ -231,7 +231,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpDelete]
-        [Route("course/{courseId}/exercise-group/{exerciseGroupId}")]
+        [Route("{courseId}/exercise-group/{exerciseGroupId}")]
         public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int courseId, [FromRoute] int exerciseGroupId)
         {
             try

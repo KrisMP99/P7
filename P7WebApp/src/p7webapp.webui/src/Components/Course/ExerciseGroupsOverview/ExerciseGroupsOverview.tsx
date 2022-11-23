@@ -119,6 +119,7 @@ function makeExerciseGroupElements (exercisegroups: ExerciseGroup[],
                                 </Button>
                                 <Button size='sm' className='btn-3' variant='danger' onClick={(e) => {
                                     e.stopPropagation();
+                                    console.log("GROUP ID: " + exGroup.id)
                                     deleteExerciseModalRef.current?.handleShow(exGroup.title, exGroup.id, DeleteElementType.EXERCISEGROUP)
                                 }}>
                                     <Trash />
