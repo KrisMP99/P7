@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using P7WebApp.Application.Common.Interfaces.Identity;
-using P7WebApp.Domain.Identity;
+using P7WebApp.Application.Responses.Account;
 using P7WebApp.Infrastructure.Common.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,7 +23,7 @@ namespace P7WebApp.Infrastructure.Identity.Services
             _token = tokenOptions.Value;
         }
 
-        public async Task<(ApplicationUser? User, string? Token)> AuthenticateAsync(string username, string password)
+        public async Task<TokenResponse> AuthenticateAsync(string username, string password)
         {
             try
             {
@@ -36,39 +36,63 @@ namespace P7WebApp.Infrastructure.Identity.Services
                     if (signIn.Succeeded)
                     {
                         byte[] secret = Encoding.ASCII.GetBytes(_token.Secret);
-                        var handler = new JwtSecurityTokenHandler();
+                        string token = SetToken(issuer: _token.Issuer, audience: _token.Audience, expires: _token.Expiry, secret: secret, user: user);
+                        
+                        var tokenResponse = new TokenResponse(token);
 
-                        var descriptor = new SecurityTokenDescriptor
-                        {
-                            Issuer = _token.Issuer,
-                            Audience = _token.Audience,
-                            Subject = new ClaimsIdentity(new Claim[]
-                            {
-                            new Claim("UserId", user.Id),
-                            new Claim("FirstName", $"{user.FirstName}"),
-                            new Claim("LastName", $"{user.FirstName}"),
-                            new Claim("UserName", user.UserName),
-                            new Claim(ClaimTypes.Email, user.Email),
-                            new Claim(ClaimTypes.NameIdentifier, user.Id)
-                            }),
-                            Expires = DateTime.UtcNow.AddMinutes(_token.Expiry),
-                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
-                        };
-
-                        var jwtToken = handler.CreateToken(descriptor);
-
-                        //await _userManager.UpdateAsync(user);
-
-                        return (user, handler.WriteToken(jwtToken));
+                        return tokenResponse;
                     }
                 }
 
-                return (null, null);
+                return null;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+
+        public string SetToken(string issuer, string audience, int expires, byte[] secret, ApplicationUser user)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience) || expires == 0 || secret is null)
+                {
+                    throw new Exception("Was given invalid date for creation of token"); // TODO: Make own exception?
+                }
+                else
+                {
+                    var handler = new JwtSecurityTokenHandler();
+                    var descriptor = new SecurityTokenDescriptor
+                    {
+                        Issuer = issuer,
+                        Audience = audience,
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim("UserId", user.Id),
+                            new Claim("FirstName", $"{user.FirstName}"),
+                            new Claim("LastName", $"{user.LastName}"),
+                            new Claim("Username", user.UserName),
+                            new Claim(ClaimTypes.Email, user.Email),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id)
+                        }),
+                        Expires = DateTime.UtcNow.AddMinutes(expires),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
+                    };
+
+                    var jwtToken = handler.CreateToken(descriptor);
+                    var writtenToken = handler.WriteToken(jwtToken);
+
+                    return writtenToken;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
     }
 }

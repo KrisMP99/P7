@@ -1,10 +1,9 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using P7WebApp.Domain.Identity;
+﻿using P7WebApp.Application.Responses.Account;
 
 namespace P7WebApp.Application.Common.Interfaces.Identity
 {
     public interface ITokenService
     {
-        Task<(ApplicationUser User, string Token)> AuthenticateAsync(string username, string password);
+        Task<TokenResponse> AuthenticateAsync(string username, string password);
     }
 }

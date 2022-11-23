@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using P7WebApp.Application.UserCQRS.Commands;
-using P7WebApp.Application.UserCQRS.Commands.CreateUser;
-using P7WebApp.Application.UserCQRS.Commands.SignIn;
+using P7WebApp.Application.AccountCQRS.Commands;
+using P7WebApp.Application.AccountCQRS.Commands.CreateUser;
+using P7WebApp.Application.AccountCQRS.Commands.SignIn;
 
 namespace P7WebApp.API.Controllers
 {
@@ -17,7 +17,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] CreateUserCommand request)
+        public async Task<IActionResult> Register([FromBody] CreateAccountCommand request)
         {
             try
             {

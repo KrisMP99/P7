@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.VisualStudio.Services.Users;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Common;
-using P7WebApp.Domain.Identity;
-using System.Security.Claims;
 
 namespace P7WebApp.Infrastructure.Persistence.Intercepters
 {
@@ -43,6 +38,7 @@ namespace P7WebApp.Infrastructure.Persistence.Intercepters
             if (context == null) return;
 
             var userId = _currentUserService.UserId;
+
 
             foreach (var entry in context.ChangeTracker.Entries<AuditableEntityBase>())
             {

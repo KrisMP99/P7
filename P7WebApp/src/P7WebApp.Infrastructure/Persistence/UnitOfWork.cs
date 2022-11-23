@@ -1,5 +1,4 @@
-﻿
-using P7WebApp.Application.Common.Interfaces;
+﻿using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Repositories;
 
@@ -31,7 +30,7 @@ namespace P7WebApp.Infrastructure.Persistence
             {
                 return await _context.SaveChangesAsync(cancellationToken);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
