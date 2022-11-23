@@ -26,7 +26,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         public DateTime LastModifiedDate { get; private set; }
         public bool IsVisible { get; private set; }
         public DateTime? VisibleFromDate { get; private set; }
-        public List<Exercise> Exercises { get; private set; }
+        public List<Exercise> Exercises { get; private set; } = new List<Exercise>();
 
         public Exercise GetExercise(int exerciseId)
         {
@@ -49,11 +49,12 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             }
         }
 
-        public IEnumerable<Exercise> GetAllExercises()
+        public List<Exercise> GetAllExercises()
         {
             return Exercises;
         }
 
+        // should we have null checks here, or is that done in the validators?
         public void EditInformation(string newTitle, string newDescription, int newExerciseGroupNumber, bool isVisible, DateTime newBecomeVisibleAt)
         {
             Title = String.IsNullOrEmpty(newTitle) ? throw new ArgumentNullException("Title has not been set.") : newTitle;

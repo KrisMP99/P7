@@ -21,7 +21,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         public List<CourseRole> CourseRoles { get; private set; } = new List<CourseRole>();
         public List<Attendee> Attendes { get; private set; } = new List<Attendee>();
         
-
+        // Should we have argument null checks as done in ExerciseGroup.cs?
         public void EditInformation(string newTitle, string newDescription, bool newVisibility)
         {
             Title = newTitle;

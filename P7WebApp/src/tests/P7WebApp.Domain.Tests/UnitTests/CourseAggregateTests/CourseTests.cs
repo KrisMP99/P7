@@ -51,7 +51,9 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             result
                 .Should()
-                .BeOfType<ExerciseGroup>();
+                .BeOfType<ExerciseGroup>()
+                .And
+                .Be(exerciseGroup);
         }
 
         [Theory]
@@ -71,7 +73,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(100)]
-        public void GetExerciseGroup_Success_ReturnsOneExerciseGroupWithCorrectCourseIdGivenCorrectCourseIdAndExerciseGroupId(int courseId)
+        public void GetExerciseGroup_Success_ReturnsOneExerciseGroupWithCorrectCourseIdGivenCorrectCourseIdAndExerciseGroupIdAndExerciseGroupListIsNotEmpty(int courseId)
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);
 
@@ -101,7 +103,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(100)]
-        public void GetExerciseGroup_Success_ReturnsOneExerciseGroupWithCorrectExerciseGroupIdGivenCorrectExerciseGroupIds(int exerciseGroupId)
+        public void GetExerciseGroup_Success_ReturnsOneExerciseGroupWithCorrectExerciseGroupIdGivenCorrectExerciseGroupId(int exerciseGroupId)
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);
 
@@ -128,7 +130,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
-        public void GetExerciseGroup_Fail_ThrowsExceptionWhenNoExerciseGroupIsFoundGivenWrongGroupExerciseIdAndExerciseGroupListIsNotEmptyd()
+        public void GetExerciseGroup_Fail_ThrowsExceptionWhenNoExerciseGroupIsFoundGivenWrongGroupExerciseIdAndExerciseGroupListIsNotEmpty()
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);
 
