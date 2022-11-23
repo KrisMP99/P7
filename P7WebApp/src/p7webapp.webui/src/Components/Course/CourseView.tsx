@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Container, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, Container, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { getApiRoot, User } from '../../App';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -68,15 +68,16 @@ export default function CourseView(props: CourseProps) {
     const [editedCourse, setEditedCourse] = useState<Course | null>(null);
     const [isOwner, setIsOwner] = useState<boolean>(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
+    const [inviteCode, setInviteCode] = useState<string>("");
 
     const params = useParams();
     const courseId = params.courseId ? Number(params.courseId) : undefined;
-    const navigator = useNavigate();
+    const navigate = useNavigate();
     
     //Checks if the Course ID isn't present in the URL (shouldn't happen)
     useEffect(() => {
         if (!courseId) {
-            navigator('/home')
+            navigate('/home')
         }
         else {
             setIsLoading(true);
@@ -129,18 +130,37 @@ export default function CourseView(props: CourseProps) {
                             </>
                         }
                         {!isEditMode &&
-                            <OverlayTrigger
-                                placement='top'
-                                overlay={
-                                    <Tooltip>
-                                        Edit title and/or description
-                                    </Tooltip>
+                            <>
+                                {inviteCode !== "" && 
+                                <>
+                                    <Form.Control readOnly value={inviteCode}/>
+                                    {/* <Toast delay={2500} autohide>
+                                        <Toast.Body>Invite code copied to clipboard</Toast.Body>
+                                    </Toast> */}
+                                </>
                                 }
-                            >
-                                <Button size='sm' className='btn-3' onClick={() => setIsEditMode(true)}>
-                                    <Gear />
+                                <Button size='sm' className='btn-3' onClick={() => {
+                                    getInviteCode(course?.id!, (inviteCode) => 
+                                    {
+                                        navigator.clipboard.writeText(inviteCode);
+                                        setInviteCode(inviteCode);
+                                    })
+                                }}>
+                                    Get invite code
                                 </Button>
-                            </OverlayTrigger>
+                                <OverlayTrigger
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip>
+                                            Edit title and/or description
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Button size='sm' className='btn-3' onClick={() => setIsEditMode(true)}>
+                                        <Gear />
+                                    </Button>
+                                </OverlayTrigger>
+                            </>
                         }
                     </div>
                 )}
@@ -312,6 +332,32 @@ async function fetchCourse(courseId: number, callback: (course: Course) => void)
             .then((course: Course) => {
                 console.log(course)
                 callback(course);
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+async function getInviteCode(courseId: number, callback: (inviteCode: string) => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            }
+        }
+        await fetch(getApiRoot() + 'courses/' + courseId + "/invite-code", requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then((inviteCode: string) => {
+                callback(inviteCode);
             });
     } catch (error) {
         alert(error);
