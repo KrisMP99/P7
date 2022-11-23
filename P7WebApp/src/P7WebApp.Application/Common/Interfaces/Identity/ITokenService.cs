@@ -1,9 +1,9 @@
-﻿using P7WebApp.Domain.Aggregates.AccountAggregate;
+﻿using P7WebApp.Application.Responses.Account;
 
 namespace P7WebApp.Application.Common.Interfaces.Identity
 {
     public interface ITokenService
     {
-        Task<Account> AuthenticateAsync(string username, string password);
+        Task<TokenResponse> AuthenticateAsync(string username, string password);
     }
 }

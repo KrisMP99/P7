@@ -11,8 +11,8 @@ using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
-using P7WebApp.Domain.Identity;
 using P7WebApp.Infrastructure.Common;
+using P7WebApp.Infrastructure.Identity;
 
 namespace P7WebApp.Infrastructure.Persistence
 {

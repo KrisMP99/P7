@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using P7WebApp.Application.Responses;
+using P7WebApp.Application.Responses.Account;
 
 namespace P7WebApp.Application.AccountCQRS.Commands.SignIn
 {

@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Microsoft.VisualStudio.Services.WebApi.Jwt;
 using P7WebApp.Application.AccountCQRS.Commands.SignIn;
-using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Interfaces.Identity;
-using P7WebApp.Application.Common.Mappings;
-using P7WebApp.Application.Responses;
+using P7WebApp.Application.Responses.Account;
 
 namespace P7WebApp.Application.AccountCQRS.CommandHandlers
 {
@@ -21,22 +19,15 @@ namespace P7WebApp.Application.AccountCQRS.CommandHandlers
         {
             try
             {
-                var account = await _tokenService.AuthenticateAsync(username: request.Username, password: request.Password);
+                var tokenResponse = await _tokenService.AuthenticateAsync(username: request.Username, password: request.Password);
 
-                if (account is null)
+                if (tokenResponse is null)
                 {
                     throw new InvalidCredentialsException("Username or password is incorrect");
                 }
                 else
                 {
-                    var response = AuthenticateMapper.Mapper.Map<TokenResponse>(account);
-
-                    if (response is null)
-                    {
-                        throw new Exception("Could not map user account to token response.");
-                    }
-
-                    return response;
+                    return tokenResponse;
                 }
             }
             catch (Exception)

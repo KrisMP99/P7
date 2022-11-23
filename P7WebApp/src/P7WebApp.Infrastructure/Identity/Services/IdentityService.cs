@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Common.Models;
-using P7WebApp.Domain.Aggregates.AccountAggregate;
-using P7WebApp.Domain.Identity;
-
 namespace P7WebApp.Infrastructure.Identity.Services
 {
     public class IdentityService : IIdentityService
@@ -75,27 +72,6 @@ namespace P7WebApp.Infrastructure.Identity.Services
         public async Task<Result> DeleteUserAsync(ApplicationUser user)
         {
             var result = await _userManager.DeleteAsync(user);
-
-            return result.ToApplicationResult();
-        }
-
-        public async Task<Account> GetUserAccount(string userId)
-        {
-            var user = await _signInManager.UserManager.FindByIdAsync(userId);
-
-            var account = new Account(user.Id, user.UserName, new AccountProfile(user.FirstName, user.LastName, user.Email));
-
-            return account;
-        }
-
-        public async Task<Result> UpdateAccountProfile(Account account)
-        {
-            var user = await _signInManager.UserManager.FindByIdAsync(account.UserId);
-            user.Email = account.Profile.Email;
-            user.FirstName = account.Profile.FirstName;
-            user.LastName = account.Profile.LastName;
-
-            var result = await _signInManager.UserManager.UpdateAsync(user);
 
             return result.ToApplicationResult();
         }
