@@ -14,7 +14,6 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
         { 
             CreateMap<UpdateExerciseCommand, Exercise>();
             CreateMap<CreateSolutionCommand, Solution>();
-            CreateMap<DeleteSolutionCommand, Solution>();
             CreateMap<CreateSubmissionCommand, Submission>();
             CreateMap<DeleteSubmissionCommand, Submission>();
             CreateMap<CreateExerciseCommand, Exercise>();

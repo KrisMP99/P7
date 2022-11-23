@@ -1,38 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Table, Form, InputGroup, Pagination, Button } from 'react-bootstrap';
-import { ArrowCounterclockwise } from 'react-bootstrap-icons';
-import { useNavigate } from 'react-router-dom';
-import { getApiRoot } from '../../../App';
-import { CourseOverview } from './OwnedCourseOverview';
-import './OwnedCourseOverview.css';
+import React, { useEffect, useState } from 'react'
+import { Container, Tabs, Tab, Form, InputGroup, Pagination, Table, Button } from 'react-bootstrap'
+import { ArrowCounterclockwise } from 'react-bootstrap-icons'
+import { useNavigate } from 'react-router-dom'
+import { getApiRoot } from '../../App'
+import AttendeeCourseOverview from '../Landingpage/LandingpageModules/AttendeeCourseOverview'
+import OwnedCourseOverview, { CourseOverview } from '../Landingpage/LandingpageModules/OwnedCourseOverview'
+import CreateCourseModal from '../Modals/CreateCourseModal/CreateCourseModal'
 
-interface AttendedCourseOverviewProps {
-    
-}
-
-export default function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element {
-    
+export default function PublicCourses() {
     const [search, setSearch] = useState('');
-    const [attendedCourses, setAttendedCourses] = useState<CourseOverview[]>([]);
+    const [publicCourses, setPublicCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [coursesPerPage, setCoursesPerPage] = useState<number>(10);
+    const [coursesPerPage, setCoursesPerPage] = useState<number>(25);
     const [maxPages, setMaxPages] = useState<number>(1);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchAttendedCourses((courses) =>{
-            setAttendedCourses(courses);
+        fetchPublicCourses((courses) =>{
+            setPublicCourses(courses);
         });
     }, []);
     
     useEffect(() => {  
-        let endPage = Math.ceil(attendedCourses.filter((item: { title: string; }) => {
+        let endPage = Math.ceil(publicCourses.filter((item: { title: string; }) => {
             return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
         }).length / coursesPerPage);
         setMaxPages(endPage === 0 ? 1 : endPage);
-    }, [attendedCourses.length, coursesPerPage, search]);
+    }, [publicCourses.length, coursesPerPage, search]);
 
     return (
         <Container>
@@ -55,8 +51,8 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                     </div>
                     <div className="col text-end">
                         <Button className="btn-2" onClick={()=>{
-                            fetchAttendedCourses((courses) => {
-                                setAttendedCourses(courses);
+                            fetchPublicCourses((courses) => {
+                                setPublicCourses(courses);
                             })
                         }}>
                             <ArrowCounterclockwise />
@@ -75,7 +71,7 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                             </tr>
                         </thead>
                         <tbody>
-                            {attendedCourses.filter((item: { title: string; }) => {
+                            {publicCourses.filter((item: { title: string; }) => {
                                 return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
                             }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
                                 <tr key={item.id} onClick={() => { navigate('/course/' + item.id) }}>
@@ -158,7 +154,7 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                     <Form.Select size="sm" style={{ height: '100%' }} value={coursesPerPage}
                         onChange={(e) => {
                             setCoursesPerPage(Number(e.target.value));
-                            setMaxPages(Math.ceil(attendedCourses.length / Number(e.target.value)))
+                            setMaxPages(Math.ceil(publicCourses.length / Number(e.target.value)))
                             setCurrentPage(0);
                         }
                         }>
@@ -174,29 +170,30 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     );
 }
 
-async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => void) {
-    let jwt = sessionStorage.getItem('jwt');
-    if (jwt === null) return;
+async function fetchPublicCourses(callback: (courses: CourseOverview[]) => void) {
+    const jwt = sessionStorage.getItem('jwt');
+    if (sessionStorage.getItem('jwt') === null) return;
+
     try {
-       const requestOptions = {
-           method: 'GET',
-           headers: { 
-               'Accept': 'application/json', 
-               'Content-Type': 'application/json',
-               'Authorization': 'Bearer ' + jwt
-           }
-       }
-       await fetch(getApiRoot() + 'users/courses/attended', requestOptions)
-           .then((res) => {
-               if (!res.ok) {
-                   throw new Error('Response not okay from backend');
-               }
-               return res.json();
-           })
-           .then((courses: CourseOverview[]) => {
-               callback(courses);
-           });
+        const requestOptions = {
+            method: 'GET',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            }
+        }
+        await fetch(getApiRoot() + 'courses/public', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then((courseOverviews: CourseOverview[]) => {
+                callback(courseOverviews);
+            });
     } catch (error) {
-       alert(error);
+        
     }
 }

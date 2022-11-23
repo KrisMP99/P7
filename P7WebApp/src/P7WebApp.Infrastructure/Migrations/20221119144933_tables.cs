@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace P7WebApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addtables : Migration
+    public partial class tables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,25 +54,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    IsPrivate = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedById = table.Column<string>(type: "text", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    LastModifiedById = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -129,19 +111,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PersistedGrants", x => x.Key);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubmissionsDrafts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubmissionsDrafts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -248,6 +217,61 @@ namespace P7WebApp.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    IsPrivate = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedById = table.Column<string>(type: "text", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModifiedById = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Courses_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Courses_AspNetUsers_LastModifiedById",
+                        column: x => x.LastModifiedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Attendees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    CourseId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attendees_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attendees_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -406,9 +430,10 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SubmissionDraftId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     ExerciseId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
+                    IsSubmitted = table.Column<bool>(type: "boolean", nullable: false),
                     SubmitDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
@@ -418,12 +443,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         name: "FK_Submissions_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Submissions_SubmissionsDrafts_SubmissionDraftId",
-                        column: x => x.SubmissionDraftId,
-                        principalTable: "SubmissionsDrafts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -439,7 +458,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     Position = table.Column<int>(type: "integer", nullable: false),
                     ExerciseId = table.Column<int>(type: "integer", nullable: true),
                     SolutionId = table.Column<int>(type: "integer", nullable: true),
-                    SubmissionDraftId = table.Column<int>(type: "integer", nullable: true),
                     SubmissionId = table.Column<int>(type: "integer", nullable: true),
                     Code = table.Column<string>(type: "text", nullable: false)
                 },
@@ -455,11 +473,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         name: "FK_CodeEditorModules_Solutions_SolutionId",
                         column: x => x.SolutionId,
                         principalTable: "Solutions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_CodeEditorModules_SubmissionsDrafts_SubmissionDraftId",
-                        column: x => x.SubmissionDraftId,
-                        principalTable: "SubmissionsDrafts",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CodeEditorModules_Submissions_SubmissionId",
@@ -479,7 +492,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     Position = table.Column<int>(type: "integer", nullable: false),
                     ExerciseId = table.Column<int>(type: "integer", nullable: true),
                     SolutionId = table.Column<int>(type: "integer", nullable: true),
-                    SubmissionDraftId = table.Column<int>(type: "integer", nullable: true),
                     SubmissionId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -494,11 +506,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         name: "FK_QuizModules_Solutions_SolutionId",
                         column: x => x.SolutionId,
                         principalTable: "Solutions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_QuizModules_SubmissionsDrafts_SubmissionDraftId",
-                        column: x => x.SubmissionDraftId,
-                        principalTable: "SubmissionsDrafts",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_QuizModules_Submissions_SubmissionId",
@@ -518,7 +525,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     Position = table.Column<int>(type: "integer", nullable: false),
                     ExerciseId = table.Column<int>(type: "integer", nullable: true),
                     SolutionId = table.Column<int>(type: "integer", nullable: true),
-                    SubmissionDraftId = table.Column<int>(type: "integer", nullable: true),
                     SubmissionId = table.Column<int>(type: "integer", nullable: true),
                     Text = table.Column<string>(type: "text", nullable: false)
                 },
@@ -534,11 +540,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         name: "FK_TextModules_Solutions_SolutionId",
                         column: x => x.SolutionId,
                         principalTable: "Solutions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TextModules_SubmissionsDrafts_SubmissionDraftId",
-                        column: x => x.SubmissionDraftId,
-                        principalTable: "SubmissionsDrafts",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_TextModules_Submissions_SubmissionId",
@@ -583,6 +584,26 @@ namespace P7WebApp.Infrastructure.Migrations
                         name: "FK_Question_QuizModules_QuizModuleId",
                         column: x => x.QuizModuleId,
                         principalTable: "QuizModules",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Image",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TextModuleId = table.Column<int>(type: "integer", nullable: false),
+                    File = table.Column<byte[]>(type: "bytea", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Image", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Image_TextModules_TextModuleId",
+                        column: x => x.TextModuleId,
+                        principalTable: "TextModules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -646,6 +667,16 @@ namespace P7WebApp.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attendees_CourseId",
+                table: "Attendees",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendees_UserId",
+                table: "Attendees",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Choices_QuestionId",
                 table: "Choices",
                 column: "QuestionId");
@@ -661,11 +692,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 column: "SolutionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CodeEditorModules_SubmissionDraftId",
-                table: "CodeEditorModules",
-                column: "SubmissionDraftId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CodeEditorModules_SubmissionId",
                 table: "CodeEditorModules",
                 column: "SubmissionId");
@@ -674,6 +700,16 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "IX_CourseRoles_CourseId",
                 table: "CourseRoles",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_CreatedById",
+                table: "Courses",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_LastModifiedById",
+                table: "Courses",
+                column: "LastModifiedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -695,6 +731,11 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "IX_Exercises_ExerciseGroupId",
                 table: "Exercises",
                 column: "ExerciseGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_TextModuleId",
+                table: "Image",
+                column: "TextModuleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InviteCode_CourseId",
@@ -749,11 +790,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 column: "SolutionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizModules_SubmissionDraftId",
-                table: "QuizModules",
-                column: "SubmissionDraftId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_QuizModules_SubmissionId",
                 table: "QuizModules",
                 column: "SubmissionId");
@@ -769,11 +805,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Submissions_SubmissionDraftId",
-                table: "Submissions",
-                column: "SubmissionDraftId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TestCases_CodeEditorModuleId",
                 table: "TestCases",
                 column: "CodeEditorModuleId");
@@ -787,11 +818,6 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "IX_TextModules_SolutionId",
                 table: "TextModules",
                 column: "SolutionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TextModules_SubmissionDraftId",
-                table: "TextModules",
-                column: "SubmissionDraftId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TextModules_SubmissionId",
@@ -818,10 +844,16 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Attendees");
+
+            migrationBuilder.DropTable(
                 name: "Choices");
 
             migrationBuilder.DropTable(
                 name: "DeviceCodes");
+
+            migrationBuilder.DropTable(
+                name: "Image");
 
             migrationBuilder.DropTable(
                 name: "InviteCode");
@@ -839,16 +871,13 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "TestCases");
 
             migrationBuilder.DropTable(
-                name: "TextModules");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Question");
 
             migrationBuilder.DropTable(
-                name: "Question");
+                name: "TextModules");
 
             migrationBuilder.DropTable(
                 name: "CourseRoles");
@@ -869,13 +898,13 @@ namespace P7WebApp.Infrastructure.Migrations
                 name: "Exercises");
 
             migrationBuilder.DropTable(
-                name: "SubmissionsDrafts");
-
-            migrationBuilder.DropTable(
                 name: "ExerciseGroups");
 
             migrationBuilder.DropTable(
                 name: "Courses");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropSequence(
                 name: "ModuleSequence");

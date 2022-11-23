@@ -19,7 +19,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
         {
             try
             {
-                var course = await _unitOfWork.CourseRepository.GetCourse(request.CourseId);
+                var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.CourseId);
 
                 if (course is null)
                 {
@@ -27,17 +27,15 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
                 }
                 else
                 {
-                    course.GetExerciseGroup(request.CourseId)
+                    course.GetExerciseGroup(request.Id)
                         .EditInformation(newTitle: request.Title, newDescription: request.Description, isVisible: request.IsVisible, newBecomeVisibleAt: request.BecomesVisibleAt, newExerciseGroupNumber: request.ExerciseGroupNumber);
+                    int rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
-                    int affectedRows = await _unitOfWork.CourseRepository.UpdateCourse(course);
-
-                    return affectedRows;
+                    return rowsAffected;
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

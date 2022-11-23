@@ -3,6 +3,7 @@
     public class CourseOverviewResponse
     {
         public int Id { get; set; }
+        public string OwnerId { get; set; }
         public string Title { get; set; }
         public bool IsPrivate { get; set; }
         public DateTime CreatedDate { get; set; }

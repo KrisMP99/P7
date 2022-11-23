@@ -12,8 +12,8 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221117113130_add_tables")]
-    partial class addtables
+    [Migration("20221119144933_tables")]
+    partial class tables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -300,6 +300,30 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Attendee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Attendees");
+                });
+
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -333,6 +357,10 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LastModifiedById");
 
                     b.ToTable("Courses");
                 });
@@ -541,9 +569,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<int?>("SolutionId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SubmissionDraftId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("SubmissionId")
                         .HasColumnType("integer");
 
@@ -555,8 +580,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.HasIndex("ExerciseId");
 
                     b.HasIndex("SolutionId");
-
-                    b.HasIndex("SubmissionDraftId");
 
                     b.HasIndex("SubmissionId");
 
@@ -612,6 +635,28 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.ToTable("Question");
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("File")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<int>("TextModuleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TextModuleId");
+
+                    b.ToTable("Image");
+                });
+
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
                 {
                     b.Property<int>("Id")
@@ -647,8 +692,8 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<int>("ExerciseId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SubmissionDraftId")
-                        .HasColumnType("integer");
+                    b.Property<bool>("IsSubmitted")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("SubmitDate")
                         .HasColumnType("timestamp without time zone");
@@ -657,30 +702,14 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ExerciseId");
 
-                    b.HasIndex("SubmissionDraftId");
-
                     b.ToTable("Submissions");
-                });
-
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.SubmissionDraft", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SubmissionsDrafts");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseGroupAggregate.ExerciseGroup", b =>
@@ -876,6 +905,38 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Attendee", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
+                        .WithMany("Attendes")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "LastModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("LastModifiedBy");
+                });
+
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
@@ -931,10 +992,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         .WithMany("Modules")
                         .HasForeignKey("SolutionId");
 
-                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.SubmissionDraft", null)
-                        .WithMany("Modules")
-                        .HasForeignKey("SubmissionDraftId");
-
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Submission", null)
                         .WithMany("Modules")
                         .HasForeignKey("SubmissionId");
@@ -958,6 +1015,15 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.Image", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", null)
+                        .WithMany("Images")
+                        .HasForeignKey("TextModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Exercise", null)
@@ -974,12 +1040,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.SubmissionDraft", null)
-                        .WithMany("Submissions")
-                        .HasForeignKey("SubmissionDraftId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseGroupAggregate.ExerciseGroup", b =>
@@ -993,6 +1053,8 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
                 {
+                    b.Navigation("Attendes");
+
                     b.Navigation("CourseRoles");
 
                     b.Navigation("ExerciseGroups");
@@ -1030,13 +1092,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Navigation("Modules");
                 });
 
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.SubmissionDraft", b =>
-                {
-                    b.Navigation("Modules");
-
-                    b.Navigation("Submissions");
-                });
-
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseGroupAggregate.ExerciseGroup", b =>
                 {
                     b.Navigation("Exercises");
@@ -1050,6 +1105,11 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

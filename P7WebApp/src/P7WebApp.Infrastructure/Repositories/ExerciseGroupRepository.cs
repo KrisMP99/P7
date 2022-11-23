@@ -1,4 +1,7 @@
-﻿using P7WebApp.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Services.Common;
+using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Application.Common.Models;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
@@ -14,14 +17,58 @@ namespace P7WebApp.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task<int> CreateExercise(Exercise exercise)
+        public async Task CreateExercise(Exercise exercise)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await  _context.Exercises.AddAsync(exercise);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<int> DeleteExercise(int exerciseId)
+        public async Task<int> DeleteExercise(int exerciseId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var exercise = _context.Exercises.Find(exerciseId);
+                if (exercise != null)
+                {
+                    _context.Exercises.Remove(exercise);
+                    return exerciseId;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            { 
+                throw;
+            }
+        }
+
+        public async Task<ExerciseGroup> GetExerciseGroupByIdWithExercises(int Id)
+        {
+            try
+            {
+                var exerciseGroup = await _context.ExerciseGroups.Include(e => e.Exercises).FirstOrDefaultAsync();
+                
+                if (exerciseGroup is not null)
+                {
+                    return exerciseGroup;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<IAsyncEnumerable<ExerciseGroup>> GetExerciseGroupsByCourseId(int courseId)

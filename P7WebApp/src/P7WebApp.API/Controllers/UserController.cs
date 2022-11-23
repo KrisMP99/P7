@@ -1,13 +1,15 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.AccountCQRS.Commands.UpdateAccountProfile;
+using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.UserCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
 {
     [Route("api/users")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : BaseController
     {
         private readonly IMediator _mediator;
@@ -48,7 +50,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpGet]
-        [Route("courses")]
+        [Route("courses/created")]
         public async Task<IActionResult> GetUsersCreatedCourses()
         {
             try
@@ -57,6 +59,21 @@ namespace P7WebApp.API.Controllers
                 return Ok(result);
             }
             catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("courses/attended")]
+        public async Task<IActionResult> GetUsersAttendedCourses()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetUserAttendedCoursesQuery());
+                return Ok(result);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

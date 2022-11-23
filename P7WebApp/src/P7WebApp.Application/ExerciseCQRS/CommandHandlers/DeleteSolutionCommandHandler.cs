@@ -23,8 +23,8 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
 
             try
             {
-                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseFromSolutionId(request.SolutionId);
-                exercise.DeleteSolution(request.SolutionId);
+                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseWithSolutionsById(request.ExerciseId);
+                exercise.RemoveSolution(request.SolutionId);
 
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 

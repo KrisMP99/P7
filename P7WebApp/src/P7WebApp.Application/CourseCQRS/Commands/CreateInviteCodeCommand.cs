@@ -4,19 +4,19 @@ namespace P7WebApp.Application.CourseCQRS.Commands
 {
     public class CreateInviteCodeCommand : IRequest<int>
     {
-        public CreateInviteCodeCommand(int courseId, bool isActive, DateTime usableFrom, DateTime usableTo)
+        public CreateInviteCodeCommand(int courseId, bool isActive, DateTime? useableFrom, DateTime? useableTo)
         {
             CourseId = courseId;
             IsActive = isActive;
-            UsableFrom = usableFrom;
-            UsableTo = usableTo;
+            UseableFrom = useableFrom ?? DateTime.UtcNow;
+            UseableTo = useableTo ?? DateTime.MaxValue;
         }
-        
+
         public int CourseId { get; set; }
 
         public bool IsActive { get; set; }
-        public DateTime? UsableFrom { get; set; }
-        public DateTime? UsableTo { get; set; }
+        public DateTime? UseableFrom { get; }
+        public DateTime? UseableTo { get; }
 
     }
 } 

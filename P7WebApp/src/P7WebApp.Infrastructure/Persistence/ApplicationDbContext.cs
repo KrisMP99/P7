@@ -32,11 +32,11 @@ namespace P7WebApp.Infrastructure.Persistence
         }
 
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Attendee> Attendees { get; set; }
         public DbSet<ExerciseGroup> ExerciseGroups { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<CourseRole> CourseRoles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
-        public DbSet<SubmissionDraft> SubmissionsDrafts { get; set; }
         public DbSet<Submission> Submissions { get; set; }
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<TextModule> TextModules { get; set; }

@@ -3,18 +3,20 @@ import { Container, Table, Form, InputGroup, Button, Pagination} from 'react-boo
 import { useNavigate } from 'react-router-dom';
 import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
-import { Trash } from 'react-bootstrap-icons';
+import { ArrowCounterclockwise, Trash } from 'react-bootstrap-icons';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import { getApiRoot } from '../../../App';
 import CreateCourseModal from '../../Modals/CreateCourseModal/CreateCourseModal';
 
 export interface CourseOverview {
     id: number;
-    name: string;
-    exerciseAmount: number;
-    membersAmount: number;
-    owner: string;
+    title: string;
+    numberOfExercises: number;
+    numberOfMembers: number;
+    ownerName: string | null;
     isPrivate: boolean;
+    createdDate: Date;
+    modifiedDate: Date;
 }
 
 interface OwnedCourseOverviewProps {
@@ -30,18 +32,18 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     const [ownedCourses, setOwnedCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
+    const [coursesPerPage, setCoursesPerPage] = useState<number>(10);
     const [maxPages, setMaxPages] = useState<number>(1);
 
     useEffect(() => {
-        // fetchOwnedCourses((courses) =>{
-        //     setOwnedCourses(courses);
-        // });
+        fetchOwnedCourses((courses) =>{
+            setOwnedCourses(courses);
+        });
     }, []);
 
     useEffect(() => {
-        let endPage = Math.ceil(ownedCourses.filter((item: { name: string; }) => {
-            return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
+        let endPage = Math.ceil(ownedCourses.filter((item: { title: string; }) => {
+            return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
         }).length / coursesPerPage)
         setMaxPages(endPage === 0 ? 1 : endPage);
     }, [ownedCourses.length, coursesPerPage, search]);
@@ -64,14 +66,21 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                         <h3>My courses</h3>
                     </div>
                     <div className="col text-end">
-                        <Button className="rounded p-2 create-course" onClick={()=>openCreateCourseModalRef.current?.handleShow()}>
+                        <Button className="btn-2" onClick={()=>openCreateCourseModalRef.current?.handleShow()}>
                             Create course
+                        </Button> 
+                        <Button className="btn-2" onClick={()=>{
+                            fetchOwnedCourses((courses) => {
+                                setOwnedCourses(courses);
+                            })
+                        }}>
+                            <ArrowCounterclockwise />
                         </Button> 
                     </div>
                 </div>
 
                 <div className='col-9'>
-                    <Table striped bordered hover>
+                    <Table striped size='sm' bordered hover>
                         <thead>
                             <tr>
                                 <th>Course name</th>
@@ -82,25 +91,28 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                             </tr>
                         </thead>
                         <tbody>
-                        {ownedCourses.filter((item: { name: string; }) => {
-                            return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
-                        }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
-                            <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
-                                <td>{item.name}</td>
-                                <td>{item.exerciseAmount}</td>
-                                <td>{item.membersAmount}</td>
-                                <td>{item.owner}</td>
-                                <td>
-                                    <Button variant='danger' onClick={(e)=>{
-                                        e.stopPropagation();
-                                        deleteCourseModalRef.current?.handleShow(item.name, item.id, DeleteElementType.COURSE);
-                                    }}>
-                                        <Trash/>
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
-
+                        {
+                            ownedCourses.filter((item: { title: string; }) => {
+                                return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
+                            })
+                            .slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage)
+                            .map((item: CourseOverview) => (
+                                <tr key={item.id} onClick={()=>{navigate('/course/' + item.id)}}>
+                                    <td>{item.title}</td>
+                                    <td>{item.numberOfExercises ?? 0}</td>
+                                    <td>{item.numberOfMembers ?? 0}</td>
+                                    <td>{item.ownerName ?? 'Missing'}</td>
+                                    <td>
+                                        <Button variant='danger' size='sm' onClick={(e)=>{
+                                            e.stopPropagation();
+                                            deleteCourseModalRef.current?.handleShow(item.title, item.id, DeleteElementType.COURSE);
+                                        }}>
+                                            <Trash/>
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))
+                        }
                         </tbody>
                     </Table>
                 </div>
@@ -190,17 +202,16 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={deleteCourseModalRef}
                 confirmDelete={(courseId: number)=>{
                     deleteOwnedCourse(courseId, () => {
-                        // fetchOwnedCourses((courses) => setOwnedCourses(courses));
+                        fetchOwnedCourses((courses) => setOwnedCourses(courses));
                     });
                 }}                
             />
             <CreateCourseModal 
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
-                    console.log("HHH")
-                    // fetchOwnedCourses((courses) => {
-                    //     setOwnedCourses(courses);
-                    // });
+                    fetchOwnedCourses((courses) => {
+                        setOwnedCourses(courses);
+                    });
                 }}
             />
         </Container>
@@ -219,38 +230,35 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'users/courses', requestOptions)
+        await fetch(getApiRoot() + 'users/courses/created', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
                 }
                 return res.json();
             })
-            .then((data) => {
-                console.log(data);
+            .then((courses: CourseOverview[]) => {
+                console.log(courses);
+                callback(courses);
             });
-            // .then((ownedCourses: CourseOverview[]) => {
-            //     callback(ownedCourses);
-            // });
     } catch (error) {
         alert(error);
     }
 }
 
 async function deleteOwnedCourse(courseId: number, callback: () => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
     try {
         const requestOptions = {
-            method: 'POST',
+            method: 'DELETE',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
-                'Authorization': '' //WIP - SET AUTH
-            },
-            body: JSON.stringify({
-                'id': courseId
-            })
+                'Authorization': 'Bearer ' + jwt
+            }
         }
-        await fetch(getApiRoot() + 'Course/get-assigned-courses', requestOptions)
+        await fetch(getApiRoot() + 'courses/' + courseId, requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');

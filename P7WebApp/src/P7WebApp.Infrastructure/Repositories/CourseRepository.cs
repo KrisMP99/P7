@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
+using System.Reflection.Metadata;
 
 
 namespace P7WebApp.Infrastructure.Repositories
@@ -48,47 +50,56 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-
         }
-        public async Task<Course> GetCourse(int courseId)
-        {
-            return new Course("", "", false);
-        }
-        public async Task<IEnumerable<Course>> GetAttendedCourses(int userId)
+        public async Task<Course> GetCourseWithExerciseGroups(int courseId)
         {
             try
             {
-                var courses = _context.Courses.Where(c => c.Id == userId);
-
-                if(courses.Any())
+                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.ExerciseGroups).FirstOrDefaultAsync();
+                if (course != null)
                 {
-                    return courses;
-                } else
+                    return course;
+                }
+                else
                 {
                     throw new Exception();
                 }
-
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
 
+        // TODO: Implement correctly
+        public async Task<IEnumerable<Course>> GetAttendedCourses(string userId)
+        {
+            try
+            {
+                var courses = _context.Courses.Include(c => c.Attendes).Where(c => c.Attendes.Any(a => a.UserId == userId));
+
+                return courses;
+            }
+            catch (Exception)
+            { 
                 throw;
             }
             
         }
 
 
-        public async Task<IEnumerable<ExerciseGroup>> GetExerciseGroups(int courseId)
+        public async Task<IEnumerable<ExerciseGroup>> GetExerciseGroupsWithExercises(int courseId)
         {
             try
             {
-                var exerciseGroups = _context.ExerciseGroups.Where(e => e.CourseId == courseId);
+                var exerciseGroups = _context.ExerciseGroups.Where(e => e.CourseId == courseId).Include(e => e.Exercises);
 
                 if (exerciseGroups != null)
                 {
                     return exerciseGroups.AsEnumerable();
 
-                } else
+                } 
+                else
                 {
                     throw new Exception();
                 }
@@ -103,7 +114,7 @@ namespace P7WebApp.Infrastructure.Repositories
         public async Task<IEnumerable<Course>> GetListOfCourses()
         {
 
-            var courses = _context.Courses.ToList().AsEnumerable();
+            var courses = await _context.Courses.ToListAsync();
 
             try
             {
@@ -120,34 +131,33 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-            
         }
 
-        public async Task<IEnumerable<Course>> GetUsersCreatedCourses(string userId)
+        public async Task<IEnumerable<Course>> GetCreatedCourses(string userId)
         {
             try
             {
-                var courses = _context.Courses
-                    .Where(c => c.CreatedById == userId);
-                
-                if(courses is not null)
-                {
-                    return courses;
-                }
-                else
-                {
-                    throw new Exception();
-                }
-
+                var courses = _context.Courses.Where(c => c.CreatedById.Equals(userId)).Include(c => c.CreatedBy).Include(c => c.Attendes);
+                return courses.AsEnumerable();
             }
             catch (Exception)
-            {
+            { 
                 throw;
             }
         }
 
-        public Task<IEnumerable<Course>> GetPublicCourses()
+        public async Task<IEnumerable<Course>> GetPublicCourses()
         {
+            try
+            {
+                var courses = _context.Courses.Where(c => c.IsPrivate == false);
+                return courses;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             throw new NotImplementedException();
         }
 
@@ -170,11 +180,6 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-        }
-
-        public Task<Course> GetCourseFromExerciseGroupId(int exerciseGroupId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
