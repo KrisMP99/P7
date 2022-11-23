@@ -57,6 +57,21 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("invite-code/{code}")]
+        public async Task<IActionResult> GetCourseFromInviteCode([FromRoute] int code)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCourseFromInviteCodeQuery(code));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete]
         [Route("{courseId}")]
         public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)

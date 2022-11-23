@@ -29,7 +29,26 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
+        public async Task<int> GetCourseFromInviteCode(int code)
+        {
+            try
+            {
+                var course = await _context.Courses.Where(c => c.InviteCode.Code == code).FirstOrDefaultAsync();
 
+                if (course != null)
+                {
+                    return course.Id;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public async Task<int> DeleteCourse(int courseId)
         {
             try
