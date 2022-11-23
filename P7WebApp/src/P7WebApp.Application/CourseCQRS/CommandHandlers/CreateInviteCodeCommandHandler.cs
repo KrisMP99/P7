@@ -21,13 +21,14 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             {
                 var inviteCode = CourseMapper.Mapper.Map<InviteCode>(request);
                 var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(inviteCode.CourseId);
-                
-                course.CreateInviteCode(inviteCode);
-                await _unitOfWork.CourseRepository.UpdateCourse(course);
+                if (course.InviteCode is null)
+                {
+                    course.CreateInviteCode(inviteCode);
+                    await _unitOfWork.CourseRepository.UpdateCourse(course);
+                    await _unitOfWork.CommitChangesAsync(cancellationToken);
+                }
 
-                var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
-
-                return rowsAffected;
+                return course.InviteCode.Code;
             }
             catch(Exception)
             {
