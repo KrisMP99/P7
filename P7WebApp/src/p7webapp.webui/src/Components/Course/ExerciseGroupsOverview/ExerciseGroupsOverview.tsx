@@ -97,7 +97,6 @@ function makeExerciseGroupElements (exercisegroups: ExerciseGroup[],
                         }
                     </div>
                 )
-
             })
 
             return (
