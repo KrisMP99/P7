@@ -1,25 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Form, InputGroup, Pagination } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { getApiRoot } from '../../../App';
 import { CourseOverview } from './OwnedCourseOverview';
 import './OwnedCourseOverview.css';
 
 interface AttendedCourseOverviewProps {
-    courses: CourseOverview[];
+    
 }
 
-function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element {
+export default function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element {
+    
     const [search, setSearch] = useState('');
+    const [attendedCourses, setAttendedCourses] = useState<CourseOverview[]>([]);
+
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [coursesPerPage, setCoursesPerPage] = useState<number>(5);
     const [maxPages, setMaxPages] = useState<number>(1);
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        setMaxPages(Math.ceil(props.courses.filter((item: { name: string; }) => {
+        // fetchAttendedCourses((courses) =>{
+        //     setAttendedCourses(courses);
+        // });
+    }, []);
+    
+    useEffect(() => {  
+        let endPage = Math.ceil(attendedCourses.filter((item: { name: string; }) => {
             return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
-        }).length / coursesPerPage));
-    }, [props.courses.length, coursesPerPage, search]);
+        }).length / coursesPerPage);
+        setMaxPages(endPage === 0 ? 1 : endPage);
+    }, [attendedCourses.length, coursesPerPage, search]);
 
     return (
         <Container>
@@ -53,7 +65,7 @@ function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element
                             </tr>
                         </thead>
                         <tbody>
-                            {props.courses.filter((item: { name: string; }) => {
+                            {attendedCourses.filter((item: { name: string; }) => {
                                 return search.toLowerCase() === '' ? item : item.name.toLowerCase().includes(search)
                             }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
                                 <tr key={item.id} onClick={() => { navigate('/course/' + item.id) }}>
@@ -136,7 +148,7 @@ function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element
                     <Form.Select size="sm" style={{ height: '100%' }} value={coursesPerPage}
                         onChange={(e) => {
                             setCoursesPerPage(Number(e.target.value));
-                            setMaxPages(Math.ceil(props.courses!.length / Number(e.target.value)))
+                            setMaxPages(Math.ceil(attendedCourses.length / Number(e.target.value)))
                             setCurrentPage(0);
                         }
                         }>
@@ -152,4 +164,34 @@ function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element
     );
 }
 
-export default AttendedCourseOverview;
+async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => void) {
+    console.log("FetchAttendedCourses");
+    //let jwt = sessionStorage.getItem('jwt');
+    //if (jwt === null) return;
+    //try {
+    //    const requestOptions = {
+    //        method: 'POST',
+    //        headers: { 
+    //            'Accept': 'application/json', 
+    //            'Content-Type': 'application/json',
+    //            'Authorization': 'Bearer ' + jwt
+    //        }
+    //    }
+    //    await fetch(getApiRoot() + 'users/courses', requestOptions)
+    //        .then((res) => {
+    //            if (!res.ok) {
+    //                throw new Error('Response not okay from backend');
+    //            }
+    //            return res.json();
+    //        })
+    //        .then((data) => {
+    //            console.log("ATTENDED (CHANGE LATER IS ALL COURSES NOW)");
+    //            // console.log(data)
+    //        });
+    //        // .then((ownedCourses: CourseOverview[]) => {
+    //        //     callback(ownedCourses);
+    //        // });
+    //} catch (error) {
+    //    alert(error);
+    //}
+}

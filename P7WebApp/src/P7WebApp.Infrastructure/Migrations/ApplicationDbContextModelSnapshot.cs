@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using P7WebApp.Infrastructure.Data;
+using P7WebApp.Infrastructure.Persistence;
 
 #nullable disable
 
@@ -609,6 +609,28 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.ToTable("Question");
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("File")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<int>("TextModuleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TextModuleId");
+
+                    b.ToTable("Image");
+                });
+
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
                 {
                     b.Property<int>("Id")
@@ -955,6 +977,15 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.Image", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", null)
+                        .WithMany("Images")
+                        .HasForeignKey("TextModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Exercise", null)
@@ -1047,6 +1078,11 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.QuizModule", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule.TextModule", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

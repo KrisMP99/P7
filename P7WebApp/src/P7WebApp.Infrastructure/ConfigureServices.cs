@@ -1,21 +1,20 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.Services.Common;
+using Microsoft.IdentityModel.Tokens;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Domain.Identity;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Common.Models;
-using P7WebApp.Infrastructure.Data;
-using P7WebApp.Infrastructure.Identity;
 using P7WebApp.Infrastructure.Identity.Services;
 using P7WebApp.Infrastructure.Persistence;
+using P7WebApp.Infrastructure.Persistence.Intercepters;
 using P7WebApp.Infrastructure.Repositories;
 using P7WebApp.Infrastructure.Services;
-using P7WebApp.Infrastructure.Persistence.Intercepters;
+using System.Text;
 
 namespace P7WebApp.Infrastructure
 {
@@ -59,8 +58,22 @@ namespace P7WebApp.Infrastructure
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            byte[] key = Encoding.ASCII.GetBytes(configuration.GetSection("token").GetSection("secret").Value); // This should probably be retrieved some other way
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://localhost:7001";
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ICourseRepository, CourseRepository>();
@@ -68,8 +81,8 @@ namespace P7WebApp.Infrastructure
             services.AddTransient<IDateTime, DateTimeService>();
 
             services.AddScoped<ITokenService, TokenService>();
-
             services.Configure<Token>(configuration.GetSection("token"));
+
 
             return services;
         }

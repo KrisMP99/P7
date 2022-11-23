@@ -18,6 +18,7 @@ import selectedTwoLeftOneRightImg from '../../../Images/LayoutSelected/selected_
 import selectedOneLeftTwoRightImg from '../../../Images/LayoutSelected/selected_1left_2right.svg';
 import selectedTwoLeftTwoRightImg from '../../../Images/LayoutSelected/selected_2left_2right.svg';
 import { Exercise } from '../../Course/CourseView';
+import { getApiRoot } from '../../../App';
 
 interface CreateExerciseModalProps {
     created: (layout: LayoutType, exercise: Exercise) => void;
@@ -64,6 +65,35 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
 
     const handleChooseLayout = (type: LayoutType, left: number, right: number) => {
         setLayout(type);
+    }
+
+    const createExercise = async () => {
+        try {
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'a'
+                },
+                body: JSON.stringify({
+                    "something": '',
+                })
+            }
+            await fetch(getApiRoot() + 'Exercise', requestOptions)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('Response not okay from backend - server unavailable');
+                    }
+                    return res.json();
+                })
+                .then((user: any) => {
+                    console.log("Successfully created exercise!");
+                    console.log(user);
+                });
+        } catch (error) {
+            alert(error);
+        }
     }
 
     return (

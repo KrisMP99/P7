@@ -16,7 +16,5 @@ namespace P7WebApp.Infrastructure.Common.Models
         public string Audience { get; set; }
 
         public int Expiry { get; set; }
-
-        public int RefreshExpiry { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace P7WebApp.Application.UserCQRS.Commands.SignIn
+namespace P7WebApp.Application.AccountCQRS.Commands.SignIn
 {
     public class AuthenticateCommandValidator : AbstractValidator<AuthenticateCommand>
     {

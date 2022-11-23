@@ -25,10 +25,7 @@ builder.Services.AddCors(options =>
         });
 
     options.AddPolicy("CorsAllowSpecific",
-        p => p.AllowAnyHeader()
-            .WithMethods("POST")
-            .AllowAnyOrigin()
-        );
+        p => p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 });
 
 var app = builder.Build();
@@ -50,8 +47,8 @@ app.UseRouting();
 app.UseCors("CorsAllowSpecific");
 
 app.UseAuthentication();
-app.UseIdentityServer();
 app.UseAuthorization();
+app.UseIdentityServer();
 
 app.MapControllers();
 

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using P7WebApp.Application.Common.Interfaces.Identity;
+using P7WebApp.Domain.Aggregates.AccountAggregate;
 using P7WebApp.Domain.Identity;
 using P7WebApp.Infrastructure.Common.Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 
 namespace P7WebApp.Infrastructure.Identity.Services
@@ -23,7 +21,7 @@ namespace P7WebApp.Infrastructure.Identity.Services
             _token = tokenOptions.Value;
         }
 
-        public async Task<(ApplicationUser? User, string? Token)> AuthenticateAsync(string username, string password)
+        public async Task<Account> AuthenticateAsync(string username, string password)
         {
             try
             {
@@ -35,35 +33,17 @@ namespace P7WebApp.Infrastructure.Identity.Services
 
                     if (signIn.Succeeded)
                     {
+                        var account = new Account(user.Id, user.UserName, new AccountProfile(user.FirstName, user.LastName, user.Email));
+
                         byte[] secret = Encoding.ASCII.GetBytes(_token.Secret);
-                        var handler = new JwtSecurityTokenHandler();
 
-                        var descriptor = new SecurityTokenDescriptor
-                        {
-                            Issuer = _token.Issuer,
-                            Audience = _token.Audience,
-                            Subject = new ClaimsIdentity(new Claim[]
-                            {
-                            new Claim("UserId", user.Id),
-                            new Claim("FirstName", $"{user.FirstName}"),
-                            new Claim("LastName", $"{user.FirstName}"),
-                            new Claim("UserName", user.UserName),
-                            new Claim(ClaimTypes.Email, user.Email),
-                            new Claim(ClaimTypes.NameIdentifier, user.Id)
-                            }),
-                            Expires = DateTime.UtcNow.AddMinutes(_token.Expiry),
-                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
-                        };
+                        account.SetToken(issuer: _token.Issuer, audience: _token.Audience, expires: _token.Expiry, secret: secret);
 
-                        var jwtToken = handler.CreateToken(descriptor);
-
-                        //await _userManager.UpdateAsync(user);
-
-                        return (user, handler.WriteToken(jwtToken));
+                        return account;
                     }
                 }
 
-                return (null, null);
+                return null;
             }
             catch (Exception)
             {

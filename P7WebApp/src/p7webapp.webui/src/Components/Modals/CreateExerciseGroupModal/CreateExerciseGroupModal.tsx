@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { getApiRoot } from '../../../App';
 import '../../../App.css';
 
 interface CreateExerciseGroupModalProps {
@@ -27,11 +28,40 @@ export const CreateExerciseGroupModal = forwardRef<ShowCreateExerciseGroupModal,
         }),
     )
 
+    const createExerciseGroup = async () => {
+        try {
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': ''
+                },
+                body: JSON.stringify({
+                    "username": '',
+                })
+            }
+            await fetch(getApiRoot() + 'ExerciseGroup', requestOptions)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('Response not okay from backend - server unavailable');
+                    }
+                    return;
+                })
+                .then(() => {
+                    console.log("Successfully created exercise group!");
+                });
+        } catch (error) {
+            alert(error);
+        }
+    }
+
     return (
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => { 
                 e.preventDefault();
                 //WIP - POST TO CREATE EXERCISEGROUP
+                createExerciseGroup();
                 props.updateExerciseGroups(title, visible);
                 handleClose();
             }}>
