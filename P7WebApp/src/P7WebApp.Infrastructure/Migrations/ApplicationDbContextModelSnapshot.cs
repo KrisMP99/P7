@@ -355,7 +355,11 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses", (string)null);
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LastModifiedById");
+
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>
@@ -680,26 +684,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.HasIndex("SubmissionDraftId");
-
-                    b.ToTable("Submissions", (string)null);
-                });
-
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.SubmissionDraft", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SubmissionsDrafts", (string)null);
+                    b.ToTable("Submissions");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseGroupAggregate.ExerciseGroup", b =>
