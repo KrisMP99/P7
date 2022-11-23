@@ -285,7 +285,6 @@ namespace P7WebApp.API.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
