@@ -6,8 +6,6 @@ using P7WebApp.API.Controllers;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate;
-using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 {
@@ -88,25 +86,6 @@ namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 
             result.Should().BeOfType<OkObjectResult>();
         }
-
-        // Does not work, because there is no courses in the DB with these id's 
-        //[Theory]
-        //[InlineData(0)]
-        //[InlineData(1)]
-        //[InlineData(100)]
-        //public async Task GetCourse_ReturnsOK_GivenValidCourseId(int courseId)
-        //{
-        //    var mockRepo = new Mock<ICourseRepository>();
-        //    var mockMediator = new Mock<IMediator>();
-        //    var courseController = new CourseController(mockMediator.Object);
-        //    CourseResponse courseResponse = new CourseResponse();
-        //    mockMediator.Setup(m => m.Send(It.IsAny<int>(), It.IsAny<CancellationToken>())).
-        //        ReturnsAsync(courseResponse);
-
-        //    var result = await courseController.GetCourse(courseId);
-
-        //    result.Should().BeOfType<OkObjectResult>();
-        //}
 
         [Fact]
         public async Task GetListOfCourses_ReturnsOk_AmountIsOne()
