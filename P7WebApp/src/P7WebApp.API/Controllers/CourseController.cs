@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.ExerciseCQRS.Commands;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise;
 using P7WebApp.Application.UserCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
