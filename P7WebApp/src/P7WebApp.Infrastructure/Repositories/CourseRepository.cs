@@ -50,7 +50,6 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-
         }
         public async Task<Course> GetCourseWithExerciseGroups(int courseId)
         {
@@ -80,11 +79,9 @@ namespace P7WebApp.Infrastructure.Repositories
                 var courses = _context.Courses.Include(c => c.Attendes).Where(c => c.Attendes.Any(a => a.UserId == userId));
 
                 return courses;
-
             }
             catch (Exception)
-            {
-
+            { 
                 throw;
             }
             
@@ -101,7 +98,8 @@ namespace P7WebApp.Infrastructure.Repositories
                 {
                     return exerciseGroups.AsEnumerable();
 
-                } else
+                } 
+                else
                 {
                     throw new Exception();
                 }
@@ -133,7 +131,6 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 throw;
             }
-            
         }
 
         public async Task<IEnumerable<Course>> GetCreatedCourses(string userId)

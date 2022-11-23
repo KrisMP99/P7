@@ -14,8 +14,5 @@ namespace P7WebApp.Domain.Repositories
         Task<IEnumerable<Course>> GetAttendedCourses(string userId);
         Task<IEnumerable<Course>> GetPublicCourses();
         Task<IEnumerable<Course>> GetCreatedCourses(string userId);
-
-
-
     }
 }

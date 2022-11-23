@@ -39,7 +39,6 @@ namespace P7WebApp.Infrastructure.Repositories
 
         public async Task<Exercise> GetExerciseWithSubmissionsById(int id)
         {
-
             try
             {
                 var exercise = await _context.Exercises.Include(e => e.Submissions).FirstOrDefaultAsync();
