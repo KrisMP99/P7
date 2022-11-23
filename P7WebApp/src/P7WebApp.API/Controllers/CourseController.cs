@@ -42,21 +42,14 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("invite-code")]
-        public async Task<IActionResult> CreateInviteCode([FromBody] CreateInviteCodeCommand request)
+        [HttpGet]
+        [Route("{id}/invite-code")]
+        public async Task<IActionResult> CreateInviteCode([FromRoute] int id)
         {
             try
             {
-                var result = await _mediator.Send(request);
-                if(result == 0)
-                {
-                    return BadRequest("Could not create invite code");
-                }
-                else
-                {
-                    return Ok(result);
-                }
+                var result = await _mediator.Send(new CreateInviteCodeCommand(id, true));
+                return Ok(result);
             }
             catch (Exception ex)
             {
