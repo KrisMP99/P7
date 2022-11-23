@@ -45,11 +45,7 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
             <EditExerciseGroupModal 
                 ref={openEditExerciseGroupModalRef} 
                 updateExerciseGroup={(newGroup) => {
-                    // if (course) {
-                    //     let tempGroups = [...course.exerciseGroups];
-                    //     tempGroups[index] = newGroup;
-                    //     props.changedCourse({...course, exerciseGroups: tempGroups});
-                    // }
+                    //WIP - refetch course
                 }}
             />
         </div>
@@ -87,16 +83,6 @@ function makeExerciseGroupElements (exercisegroups: ExerciseGroup[],
                             <div className={'exercise-owner-container'}>
                                 <Button size='sm' className='btn-3' onClick={(e) => {
                                     e.stopPropagation();
-                                    // let updatedExercises = course.exercises.map((ex) => {
-                                    //     if (ex.id === exercise.id) return { ...ex, isVisible: !ex.isVisible }
-                                    //     else return ex;
-                                    // })
-                                    // props.changedCourse({ ...course, exercises: updatedExercises });
-                                }}>
-                                    {visibilityElement}
-                                </Button>
-                                <Button size='sm' className='btn-3' onClick={(e) => {
-                                    e.stopPropagation();
                                     editExerciseModalRef.current?.handleShow(exGroup, index);
                                 }}>
                                     <Pencil />
@@ -121,13 +107,6 @@ function makeExerciseGroupElements (exercisegroups: ExerciseGroup[],
                             <input
                                 className='input-field'
                                 value={exGroup.title}
-                                onChange={(e) => {
-                                    if (e.target.value !== exGroup.title) {
-                                        // let exerciseGroups = [...course.exerciseGroups]
-                                        // exerciseGroups[exerciseGroups.findIndex((val) => val.id === value.id)].title = e.target.value;
-                                        // setCourse({ ...course, exerciseGroups: exerciseGroups });
-                                    }
-                                }}
                                 readOnly={true}
                             />
                         </AccordionHeader>
