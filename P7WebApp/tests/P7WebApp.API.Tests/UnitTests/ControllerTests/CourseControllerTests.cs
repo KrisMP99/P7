@@ -6,7 +6,6 @@ using P7WebApp.API.Controllers;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 
 namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
 {

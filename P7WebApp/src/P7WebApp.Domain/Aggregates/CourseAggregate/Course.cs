@@ -17,9 +17,9 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         public string Description { get; private set; }
         public bool IsPrivate { get; private set; }
         public InviteCode? InviteCode { get; private set; }
-        public List<ExerciseGroup> ExerciseGroups { get; private set; }
-        public List<CourseRole> CourseRoles { get; private set; }
-        public List<Attendee> Attendes { get; private set; }
+        public List<ExerciseGroup> ExerciseGroups { get; private set; } = new List<ExerciseGroup>();
+        public List<CourseRole> CourseRoles { get; private set; } = new List<CourseRole>();
+        public List<Attendee> Attendes { get; private set; } = new List<Attendee>();
         
 
         public void EditInformation(string newTitle, string newDescription, bool newVisibility)
@@ -29,11 +29,11 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             IsPrivate= newVisibility;
         }
 
-        public ExerciseGroup GetExerciseGroup(int groupId)
+        public ExerciseGroup GetExerciseGroup(int exerciseGroupId)
         {
             try
             {
-                var exerciseGroup =  ExerciseGroups.Find(e => e.Id == groupId);
+                var exerciseGroup = ExerciseGroups.Find(e => e.Id == exerciseGroupId);
 
                 if (exerciseGroup is not null)
                 {
@@ -41,7 +41,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not find an exerciseGroup with the specified Id");
+                    throw new Exception("Could not find an exercise group with the specified id");
                 }
             }
             catch (Exception)
