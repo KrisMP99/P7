@@ -7,10 +7,11 @@ import './CourseView.css';
 import { LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import ExerciseGroupsOverview from './ExerciseGroupsOverview/ExerciseGroupsOverview';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../Modals/DeleteConfirmModal/DeleteConfirmModal';
-import { Gear, Plus } from 'react-bootstrap-icons';
+import { Gear, Pencil, Plus } from 'react-bootstrap-icons';
 import CreateExerciseGroupModal, { ShowCreateExerciseGroupModal } from '../Modals/CreateExerciseGroupModal/CreateExerciseGroupModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import internal from 'stream';
+import EditCourseModal, { ShowEditCourseModal } from '../Modals/EditCourseModal/EditCourseModal';
 
 export interface ExerciseOverview {
     id: number;
@@ -73,6 +74,7 @@ interface CourseProps {
 export default function CourseView(props: CourseProps) {
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
+    const editCourseModalRef = useRef<ShowEditCourseModal>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -121,7 +123,7 @@ export default function CourseView(props: CourseProps) {
 
     useEffect(() => {
         setEditedCourse(course);
-    }, [course?.createdById, props.user.id, isOwner]);
+    }, [course?.createdById, props.user.id, isOwner, course?.description, course?.isPrivate, course?.title]);
 
     return isLoading ? 
         (<></>) :
@@ -198,8 +200,13 @@ export default function CourseView(props: CourseProps) {
                                         </Tooltip>
                                     }
                                 >
-                                    <Button size='sm' className='btn-3' onClick={() => setIsEditMode(true)}>
-                                        <Gear />
+                                    <Button size='sm' className='btn-3' onClick={() => {
+                                            if (course){
+                                                editCourseModalRef.current?.handleShow(course.id);
+                                            }
+                                        }
+                                    }>
+                                        <Pencil />
                                     </Button>
                                 </OverlayTrigger>
                             </>
@@ -277,6 +284,18 @@ export default function CourseView(props: CourseProps) {
                     }
                 }}
             />
+            {isOwner && 
+                <EditCourseModal
+                    ref={editCourseModalRef}
+                    updatedCourse={()=>{
+                        if (course){
+                            fetchCourse(course?.id, (course) => {
+                                setCourse(course);
+                            })
+                        }
+                    }}
+                />
+            }
             <CreateExerciseGroupModal
                 ref={createExerciseGroupModalRef}
                 updateExerciseGroups={() => {
@@ -405,7 +424,7 @@ async function enrollToCourse(courseId: number, callback: () => void) {
     }
 }
 
-async function fetchCourse(courseId: number, callback: (course: Course) => void) {
+export async function fetchCourse(courseId: number, callback: (course: Course) => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {

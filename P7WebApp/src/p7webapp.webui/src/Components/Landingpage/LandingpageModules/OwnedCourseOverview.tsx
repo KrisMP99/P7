@@ -3,10 +3,11 @@ import { Container, Table, Form, InputGroup, Button, Pagination} from 'react-boo
 import { useNavigate } from 'react-router-dom';
 import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
-import { ArrowCounterclockwise, Trash } from 'react-bootstrap-icons';
+import { ArrowCounterclockwise, Pencil, Trash } from 'react-bootstrap-icons';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import { getApiRoot } from '../../../App';
 import CreateCourseModal from '../../Modals/CreateCourseModal/CreateCourseModal';
+import EditCourseModal, { ShowEditCourseModal } from '../../Modals/EditCourseModal/EditCourseModal';
 
 export interface CourseOverview {
     id: number;
@@ -29,6 +30,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
     const deleteCourseModalRef = useRef<ShowDeleteConfirmModal>(null);
+    const editCourseModalRef = useRef<ShowEditCourseModal>(null);
     const [ownedCourses, setOwnedCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -103,6 +105,12 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                                     <td>{item.numberOfMembers ?? 0}</td>
                                     <td>{item.ownerName ?? 'Missing'}</td>
                                     <td>
+                                        <Button size='sm' onClick={(e)=>{
+                                            e.stopPropagation();
+                                            editCourseModalRef.current?.handleShow(item.id);
+                                        }}>
+                                            <Pencil/>
+                                        </Button>
                                         <Button variant='danger' size='sm' onClick={(e)=>{
                                             e.stopPropagation();
                                             deleteCourseModalRef.current?.handleShow(item.title, item.id, DeleteElementType.COURSE);
@@ -205,6 +213,14 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                         fetchOwnedCourses((courses) => setOwnedCourses(courses));
                     });
                 }}                
+            />
+            <EditCourseModal
+                ref={editCourseModalRef}
+                updatedCourse={()=>{
+                    fetchOwnedCourses((courses) => {
+                        setOwnedCourses(courses);
+                    })
+                }}
             />
             <CreateCourseModal 
                 ref={openCreateCourseModalRef}
