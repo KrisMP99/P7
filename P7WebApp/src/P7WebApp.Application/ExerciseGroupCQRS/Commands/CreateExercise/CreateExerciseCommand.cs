@@ -5,7 +5,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
 {
     public class CreateExerciseCommand : IRequest<int>
     {
-        public CreateExerciseCommand(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId, List<string> hello)
+        public CreateExerciseCommand(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId, List<CreateModuleCommand> modules)
         {
             ExerciseGroupId = exerciseGroupId;
             Title = title;
@@ -16,7 +16,8 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
             VisibleFrom = visibleFrom;
             VisibleTo = visibleTo;
             LayoutId = layoutId;
-            Hellos = hello;
+            Modules = modules;
+
         }
 
         public int ExerciseGroupId { get; }
@@ -28,7 +29,6 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
         public DateTime? VisibleFrom { get; }
         public DateTime? VisibleTo { get; }
         public int LayoutId { get; }
-        public List<string> Hellos { get; }
-        //public ICollection<CreateModuleCommand>? Modules { get; set; }
+        public List<CreateModuleCommand>? Modules { get; }
     }
 }

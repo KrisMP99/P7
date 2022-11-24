@@ -25,16 +25,18 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
             CreateMap<CreateSolutionCommand, Solution>();
             CreateMap<CreateSubmissionCommand, Submission>();
             CreateMap<DeleteSubmissionCommand, Submission>();
+            CreateMap<Exercise, ExerciseOverviewResponse>();
+            CreateMap<Exercise, ExerciseResponse>();
+            CreateMap<CreateExerciseCommand, Exercise>()
+                .ForMember(dest => dest.Modules, src => src.MapFrom(src => src.Modules));
+            CreateMap<CreateModuleCommand, Module>();
+            CreateMap<CreateCodeEditorModuleCommand, CodeEditorModule>();
+            CreateMap<CreateTextModuleCommand, TextModule>();
+            CreateMap<CreateQuizModuleCommand, QuizModule>();
             CreateMap<CreateModuleCommand, Module>()
                 .Include<CreateCodeEditorModuleCommand, CodeEditorModule>()
                 .Include<CreateTextModuleCommand, TextModule>()
                 .Include<CreateQuizModuleCommand, QuizModule>();
-            CreateMap<Exercise, ExerciseOverviewResponse>();
-            CreateMap<Exercise, ExerciseResponse>();
-            CreateMap<CreateModuleCommand, Module>();
-            CreateMap<CreateCodeEditorModuleCommand, CodeEditorModule>();
-            CreateMap<CreateTextModuleCommand, CreateTextModuleCommand>();
-            CreateMap<CreateQuizModuleCommand, QuizModule>();
         }
     }
 }

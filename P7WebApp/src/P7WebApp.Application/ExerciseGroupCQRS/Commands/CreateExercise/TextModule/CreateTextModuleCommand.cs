@@ -4,11 +4,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.TextMod
 {
     public class CreateTextModuleCommand : CreateModuleCommand
     {
-        public CreateTextModuleCommand(string description, double height, double width, int position, string text) : base(description, height, width, position)
-        {
-            Text = text;
-        }
-
-        public string Text { get; }
+        public string Title { get; set; }
+        public string Content { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
 {
@@ -21,6 +22,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         public int CourseId { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ExerciseGroupNumber { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }

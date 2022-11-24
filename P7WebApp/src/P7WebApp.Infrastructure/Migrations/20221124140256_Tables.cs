@@ -287,7 +287,8 @@ namespace P7WebApp.Infrastructure.Migrations
                     CourseId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    ExerciseGroupNumber = table.Column<int>(type: "integer", nullable: false),
+                    ExerciseGroupNumber = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
@@ -368,7 +369,8 @@ namespace P7WebApp.Infrastructure.Migrations
                     ExerciseGroupId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
-                    ExerciseNumber = table.Column<int>(type: "integer", nullable: false),
+                    ExerciseNumber = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     VisibleFrom = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -511,7 +513,8 @@ namespace P7WebApp.Infrastructure.Migrations
                     ExerciseId = table.Column<int>(type: "integer", nullable: true),
                     SolutionId = table.Column<int>(type: "integer", nullable: true),
                     SubmissionId = table.Column<int>(type: "integer", nullable: true),
-                    Text = table.Column<string>(type: "text", nullable: false)
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,18 +1,14 @@
-﻿namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module
+﻿using Newtonsoft.Json;
+
+namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module
 {
+    [JsonConverter(typeof(PolymorphicModuleConverter))]
     public abstract class CreateModuleCommand
     {
-        protected CreateModuleCommand(string description, double height, double width, int position)
-        {
-            Description = description;
-            Height = height;
-            Width = width;
-            Position = position;
-        }
-
-        public string Description { get; }
-        public double Height { get; }
-        public double Width { get; }
-        public int Position { get; }
+        public string Description { get; set; }
+        public double Height { get; set; }
+        public double Width { get; set; }
+        public int Position { get; set; }
+        public string Type { get; set; }
     }
 }
