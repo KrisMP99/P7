@@ -74,11 +74,11 @@ namespace P7WebApp.API.Controllers
 
         [HttpPost]
         [Route("enroll")]
-        public async Task<IActionResult> EnrollToCourse([FromBody] int courseId)
+        public async Task<IActionResult> EnrollToCourse([FromBody] EnrollToCourseCommand request)
         {
             try
             {
-                var result = await _mediator.Send(new EnrollToCourseCommand(courseId));
+                var result = await _mediator.Send(new EnrollToCourseCommand(request.CourseId));
                 return Ok(result);
             }
             catch (Exception ex)

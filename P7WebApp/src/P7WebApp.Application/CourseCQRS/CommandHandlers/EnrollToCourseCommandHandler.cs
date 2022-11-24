@@ -22,15 +22,14 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                //var attendee = new Attendee(_currentUserService.UserId, request.CourseId);
-                //var course = await _unitOfWork.CourseRepository.GetCourseWithAttendees(request.CourseId);
+                var attendee = new Attendee(_currentUserService.UserId, request.CourseId);
+                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendees(request.CourseId);
 
-                //course.AddAttendee(attendee);
+                course.AddAttendee(attendee);
 
-                //var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
+                var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
-                //return affectedRows;
-                return 1;
+                return affectedRows;
             }
             catch(Exception)
             {

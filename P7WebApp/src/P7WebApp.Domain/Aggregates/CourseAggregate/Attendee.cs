@@ -9,7 +9,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             CourseId = courseId;
         }
 
-        public string UserId { get; }
-        public int CourseId { get; }
+        public string UserId { get; private set; }
+        public int CourseId { get; private set; }
     }
 }
