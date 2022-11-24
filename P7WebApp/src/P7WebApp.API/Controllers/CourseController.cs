@@ -64,14 +64,7 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(new DeleteCourseCommand(courseId));
-                if (result == null)
-                {
-                    return BadRequest($"Could not find course with id {courseId}");
-                }
-                else
-                {
-                    return Ok(result);
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
