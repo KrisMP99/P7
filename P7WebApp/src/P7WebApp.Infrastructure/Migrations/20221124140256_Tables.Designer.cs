@@ -12,8 +12,8 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221124091043_attendees")]
-    partial class attendees
+    [Migration("20221124140256_Tables")]
+    partial class Tables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -489,7 +489,10 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("ExerciseNumber")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExerciseNumber"));
 
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");
@@ -729,7 +732,10 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("ExerciseGroupNumber")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExerciseGroupNumber"));
 
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");
@@ -845,7 +851,11 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     b.HasBaseType("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 

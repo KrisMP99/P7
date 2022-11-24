@@ -486,7 +486,10 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("ExerciseNumber")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExerciseNumber"));
 
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");
@@ -726,7 +729,10 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("ExerciseGroupNumber")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExerciseGroupNumber"));
 
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");
@@ -842,7 +848,11 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     b.HasBaseType("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
