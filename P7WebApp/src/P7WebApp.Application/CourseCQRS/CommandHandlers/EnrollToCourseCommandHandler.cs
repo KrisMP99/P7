@@ -22,7 +22,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                var attendee = new Attendee(_currentUserService.UserId, request.CourseId);
+                var attendee = new Attendee(_currentUserService.UserId, request.CourseId, 1);
                 var course = await _unitOfWork.CourseRepository.GetCourseWithAttendees(request.CourseId);
 
                 course.AddAttendee(attendee);

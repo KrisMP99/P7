@@ -10,6 +10,7 @@ import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '.
 import { Gear, Plus } from 'react-bootstrap-icons';
 import CreateExerciseGroupModal, { ShowCreateExerciseGroupModal } from '../Modals/CreateExerciseGroupModal/CreateExerciseGroupModal';
 import { useNavigate, useParams } from 'react-router-dom';
+import internal from 'stream';
 
 export interface ExerciseOverview {
     id: number;
@@ -55,6 +56,13 @@ export interface Course {
     exerciseGroups: ExerciseGroup[];
     createdDate: Date | null;
     modifiedDate: Date | null;
+    attendees: Attendee[];
+}
+
+export interface Attendee {
+    courseId: number;
+    userId: string;
+    roleId: number;
 }
 
 interface CourseProps {
@@ -371,6 +379,7 @@ async function fetchCourse(courseId: number, callback: (course: Course) => void)
                 return res.json();
             })
             .then((course: Course) => {
+                console.log(course)
                 callback(course);
             });
     } catch (error) {

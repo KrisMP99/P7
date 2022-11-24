@@ -12,8 +12,8 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221124091043_attendees")]
-    partial class attendees
+    [Migration("20221124100718_list-attendees")]
+    partial class listattendees
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -309,6 +309,9 @@ namespace P7WebApp.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CourseId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
                     b.Property<string>("UserId")
@@ -906,7 +909,7 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Attendee", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
-                        .WithMany("Attendes")
+                        .WithMany("Attendees")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1028,7 +1031,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
                 {
-                    b.Navigation("Attendes");
+                    b.Navigation("Attendees");
 
                     b.Navigation("CourseRoles");
 

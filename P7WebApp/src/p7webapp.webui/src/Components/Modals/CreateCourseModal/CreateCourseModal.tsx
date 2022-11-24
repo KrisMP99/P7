@@ -23,7 +23,8 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         exerciseGroups: [],
         isPrivate: true,
         createdDate: null,
-        modifiedDate: null
+        modifiedDate: null,
+        attendees: []
     };
     const [course, setCourse] = useState<Course>(emptyCourse);
     

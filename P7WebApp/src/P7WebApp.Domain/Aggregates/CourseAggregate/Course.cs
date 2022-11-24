@@ -80,7 +80,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             {
                 if(attendee is not null)
                 {
-                    Attendes.Add(attendee);
+                    Attendees.Add(attendee);
                 }
                 else
                 {

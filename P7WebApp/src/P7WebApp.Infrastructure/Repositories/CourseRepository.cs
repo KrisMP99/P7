@@ -95,7 +95,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var courses = _context.Courses.Include(c => c.Attendes).Where(c => c.Attendes.Any(a => a.UserId == userId));
+                var courses = _context.Courses.Include(c => c.Attendees).Where(c => c.Attendees.Any(a => a.UserId == userId));
 
                 return courses;
             }
@@ -206,7 +206,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.Attendes).FirstOrDefaultAsync();
+                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.Attendees).FirstOrDefaultAsync();
 
                 if (course != null)
                 {
