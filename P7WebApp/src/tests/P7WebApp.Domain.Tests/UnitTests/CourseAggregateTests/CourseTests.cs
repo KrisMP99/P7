@@ -2,6 +2,7 @@
 using FluentAssertions;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using Moq;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 {
@@ -26,6 +27,35 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
             course.IsPrivate
                 .Should()
                 .Be(newVisibility);
+        }
+
+        [Fact]
+        public void EditInformation_Fails_ThrowsCourseExceptionGivenNullForTitleParameter()
+        {
+            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            string newDescription = "TestNew";
+            bool newVisibility = false;
+
+            Action act = () => course.EditInformation(newTitle: null, newDescription: newDescription, newVisibility: newVisibility);
+
+            act
+                .Should()
+                .Throw<CourseException>();
+        }
+
+        [Fact]
+        public void EditInformation_Fails_ThrowsCourseExceptionGivenNullForDescriptionParameter()
+        {
+            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            string newTitle = "TestNew";
+            string newDescription = "TestNew";
+            bool newVisibility = false;
+
+            Action act = () => course.EditInformation(newTitle: newTitle, newDescription: null, newVisibility: newVisibility);
+
+            act
+                .Should()
+                .Throw<CourseException>();
         }
 
         [Theory]
@@ -60,13 +90,13 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(100)]
-        public void GetExerciseGroup_Fails_ThrowsExceptionWhenExerciseGroupsListIsEmptyAndIsGivenExerciseGroupsIds(int exerciseGroupId)
+        public void GetExerciseGroup_Fails_ThrowsCourseExceptionnWhenExerciseGroupsListIsEmptyAndIsGivenExerciseGroupsIds(int exerciseGroupId)
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);
 
             Action act = () => course.GetExerciseGroup(exerciseGroupId);
 
-            act.Should().Throw<Exception>();
+            act.Should().Throw<CourseException>();
         }
 
         [Theory]
@@ -130,7 +160,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
-        public void GetExerciseGroup_Fail_ThrowsExceptionWhenNoExerciseGroupIsFoundGivenWrongGroupExerciseIdAndExerciseGroupListIsNotEmpty()
+        public void GetExerciseGroup_Fail_ThrowsCourseExceptionWhenNoExerciseGroupIsFoundGivenWrongGroupExerciseIdAndExerciseGroupListIsNotEmpty()
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);
 
@@ -149,7 +179,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<CourseException>();
         }
 
         [Fact]
@@ -173,7 +203,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
-        public void CreateInviteCode_Fails_ThrowsExceptionGivenNullAsParameter()
+        public void CreateInviteCode_Fails_ThrowsCourseExceptionGivenNullAsParameter()
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);    
 
@@ -181,7 +211,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<CourseException>();
         }
 
         [Fact]
@@ -206,7 +236,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
-        public void AddExerciseGroup_Fail_ThrowsExceptionGivenNullAsParameter()
+        public void AddExerciseGroup_Fail_ThrowsCourseExceptionGivenNullAsParameter()
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);
 
@@ -214,7 +244,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<CourseException>();
         }
 
         [Fact]
@@ -241,7 +271,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
-        public void RemoveExerciseGroup_Fail_ThrowsExceptionGivenExerciseGroupIdButTheExerciseGroupDoesNotExistAndExerciseGroupListIsEmpty()
+        public void RemoveExerciseGroup_Fail_ThrowsCourseExceptionGivenExerciseGroupIdAndTheExerciseGroupDoesNotExistAndExerciseGroupListIsEmpty()
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);
 
@@ -249,11 +279,11 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<CourseException>();
         }
 
         [Fact]
-        public void RemoveExerciseGroup_Fail_ThrowsExceptionGivenExerciseGroupIdButTheExerciseGroupDoesNotExistButTheExerciseGroupListIsNotEmpty()
+        public void RemoveExerciseGroup_Fail_ThrowsCourseExceptionGivenExerciseGroupIdAndTheExerciseGroupDoesNotExistAndTheExerciseGroupListIsNotEmpty()
         {
             var course = new Course(title: "Test", description: "Test", isPrivate: true);
 
@@ -271,7 +301,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<CourseException>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
@@ -19,6 +20,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             CreatedDate = DateTime.UtcNow;
             LastModifiedDate = CreatedDate;
             LayoutId = layoutId;
+            Modules = new List<Module>();
+            Solutions = new List<Solution>();
+            Submissions = new List<Submission>();
         }
 
         public int ExerciseGroupId { get; private set; }
@@ -31,20 +35,20 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime? VisibleTo { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
-        public List<Module>? Modules { get; private set; }
-        public List<Solution>? Solution { get; private set; }
-        public List<Submission>? Submissions { get; private set; }
+        public List<Module> Modules { get; private set; }
+        public List<Solution> Solutions { get; private set; }
+        public List<Submission> Submissions { get; private set; }
         public int LayoutId { get; private set; }
 
-        public void UpdateExerciseInformation(string newTitle, bool isVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int? layoutId)
+        public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId)
         {
-            Title = String.IsNullOrEmpty(newTitle) ? throw new ArgumentNullException("Title has not been set.") : newTitle;
-            ExerciseNumber = newExerciseNumber < 0 ? throw new ArgumentOutOfRangeException("Exercise number cannot be negative.") : newExerciseNumber;
-            IsVisible = isVisible;
+            Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseException("Title has not been set.") : newTitle;
+            IsVisible = newIsVisible;
+            ExerciseNumber = newExerciseNumber < 0 ? throw new ExerciseException("Exercise number cannot be negative.") : newExerciseNumber;
             VisibleFrom = newStartDate ?? VisibleFrom;
             VisibleTo = newEndDate ?? VisibleTo;
             LastModifiedDate = DateTime.Now;
-            LayoutId = layoutId ?? LayoutId;
+            LayoutId = ExerciseLayout.FromId(newLayoutId).Id;
         }
 
         public void AddModule(Module module)
@@ -57,7 +61,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 } 
                 else
                 {
-                    throw new Exception("Could not add modules");
+                    throw new ExerciseException("Could not add modules");
                 }
             }
             catch (Exception)
@@ -89,11 +93,11 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             {
                 if (solution is not null)
                 {
-                    Solution.Add(solution);
+                    Solutions.Add(solution);
                 }
                 else
                 {
-                    throw new Exception("Could not create solution");
+                    throw new ExerciseException("Could not create solution");
                 }
             }
             catch (Exception)
@@ -107,7 +111,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                Solution.Remove(GetSolution(solutionId));
+                Solutions.Remove(GetSolution(solutionId));
             }
             catch (Exception)
             {
@@ -119,7 +123,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Solution.Where(s => s.Id == solutionId).FirstOrDefault();
+                var result = Solutions.Where(s => s.Id == solutionId).FirstOrDefault();
                 if (result is not null)
                 {
                     return result;
@@ -146,7 +150,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not create submission");
+                    throw new ExerciseException("Could not create submission");
                 }
             }
             catch (Exception)

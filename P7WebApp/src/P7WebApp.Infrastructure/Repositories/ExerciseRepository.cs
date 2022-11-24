@@ -21,7 +21,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var exercise = await _context.Exercises.Include(e => e.Solution).FirstOrDefaultAsync();
+                var exercise = await _context.Exercises.Include(e => e.Solutions).FirstOrDefaultAsync();
                 if (exercise is not null)
                 {
                     return exercise;

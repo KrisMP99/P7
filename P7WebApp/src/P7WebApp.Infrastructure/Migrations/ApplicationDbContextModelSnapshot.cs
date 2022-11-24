@@ -997,7 +997,7 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Exercise", null)
-                        .WithMany("Solution")
+                        .WithMany("Solutions")
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1042,7 +1042,7 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     b.Navigation("Modules");
 
-                    b.Navigation("Solution");
+                    b.Navigation("Solutions");
 
                     b.Navigation("Submissions");
                 });

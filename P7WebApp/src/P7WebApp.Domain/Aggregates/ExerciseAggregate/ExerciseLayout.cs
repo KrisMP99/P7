@@ -12,9 +12,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public static ExerciseLayout Single = new ExerciseLayout(1, nameof(Single).ToLowerInvariant());
         public static ExerciseLayout TwoVertical = new ExerciseLayout(2, nameof(TwoVertical).ToLowerInvariant());
         public static ExerciseLayout TwoHorizontal = new ExerciseLayout(3, nameof(TwoHorizontal).ToLowerInvariant());
-        public static ExerciseLayout TwoLeftOneRight = new ExerciseLayout(1, nameof(TwoLeftOneRight).ToLowerInvariant());
-        public static ExerciseLayout OneLeftTwoRight = new ExerciseLayout(2, nameof(OneLeftTwoRight).ToLowerInvariant());
-        public static ExerciseLayout TwoLeftTwoRight = new ExerciseLayout(3, nameof(TwoLeftTwoRight).ToLowerInvariant());
+        public static ExerciseLayout TwoLeftOneRight = new ExerciseLayout(4, nameof(TwoLeftOneRight).ToLowerInvariant());
+        public static ExerciseLayout OneLeftTwoRight = new ExerciseLayout(5, nameof(OneLeftTwoRight).ToLowerInvariant());
+        public static ExerciseLayout TwoLeftTwoRight = new ExerciseLayout(6, nameof(TwoLeftTwoRight).ToLowerInvariant());
 
         public static IEnumerable<ExerciseLayout> List() =>
             new[] { Single, TwoVertical, TwoHorizontal, TwoLeftOneRight, OneLeftTwoRight, TwoLeftTwoRight };

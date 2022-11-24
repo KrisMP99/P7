@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 {
@@ -47,7 +48,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(100)]
-        public void GetExercise_Fails_ThrowsExceptionWhenExerciseListIsEmptyAndIsGivenExerciseId(int exerciseId)
+        public void GetExercise_Fails_ThrowsExerciseGroupExceptionWhenExerciseListIsEmptyAndIsGivenExerciseId(int exerciseId)
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -63,7 +64,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<ExerciseGroupException>();
         }
 
         [Theory]
@@ -150,7 +151,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void GetExercise_Fail_ThrowsExceptionWhenExerciseCouldNotBefoundGivenCorrectExerciseIdAndExerciseListIsEmpty()
+        public void GetExercise_Fail_ThrowsExerciseGroupExceptionWhenExerciseCouldNotBefoundGivenCorrectExerciseIdAndExerciseListIsEmpty()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -165,11 +166,11 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<ExerciseGroupException>();
         }
 
         [Fact]
-        public void GetExercise_Fail_ThrowsExceptionWhenExerciseCouldNotBefoundGivenCorrectExerciseIdAndExerciseListIsNotEmpty()
+        public void GetExercise_Fail_ThrowsExerciseGroupExceptionWhenExerciseCouldNotBefoundGivenCorrectExerciseIdAndExerciseListIsNotEmpty()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -199,7 +200,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<ExerciseGroupException>();
         }
 
 
@@ -305,7 +306,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
                 visibleFromDate: DateTime.UtcNow
                 );
             string newTitle = "NewTest";
-            string newDescription = "Test";
+            string newDescription = "NewTest";
             int newExerciseGroupNumber = 999;
             bool newIsVisible = false;
             DateTime newVisibleFromDate = DateTime.UtcNow;
@@ -332,6 +333,93 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
             exerciseGroup.VisibleFromDate
                 .Should()
                 .BeSameDateAs(newVisibleFromDate);
+        }
+
+        [Fact]
+        public void EditInformation_Fails_ThrowsExerciseGroupExceptionGivenNullAsTitleParameter()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+            string newTitle = null;
+            string newDescription = "NewTest";
+            int newExerciseGroupNumber = 999;
+            bool newIsVisible = false;
+            DateTime newVisibleFromDate = DateTime.UtcNow;
+
+            Action act = () => exerciseGroup.EditInformation(
+                                newTitle: newTitle,
+                                newDescription: newDescription,
+                                newExerciseGroupNumber,
+                                newIsVisible,
+                                newBecomeVisibleAt: newVisibleFromDate);
+
+            act
+                .Should()
+                .Throw<ExerciseGroupException>();
+        }
+
+        [Fact]
+        public void EditInformation_Fails_ThrowsExerciseGroupExceptionGivenNullAsDescriptionParameter()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+            string newTitle = "NewTest";
+            string newDescription = null;
+            int newExerciseGroupNumber = 999;
+            bool newIsVisible = false;
+            DateTime newVisibleFromDate = DateTime.UtcNow;
+
+            Action act = () => exerciseGroup.EditInformation(
+                                newTitle: newTitle,
+                                newDescription: newDescription,
+                                newExerciseGroupNumber,
+                                newIsVisible,
+                                newBecomeVisibleAt: newVisibleFromDate);
+
+            act
+                .Should()
+                .Throw<ExerciseGroupException>();
+        }
+
+        [Fact]
+        public void EditInformation_Fails_ThrowsExerciseGroupExceptionGivenNegativeNumberAsExerciseGroupNumber()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+            string newTitle = "NewTest";
+            string newDescription = "NewTest";
+            int newExerciseGroupNumber = -1;
+            bool newIsVisible = false;
+            DateTime newVisibleFromDate = DateTime.UtcNow;
+
+            Action act = () => exerciseGroup.EditInformation(
+                                newTitle: newTitle,
+                                newDescription: newDescription,
+                                newExerciseGroupNumber,
+                                newIsVisible,
+                                newBecomeVisibleAt: newVisibleFromDate);
+
+            act
+                .Should()
+                .Throw<ExerciseGroupException>();
         }
 
         [Fact]
@@ -381,7 +469,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<ExerciseGroupException>();
         }
 
         [Fact]
@@ -436,7 +524,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<ExerciseGroupException>();
         }
 
         [Fact]
@@ -470,7 +558,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 
             act
                 .Should()
-                .Throw<Exception>();
+                .Throw<ExerciseGroupException>();
         }
 
     }

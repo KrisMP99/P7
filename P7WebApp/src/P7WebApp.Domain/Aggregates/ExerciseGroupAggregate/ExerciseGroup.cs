@@ -1,6 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
 {
@@ -40,7 +41,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not find an exercise with the specified id");
+                    throw new ExerciseGroupException("Could not find an exercise with the specified id");
                 }
             }
             catch (Exception)
@@ -54,12 +55,11 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             return Exercises;
         }
 
-        // should we have null checks here, or is that done in the validators?
         public void EditInformation(string newTitle, string newDescription, int newExerciseGroupNumber, bool isVisible, DateTime newBecomeVisibleAt)
         {
-            Title = String.IsNullOrEmpty(newTitle) ? throw new ArgumentNullException("Title has not been set.") : newTitle;
-            Description = String.IsNullOrEmpty(newDescription) ? throw new ArgumentNullException("Description has not been set.") : newDescription;
-            ExerciseGroupNumber = ExerciseGroupNumber < 0 ? throw new ArgumentOutOfRangeException("Exercisegroup number cannot be negative.") : newExerciseGroupNumber;
+            Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseGroupException("Title has not been set.") : newTitle;
+            Description = String.IsNullOrEmpty(newDescription) ? throw new ExerciseGroupException("Description has not been set.") : newDescription;
+            ExerciseGroupNumber = newExerciseGroupNumber < 0 ? throw new ExerciseGroupException("Exercisegroup number cannot be negative.") : newExerciseGroupNumber;
             IsVisible = isVisible;
             VisibleFromDate = newBecomeVisibleAt;
             LastModifiedDate = DateTime.Now;
@@ -71,7 +71,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             {
                 if(newExercise == null)
                 {
-                    throw new Exception("Could not add exercise (Exercise is null)");
+                    throw new ExerciseGroupException("Could not add exercise (Exercise is null)");
                 } 
                 else
                 {

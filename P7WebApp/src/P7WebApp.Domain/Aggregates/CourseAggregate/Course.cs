@@ -1,6 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
@@ -11,21 +12,23 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             Title = title;
             Description = description;
             IsPrivate = isPrivate;
+            ExerciseGroups = new List<ExerciseGroup>();
+            CourseRoles = new List<CourseRole>();
+            Attendes = new List<Attendee>();
         }
 
         public string Title { get; private set; }
         public string Description { get; private set; }
         public bool IsPrivate { get; private set; }
         public InviteCode? InviteCode { get; private set; }
-        public List<ExerciseGroup> ExerciseGroups { get; private set; } = new List<ExerciseGroup>();
-        public List<CourseRole> CourseRoles { get; private set; } = new List<CourseRole>();
-        public List<Attendee> Attendes { get; private set; } = new List<Attendee>();
-        
-        // Should we have argument null checks as done in ExerciseGroup.cs?
+        public List<ExerciseGroup> ExerciseGroups { get; private set; }
+        public List<CourseRole> CourseRoles { get; private set; }
+        public List<Attendee> Attendes { get; private set; }
+
         public void EditInformation(string newTitle, string newDescription, bool newVisibility)
         {
-            Title = newTitle;
-            Description = newDescription;
+            Title = String.IsNullOrEmpty(newTitle) ? throw new CourseException("The title has not been set.") : newTitle;
+            Description = String.IsNullOrEmpty(newDescription) ? throw new CourseException("Description has not been set.") : newDescription;
             IsPrivate= newVisibility;
         }
 
@@ -41,7 +44,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not find an exercise group with the specified id");
+                    throw new CourseException("Could not find an exercise group with the specified id");
                 }
             }
             catch (Exception)
@@ -60,7 +63,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not create the invite code");
+                    throw new CourseException("Could not create the invite code");
                 }    
             }
             catch(Exception)
@@ -94,7 +97,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not add the exercisegroup to the course (exercisegroup is null)");
+                    throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)");
                 }
             }
             catch(Exception)

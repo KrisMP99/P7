@@ -12,8 +12,8 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221123124930_tables")]
-    partial class tables
+    [Migration("20221124082417_Tables")]
+    partial class Tables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1000,7 +1000,7 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Exercise", null)
-                        .WithMany("Solution")
+                        .WithMany("Solutions")
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1045,7 +1045,7 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     b.Navigation("Modules");
 
-                    b.Navigation("Solution");
+                    b.Navigation("Solutions");
 
                     b.Navigation("Submissions");
                 });
