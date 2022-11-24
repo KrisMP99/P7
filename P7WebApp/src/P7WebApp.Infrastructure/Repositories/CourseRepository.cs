@@ -74,7 +74,11 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.ExerciseGroups).Include(c => c.InviteCode).FirstOrDefaultAsync();
+                var course = await _context.Courses.Where(c => c.Id == courseId)
+                                                   .Include(c => c.ExerciseGroups)
+                                                   .Include(c => c.InviteCode)
+                                                   .Include(c => c.Attendees)
+                                                   .FirstOrDefaultAsync();
                 if (course != null)
                 {
                     return course;

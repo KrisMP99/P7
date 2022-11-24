@@ -80,6 +80,7 @@ export default function CourseView(props: CourseProps) {
     const [course, setCourse] = useState<Course | null>(null);
     const [editedCourse, setEditedCourse] = useState<Course | null>(null);
     const [isOwner, setIsOwner] = useState<boolean>(false);
+    const [isAttendee, setIsAttendee] = useState<boolean>(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [inviteCode, setInviteCode] = useState<string>("");
 
@@ -102,14 +103,25 @@ export default function CourseView(props: CourseProps) {
         }
     }, []);
 
-    useEffect(() => {
-        if (props.user.id === course?.createdById && !isOwner) {
-            setIsOwner(true);
+    useEffect(()=> {
+        if (course){
+            console.log(props.user.id + ":" + course.createdById)
+            if (props.user.id === course?.createdById) {
+                setIsOwner(true);
+            }
+            else {
+                setIsOwner(false);
+            }
+            if (course!.attendees.filter((a) => a.userId === props.user.id).length > 0 && !isOwner){
+                setIsAttendee(true);
+            }
         }
-        // setIsOwner(true)
+    }, [course])
+    useEffect(() => {
         setEditedCourse(course);
     }, [course?.createdById, props.user.id, isOwner]);
 
+    console.log(isAttendee)
     return isLoading ? 
         (<></>) :
         (<Container>
@@ -124,15 +136,25 @@ export default function CourseView(props: CourseProps) {
                     }}
                     readOnly={!isEditMode}
                 />
-                <div style={{float:'right'}} >
-                    <Button size='sm' className='btn-3' onClick={() => {
-                        if (courseId) {
-                            enrollToCourse(courseId, ()=>{});
-                        }
-                    }}>
-                        Enroll
-                    </Button>
-                </div>
+                {!isOwner && <div style={{float:'right'}} >
+                    {
+                        isAttendee?
+                        <Button size='sm' className='btn-3' onClick={() => {
+                            if (courseId) {
+                                // leaveCourse(courseId, ()=>{});
+                            }
+                        }}>
+                            Leave
+                        </Button>: 
+                        <Button size='sm' className='btn-3' onClick={() => {
+                            if (courseId) {
+                                enrollToCourse(courseId, ()=>{});
+                            }
+                        }}>
+                            Enroll
+                        </Button>
+                    }     
+                </div> }
                 {isOwner && 
                     (<div style={{ float: 'right' }}>
                         {isEditMode &&
