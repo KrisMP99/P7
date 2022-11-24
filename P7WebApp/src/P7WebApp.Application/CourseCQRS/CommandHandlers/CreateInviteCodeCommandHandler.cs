@@ -24,7 +24,6 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 if (course.InviteCode is null)
                 {
                     course.CreateInviteCode(inviteCode);
-                    await _unitOfWork.CourseRepository.UpdateCourse(course);
                     await _unitOfWork.CommitChangesAsync(cancellationToken);
                 }
 

@@ -65,7 +65,6 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                             }
                         }}>
                             <Form.Control 
-                                defaultValue={'Enter Invite Code Here...'}
                                 type='number'
                                 value={inviteCode}
                                 isInvalid={invalidInviteCode}

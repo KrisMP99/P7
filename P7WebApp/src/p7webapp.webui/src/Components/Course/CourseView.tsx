@@ -113,8 +113,12 @@ export default function CourseView(props: CourseProps) {
             if (course!.attendees.filter((a) => a.userId === props.user.id).length > 0 && !isOwner){
                 setIsAttendee(true);
             }
+            else {
+                setIsAttendee(false);
+            }
         }
-    }, [course, props.user.id])
+    }, [course, props.user.id, course?.attendees.length]);
+
     useEffect(() => {
         setEditedCourse(course);
     }, [course?.createdById, props.user.id, isOwner]);
@@ -138,14 +142,18 @@ export default function CourseView(props: CourseProps) {
                         isAttendee?
                         <Button size='sm' className='btn-3' onClick={() => {
                             if (courseId) {
-                                // leaveCourse(courseId, ()=>{});
+                                leaveCourse(courseId, ()=>{
+                                    fetchCourse(courseId, (newCourse) => setCourse(newCourse));
+                                });
                             }
                         }}>
                             Leave
                         </Button>: 
                         <Button size='sm' className='btn-3' onClick={() => {
                             if (courseId) {
-                                enrollToCourse(courseId, ()=>{});
+                                enrollToCourse(courseId, ()=>{
+                                    fetchCourse(courseId, (newCourse) => setCourse(newCourse));
+                                });
                             }
                         }}>
                             Enroll
@@ -172,14 +180,7 @@ export default function CourseView(props: CourseProps) {
                         }
                         {!isEditMode &&
                             <>
-                                {inviteCode !== "" && 
-                                <>
-                                    <Form.Control readOnly value={inviteCode}/>
-                                    {/* <Toast delay={2500} autohide>
-                                        <Toast.Body>Invite code copied to clipboard</Toast.Body>
-                                    </Toast> */}
-                                </>
-                                }
+                                {inviteCode !== "" && <Form.Control readOnly value={inviteCode}/>}
                                 <Button size='sm' className='btn-3' onClick={() => {
                                     getInviteCode(course?.id!, (inviteCode) => 
                                     {
@@ -347,6 +348,33 @@ async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, ca
     }
 }
 
+async function leaveCourse(courseId: number, callback: () => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            }
+        }
+        await fetch(getApiRoot() + 'courses/' + courseId + '/leave', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then(() => {
+                callback();
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
 async function enrollToCourse(courseId: number, callback: () => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
@@ -369,8 +397,8 @@ async function enrollToCourse(courseId: number, callback: () => void) {
                 }
                 return res.json();
             })
-            .then((data) => {
-                // callback(course);
+            .then(() => {
+                callback();
             });
     } catch (error) {
         alert(error);

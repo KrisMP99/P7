@@ -93,9 +93,24 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             }
         }
 
-        public void RemoveAttendee()
+        public void RemoveAttendee(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var attendee = Attendees.Where(a => a.UserId == userId).FirstOrDefault();
+                if (attendee is not null)
+                {
+                    Attendees.Remove(attendee);
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void AddExerciseGroup(ExerciseGroup exerciseGroup)
