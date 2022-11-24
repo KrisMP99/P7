@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace P7WebApp.Application.CourseCQRS.Commands
+namespace P7WebApp.Application.CourseCQRS.Commands.DeleteExerciseGroup
 {
     public class DeleteExerciseGroupCommand : IRequest<int>
     {

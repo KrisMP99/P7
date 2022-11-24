@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.Application.ExerciseCQRS.Commands
+namespace P7WebApp.Application.ExerciseCQRS.Commands.CreateSubmission
 {
     public class CreateSubmissionCommand : IRequest<int>
     {

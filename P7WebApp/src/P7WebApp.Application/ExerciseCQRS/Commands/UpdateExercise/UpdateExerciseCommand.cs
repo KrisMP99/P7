@@ -1,7 +1,7 @@
 using MediatR;
 using System.Runtime.InteropServices;
 
-namespace P7WebApp.Application.ExerciseCQRS.Commands
+namespace P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise
 {
     public class UpdateExerciseCommand : IRequest<int>
     {
@@ -19,7 +19,7 @@ namespace P7WebApp.Application.ExerciseCQRS.Commands
             LastModifiedDate = CreatedDate;
             LayoutId = layoutId;
         }
-        
+
         public int Id { get; set; }
         public string Title { get; set; }
         public bool IsVisible { get; set; }
