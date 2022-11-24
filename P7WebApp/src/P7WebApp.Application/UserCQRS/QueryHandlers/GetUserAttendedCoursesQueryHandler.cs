@@ -25,15 +25,21 @@ namespace P7WebApp.Application.UserCQRS.QueryHandlers
         // TODO: Implement correctly
         public async Task<IEnumerable<CourseOverviewResponse>> Handle(GetUserAttendedCoursesQuery request, CancellationToken cancellationToken)
         {
-            var userId = _currentUserService.UserId;
+            try
+            {
+                var userId = _currentUserService.UserId;
 
-            if (userId is null) throw new Exception("User not found.");
+                if (userId is null) throw new Exception("User not found.");
 
-            var courses = await _courseRepository.GetAttendedCourses(userId);
-            var result = CourseMapper.Mapper.Map<IEnumerable<CourseOverviewResponse>>(courses);
+                var courses = await _courseRepository.GetAttendedCourses(userId);
+                var result = CourseMapper.Mapper.Map<IEnumerable<CourseOverviewResponse>>(courses);
 
-            return result;
-
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

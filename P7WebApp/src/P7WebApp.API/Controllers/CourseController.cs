@@ -71,6 +71,36 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("invite-code/{code}")]
+        public async Task<IActionResult> GetCourseFromInviteCode([FromRoute] int code)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCourseFromInviteCodeQuery(code));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("enroll")]
+        public async Task<IActionResult> EnrollToCourse([FromBody] EnrollToCourseCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(new EnrollToCourseCommand(request.CourseId));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete]
         [Route("{courseId}")]
         public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
@@ -238,7 +268,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpDelete]
-        [Route("course/{courseId}/exercise-group/{exerciseGroupId}")]
+        [Route("{courseId}/exercise-group/{exerciseGroupId}")]
         public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int courseId, [FromRoute] int exerciseGroupId)
         {
             try
