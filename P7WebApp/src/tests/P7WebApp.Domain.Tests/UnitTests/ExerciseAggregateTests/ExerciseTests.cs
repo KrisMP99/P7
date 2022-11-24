@@ -61,7 +61,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void EditInformation_Fails_ThrowsExerciseExceptionGivenNullAsTitleParameter()
+        public void EditInformation_ThrowsExerciseException_GivenNullAsTitleParameter()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -96,7 +96,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void EditInformation_Fails_ThrowsExerciseExceptionGivenNegativeNumberAsExerciseNumberParameter()
+        public void EditInformation_ThrowsExerciseException_GivenNegativeNumberAsExerciseNumberParameter()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -134,7 +134,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         [InlineData(7)]
         [InlineData(10)]
         [InlineData(100)]
-        public void EditInformation_Fails_ThrowsExerciseExceptionGivenInvalidLayoutIdNumber(int layoutId)
+        public void EditInformation_ThrowsExerciseException_GivenInvalidLayoutIdNumber(int layoutId)
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -224,7 +224,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void AddModule_Success_AddModulesToModuleListGivenTextModule()
+        public void AddModule_Success_GivenTextModule()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -251,8 +251,163 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 .Contain(module);
         }
 
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        public void AddModule_ThrowsExerciseException_GivenXPlusOneModulesAndOnlyXModulesIsAllowed(int layoutId)
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: layoutId);
+
+            var module = new TextModule(
+                    description: "Test",
+                    height: 10.00,
+                    width: 10.00,
+                    position: 1,
+                    text: "test");
+
+            var numberOfAllowedModules = ExerciseLayout.GetNumberOfModulesAllowed(layoutId);
+
+            for (int i = 0; i < numberOfAllowedModules + 1; i++)
+            {
+                module = new TextModule(
+                    description: "Test",
+                    height: 10.00,
+                    width: 10.00,
+                    position: 1,
+                    text: "test");
+
+                exercise.AddModule(module);
+            }
+
+            Action act = () => exercise.AddModule(module);
+
+            act
+                .Should()
+                .Throw<ExerciseException>();
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        public void AddModule_Success_GivenXModulesAndXModulesIsAllowed(int layoutId)
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: layoutId);
+
+            var numberOfAllowedModules = ExerciseLayout.GetNumberOfModulesAllowed(layoutId);
+
+            for (int i = 0; i < numberOfAllowedModules; i++)
+            {
+                var module = new TextModule(
+                    description: "Test",
+                    height: 10.00,
+                    width: 10.00,
+                    position: i + 1,
+                    text: "test");
+
+                exercise.AddModule(module);
+            }
+
+            exercise.Modules
+                .Should()
+                .HaveCount(numberOfAllowedModules);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void AddModule_Success_GivenCorrectModulePosition(int modulePosition)
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            var module = new TextModule(
+                description: "Test",
+                height: 10.00,
+                width: 10.00,
+                position: modulePosition,
+                text: "test");
+
+            exercise.AddModule(module);
+
+            exercise.Modules
+                .Should()
+                .Contain(module)
+                .Which
+                .Position
+                .Should()
+                .Be(modulePosition);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(5)]
+        [InlineData(6)]
+        public void AddModule_ThrowsExerciseException_GivenInvalidPositionValue(int modulePosition)
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            var module = new TextModule(
+                description: "Test",
+                height: 10.00,
+                width: 10.00,
+                position: modulePosition,
+                text: "test");
+
+            Action act = () => exercise.AddModule(module);
+
+            act
+                .Should()
+                .Throw<ExerciseException>();
+        }
+
         [Fact]
-        public void AddModule_Fails_ThrowsExerciseExceptionWhenModuleIsNull()
+        public void AddModule_ThrowsExerciseException_GivenModuleIsNull()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -371,7 +526,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void RemoveModuleById_Fails_ThrowsExerciseExceptionGivenIncorrectModuleIdAndModuleListIsEmpty()
+        public void RemoveModuleById_ThrowsExerciseException_GivenIncorrectModuleIdAndModuleListIsEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -392,7 +547,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void RemoveModuleById_Fails_ThrowsExerciseExceptionGivenIncorrectModuleIdAndModuleListIsNotEmpty()
+        public void RemoveModuleById_ThrowsExerciseException_GivenIncorrectModuleIdAndModuleListIsNotEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -459,7 +614,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void GetModuleId_Fails_ThrowsExerciseExceptionGivenModuleIdIsNotInModuleListAndModuleListIsEmpty()
+        public void GetModuleId_ThrowsExerciseException_GivenModuleIdIsNotInModuleListAndModuleListIsEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -480,7 +635,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void GetModuleId_Fails_ThrowsExerciseExceptionGivenModuleIdIsNotInModuleListAndModuleListIsNotEmpty()
+        public void GetModuleId_ThrowsExerciseException_GivenModuleIdIsNotInModuleListAndModuleListIsNotEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -538,7 +693,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void AddSolution_Fails_ThrowsExerciseExceptionGivenSolutionIsNull()
+        public void AddSolution_ThrowsExerciseException_GivenSolutionIsNull()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -587,7 +742,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void RemoveSolutionById_Fails_ThrowsExerciseExceptionGivenSolutionIdWhichDoesNotExistAndSolutionsListIsEmpty()
+        public void RemoveSolutionById_ThrowsExerciseException_GivenSolutionIdWhichDoesNotExistAndSolutionsListIsEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -608,7 +763,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void RemoveSolutionById_Fails_ThrowsExerciseExceptionGivenSolutionIdWhichDoesNotExistAndSolutionsListIsNotEmpty()
+        public void RemoveSolutionById_ThrowsExerciseException_GivenSolutionIdWhichDoesNotExistAndSolutionsListIsNotEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -665,7 +820,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void AddSubmission_Fails_GivenSubmissionIsNull()
+        public void AddSubmission_ThrowsExerciseException_GivenSubmissionIsNull()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -718,7 +873,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void RemoveSubmissionById_Fails_ThrowsExerciseExceptionGivenSubmissionIdDoesNotExistAndSubmissionListIsEmpty()
+        public void RemoveSubmissionById_ThrowsExerciseException_GivenSubmissionIdDoesNotExistAndSubmissionListIsEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -739,7 +894,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void RemoveSubmissionById_Fails_ThrowsExerciseExceptionGivenSubmissionIdDoesNotExistAndSubmissionListIsNotEmpty()
+        public void RemoveSubmissionById_ThrowsExerciseException_GivenSubmissionIdDoesNotExistAndSubmissionListIsNotEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -803,7 +958,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void GetSubmissionById_Fails_ThrowsExerciseExceptionGivenSubmissionIdDoesNotExistInSubmissionListAndSubmissionListIsEmpty()
+        public void GetSubmissionById_ThrowsExerciseException_GivenSubmissionIdDoesNotExistInSubmissionListAndSubmissionListIsEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -824,7 +979,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Fact]
-        public void GetSubmissionById_Fails_ThrowsExerciseExceptionGivenSubmissionIdDoesNotExistInSubmissionListAndSubmissionListIsNotEmpty()
+        public void GetSubmissionById_ThrowsExerciseException_GivenSubmissionIdDoesNotExistInSubmissionListAndSubmissionListIsNotEmpty()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,

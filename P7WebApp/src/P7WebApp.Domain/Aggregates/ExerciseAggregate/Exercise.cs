@@ -55,19 +55,45 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                if (module is not null)
-                {
-                    Modules.Add(module);
-                } 
-                else
+                if (module is null)
                 {
                     throw new ExerciseException("Could not add modules");
+                } 
+                
+                if(CanModuleBeAddedToExercise(module))
+                {
+                    Modules.Add(module);
                 }
             }
             catch (Exception)
             {
                 throw;
             }
+        }
+
+        private bool CanModuleBeAddedToExercise(Module module)
+        {
+            var numOfModules = Modules.Count();
+            var numberOfModulesAllowed = ExerciseLayout.GetNumberOfModulesAllowed(this.LayoutId);
+
+            if(numOfModules > numberOfModulesAllowed)
+            {
+                throw new ExerciseException("");
+            }
+
+            if(module.Position < 1 || module.Position > 4)
+            {
+                throw new ExerciseException($"The modules position '{module.Position}' is invalid. Allowed values are: 1-4.");
+            }
+
+            var result = Modules.Find(m => m.Position == module.Position);
+
+            if (result is not null)
+            {
+                throw new ExerciseException($"Module position '{module.Position}' is already assigned to another module.");
+            }
+            
+            return true;
         }
 
         public void RemoveModuleById(int moduleId)

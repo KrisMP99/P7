@@ -48,7 +48,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(100)]
-        public void GetExercise_Fails_ThrowsExerciseGroupExceptionWhenExerciseListIsEmptyAndIsGivenExerciseId(int exerciseId)
+        public void GetExercise_ThrowsExerciseGroupException_GivenExerciseListIsEmptyAndIsGivenExerciseId(int exerciseId)
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -151,7 +151,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void GetExercise_Fail_ThrowsExerciseGroupExceptionWhenExerciseCouldNotBefoundGivenCorrectExerciseIdAndExerciseListIsEmpty()
+        public void GetExercise_ThrowsExerciseGroupException_GivenExerciseCouldNotBefoundGivenCorrectExerciseIdAndExerciseListIsEmpty()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -170,7 +170,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void GetExercise_Fail_ThrowsExerciseGroupExceptionWhenExerciseCouldNotBefoundGivenCorrectExerciseIdAndExerciseListIsNotEmpty()
+        public void GetExercise_ThrowsExerciseGroupException_GivenExerciseCouldNotBefoundGivenCorrectExerciseIdAndExerciseListIsNotEmpty()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -336,7 +336,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void EditInformation_Fails_ThrowsExerciseGroupExceptionGivenNullAsTitleParameter()
+        public void EditInformation_ThrowsExerciseGroupException_GivenNullAsTitleParameter()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -365,7 +365,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void EditInformation_Fails_ThrowsExerciseGroupExceptionGivenNullAsDescriptionParameter()
+        public void EditInformation_ThrowsExerciseGroupException_GivenNullAsDescriptionParameter()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -394,7 +394,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void EditInformation_Fails_ThrowsExerciseGroupExceptionGivenNegativeNumberAsExerciseGroupNumber()
+        public void EditInformation_ThrowsExerciseGroupException_GivenNegativeNumberAsExerciseGroupNumber()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -454,7 +454,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void AddExercise_Fails_ThrowsExceptionGivenNullAsParameter()
+        public void AddExercise_ThrowsExerciseGroupException_GivenNullAsParameter()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -466,6 +466,82 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
                 );
 
             Action act = () => exerciseGroup.AddExercise(null);
+
+            act
+                .Should()
+                .Throw<ExerciseGroupException>();
+        }
+
+        [Fact]
+        public void AddExercise_ThrowsExerciseGroupException_GivenNegativeExerciseNumber()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: -1,
+                null,
+                null,
+                null,
+                null,
+                1
+                ); 
+            
+            Action act = () => exerciseGroup.AddExercise(exercise);
+
+            act
+                .Should()
+                .Throw<ExerciseGroupException>();
+        }
+
+        [Fact]
+        public void AddExercise_ThrowsExerciseGroupException_GivenTwoExercisesWithSameExerciseNumber()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+
+            var exercise1 = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                null,
+                null,
+                null,
+                null,
+                1
+                );
+
+            var exercise2 = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                null,
+                null,
+                null,
+                null,
+                1
+                );
+
+            exerciseGroup.AddExercise(exercise1);
+
+            Action act = () => exerciseGroup.AddExercise(exercise2);
 
             act
                 .Should()
@@ -509,7 +585,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void RemoveExerciseById_Fails_ThrowsExceptionGivenExerciseIdButTheExerciseIsNotInExerciseListAndTheExerciseListIsEmpty()
+        public void RemoveExerciseById_ThrowsExerciseGroupException_GivenExerciseIdButTheExerciseIsNotInExerciseListAndTheExerciseListIsEmpty()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -528,7 +604,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void RemoveExerciseById_Fails_ThrowsExceptionGivenExerciseIdButTheExerciseIsNotInExerciseListAndTheExerciseListIsNotEmpty()
+        public void RemoveExerciseById_ThrowsExerciseGroupException_GivenExerciseIdButTheExerciseIsNotInExerciseListAndTheExerciseListIsNotEmpty()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -560,6 +636,5 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
                 .Should()
                 .Throw<ExerciseGroupException>();
         }
-
     }
 }

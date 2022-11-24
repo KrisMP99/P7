@@ -91,19 +91,37 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             try
             {
-                if(exerciseGroup is not null)
-                {
-                    ExerciseGroups.Add(exerciseGroup);
-                }
-                else
+                if(exerciseGroup is null)
                 {
                     throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)");
+                }
+                
+                if(CheckExerciseGroupNumberIsOk(exerciseGroup))
+                {
+                    ExerciseGroups.Add(exerciseGroup);
                 }
             }
             catch(Exception)
             {
                 throw;
             }
+        }
+
+        private bool CheckExerciseGroupNumberIsOk(ExerciseGroup exerciseGroup)
+        {
+            if(exerciseGroup.ExerciseGroupNumber < 0)
+            {
+                throw new CourseException("The exercise group number cannot be less than 0.");
+            }
+
+            var result = ExerciseGroups.Find(eg => eg.Id == exerciseGroup.ExerciseGroupNumber);
+
+            if (result is not null)
+            {
+                throw new CourseException($"An exercise group with exercise group number {result.ExerciseGroupNumber} already exists.");
+            }
+
+            return true;
         }
 
         public void RemoveExerciseGroup(int exerciseGroupId)

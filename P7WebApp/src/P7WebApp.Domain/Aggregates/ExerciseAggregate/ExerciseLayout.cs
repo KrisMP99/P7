@@ -8,7 +8,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public ExerciseLayout(int id, string name) : base(id, name)
         {
         }
-        
+
         public static ExerciseLayout Single = new ExerciseLayout(1, nameof(Single).ToLowerInvariant());
         public static ExerciseLayout TwoVertical = new ExerciseLayout(2, nameof(TwoVertical).ToLowerInvariant());
         public static ExerciseLayout TwoHorizontal = new ExerciseLayout(3, nameof(TwoHorizontal).ToLowerInvariant());
@@ -19,29 +19,48 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public static IEnumerable<ExerciseLayout> List() =>
             new[] { Single, TwoVertical, TwoHorizontal, TwoLeftOneRight, OneLeftTwoRight, TwoLeftTwoRight };
 
-            public static ExerciseLayout FromName(string name)
+        public static ExerciseLayout FromName(string name)
+        {
+            var state = List()
+                .SingleOrDefault(s => String.Equals(s.Name, name, StringComparison.CurrentCultureIgnoreCase));
+
+            if (state == null)
             {
-                var state = List()
-                    .SingleOrDefault(s => String.Equals(s.Name, name, StringComparison.CurrentCultureIgnoreCase));
-
-                if (state == null)
-                {
-                    throw new ExerciseException($"Possible values for layout of an exercise: {String.Join(",", List().Select(s => s.Name))}");
-                }
-
-                return state;
+                throw new ExerciseException($"Possible values for layout of an exercise: {String.Join(",", List().Select(s => s.Name))}");
             }
 
-            public static ExerciseLayout FromId(int id)
+            return state;
+        }
+
+        public static ExerciseLayout FromId(int id)
+        {
+            var state = List().SingleOrDefault(s => s.Id == id);
+
+            if (state == null)
             {
-                var state = List().SingleOrDefault(s => s.Id == id);
+                throw new ExerciseException($"Possible values for layout of an exercise: {String.Join(",", List().Select(s => s.Name))}");
+            }
 
-                if (state == null)
-                {
-                    throw new ExerciseException($"Possible values for layout of an exercise: {String.Join(",", List().Select(s => s.Name))}");
-                }
+            return state;
+        }
 
-                return state;
+        public static int GetNumberOfModulesAllowed(int id)
+        {
+            switch (id)
+            {
+                case 1:
+                    return 1;
+                case 2:
+                case 3:
+                    return 2;
+                case 4:
+                case 5:
+                    return 3;
+                case 6:
+                    return 4;
+                default:
+                    throw new ExerciseLayoutException("The id does not correspond to a valid layout.");
             }
         }
+    }
 }

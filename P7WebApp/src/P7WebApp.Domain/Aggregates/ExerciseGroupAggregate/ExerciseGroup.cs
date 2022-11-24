@@ -90,14 +90,14 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         {
             if (newExercise.ExerciseNumber < 0)
             {
-                throw new ExerciseException("The exercise number cannot be less than 0.");
+                throw new ExerciseGroupException("The exercise number cannot be less than 0.");
             }
 
             var result = Exercises.Find(e => e.ExerciseNumber == newExercise.ExerciseNumber);
 
-            if (result is null)
+            if (result is not null)
             {
-                throw new ExerciseException($"An exercise with exercise number {newExercise.ExerciseNumber} already exists.");
+                throw new ExerciseGroupException($"An exercise with exercise number {newExercise.ExerciseNumber} already exists.");
             }
 
             return true;

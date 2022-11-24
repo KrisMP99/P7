@@ -23,5 +23,25 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 .Should()
                 .BeLowerCased(layoutName);
         }
+
+        [Theory]
+        [InlineData(1, "Single")]
+        [InlineData(2, "TwoVertical")]
+        [InlineData(3, "TwoHorizontal")]
+        [InlineData(4, "TwoLeftOneRight")]
+        [InlineData(5, "OneLeftTwoRight")]
+        [InlineData(6, "TwoLeftTwoRight")]
+        public void FromId_Success_GivenCorrectLayoutIds(int layoutId, string layoutName)
+        {
+            var result = ExerciseLayout.FromId(layoutId);
+
+            result
+                .Should()
+                .BeOfType<ExerciseLayout>();
+            result.Name
+                .Should()
+                .BeLowerCased(layoutName);
+
+        }
     }
 }
