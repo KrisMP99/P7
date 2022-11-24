@@ -38,7 +38,7 @@ namespace P7WebApp.Infrastructure.Identity.Services
                         byte[] secret = Encoding.ASCII.GetBytes(_token.Secret);
                         string token = SetToken(issuer: _token.Issuer, audience: _token.Audience, expires: _token.Expiry, secret: secret, user: user);
                         
-                        var tokenResponse = new TokenResponse(token);
+                        var tokenResponse = new TokenResponse(token: token, userId: user.Id, firstname: user.FirstName, lastname: user.LastName, email: user.Email, username: user.UserName);
 
                         return tokenResponse;
                     }

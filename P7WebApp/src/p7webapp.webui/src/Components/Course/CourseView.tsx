@@ -71,7 +71,6 @@ interface CourseProps {
 }
 
 export default function CourseView(props: CourseProps) {
-
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
 
@@ -105,7 +104,6 @@ export default function CourseView(props: CourseProps) {
 
     useEffect(()=> {
         if (course){
-            console.log(props.user.id + ":" + course.createdById)
             if (props.user.id === course?.createdById) {
                 setIsOwner(true);
             }
@@ -116,12 +114,11 @@ export default function CourseView(props: CourseProps) {
                 setIsAttendee(true);
             }
         }
-    }, [course])
+    }, [course, props.user.id])
     useEffect(() => {
         setEditedCourse(course);
     }, [course?.createdById, props.user.id, isOwner]);
 
-    console.log(isAttendee)
     return isLoading ? 
         (<></>) :
         (<Container>
@@ -373,7 +370,6 @@ async function enrollToCourse(courseId: number, callback: () => void) {
                 return res.json();
             })
             .then((data) => {
-                console.log(data);
                 // callback(course);
             });
     } catch (error) {
@@ -401,7 +397,6 @@ async function fetchCourse(courseId: number, callback: (course: Course) => void)
                 return res.json();
             })
             .then((course: Course) => {
-                console.log(course)
                 callback(course);
             });
     } catch (error) {

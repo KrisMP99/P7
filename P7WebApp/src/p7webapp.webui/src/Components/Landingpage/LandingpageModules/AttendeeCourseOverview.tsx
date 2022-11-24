@@ -216,8 +216,7 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                callback(courses);
            });
     } catch (error) {
-    //    alert(error);
-    console.log(error);
+       alert(error);
     }
 }
 
