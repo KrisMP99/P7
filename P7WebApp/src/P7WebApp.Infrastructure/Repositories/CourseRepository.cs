@@ -200,5 +200,26 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
+
+        public async Task<Course> GetCourseWithAttendees(int courseId)
+        {
+            try
+            {
+                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.Attendes).FirstOrDefaultAsync();
+
+                if (course != null)
+                {
+                    return course;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

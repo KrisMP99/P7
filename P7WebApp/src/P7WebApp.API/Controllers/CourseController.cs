@@ -72,6 +72,21 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("enroll")]
+        public async Task<IActionResult> EnrollToCourse([FromBody] int courseId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new EnrollToCourseCommand(courseId));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete]
         [Route("{courseId}")]
         public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)

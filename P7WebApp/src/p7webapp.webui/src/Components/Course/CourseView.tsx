@@ -116,6 +116,15 @@ export default function CourseView(props: CourseProps) {
                     }}
                     readOnly={!isEditMode}
                 />
+                <div style={{float:'right'}} >
+                    <Button size='sm' className='btn-3' onClick={() => {
+                        if (courseId) {
+                            enrollToCourse(courseId, ()=>{});
+                        }
+                    }}>
+                        Enroll
+                    </Button>
+                </div>
                 {isOwner && 
                     (<div style={{ float: 'right' }}>
                         {isEditMode &&
@@ -311,6 +320,37 @@ async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, ca
     }
 }
 
+async function enrollToCourse(courseId: number, callback: () => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            },
+            body: JSON.stringify({
+                'courseId': courseId 
+            })
+        }
+        await fetch(getApiRoot() + 'courses/enroll', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log(data);
+                // callback(course);
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
 async function fetchCourse(courseId: number, callback: (course: Course) => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
@@ -331,7 +371,6 @@ async function fetchCourse(courseId: number, callback: (course: Course) => void)
                 return res.json();
             })
             .then((course: Course) => {
-                console.log(course.exerciseGroups)
                 callback(course);
             });
     } catch (error) {

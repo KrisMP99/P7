@@ -23,10 +23,6 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
         {
             var id = await _unitOfWork.CourseRepository.GetCourseFromInviteCode(request.Code);
 
-            if (id < 0)
-            {
-                throw new Exception("Did not find course from code");
-            }
             return id;
         }
     }
