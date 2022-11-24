@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSolution;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -26,7 +26,6 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
     const openEditExerciseGroupModalRef = useRef<ShowEditExerciseGroupModal>(null);
 
     useEffect(() => {
-        console.log(props.exerciseGroups)
         if (changesHasBeenMade) {
             props.changedCourse();
             changesHasBeenMade = false;

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using System;
 using System.Collections.Generic;

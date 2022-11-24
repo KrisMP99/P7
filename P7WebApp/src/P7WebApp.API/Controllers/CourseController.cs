@@ -2,11 +2,26 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.CourseCQRS.Commands.CreateCourse;
+using P7WebApp.Application.CourseCQRS.Commands.CreateExerciseGroup;
+using P7WebApp.Application.CourseCQRS.Commands.CreateInviteCode;
+using P7WebApp.Application.CourseCQRS.Commands.UpdateCourse;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.ExerciseCQRS.Commands;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.ExerciseCQRS.Commands.CreateSolution;
+using P7WebApp.Application.ExerciseCQRS.Commands.CreateSubmission;
+using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSolution;
+using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSubmission;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateSolution;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Application.UserCQRS.Queries;
+using P7WebApp.Application.CourseCQRS.Commands.DeleteCourse;
+using P7WebApp.Application.CourseCQRS.Commands.DeleteExerciseGroup;
+using P7WebApp.Application.CourseCQRS.Commands;
 
 namespace P7WebApp.API.Controllers
 {
@@ -57,6 +72,36 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("invite-code/{code}")]
+        public async Task<IActionResult> GetCourseFromInviteCode([FromRoute] int code)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCourseFromInviteCodeQuery(code));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("enroll")]
+        public async Task<IActionResult> EnrollToCourse([FromBody] EnrollToCourseCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(new EnrollToCourseCommand(request.CourseId));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete]
         [Route("{courseId}")]
         public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
@@ -64,14 +109,7 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(new DeleteCourseCommand(courseId));
-                if (result == null)
-                {
-                    return BadRequest($"Could not find course with id {courseId}");
-                }
-                else
-                {
-                    return Ok(result);
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -231,7 +269,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpDelete]
-        [Route("course/{courseId}/exercise-group/{exerciseGroupId}")]
+        [Route("{courseId}/exercise-group/{exerciseGroupId}")]
         public async Task<IActionResult> DeleteExerciseGroup([FromRoute] int courseId, [FromRoute] int exerciseGroupId)
         {
             try

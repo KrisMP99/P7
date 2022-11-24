@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.Commands
 {
-    public class DeleteCourseCommand : IRequest<int>
+    public class EnrollToCourseCommand : IRequest<int>
     {
-        public DeleteCourseCommand(int id)
+        public EnrollToCourseCommand(int courseId)
         {
-            Id = id;
+            CourseId = courseId;
         }
-        public int Id { get; set; }
+
+        public int CourseId { get; set; }
     }
 }

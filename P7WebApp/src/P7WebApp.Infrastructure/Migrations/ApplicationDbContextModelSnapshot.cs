@@ -305,7 +305,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("integer");
 
                     b.Property<string>("UserId")
@@ -904,7 +904,9 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
                         .WithMany("Attendes")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace P7WebApp.Application.CourseCQRS.Commands
+namespace P7WebApp.Application.CourseCQRS.Commands.CreateInviteCode
 {
     public class CreateInviteCodeCommand : IRequest<int>
     {
@@ -26,4 +26,4 @@ namespace P7WebApp.Application.CourseCQRS.Commands
         public DateTime? UseableTo { get; }
 
     }
-} 
+}

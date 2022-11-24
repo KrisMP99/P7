@@ -74,9 +74,23 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             throw new NotImplementedException();
         }
 
-        public void AddAttendee()
+        public void AddAttendee(Attendee attendee)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if(attendee is not null)
+                {
+                    Attendes.Add(attendee);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         public void RemoveAttendee()

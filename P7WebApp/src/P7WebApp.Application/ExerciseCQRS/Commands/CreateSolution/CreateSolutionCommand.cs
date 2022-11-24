@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.Application.ExerciseCQRS.Commands
+namespace P7WebApp.Application.ExerciseCQRS.Commands.CreateSolution
 {
     public class CreateSolutionCommand : IRequest<int>
     {
