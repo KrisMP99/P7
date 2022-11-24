@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using P7WebApp.Infrastructure.Data;
+using P7WebApp.Infrastructure.Persistence;
 
 #nullable disable
 
@@ -316,8 +316,6 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Attendees");
                 });
 
@@ -344,6 +342,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastModifiedById")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -354,10 +353,6 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("LastModifiedById");
 
                     b.ToTable("Courses");
                 });
@@ -393,7 +388,10 @@ namespace P7WebApp.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Code")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<int>("CourseId")
                         .HasColumnType("integer");
@@ -750,7 +748,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.ToTable("ExerciseGroups");
                 });
 
-            modelBuilder.Entity("P7WebApp.Domain.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("P7WebApp.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -862,7 +860,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -871,7 +869,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -886,7 +884,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -895,7 +893,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", null)
+                    b.HasOne("P7WebApp.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -907,31 +905,6 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
                         .WithMany("Attendes")
                         .HasForeignKey("CourseId");
-
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
-                {
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("P7WebApp.Domain.Identity.ApplicationUser", "LastModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("LastModifiedById");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("LastModifiedBy");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>

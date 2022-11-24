@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using P7WebApp.Application.CourseCQRS.Commands;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {

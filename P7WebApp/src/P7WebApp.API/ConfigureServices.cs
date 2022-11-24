@@ -3,7 +3,7 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using P7WebApp.API.Services;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Infrastructure.Data;
+using P7WebApp.Infrastructure.Persistence;
 
 namespace P7WebApp.API
 {
@@ -29,7 +29,6 @@ namespace P7WebApp.API
                 options.SuppressModelStateInvalidFilter = true);
 
             services.AddEndpointsApiExplorer();
-            //services.AddSwaggerGen();
 
             services.AddOpenApiDocument(configure =>
             {

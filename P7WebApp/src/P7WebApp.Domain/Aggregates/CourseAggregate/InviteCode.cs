@@ -1,4 +1,6 @@
 ﻿using P7WebApp.Domain.Common;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
@@ -12,6 +14,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             UseableTo = useableTo ?? DateTime.MaxValue;
         }
         public int CourseId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Code { get; set; }
         public bool IsActive { get; set; }
         public DateTime? UseableFrom { get; set; }

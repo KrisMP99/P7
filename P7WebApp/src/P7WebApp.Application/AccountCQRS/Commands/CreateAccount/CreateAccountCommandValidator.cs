@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace P7WebApp.Application.UserCQRS.Commands.CreateUser
+namespace P7WebApp.Application.AccountCQRS.Commands.CreateUser
 {
-    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+    public class CreateAccountCommandValidator : AbstractValidator<CreateAccountCommand>
     {
-        public CreateUserCommandValidator()
+        public CreateAccountCommandValidator()
         {
             RuleFor(crm => crm.Username).NotEmpty().WithMessage("Must be a valid username");
             RuleFor(crm => crm.Password).NotEmpty().WithMessage("Must be a valid password");

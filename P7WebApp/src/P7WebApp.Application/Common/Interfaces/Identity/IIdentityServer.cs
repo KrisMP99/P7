@@ -1,4 +1,5 @@
 ﻿using P7WebApp.Application.Common.Models;
+using P7WebApp.Application.Responses.Account;
 
 namespace P7WebApp.Application.Common.Interfaces.Identity
 {

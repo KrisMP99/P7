@@ -55,7 +55,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.ExerciseGroups).FirstOrDefaultAsync();
+                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.ExerciseGroups).Include(c => c.InviteCode).FirstOrDefaultAsync();
                 if (course != null)
                 {
                     return course;
@@ -137,7 +137,8 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var courses = _context.Courses.Where(c => c.CreatedById.Equals(userId)).Include(c => c.CreatedBy).Include(c => c.Attendes);
+                var courses = _context.Courses.Where(c => c.CreatedById == userId);
+
                 return courses.AsEnumerable();
             }
             catch (Exception)
