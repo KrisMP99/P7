@@ -70,21 +70,37 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
         }
 
-        public void DeleteModule(int moduleId)
+        public void RemoveModuleById(int moduleId)
         {
             try
             {
-                Modules.Remove(GetModule(moduleId));
+                Modules.Remove(GetModuleById(moduleId));
             }
             catch (Exception)
             {
-                throw new NotImplementedException();
+                throw;
             }
         }
 
-        public Module GetModule(int moduleId)
+        public Module GetModuleById(int moduleId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var module = Modules.Find(m => m.Id == moduleId);
+
+                if(module is not null)
+                {
+                    return module;
+                }
+                else
+                {
+                    throw new ExerciseException("Could not find the module with the specified id.");
+                }
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         public void AddSolution(Solution solution)
@@ -107,7 +123,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
         }
 
-        public void RemoveSolution(int solutionId)
+        public void RemoveSolutionById(int solutionId)
         {
             try
             {
@@ -123,14 +139,14 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Solutions.Where(s => s.Id == solutionId).FirstOrDefault();
+                var result = Solutions.Find(s => s.Id == solutionId);
                 if (result is not null)
                 {
                     return result;
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new ExerciseException("Could not find a solution with the given solution id.");
                 }
             }
             catch (Exception)
@@ -150,41 +166,39 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 }
                 else
                 {
-                    throw new ExerciseException("Could not create submission");
+                    throw new ExerciseException("Could not create submission.");
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
-        public void RemoveSubmission(int submissionId)
+        public void RemoveSubmissionById(int submissionId)
         {
             try
             {
-                Submissions.Remove(GetSubmission(submissionId));
+                Submissions.Remove(GetSubmissionById(submissionId));
             }
             catch (Exception)
             {
-                throw new NotImplementedException();
+                throw new ExerciseException("Could not remove submission with the given submission id, as it does not exist in the submission list.");
             }
         }
 
-        public Submission GetSubmission(int submissionId)
+        public Submission GetSubmissionById(int submissionId)
         {
             try
             {
-                var result = Submissions.Where(s => s.Id == submissionId).FirstOrDefault();
+                var result = Submissions.Find(s => s.Id == submissionId);
                 if (result is not null)
                 {
                     return result;
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new ExerciseException("Could not find submission with the given submission id.");
                 }
             }
             catch (Exception)

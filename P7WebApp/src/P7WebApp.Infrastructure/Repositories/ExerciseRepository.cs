@@ -125,7 +125,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 var exercise = await GetExerciseWithSolutionsById(solution.ExerciseId);
                 if (exercise is not null)
                 {
-                    exercise.RemoveSolution(solution.Id);
+                    exercise.RemoveSolutionById(solution.Id);
                     return 1;
                 }
                 else
@@ -148,7 +148,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 var exercise = await GetExerciseWithSubmissionsById(submission.ExerciseId);
                 if (exercise is not null)
                 {
-                    exercise.RemoveSubmission(submission.Id);
+                    exercise.RemoveSubmissionById(submission.Id);
                     return 1;
                 }
                 else
