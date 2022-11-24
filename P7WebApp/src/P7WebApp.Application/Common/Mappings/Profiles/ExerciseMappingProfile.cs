@@ -3,6 +3,7 @@ using P7WebApp.Application.ExerciseCQRS.Commands.CreateSolution;
 using P7WebApp.Application.ExerciseCQRS.Commands.CreateSubmission;
 using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSubmission;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.QuizModule;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.CodeModule;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module;
@@ -32,7 +33,7 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
             CreateMap<CreateModuleCommand, Module>();
             CreateMap<CreateCodeEditorModuleCommand, CodeEditorModule>();
             CreateMap<CreateTextModuleCommand, TextModule>();
-            CreateMap<CreateQuizModuleCommand, QuizModule>();
+            CreateMap<UpdateQuizModuleCommand, QuizModule>();
             CreateMap<CreateModuleCommand, Module>()
                 .Include<CreateCodeEditorModuleCommand, CodeEditorModule>()
                 .Include<CreateTextModuleCommand, TextModule>()

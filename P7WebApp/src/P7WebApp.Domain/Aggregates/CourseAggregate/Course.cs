@@ -1,6 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
@@ -11,6 +12,9 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             Title = title;
             Description = description;
             IsPrivate = isPrivate;
+            ExerciseGroups = new List<ExerciseGroup>();
+            CourseRoles = new List<CourseRole>();
+            Attendes = new List<Attendee>();
         }
 
         public string Title { get; private set; }
@@ -20,20 +24,19 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         public List<ExerciseGroup> ExerciseGroups { get; private set; }
         public List<CourseRole> CourseRoles { get; private set; }
         public List<Attendee> Attendes { get; private set; }
-        
 
         public void EditInformation(string newTitle, string newDescription, bool newVisibility)
         {
-            Title = newTitle;
-            Description = newDescription;
+            Title = String.IsNullOrEmpty(newTitle) ? throw new CourseException("The title has not been set.") : newTitle;
+            Description = String.IsNullOrEmpty(newDescription) ? throw new CourseException("Description has not been set.") : newDescription;
             IsPrivate= newVisibility;
         }
 
-        public ExerciseGroup GetExerciseGroup(int groupId)
+        public ExerciseGroup GetExerciseGroup(int exerciseGroupId)
         {
             try
             {
-                var exerciseGroup =  ExerciseGroups.Find(e => e.Id == groupId);
+                var exerciseGroup = ExerciseGroups.Find(e => e.Id == exerciseGroupId);
 
                 if (exerciseGroup is not null)
                 {
@@ -41,7 +44,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not find an exerciseGroup with the specified Id");
+                    throw new CourseException("Could not find an exercise group with the specified id");
                 }
             }
             catch (Exception)
@@ -60,7 +63,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not create the invite code");
+                    throw new CourseException("Could not create the invite code");
                 }    
             }
             catch(Exception)
@@ -74,23 +77,9 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             throw new NotImplementedException();
         }
 
-        public void AddAttendee(Attendee attendee)
+        public void AddAttendee()
         {
-            try
-            {
-                if(attendee is not null)
-                {
-                    Attendes.Add(attendee);
-                }
-                else
-                {
-                    throw new Exception();
-                }
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
         public void RemoveAttendee()
@@ -102,19 +91,37 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             try
             {
-                if(exerciseGroup is not null)
+                if(exerciseGroup is null)
+                {
+                    throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)");
+                }
+                
+                if(CheckExerciseGroupNumberIsOk(exerciseGroup))
                 {
                     ExerciseGroups.Add(exerciseGroup);
-                }
-                else
-                {
-                    throw new Exception("Could not add the exercisegroup to the course (exercisegroup is null)");
                 }
             }
             catch(Exception)
             {
                 throw;
             }
+        }
+
+        private bool CheckExerciseGroupNumberIsOk(ExerciseGroup exerciseGroup)
+        {
+            if(exerciseGroup.ExerciseGroupNumber < 0)
+            {
+                throw new CourseException("The exercise group number cannot be less than 0.");
+            }
+
+            var result = ExerciseGroups.Find(eg => eg.Id == exerciseGroup.ExerciseGroupNumber);
+
+            if (result is not null)
+            {
+                throw new CourseException($"An exercise group with exercise group number {result.ExerciseGroupNumber} already exists.");
+            }
+
+            return true;
         }
 
         public void RemoveExerciseGroup(int exerciseGroupId)

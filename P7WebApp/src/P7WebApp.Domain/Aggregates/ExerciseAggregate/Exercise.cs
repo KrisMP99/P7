@@ -1,6 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
@@ -12,13 +13,16 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             Title = title;
             IsVisible = isVisible;
             ExerciseNumber = exerciseNumber;
-            StartDate = startDate ?? null;
-            EndDate = endDate ?? null;
-            VisibleFrom = visibleFrom ?? null;
-            VisibleTo = visibleTo ?? null;
+            StartDate = startDate ?? DateTime.UtcNow;
+            EndDate = endDate ?? DateTime.MaxValue;
+            VisibleFrom = visibleFrom ?? DateTime.UtcNow;
+            VisibleTo = visibleTo ?? DateTime.MaxValue;
             CreatedDate = DateTime.UtcNow;
             LastModifiedDate = CreatedDate;
             LayoutId = layoutId;
+            Modules = new List<Module>();
+            Solutions = new List<Solution>();
+            Submissions = new List<Submission>();
         }
 
         public int ExerciseGroupId { get; private set; }
@@ -31,33 +35,34 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime? VisibleTo { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
-        public List<Module>? Modules { get; private set; }
-        public List<Solution>? Solution { get; private set; }
-        public List<Submission>? Submissions { get; private set; }
+        public List<Module> Modules { get; private set; }
+        public List<Solution> Solutions { get; private set; }
+        public List<Submission> Submissions { get; private set; }
         public int LayoutId { get; private set; }
 
-        public void UpdateExerciseInformation(string newTitle, bool isVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int? layoutId)
+        public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId)
         {
-            Title = String.IsNullOrEmpty(newTitle) ? throw new ArgumentNullException("Title has not been set.") : newTitle;
-            ExerciseNumber = newExerciseNumber < 0 ? throw new ArgumentOutOfRangeException("Exercise number cannot be negative.") : newExerciseNumber;
-            IsVisible = isVisible;
+            Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseException("Title has not been set.") : newTitle;
+            IsVisible = newIsVisible;
+            ExerciseNumber = newExerciseNumber < 0 ? throw new ExerciseException("Exercise number cannot be negative.") : newExerciseNumber;
             VisibleFrom = newStartDate ?? VisibleFrom;
             VisibleTo = newEndDate ?? VisibleTo;
             LastModifiedDate = DateTime.Now;
-            LayoutId = layoutId ?? LayoutId;
+            LayoutId = ExerciseLayout.FromId(newLayoutId).Id;
         }
 
         public void AddModule(Module module)
         {
             try
             {
-                if (module is not null)
+                if (module is null)
+                {
+                    throw new ExerciseException("Could not add modules");
+                } 
+                
+                if(CanModuleBeAddedToExercise(module))
                 {
                     Modules.Add(module);
-                } 
-                else
-                {
-                    throw new Exception("Could not add modules");
                 }
             }
             catch (Exception)
@@ -66,19 +71,36 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
         }
 
-        public void AddModules(ICollection<Module> modules)
+        private bool CanModuleBeAddedToExercise(Module module)
+        {
+            var numOfModules = Modules.Count();
+            var numberOfModulesAllowed = ExerciseLayout.GetNumberOfModulesAllowed(this.LayoutId);
+
+            if(numOfModules > numberOfModulesAllowed)
+            {
+                throw new ExerciseException("");
+            }
+
+            if(module.Position < 1 || module.Position > 4)
+            {
+                throw new ExerciseException($"The modules position '{module.Position}' is invalid. Allowed values are: 1-4.");
+            }
+
+            var result = Modules.Find(m => m.Position == module.Position);
+
+            if (result is not null)
+            {
+                throw new ExerciseException($"Module position '{module.Position}' is already assigned to another module.");
+            }
+            
+            return true;
+        }
+
+        public void RemoveModuleById(int moduleId)
         {
             try
             {
-                if (modules is not null && modules.Any())
-                {
-                    Modules.AddRange(modules);
-                    
-                }
-                else
-                {
-                    throw new Exception("Could not add modules");
-                }
+                Modules.Remove(GetModuleById(moduleId));
             }
             catch (Exception)
             {
@@ -86,21 +108,25 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
         }
 
-        public void DeleteModule(int moduleId)
+        public Module GetModuleById(int moduleId)
         {
             try
             {
-                Modules.Remove(GetModule(moduleId));
-            }
-            catch (Exception)
-            {
-                throw new NotImplementedException();
-            }
-        }
+                var module = Modules.Find(m => m.Id == moduleId);
 
-        public Module GetModule(int moduleId)
-        {
-            throw new NotImplementedException();
+                if(module is not null)
+                {
+                    return module;
+                }
+                else
+                {
+                    throw new ExerciseException("Could not find the module with the specified id.");
+                }
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         public void AddSolution(Solution solution)
@@ -109,11 +135,11 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             {
                 if (solution is not null)
                 {
-                    Solution.Add(solution);
+                    Solutions.Add(solution);
                 }
                 else
                 {
-                    throw new Exception("Could not create solution");
+                    throw new ExerciseException("Could not create solution");
                 }
             }
             catch (Exception)
@@ -123,11 +149,11 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
         }
 
-        public void RemoveSolution(int solutionId)
+        public void RemoveSolutionById(int solutionId)
         {
             try
             {
-                Solution.Remove(GetSolution(solutionId));
+                Solutions.Remove(GetSolution(solutionId));
             }
             catch (Exception)
             {
@@ -139,14 +165,14 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Solution.Where(s => s.Id == solutionId).FirstOrDefault();
+                var result = Solutions.Find(s => s.Id == solutionId);
                 if (result is not null)
                 {
                     return result;
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new ExerciseException("Could not find a solution with the given solution id.");
                 }
             }
             catch (Exception)
@@ -166,41 +192,39 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not create submission");
+                    throw new ExerciseException("Could not create submission.");
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
-        public void RemoveSubmission(int submissionId)
+        public void RemoveSubmissionById(int submissionId)
         {
             try
             {
-                Submissions.Remove(GetSubmission(submissionId));
+                Submissions.Remove(GetSubmissionById(submissionId));
             }
             catch (Exception)
             {
-                throw new NotImplementedException();
+                throw new ExerciseException("Could not remove submission with the given submission id, as it does not exist in the submission list.");
             }
         }
 
-        public Submission GetSubmission(int submissionId)
+        public Submission GetSubmissionById(int submissionId)
         {
             try
             {
-                var result = Submissions.Where(s => s.Id == submissionId).FirstOrDefault();
+                var result = Submissions.Find(s => s.Id == submissionId);
                 if (result is not null)
                 {
                     return result;
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new ExerciseException("Could not find submission with the given submission id.");
                 }
             }
             catch (Exception)
