@@ -21,6 +21,7 @@ using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Application.UserCQRS.Queries;
 using P7WebApp.Application.CourseCQRS.Commands.DeleteCourse;
 using P7WebApp.Application.CourseCQRS.Commands.DeleteExerciseGroup;
+using P7WebApp.Application.CourseCQRS.Commands;
 
 namespace P7WebApp.API.Controllers
 {
