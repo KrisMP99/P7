@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using P7WebApp.API.Controllers;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.CourseCQRS.Commands.CreateCourse;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
 
