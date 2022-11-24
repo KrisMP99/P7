@@ -73,7 +73,8 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
                 {
                     throw new ExerciseGroupException("Could not add exercise (Exercise is null)");
                 } 
-                else
+
+                if(CheckExerciseNumberIsOk(newExercise))
                 {
                     Exercises.Add(newExercise);
                 }
@@ -82,6 +83,24 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             {
                 throw;
             }
+        }
+
+        // Checks if the exercise number is correct, i.e., the order of the exercises is correct
+        private bool CheckExerciseNumberIsOk(Exercise newExercise)
+        {
+            if (newExercise.ExerciseNumber < 0)
+            {
+                throw new ExerciseException("The exercise number cannot be less than 0.");
+            }
+
+            var result = Exercises.Find(e => e.ExerciseNumber == newExercise.ExerciseNumber);
+
+            if (result is null)
+            {
+                throw new ExerciseException($"An exercise with exercise number {newExercise.ExerciseNumber} already exists.");
+            }
+
+            return true;
         }
 
         public void RemoveExerciseById(int exerciseId)
