@@ -1,17 +1,10 @@
-﻿using MediatR;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using P7WebApp.Application.ExerciseCQRS.Commands.CreateExercise.Module;
 
-namespace P7WebApp.Application.ExerciseGroupCQRS.Commands
+namespace P7WebApp.Application.ExerciseCQRS.Commands.CreateExercise
 {
-    public class CreateExerciseCommand : IRequest<int>
+    public class CreateExerciseCommand
     {
-        public CreateExerciseCommand(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId, ICollection<Module>? modules)
+        public CreateExerciseCommand(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId, ICollection<CreateModuleCommand>? modules)
         {
             ExerciseGroupId = exerciseGroupId;
             Title = title;
@@ -34,6 +27,6 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands
         public DateTime? VisibleFrom { get; }
         public DateTime? VisibleTo { get; }
         public int LayoutId { get; }
-        public ICollection<Module>? Modules { get; }
+        public ICollection<CreateModuleCommand>? Modules { get; }
     }
 }
