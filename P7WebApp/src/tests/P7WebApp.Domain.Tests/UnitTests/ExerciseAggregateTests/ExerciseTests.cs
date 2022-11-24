@@ -1,5 +1,8 @@
 ﻿using FluentAssertions;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
 using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
@@ -164,6 +167,60 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 .Throw<ExerciseException>();
         }
 
+        [Fact]
+        public void AddModule_Success_AddModulesToModuleListGivenCodeEditorModule()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            var module = new CodeEditorModule(
+                description: "Test",
+                height: 10.00,
+                width: 10.00,
+                position: 1,
+                code: "int main()");
+
+            exercise.AddModule(module);
+
+            exercise.Modules
+                .Should()
+                .Contain(module);
+        }
+
+        [Fact]
+        public void AddModule_Success_AddModulesToModuleListGivenQuizModule()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            var module = new QuizModule(
+                description: "Test",
+                height: 10.00,
+                width: 10.00,
+                position: 1);
+
+            exercise.AddModule(module);
+
+            exercise.Modules
+                .Should()
+                .Contain(module);
+        }
 
 
 
