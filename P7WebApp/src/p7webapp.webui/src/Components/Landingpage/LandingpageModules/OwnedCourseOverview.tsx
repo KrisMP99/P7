@@ -104,14 +104,14 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                                     <td>{item.numberOfExercises ?? 0}</td>
                                     <td>{item.numberOfMembers ?? 0}</td>
                                     <td>{item.ownerName ?? 'Missing'}</td>
-                                    <td>
-                                        <Button size='sm' onClick={(e)=>{
+                                    <td className="d-flex justify-content-center">
+                                        <Button size='sm' className="btn-3" onClick={(e)=>{
                                             e.stopPropagation();
                                             editCourseModalRef.current?.handleShow(item.id);
                                         }}>
                                             <Pencil/>
                                         </Button>
-                                        <Button variant='danger' size='sm' onClick={(e)=>{
+                                        <Button variant='danger' className="btn-3" size='sm' onClick={(e)=>{
                                             e.stopPropagation();
                                             deleteCourseModalRef.current?.handleShow(item.title, item.id, DeleteElementType.COURSE);
                                         }}>
