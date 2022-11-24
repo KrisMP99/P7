@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
+using P7WebApp.Application.Common.Models;
 using P7WebApp.Application.CourseCQRS.Commands;
-using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 
 namespace P7WebApp.Application.Common.Mappings.Profiles
@@ -17,8 +16,7 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
             CreateMap<ExerciseGroup, ExerciseGroupResponse>();
             CreateMap<CreateInviteCodeCommand, InviteCode>();
             CreateMap<CreateExerciseGroupCommand, ExerciseGroup>();
-            CreateMap<Course, CourseOverviewResponse>()
-                .ForMember(dest => dest.OwnerName, src => src.MapFrom(c => c.CreatedBy.FirstName + " " + c.CreatedBy.LastName));
+            CreateMap<Course, CourseOverviewResponse>();
         }
     }
 }

@@ -2,11 +2,11 @@
 using P7WebApp.Application.Common.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace P7WebApp.Application.UserCQRS.Commands.CreateUser
+namespace P7WebApp.Application.AccountCQRS.Commands.CreateUser
 {
-    public class CreateUserCommand : IRequest<Result>
+    public class CreateAccountCommand : IRequest<Result>
     {
-        public CreateUserCommand(string username, string password, string email, string firstName, string lastName)
+        public CreateAccountCommand(string username, string password, string email, string firstName, string lastName)
         {
             Username = username;
             Password = password;
@@ -18,7 +18,7 @@ namespace P7WebApp.Application.UserCQRS.Commands.CreateUser
         public string Username { get; }
 
         [DataType(DataType.Password)]
-        public string Password { get;}
+        public string Password { get; }
 
         [DataType(DataType.EmailAddress)]
         public string Email { get; }
