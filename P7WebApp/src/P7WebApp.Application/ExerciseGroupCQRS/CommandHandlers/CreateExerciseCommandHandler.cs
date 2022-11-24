@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
-using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 
 namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
@@ -22,13 +20,8 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
             try
             {
                 var exercise = ExerciseMapper.Mapper.Map<Exercise>(request);
-
-                if (request.Modules is not null && request.Modules.Any())
-                {
-                    exercise.AddModules(request.Modules);
-                }
-
                 var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
+                
                 exerciseGroup.AddExercise(exercise);
 
                 var result = await _unitOfWork.CommitChangesAsync(cancellationToken); 

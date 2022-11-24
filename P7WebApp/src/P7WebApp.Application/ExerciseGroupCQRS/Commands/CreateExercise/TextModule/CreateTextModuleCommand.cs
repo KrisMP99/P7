@@ -1,6 +1,6 @@
-﻿using P7WebApp.Application.ExerciseCQRS.Commands.CreateExercise.Module;
+﻿using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module;
 
-namespace P7WebApp.Application.ExerciseCQRS.Commands.CreateExercise.TextModule
+namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.TextModule
 {
     public class CreateTextModuleCommand : CreateModuleCommand
     {

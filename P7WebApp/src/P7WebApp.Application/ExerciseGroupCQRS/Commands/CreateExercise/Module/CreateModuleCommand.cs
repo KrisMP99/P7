@@ -1,4 +1,4 @@
-﻿namespace P7WebApp.Application.ExerciseCQRS.Commands.CreateExercise.Module
+﻿namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module
 {
     public abstract class CreateModuleCommand
     {
