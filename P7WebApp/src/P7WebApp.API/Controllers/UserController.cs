@@ -50,7 +50,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpGet]
-        [Route("{userId}/courses")]
+        [Route("courses/created")]
         public async Task<IActionResult> GetUsersCreatedCourses()
         {
             try
@@ -65,7 +65,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpGet]
-        [Route("courses/attended")]
+        [Route("courses/attends")]
         public async Task<IActionResult> GetUsersAttendedCourses()
         {
             try

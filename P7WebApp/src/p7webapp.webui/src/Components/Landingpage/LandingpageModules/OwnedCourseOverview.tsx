@@ -238,7 +238,6 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
                 return res.json();
             })
             .then((courses: CourseOverview[]) => {
-                console.log(courses);
                 callback(courses);
             });
     } catch (error) {

@@ -12,8 +12,8 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221123124930_tables")]
-    partial class tables
+    [Migration("20221124091043_attendees")]
+    partial class attendees
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -308,7 +308,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("integer");
 
                     b.Property<string>("UserId")
@@ -907,7 +907,9 @@ namespace P7WebApp.Infrastructure.Migrations
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
                         .WithMany("Attendes")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>

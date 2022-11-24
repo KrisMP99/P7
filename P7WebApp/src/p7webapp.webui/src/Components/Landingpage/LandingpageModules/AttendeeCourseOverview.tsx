@@ -14,6 +14,8 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     
     const [search, setSearch] = useState('');
     const [attendedCourses, setAttendedCourses] = useState<CourseOverview[]>([]);
+    const [inviteCode, setInviteCode] = useState<number | undefined>(undefined);
+    const [invalidInviteCode, setInvalidInviteCode] = useState<boolean>(false);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [coursesPerPage, setCoursesPerPage] = useState<number>(10);
@@ -53,7 +55,24 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                     <div className='col text-start'>
                         <h3>Attended courses</h3>
                     </div>
-                    <div className="col text-end">
+                    <div className="col text-end d-flex justify-content-end">
+                        <Form className='d-flex' onSubmit={(e) => {
+                            e.preventDefault();
+                            if (inviteCode) {
+                                fetchCourseIdFromInviteCode(inviteCode, (courseId) => {
+                                    courseId === -1 ? setInvalidInviteCode(true) : navigate('/course/' + courseId);
+                                })
+                            }
+                        }}>
+                            <Form.Control 
+                                defaultValue={'Enter Invite Code Here...'}
+                                type='number'
+                                value={inviteCode}
+                                isInvalid={invalidInviteCode}
+                                onChange={(e) => setInviteCode(Number(e.target.value))}
+                            />
+                            <Button className='btn-2' type='submit'>Find</Button>
+                        </Form>
                         <Button className="btn-2" onClick={()=>{
                             fetchAttendedCourses((courses) => {
                                 setAttendedCourses(courses);
@@ -186,15 +205,43 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                'Authorization': 'Bearer ' + jwt
            }
        }
-       await fetch(getApiRoot() + 'users/courses/attended', requestOptions)
+       await fetch(getApiRoot() + 'users/courses/attends', requestOptions)
+           .then((res) => {
+               if (!res.ok) {
+                   throw new Error(res.statusText);
+               }
+               return res.json();
+           })
+           .then((courses: CourseOverview[]) => {
+               callback(courses);
+           });
+    } catch (error) {
+    //    alert(error);
+    console.log(error);
+    }
+}
+
+async function fetchCourseIdFromInviteCode(inviteCode: number, callback: (courseId: number) => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+       const requestOptions = {
+           method: 'GET',
+           headers: { 
+               'Accept': 'application/json', 
+               'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + jwt
+           }
+       }
+       await fetch(getApiRoot() + 'courses/invite-code/' + inviteCode, requestOptions)
            .then((res) => {
                if (!res.ok) {
                    throw new Error('Response not okay from backend');
                }
                return res.json();
            })
-           .then((courses: CourseOverview[]) => {
-               callback(courses);
+           .then((coursesId: number) => {
+               callback(coursesId);
            });
     } catch (error) {
        alert(error);
