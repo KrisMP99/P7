@@ -12,10 +12,15 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise
         public DeleteExerciseCommandValidation()
         {
             RuleFor(dec => dec.Id)
-                .NotEmpty().WithMessage("Could not find the exercise id");
+                .NotEmpty().WithMessage("Exercise id must be provided")
+                .NotNull().WithMessage("Exercise id cannot be null")
+                .GreaterThan(0).WithMessage("Exercise id cannot be negative");
 
             RuleFor(dec => dec.ExerciseGroupId)
-                .NotEmpty().WithMessage("Could not find the exercisegroup id");
+                .NotEmpty().WithMessage("Exercisegroup id must be provided")
+                .NotNull().WithMessage("Exercisegroup id cannot be null")
+                .GreaterThan(0).WithMessage("Exercisegroup id cannot be negative");
+
         }
     }
 }

@@ -5,24 +5,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
+namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise
 {
-    public class CreateExerciseCommandValidation : AbstractValidator<CreateExerciseCommand>
+    public class UpdateExerciseGroupCommandValidation : AbstractValidator<UpdateExerciseGroupCommand>
     {
-        public CreateExerciseCommandValidation()
+        public UpdateExerciseGroupCommandValidation()
         {
-            RuleFor(cec => cec.ExerciseGroupId)
+            RuleFor(ueg => ueg.Id)
                 .NotEmpty().WithMessage("Exercisegroup id must be provided")
                 .NotNull().WithMessage("Exercisegroup id cannot be null")
                 .GreaterThan(0).WithMessage("Exercisegroup id cannot be negative");
 
-            RuleFor(cec => cec.Title)
+            RuleFor(ueg => ueg.Title)
                 .NotEmpty().WithMessage("Title is required")
                 .NotNull().WithMessage("Title cannot be null")
                 .MaximumLength(200).WithMessage("Title cannot exceed 200 characters");
 
-            RuleFor(cec => cec.ExerciseNumber)
-                .GreaterThan(0).WithMessage("Exercisenumber cannot be negative");
+            RuleFor(ueg => ueg.Description)
+                .NotEmpty().WithMessage("Description is required")
+                .NotNull().WithMessage("Description cannot be null");
+
+            RuleFor(ueg => ueg.ExerciseGroupNumber)
+                .GreaterThan(0).WithMessage("Exercisegroup number cannot be negative");
 
         }
     }

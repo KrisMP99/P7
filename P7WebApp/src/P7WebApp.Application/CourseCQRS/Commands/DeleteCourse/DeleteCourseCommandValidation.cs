@@ -7,7 +7,9 @@ namespace P7WebApp.Application.CourseCQRS.Commands.DeleteCourse
         public DeleteCourseCommandValidation()
         {
             RuleFor(dcc => dcc.Id)
-                .NotEmpty().WithMessage("The course to be deleted must have an id (missing course id)");
+                .NotEmpty().WithMessage("Course id must be provided")
+                .NotNull().WithMessage("Course id cannot be null")
+                .GreaterThan(0).WithMessage("Course id cannot be negative");
         }
     }
 }

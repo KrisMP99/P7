@@ -19,6 +19,8 @@ using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateSolution;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Application.UserCQRS.Queries;
+using P7WebApp.Application.CourseCQRS.Commands.DeleteCourse;
+using P7WebApp.Application.CourseCQRS.Commands.DeleteExerciseGroup;
 
 namespace P7WebApp.API.Controllers
 {

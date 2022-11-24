@@ -7,7 +7,14 @@ namespace P7WebApp.Application.CourseCQRS.Commands.DeleteExerciseGroup
         public DeleteExerciseGroupCommandValidation()
         {
             RuleFor(deg => deg.ExerciseGroupId)
-                .NotEmpty().WithMessage("The exercisegroup to be deleted must have an id (missing exercisegroup id)"); 
+                .NotEmpty().WithMessage("Exercisegroup id must be provided")
+                .NotNull().WithMessage("Exercisegroup id cannot be null")
+                .GreaterThan(0).WithMessage("Exercisegroup id cannot be negative");
+
+            RuleFor(deg => deg.CourseId)
+                .NotEmpty().WithMessage("Course id must be provided")
+                .NotNull().WithMessage("Course id cannot be null")
+                .GreaterThan(0).WithMessage("Course id cannot be negative");
         }
     }
 }

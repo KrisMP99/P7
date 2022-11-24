@@ -7,7 +7,10 @@ namespace P7WebApp.Application.CourseCQRS.Commands.CreateInviteCode
         public CreateInviteCodeCommandValidation()
         {
             RuleFor(cic => cic.CourseId)
-                .NotEmpty().WithMessage("The invitecode must belong to a course (missing course id)");
+                .NotEmpty().WithMessage("Course id must be provided")
+                .NotNull().WithMessage("Course id cannot be null")
+                .GreaterThan(0).WithMessage("Course id cannot be negative");
+
         }
     }
 }
