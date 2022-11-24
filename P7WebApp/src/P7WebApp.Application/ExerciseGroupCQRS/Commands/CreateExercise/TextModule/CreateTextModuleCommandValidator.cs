@@ -10,7 +10,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.TextMod
                 .NotNull().WithMessage("Not a valid text.");
 
             RuleFor(ctm => ctm.Content)
-                .NotNull().WithMessage("Not valid content");
+                .NotNull().WithMessage("Not valid content.");
 
             RuleFor(cmc => cmc.Height)
                 .NotNull().WithMessage("Must be a valid height.");
