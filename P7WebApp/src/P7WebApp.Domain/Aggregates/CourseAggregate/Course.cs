@@ -19,7 +19,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         public InviteCode? InviteCode { get; private set; }
         public List<ExerciseGroup> ExerciseGroups { get; private set; }
         public List<CourseRole> CourseRoles { get; private set; }
-        public List<Attendee> Attendes { get; private set; }
+        public List<Attendee> Attendees { get; private set; }
         
 
         public void EditInformation(string newTitle, string newDescription, bool newVisibility)

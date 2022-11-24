@@ -3,13 +3,15 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
     public class Attendee : EntityBase
     {
-        public Attendee(string userId, int courseId)
+        public Attendee(string userId, int courseId, int? roleId)
         {
             UserId = userId;
             CourseId = courseId;
+            RoleId = roleId ?? 0;
         }
 
         public string UserId { get; private set; }
         public int CourseId { get; private set; }
+        public int? RoleId { get; private set; }
     }
 }
