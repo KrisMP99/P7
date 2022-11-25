@@ -4,6 +4,7 @@ using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
+using P7WebApp.Infrastructure.Exceptions;
 using System.Reflection.Metadata;
 
 
@@ -26,7 +27,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch(Exception)
             {
-                throw;
+                throw new NotCreatedException(string.Format("Could not create course {0}", course.Title));
             }
         }
         public async Task<int> GetCourseFromInviteCode(int code)
@@ -41,12 +42,12 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    return -1;
+                    throw new Exception();
                 }
             }
             catch (Exception)
             {
-                throw;
+                throw new NotFoundException(string.Format("Could not find invite code: {0}", code));
             }
         }
         public async Task<int> DeleteCourse(int courseId)
@@ -67,7 +68,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-                throw;
+                throw new NotRemovedException(string.Format("Could not remove course with id {0} (does not exsist)", courseId));
             }
         }
         public async Task<Course> GetCourseWithExerciseGroups(int courseId)
@@ -86,7 +87,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-                throw;
+                throw new NotFoundException(string.Format("Could not find course with id: {0} (does not exsist)", courseId));
             }
         }
 
@@ -116,7 +117,6 @@ namespace P7WebApp.Infrastructure.Repositories
                 if (exerciseGroups != null)
                 {
                     return exerciseGroups.AsEnumerable();
-
                 } 
                 else
                 {
