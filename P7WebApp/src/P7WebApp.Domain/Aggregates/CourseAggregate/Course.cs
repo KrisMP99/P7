@@ -23,11 +23,8 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         public string Description { get; private set; }
         public bool IsPrivate { get; private set; }
         public DateTime CreatedDate { get; private set; }
-        //[ForeignKey("Profile")]
         public int OwnerId { get; private set; }
         public Profile Owner { get; private set; }
-
-        //[ForeignKey("Profile")]
         public int LastModifiedById { get; private set; }
         public Profile LastModifiedBy { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
