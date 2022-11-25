@@ -101,6 +101,21 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpDelete]
+        [Route("{courseId}/leave")]
+        public async Task<IActionResult> LeaveCourse([FromRoute] int courseId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new LeaveCourseCommand(courseId));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
         [Route("{courseId}")]
         public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
         {
@@ -182,14 +197,7 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(request);
-                if (result == 0)
-                {
-                    return BadRequest("Could not update the course");
-                }
-                else
-                {
-                    return Ok(result);
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
