@@ -4,7 +4,7 @@ namespace P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.CodeModule
 {
     public class UpdateCodeEditorModuleCommandValidator : AbstractValidator<UpdateCodeEditorModuleCommand>
     {
-        public CreateCodeEditorModuleCommandValidator()
+        public UpdateCodeEditorModuleCommandValidator()
         {
             RuleFor(cmc => cmc.Height)
                 .NotNull().WithMessage("Must be a valid height.");

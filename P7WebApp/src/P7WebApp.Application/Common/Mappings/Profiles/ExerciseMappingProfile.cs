@@ -3,7 +3,10 @@ using P7WebApp.Application.ExerciseCQRS.Commands.CreateSolution;
 using P7WebApp.Application.ExerciseCQRS.Commands.CreateSubmission;
 using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSubmission;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.CodeModule;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.Module;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.QuizModule;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.TextModule;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.CodeModule;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module;
@@ -28,16 +31,26 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
             CreateMap<DeleteSubmissionCommand, Submission>();
             CreateMap<Exercise, ExerciseOverviewResponse>();
             CreateMap<Exercise, ExerciseResponse>();
+
+            // creation of exercise
             CreateMap<CreateExerciseCommand, Exercise>()
                 .ForMember(dest => dest.Modules, src => src.MapFrom(src => src.Modules));
-            CreateMap<CreateModuleCommand, Module>();
             CreateMap<CreateCodeEditorModuleCommand, CodeEditorModule>();
             CreateMap<CreateTextModuleCommand, TextModule>();
-            CreateMap<UpdateQuizModuleCommand, QuizModule>();
+            CreateMap<CreateQuizModuleCommand, QuizModule>();
             CreateMap<CreateModuleCommand, Module>()
                 .Include<CreateCodeEditorModuleCommand, CodeEditorModule>()
                 .Include<CreateTextModuleCommand, TextModule>()
                 .Include<CreateQuizModuleCommand, QuizModule>();
+
+            // update of exercises
+            CreateMap<UpdateCodeEditorModuleCommand, CodeEditorModule>();
+            CreateMap<UpdateTextModuleCommand, TextModule>();
+            CreateMap<UpdateQuizModuleCommand, QuizModule>();
+            CreateMap<UpdateModuleCommand, Module>()
+                .Include<UpdateCodeEditorModuleCommand, CodeEditorModule>()
+                .Include<UpdateTextModuleCommand, TextModule>()
+                .Include<UpdateQuizModuleCommand, QuizModule>();
         }
     }
 }

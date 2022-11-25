@@ -14,7 +14,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             IsPrivate = isPrivate;
             ExerciseGroups = new List<ExerciseGroup>();
             CourseRoles = new List<CourseRole>();
-            Attendes = new List<Attendee>();
+            Attendees = new List<Attendee>();
         }
 
         public string Title { get; private set; }
@@ -78,7 +78,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             throw new NotImplementedException();
         }
 
-        public void AddAttendee()
+        public void AddAttendee(Attendee attendee)
         {
             try
             {

@@ -1,13 +1,7 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
-using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 {
@@ -25,18 +19,17 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
             try
             {
                 var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
+
+                if (exerciseGroup is null)
+                {
+                    throw new NotFoundException("Could not find an exercise group with the provided Id");
+                }
+
                 exerciseGroup.RemoveExerciseById(request.Id);
 
                 int rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
-                if (rowsAffected != 0)
-                {
-                    return rowsAffected;
-                }
-                else
-                {
-                    throw new Exception("Could not delete exercise");
-                }
+                return rowsAffected;
             }
             catch (Exception)
             {

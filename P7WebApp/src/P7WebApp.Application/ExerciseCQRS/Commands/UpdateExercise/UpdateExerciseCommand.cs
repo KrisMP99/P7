@@ -1,12 +1,11 @@
 using MediatR;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module;
-using System.Runtime.InteropServices;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.Module;
 
 namespace P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise
 {
     public class UpdateExerciseCommand : IRequest<int>
     {
-        public UpdateExerciseCommand(int id, int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId, List<CreateModuleCommand> modules)
+        public UpdateExerciseCommand(int id, int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId, List<UpdateModuleCommand> modules)
         {
             Id = id;
             ExerciseGroupId = exerciseGroupId;
@@ -32,6 +31,6 @@ namespace P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise
         public DateTime? VisibleFrom { get; }
         public DateTime? VisibleTo { get; }
         public int LayoutId { get; }
-        public List<CreateModuleCommand>? Modules { get; }
+        public List<UpdateModuleCommand>? Modules { get; }
     }
 }

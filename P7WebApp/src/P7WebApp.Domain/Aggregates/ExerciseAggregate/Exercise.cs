@@ -1,4 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
 using P7WebApp.Domain.Exceptions;
@@ -40,15 +43,78 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public List<Submission> Submissions { get; private set; }
         public int LayoutId { get; private set; }
 
-        public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId)
+        public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId, List<Module> newModules)
         {
-            Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseException("Title has not been set.") : newTitle;
-            IsVisible = newIsVisible;
-            ExerciseNumber = newExerciseNumber < 0 ? throw new ExerciseException("Exercise number cannot be negative.") : newExerciseNumber;
-            VisibleFrom = newStartDate ?? VisibleFrom;
-            VisibleTo = newEndDate ?? VisibleTo;
-            LastModifiedDate = DateTime.Now;
-            LayoutId = ExerciseLayout.FromId(newLayoutId).Id;
+            try
+            {
+                Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseException("Title has not been set.") : newTitle;
+                IsVisible = newIsVisible;
+                ExerciseNumber = newExerciseNumber < 0 ? throw new ExerciseException("Exercise number cannot be negative.") : newExerciseNumber;
+                VisibleFrom = newStartDate ?? VisibleFrom;
+                VisibleTo = newEndDate ?? VisibleTo;
+                LastModifiedDate = DateTime.UtcNow;
+                LayoutId = ExerciseLayout.FromId(newLayoutId).Id;
+
+                // update existing modules
+                var modulesToUpdate = newModules.Where(nm => nm.Id != 0).ToList();
+                if (modulesToUpdate is not null && modulesToUpdate.Count != 0)
+                {
+                    foreach (var module in modulesToUpdate)
+                    {
+                        if (module is TextModule)
+                        {
+                            TextModule newTextModule = module as TextModule; 
+                            var updatedModule = GetModuleById(module.Id) as TextModule;
+                            updatedModule.EditInformation(newDescription: newTextModule.Description, newHeight: newTextModule.Height, newWidth: newTextModule.Width, newPosition: newTextModule.Position, newTitle: newTextModule.Title, newTextModule.Content);
+                        }
+                        else if (module is CodeEditorModule)
+                        {
+                            CodeEditorModule newCodeEditorModule = module as CodeEditorModule;
+                            var updatedModule = GetModuleById(module.Id) as CodeEditorModule;
+                            updatedModule.EditInformation(newDescription: newCodeEditorModule.Description, newHeight: newCodeEditorModule.Height, newWidth: newCodeEditorModule.Width, newPosition: newCodeEditorModule.Position, newCode: newCodeEditorModule.Code);
+                        }
+                        else if (module is QuizModule)
+                        {
+                            QuizModule newQuizModule = module as QuizModule;
+                            var updatedModule = GetModuleById(module.Id) as QuizModule;
+                            updatedModule.EditInformation(newDescription: newQuizModule.Description, newHeight: newQuizModule.Height, newWidth: newQuizModule.Width, newPosition: newQuizModule.Position);
+                        }
+                        else
+                        {
+                            var updatedModule = GetModuleById(module.Id) as QuizModule;
+                            updatedModule.EditInformation(newDescription: module.Description, newHeight: module.Height, newWidth: module.Width, newPosition: module.Position);
+                        }
+                    }
+                }
+
+                // if modules have been deleted,
+                if (Modules.Count > newModules.Count)
+                {
+                    var module = Modules.Where(m => !newModules.Exists(nm => nm.Id == m.Id)).FirstOrDefault();
+
+                    if (module is not null)
+                    {
+                        Modules.Remove(module);
+
+                    }
+                }
+
+                // add new modules
+                if (newModules.Any(nm => nm.Id == 0))
+                {
+                    var module = newModules.Where(nm => nm.Id == 0);
+                    Modules.AddRange(module);
+                }
+
+                if (Modules.Count != ExerciseLayout.GetNumberOfModulesAllowed(LayoutId))
+                {
+                    throw new ExerciseException("You cannot set the layout given the numbers of modules");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void AddModule(Module module)

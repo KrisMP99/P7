@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module;
 
 namespace P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.Module
 {
-    [JsonConverter(typeof(PolymorphicModuleConverter))]
+    [JsonConverter(typeof(PolymorphicUpdateModuleConverter))]
     public abstract class UpdateModuleCommand
     {
+        public int Id { get; set; }
         public string Description { get; set; }
         public double Height { get; set; }
         public double Width { get; set; }
