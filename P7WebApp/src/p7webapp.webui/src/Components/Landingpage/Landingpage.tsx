@@ -15,7 +15,7 @@ interface LandingpageProps {
 }
 
 export default function Landingpage(props: LandingpageProps): JSX.Element {
-    
+
     return (
         <Container>
             <div className='tabs-container'>
