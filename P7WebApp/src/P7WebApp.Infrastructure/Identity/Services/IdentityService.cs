@@ -3,24 +3,27 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Common.Models;
+using P7WebApp.Domain.Repositories;
+
 namespace P7WebApp.Infrastructure.Identity.Services
 {
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IProfileRepository _profileRepository;
 
-        public IdentityService(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-            IAuthorizationService authorizationService)
+        public IdentityService(
+            UserManager<ApplicationUser> userManager, 
+            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, 
+            IAuthorizationService authorizationService, 
+            IProfileRepository profileRepository)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
+            _profileRepository = profileRepository;
         }
 
         public async Task<string> GetUserNameAsync(string userId)
@@ -36,6 +39,12 @@ namespace P7WebApp.Infrastructure.Identity.Services
             user.SetIdentity(username, email, firstName, lastName);
 
             var result = await _userManager.CreateAsync(user, password);
+
+            if(result.Succeeded)
+            {
+                var appUser = await _userManager.Users.FirstAsync(au => au.UserName == username);
+                await _profileRepository.CreateProfile(appUser.Id);
+            }
 
             return result.ToApplicationResult();
         }

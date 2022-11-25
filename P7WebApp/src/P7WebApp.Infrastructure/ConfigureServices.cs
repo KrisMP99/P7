@@ -11,7 +11,6 @@ using P7WebApp.Infrastructure.Common.Models;
 using P7WebApp.Infrastructure.Identity;
 using P7WebApp.Infrastructure.Identity.Services;
 using P7WebApp.Infrastructure.Persistence;
-using P7WebApp.Infrastructure.Persistence.Intercepters;
 using P7WebApp.Infrastructure.Repositories;
 using P7WebApp.Infrastructure.Services;
 using System.Text;
@@ -22,7 +21,7 @@ namespace P7WebApp.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
+            //services.AddSingleton<IAuditableEntitySaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
@@ -77,9 +76,9 @@ namespace P7WebApp.Infrastructure
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ICourseRepository, CourseRepository>();
+            services.AddTransient<IProfileRepository, ProfileRepository>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IDateTime, DateTimeService>();
-
             services.AddScoped<ITokenService, TokenService>();
             services.Configure<Token>(configuration.GetSection("token"));
 

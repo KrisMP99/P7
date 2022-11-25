@@ -156,7 +156,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var courses = _context.Courses.Where(c => c.CreatedById == userId);
+                var courses = _context.Courses.Where(c => c.Owner.UserId == userId);
 
                 return courses.AsEnumerable();
             }

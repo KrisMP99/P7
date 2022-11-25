@@ -327,10 +327,6 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -341,18 +337,24 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("LastModifiedById")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedById")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LastModifiedById");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Courses");
                 });
@@ -754,6 +756,23 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.ToTable("ExerciseGroups");
                 });
 
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.ProfileAggregate.Profile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Profiles");
+                });
+
             modelBuilder.Entity("P7WebApp.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -917,6 +936,25 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
+                {
+                    b.HasOne("P7WebApp.Domain.Aggregates.ProfileAggregate.Profile", "LastModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("P7WebApp.Domain.Aggregates.ProfileAggregate.Profile", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LastModifiedBy");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>

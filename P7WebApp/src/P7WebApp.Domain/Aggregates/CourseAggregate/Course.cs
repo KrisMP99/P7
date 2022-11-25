@@ -1,21 +1,36 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
+using P7WebApp.Domain.Aggregates.ProfileAggregate;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
-    public class Course : AuditableEntityBase, IAggregateRoot
+    public class Course : EntityBase, IAggregateRoot
     {
-        public Course(string title, string description, bool isPrivate)
+        public Course(int ownerId, string title, string description, bool isPrivate)
         {
             Title = title;
             Description = description;
             IsPrivate = isPrivate;
+            CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = CreatedDate;
+            OwnerId = ownerId;
+            LastModifiedById = ownerId;
         }
 
         public string Title { get; private set; }
         public string Description { get; private set; }
         public bool IsPrivate { get; private set; }
+        public DateTime CreatedDate { get; private set; }
+        //[ForeignKey("Profile")]
+        public int OwnerId { get; private set; }
+        public Profile Owner { get; private set; }
+
+        //[ForeignKey("Profile")]
+        public int LastModifiedById { get; private set; }
+        public Profile LastModifiedBy { get; private set; }
+        public DateTime LastModifiedDate { get; private set; }
         public InviteCode? InviteCode { get; private set; }
         public List<ExerciseGroup> ExerciseGroups { get; private set; }
         public List<CourseRole> CourseRoles { get; private set; }
@@ -27,6 +42,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             Title = newTitle;
             Description = newDescription;
             IsPrivate= newVisibility;
+            LastModifiedDate = DateTime.UtcNow;
         }
 
         public ExerciseGroup GetExerciseGroup(int groupId)
