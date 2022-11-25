@@ -20,7 +20,11 @@ namespace P7WebApp.API
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.MaxDepth = 10;
+                });
 
             services.AddRazorPages();
 
