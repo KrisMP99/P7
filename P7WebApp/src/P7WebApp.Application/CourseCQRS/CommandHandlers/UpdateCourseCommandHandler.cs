@@ -27,9 +27,9 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 else
                 {
                     course.EditInformation(newTitle: request.Title, newDescription: request.Description, newVisibility: request.IsPrivate);
-                    await _unitOfWork.CommitChangesAsync(cancellationToken);
+                    var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
-                    return 1;
+                    return rowsAffected;
                 }
             }
             catch (Exception)

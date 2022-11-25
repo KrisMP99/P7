@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Commands;
@@ -22,14 +23,21 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
+                // The number specifies the rollId. For now there is only attendee and owner.
+                // Therefore the roleId is 1 -> Attendee
                 var attendee = new Attendee(_currentUserService.UserId, request.CourseId, 1);
                 var course = await _unitOfWork.CourseRepository.GetCourseWithAttendees(request.CourseId);
+                if (course is not null)
+                {
+                    course.AddAttendee(attendee);
+                    var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
+                    return affectedRows;
+                }
+                else
+                {
+                    throw new NotFoundException("Could not find course with specified ID");
+                }
 
-                course.AddAttendee(attendee);
-
-                var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
-
-                return affectedRows;
             }
             catch(Exception)
             {

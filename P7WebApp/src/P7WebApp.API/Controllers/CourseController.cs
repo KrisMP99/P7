@@ -199,14 +199,7 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(request);
-                if (result == 0)
-                {
-                    return BadRequest("Could not update the course");
-                }
-                else
-                {
-                    return Ok(result);
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
