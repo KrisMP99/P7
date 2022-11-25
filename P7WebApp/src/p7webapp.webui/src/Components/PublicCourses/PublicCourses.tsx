@@ -31,7 +31,7 @@ export default function PublicCourses() {
     }, [publicCourses.length, coursesPerPage, search]);
 
     return (
-        <Container>
+        <Container style={{marginTop: 'calc(42px + 2rem)'}}>
             <div className="row justify-content-center">
                 <h1 className='text-center'>Find Courses</h1>
 

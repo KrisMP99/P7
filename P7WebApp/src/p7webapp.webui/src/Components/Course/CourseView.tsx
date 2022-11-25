@@ -13,6 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import internal from 'stream';
 import EditCourseModal, { ShowEditCourseModal } from '../Modals/EditCourseModal/EditCourseModal';
 import AttendeeOverview from '../AttendeeOverview/AttendeeOverview';
+import { ExerciseModule } from '../ExerciseBoard/ExerciseBoard';
 
 export interface ExerciseOverview {
     id: number;
@@ -46,6 +47,7 @@ export interface Exercise {
     exerciseGroupId: number;
     title: string;
     isVisible: boolean;
+    modules: ExerciseModule[];
 }
 
 export interface Course {
@@ -72,7 +74,6 @@ export interface Attendee {
 
 interface CourseProps {
     user: User;
-    openCreateExerciseModalRef: React.RefObject<ShowModal>;
 }
 
 export default function CourseView(props: CourseProps) {
@@ -240,7 +241,9 @@ export default function CourseView(props: CourseProps) {
                     <Tab eventKey={'exercises'} title={'Exercises'}>
                         <div className={'d-flex' + (isOwner ? '' : ' d-none')}>
                             <Button className={'create-btns'} onClick={() => {
-                                createExerciseGroupModalRef.current?.handleShow(course?.id!);
+                                if (course) {
+                                    createExerciseGroupModalRef.current?.handleShow(course.id, course.exerciseGroups.length);
+                                }
                             }}>
                                 <Plus />ExerciseGroup
                             </Button>
@@ -248,7 +251,6 @@ export default function CourseView(props: CourseProps) {
                         <ExerciseGroupsOverview
                             exerciseGroups={course ? course.exerciseGroups : []}
                             openDeleteExerciseModalRef={openDeleteExerciseModalRef}
-                            openCreateExerciseModalRef={props.openCreateExerciseModalRef}
                             isOwner={isOwner}
                             changedCourse={() => {
                                 if (courseId) {
@@ -305,7 +307,7 @@ export default function CourseView(props: CourseProps) {
             }
             <CreateExerciseGroupModal
                 ref={createExerciseGroupModalRef}
-                updateExerciseGroups={() => {
+                updatedExerciseGroups={() => {
                     if (courseId)
                         fetchCourse(courseId, (data) => {
                             setCourse(data);

@@ -1,10 +1,8 @@
 import { Allotment } from 'allotment';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { ArrowLeft } from 'react-bootstrap-icons';
-import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import { User } from '../../App';
 import { Exercise } from '../Course/CourseView';
 import { ChangeLayoutModal } from '../Modals/ChangeLayoutModal/ChangeLayoutModal';
 import ChangeModuleModal, { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
@@ -12,50 +10,61 @@ import { LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerc
 import EmptyModule from '../Modules/EmptyModule/EmptyModule';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import './ExerciseBoard.css';
+import { fetchExercise } from './ExerciseView';
+
+interface TextModule {
+    title: string;
+    body: string;
+}
+
+interface CodeModule {
+    code: string;
+}
 
 export enum ModuleType {
     EMPTY,
     EXERCISE_DESCRIPTION,
+    CODE
 }
 export interface ExerciseModule {
     id: number;
     position: number;
     type: ModuleType;
+    content: null | TextModule | CodeModule;
 }
 
 interface ExerciseBoardProps {
-    user: User;
-    boardLayout: LayoutType;
-    editMode: boolean;
-    newExercise: Exercise | null;
+    exerciseId: number;
+    exerciseGroupId: number;
 }
 
 export default function ExerciseBoard(props: ExerciseBoardProps) {
-    const params = useParams();
     const changeModuleModalRef = useRef<ShowChangeModuleModalRef>(null);
     const changeLayoutModalRef = useRef<ShowModal>(null);
-    const [modules, setModules] = useState<ExerciseModule[]>([{id: 0, position: 1, type: ModuleType.EMPTY}]);
+    const [modules, setModules] = useState<ExerciseModule[]>([{id: 0, position: 1, type: ModuleType.EMPTY, content: null}]);
     const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const navigator = useNavigate();
-    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, exerciseGroupId: 0, isVisible: true})
+    const [exercise, setExercise] = useState<Exercise>({
+        id: props.exerciseId, 
+        exerciseGroupId: props.exerciseGroupId, 
+        title: '', 
+        isVisible: true,
+        modules: []
+    });
 
     useEffect(() => {
-        //WIP - Fetch the exercise and set the module to the result
-        // setModules()
-        // setExerciseId(Number(params.id));
-        setLayout(props.boardLayout);
-        handleSetModules(layout);
-        if(props.newExercise !== null) {
-            setExercise({...props.newExercise});
+        console.log("Rendering EDIT");
+        if (props.exerciseId >= 1) {
+            fetchExercise(props.exerciseId, (newExercise) => setExercise(newExercise));
         }
-    }, [params.id, props.boardLayout, props.editMode, props.newExercise]);
+    }, [props.exerciseId]);
     useEffect(() => {
         handleSetModules(layout);
     }, [layout])
 
     const handleSetModules = (layout: LayoutType) => {
         let tempModules: ExerciseModule[] = [...modules]; 
-        let tempEmpty: ExerciseModule = {id: 0, position: 0, type: ModuleType.EMPTY};
+        let tempEmpty: ExerciseModule = {id: 0, position: 0, type: ModuleType.EMPTY, content: null};
         //Adds or removes left rows
         switch (layout) {
             case LayoutType.SINGLE:
@@ -93,12 +102,13 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
         setModules([...tempModules.sort((a, b) => a.position - b.position)]);
     }
 
-    const getModuleFromType = (type: ModuleType, position: number): React.ReactNode => {
+    const getModuleFromType = (type: ModuleType, position: number, content: null | TextModule | CodeModule): React.ReactNode => {
         switch (type) {
             case ModuleType.EMPTY:
                 return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
             case ModuleType.EXERCISE_DESCRIPTION:
-                return <ExerciseDescriptionModule changeModuleModalRef={changeModuleModalRef} position={position} isOwner={true} />;
+                const moduleContent: TextModule = content as TextModule;
+                return <ExerciseDescriptionModule changeModuleModalRef={changeModuleModalRef} position={position} isOwner={true} title={moduleContent.title} body={moduleContent.body} />;
             default:
                 return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
         };
@@ -111,7 +121,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             let temp = modules.find((val) => val.position === i+1);
             if (temp !== undefined) {
                 colElements.push((<Allotment.Pane key={i}>
-                    {getModuleFromType(temp.type, temp.position)}
+                    {getModuleFromType(temp.type, temp.position, temp.content)}
                 </Allotment.Pane>));
             }
             if ((i === 1  && modules.find((val) => val.position>2)) || i === 3) {
@@ -126,8 +136,11 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             <div className='board-actions-container'>
                 <Button onClick={() => navigator(-1)}><ArrowLeft /></Button>
                 <Button onClick={() => changeLayoutModalRef.current?.handleShow()}>Change layout</Button>
-                <span className='place-right exercise-title-text'>{exercise.title}</span>
-                <Button className='place-right' variant='success'>
+                <Form.Control className='exercise-title-text place-center' 
+                    value={exercise.title}
+                    onChange={(e) => setExercise({...exercise, title: e.target.value})}
+                />
+                <Button variant='success'>
                     Save exercise
                 </Button>
                 <Button variant='danger' onClick={() => navigator(-1)}>
@@ -140,18 +153,6 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                         return col;
                     })}
                 </Allotment>
-                {/* {props.editMode && <div className="position-fixed bottom-0 end-0 p-3" style={{ zIndex: "11", width: '260px' }}>
-                    <div id="liveToast" className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div className="toast-body">
-                            <Button variant='success' style={{ marginRight: '10px' }}>
-                                Save exercise
-                            </Button>
-                            <Button variant='danger' onClick={() => navigator(-1)}>
-                                Cancel
-                            </Button>
-                        </div>
-                    </div>
-                </div>} */}
             </div>
             <ChangeModuleModal ref={changeModuleModalRef} changedModule={(newModule: ModuleType, position: number) => {
                 if (position > 0 && position <= 4) {

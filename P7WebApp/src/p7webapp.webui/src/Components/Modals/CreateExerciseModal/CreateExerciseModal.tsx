@@ -21,7 +21,7 @@ import { Exercise, ExerciseOverview } from '../../Course/CourseView';
 import { getApiRoot } from '../../../App';
 
 interface CreateExerciseModalProps {
-    created: (layout: LayoutType, exercise: Exercise) => void;
+    created: (layout: LayoutType, exercise: ExerciseOverview) => void;
 }
 export interface ShowModal {
     handleShow(): void;

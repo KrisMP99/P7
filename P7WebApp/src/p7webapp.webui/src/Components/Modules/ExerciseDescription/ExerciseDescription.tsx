@@ -9,6 +9,8 @@ interface ExerciseDescriptionProps {
     changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef>;
     position: number;
     isOwner: boolean;
+    title: string;
+    body: string;
 }
 
 export default function ExerciseDescriptionModule(props: ExerciseDescriptionProps) {
