@@ -12,6 +12,7 @@ import CreateExerciseGroupModal, { ShowCreateExerciseGroupModal } from '../Modal
 import { useNavigate, useParams } from 'react-router-dom';
 import internal from 'stream';
 import EditCourseModal, { ShowEditCourseModal } from '../Modals/EditCourseModal/EditCourseModal';
+import AttendeeOverview from '../AttendeeOverview/AttendeeOverview';
 
 export interface ExerciseOverview {
     id: number;
@@ -61,9 +62,12 @@ export interface Course {
 }
 
 export interface Attendee {
-    courseId: number;
     userId: string;
     roleId: number;
+    roleName: string;
+    firstname: string;
+    lastname: string;
+    username: string;
 }
 
 interface CourseProps {
@@ -256,7 +260,10 @@ export default function CourseView(props: CourseProps) {
                         />
                     </Tab>
                     <Tab eventKey={'members'} title={'Members'} tabClassName={!isOwner ? 'd-none' : ''}>
-                        <p>Member overview here.</p>
+                        <AttendeeOverview 
+                            attendees={course ? course.attendees : []}
+                            reFetchCourse={() => fetchCourse(courseId!, (newCourse) => setCourse(newCourse)) }
+                        />
                     </Tab>
                     <Tab eventKey={'statistics'} title={'Statistics'} tabClassName={!isOwner ? 'd-none' : ''}>
                         <p>Statistics overview here.</p>

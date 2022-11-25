@@ -15,6 +15,6 @@ namespace P7WebApp.Application.Responses
         public string CreatedById { get; set; }
         public string OwnerName { get; set; }  
         public IEnumerable<ExerciseGroupResponse> ExerciseGroups { get; set; }
-        public IEnumerable<Attendee> Attendees { get; set; }
+        public IEnumerable<AttendeeResponse> Attendees { get; set; }
     }
 }

@@ -61,6 +61,10 @@ namespace P7WebApp.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Module>().UseTpcMappingStrategy();
+            builder.Entity<Attendee>().Ignore(a => a.UserName);
+            builder.Entity<Attendee>().Ignore(a => a.FirstName);
+            builder.Entity<Attendee>().Ignore(a => a.LastName);
+            builder.Entity<Attendee>().Ignore(a => a.RoleName);
 
             base.OnModelCreating(builder);
         }
