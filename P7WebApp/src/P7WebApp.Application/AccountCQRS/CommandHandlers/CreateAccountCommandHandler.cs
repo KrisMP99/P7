@@ -18,6 +18,7 @@ namespace P7WebApp.Application.AccountCQRS.CommandHandlers
         {
             try
             {
+                Console.WriteLine("entered");
                 var result = await _identityService.CreateUserAsync(firstName: request.FirstName, lastName: request.LastName, username: request.Username, email: request.Email, password: request.Password);
                 return result;
             }
