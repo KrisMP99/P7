@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace P7WebApp.Application.AccountCQRS.Commands.UpdateAccountProfile
+namespace P7WebApp.Application.ProfileCQRS.Commands.UpdateProfile
 {
-    public class UpdateAccountProfileCommandValidator : AbstractValidator<UpdateAccountProfileCommand>
+    public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileCommand>
     {
-        public UpdateAccountProfileCommandValidator()
+        public UpdateProfileCommandValidator()
         {
             RuleFor(uap => uap.Email).NotEmpty().EmailAddress().WithMessage("Must be an email");
             RuleFor(uap => uap.FirstName).NotEmpty().WithMessage("Firstname must be set");

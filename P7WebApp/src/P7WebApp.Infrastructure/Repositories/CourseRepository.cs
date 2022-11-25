@@ -95,7 +95,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var courses = _context.Courses.Include(c => c.Attendes).Where(c => c.Attendes.Any(a => a.UserId == userId));
+                var courses = _context.Courses.Include(c => c.Attendees).Where(c => c.Attendees.Any(a => a.Profile.UserId == userId));
 
                 return courses;
             }
@@ -202,11 +202,16 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        public async Task<Course> GetCourseWithAttendees(int courseId)
+        public async Task<Course> GetCourseWithAttendeesAndCourseRoles(int courseId)
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.Attendes).FirstOrDefaultAsync();
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.Attendees)
+                    .Include(c => c.CourseRoles)
+                        .ThenInclude(role => role.Permission)
+                    .FirstOrDefaultAsync();
 
                 if (course != null)
                 {

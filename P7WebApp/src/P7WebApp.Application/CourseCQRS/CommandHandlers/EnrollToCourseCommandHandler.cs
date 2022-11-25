@@ -22,8 +22,17 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                var attendee = new Attendee(_currentUserService.UserId, request.CourseId);
-                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendees(request.CourseId);
+                // Get the profile
+                var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId);
+
+                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendeesAndCourseRoles(request.CourseId);
+
+                var defaultRole = course.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault();
+
+                var attendee = new Attendee(
+                    courseId: request.CourseId,
+                    courseRoleId: defaultRole.Id,
+                    profileId: profile.Id);
 
                 course.AddAttendee(attendee);
 

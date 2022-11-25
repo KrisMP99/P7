@@ -308,13 +308,19 @@ namespace P7WebApp.Infrastructure.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CourseRoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("CourseRoleId");
+
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Attendees");
                 });
@@ -369,6 +375,9 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     b.Property<int>("CourseId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("IsDefaultRole")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
@@ -764,7 +773,23 @@ namespace P7WebApp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -932,10 +957,26 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Attendee", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.Course", null)
-                        .WithMany("Attendes")
+                        .WithMany("Attendees")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", "CourseRole")
+                        .WithMany()
+                        .HasForeignKey("CourseRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("P7WebApp.Domain.Aggregates.ProfileAggregate.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CourseRole");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
@@ -978,7 +1019,7 @@ namespace P7WebApp.Infrastructure.Migrations
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Permission", b =>
                 {
                     b.HasOne("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", null)
-                        .WithOne("Permisson")
+                        .WithOne("Permission")
                         .HasForeignKey("P7WebApp.Domain.Aggregates.CourseAggregate.Permission", "CourseRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1073,7 +1114,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.Course", b =>
                 {
-                    b.Navigation("Attendes");
+                    b.Navigation("Attendees");
 
                     b.Navigation("CourseRoles");
 
@@ -1084,7 +1125,7 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.CourseAggregate.CourseRole", b =>
                 {
-                    b.Navigation("Permisson")
+                    b.Navigation("Permission")
                         .IsRequired();
                 });
 

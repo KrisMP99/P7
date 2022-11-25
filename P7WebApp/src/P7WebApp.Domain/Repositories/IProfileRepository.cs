@@ -4,7 +4,7 @@ namespace P7WebApp.Domain.Repositories
 {
     public interface IProfileRepository
     {
-        Task<Profile> GetProfileById(string userId);
-        Task CreateProfile(string userId);
+        Task<Profile> GetProfileByUserId(string userId);
+        Task CreateProfile(string userId, string firstName, string lastName, string email, string userName);
     }
 }

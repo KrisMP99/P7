@@ -20,7 +20,7 @@ namespace P7WebApp.Infrastructure.Persistence
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
     {
         private readonly IMediator _mediator;
-        //private readonly IAuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
+
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
             IOptions<OperationalStoreOptions> operationalStoreOptions,
@@ -28,7 +28,6 @@ namespace P7WebApp.Infrastructure.Persistence
             ) : base(options, operationalStoreOptions)
         {
             _mediator = mediator;
-            //_auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         }
 
         public DbSet<Course> Courses { get; set; }

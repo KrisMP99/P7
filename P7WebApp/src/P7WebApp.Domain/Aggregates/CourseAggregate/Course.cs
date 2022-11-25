@@ -17,6 +17,9 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             LastModifiedDate = CreatedDate;
             OwnerId = ownerId;
             LastModifiedById = ownerId;
+            ExerciseGroups = new List<ExerciseGroup>();
+            Attendees = new List<Attendee>();
+            CourseRoles = new List<CourseRole>();
         }
 
         public string Title { get; private set; }
@@ -31,7 +34,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         public InviteCode? InviteCode { get; private set; }
         public List<ExerciseGroup> ExerciseGroups { get; private set; }
         public List<CourseRole> CourseRoles { get; private set; }
-        public List<Attendee> Attendes { get; private set; }
+        public List<Attendee> Attendees { get; private set; }
         
 
         public void EditInformation(string newTitle, string newDescription, bool newVisibility)
@@ -93,7 +96,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             {
                 if(attendee is not null)
                 {
-                    Attendes.Add(attendee);
+                    Attendees.Add(attendee);
                 }
                 else
                 {
@@ -137,6 +140,18 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 ExerciseGroups.Remove(GetExerciseGroup(exerciseGroupId));
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void AddCourseRole(CourseRole courseRole)
+        {
+            try
+            {
+                CourseRoles.Add(courseRole);
+            }
+            catch(Exception)
             {
                 throw;
             }

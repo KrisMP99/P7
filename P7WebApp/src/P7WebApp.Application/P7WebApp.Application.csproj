@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AccountCQRS\QueryHandlers\" />
     <Folder Include="Common\Behaviours\" />
     <Folder Include="ExerciseCQRS\Queries\" />
     <Folder Include="ExerciseCQRS\QueryHandlers\" />

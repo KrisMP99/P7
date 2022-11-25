@@ -44,7 +44,13 @@ namespace P7WebApp.Infrastructure.Identity.Services
             if(result.Succeeded)
             {
                 var appUser = await _userManager.Users.FirstAsync(au => au.UserName == username);
-                await _unitOfWork.ProfileRepository.CreateProfile(appUser.Id);
+                await _unitOfWork.ProfileRepository.CreateProfile(
+                    appUser.Id, 
+                    appUser.FirstName, 
+                    appUser.LastName, 
+                    appUser.Email, 
+                    appUser.UserName);
+
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(CancellationToken.None);
                
                 // The user could not be created, so we delete the application user as well,
