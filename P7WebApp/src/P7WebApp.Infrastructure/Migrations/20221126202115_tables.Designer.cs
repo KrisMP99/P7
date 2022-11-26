@@ -12,8 +12,8 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221125124052_Tables")]
-    partial class Tables
+    [Migration("20221126202115_tables")]
+    partial class tables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

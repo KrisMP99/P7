@@ -38,10 +38,6 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                     throw new Exception("Could not create the course.");
                 }
 
-                // Default role
-                var role = new CourseRole("Default", isDefaultRole: true);
-                course.AddCourseRole(role);
-
                 await _unitOfWork.CourseRepository.CreateCourse(course);
 
                 var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);

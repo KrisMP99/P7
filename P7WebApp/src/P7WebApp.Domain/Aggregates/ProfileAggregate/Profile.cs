@@ -15,6 +15,15 @@ namespace P7WebApp.Domain.Aggregates.ProfileAggregate
             UserName = userName;
         }
 
+        public Profile(Profile profile)
+        {
+            UserId=profile.UserId;
+            FirstName=profile.FirstName;
+            LastName=profile.LastName;
+            Email=profile.Email;
+            UserName=profile.UserName;
+        }
+
         public string UserId { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
@@ -24,6 +33,8 @@ namespace P7WebApp.Domain.Aggregates.ProfileAggregate
 
         public Course CreateCourse(string title, string description, bool isPrivate)
         {
+            // We create a default role that all attendees are assigned to initally when enrolling in the course
+            // This could also be done in the command handler, but is here for now.
             var course = new Course(
                 ownerId: base.Id,
                 title: title,
@@ -32,6 +43,5 @@ namespace P7WebApp.Domain.Aggregates.ProfileAggregate
 
             return course;
         }
-
     }
 }
