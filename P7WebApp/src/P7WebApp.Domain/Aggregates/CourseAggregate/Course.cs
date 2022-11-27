@@ -131,7 +131,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             {
                 if(exerciseGroup is null)
                 {
-                    throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)");    
+                    throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)"); 
                 }
 
                 if(CheckExerciseGroupNumberIsOk(exerciseGroup))
@@ -178,6 +178,18 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             try
             {
+                if(courseRole is null)
+                {
+                    throw new CourseException("The course role could not be added, since it is null.");
+                }
+
+                var result = CourseRoles.FirstOrDefault(role => role.IsDefaultRole);
+
+                if(result is not null && courseRole.IsDefaultRole)
+                {
+                    throw new CourseException("A default role already exists. There can only be a maximum of one default role per course.");
+                }
+
                 CourseRoles.Add(courseRole);
             }
             catch(Exception)
@@ -185,6 +197,5 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 throw;
             }
         }
-
     }
 }

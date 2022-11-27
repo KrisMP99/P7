@@ -9,6 +9,25 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
     public class CourseTests
     {
         [Fact]
+        public void Course_Success_CreatesCourseWithDefaultCourseRoleAndPermission()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: false);
+
+            course.CourseRoles
+                .Should()
+                .HaveCount(1);
+            course.CourseRoles.ElementAt(0).RoleName
+                .Should()
+                .BeEquivalentTo("attendee");
+            course.CourseRoles.ElementAt(0).IsDefaultRole
+                .Should()
+                .BeTrue();
+            course.CourseRoles.ElementAt(0).Permission.CourseRoleId
+                .Should()
+                .Be(0);
+        }
+
+        [Fact]
         public void EditInformation_Sucess_GivenNewInformationIsUpdatedCorrectly()
         {
             var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
@@ -215,6 +234,96 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
+        public void AddAttendee_Success_GivenCorrectAttendee()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+            var attendee = new Attendee(courseId: course.Id, courseRoleId: 0, profileId: 0);
+
+            course.AddAttendee(attendee);
+
+            course.Attendees
+                .Should()
+                .HaveCount(1)
+                .And
+                .Contain(attendee);
+        }
+
+        [Fact]
+        public void AddAttendee_ThrowsCourseException_GivenNull()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+
+            Action act = () => course.AddAttendee(null);
+
+            act
+                .Should()
+                .Throw<CourseException>();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(111111)]
+        [InlineData(347623784)]
+        public void GetAttendeeByProfileId_Success_GivenAttendeeWithCorrectProfileId(int profileId)
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+            var attendee = new Attendee(courseId: course.Id, courseRoleId: 0, profileId: profileId);
+
+            course.AddAttendee(attendee);
+
+            var result = course.GetAttendeeByProfileId(profileId);
+
+            result
+                .Should()
+                .Be(attendee);
+        }
+
+        [Fact]
+        public void GetAttendeeByProfileId_ThrowsCourseException_GivenIncorrectProfileIdAndAttendeeListIsEmtpy()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+
+            Action act = () => course.GetAttendeeByProfileId(1);
+
+            act
+                .Should()
+                .Throw<CourseException>();
+        }
+
+        [Fact]
+        public void RemoveAttendeeByProfileId_Success_GivenAttendeeAndCorrectProfileId()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+
+            var attendee = new Attendee(courseId: course.Id, courseRoleId: 0, profileId: 0);
+            course.AddAttendee(attendee);
+
+            course.RemoveAttendeeByProfileId(attendee.ProfileId);
+
+            course.Attendees
+                .Should()
+                .NotContain(attendee)
+                .And
+                .HaveCount(0);
+        }
+
+        [Fact]
+        public void GetAttendeeByProfileId_ThrowsCourseException_GivenAttendeeWithIncorrectProfileIdAndAttendeeListIsNotEmtpy()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+            var attendee = new Attendee(courseId: course.Id, courseRoleId: 0, profileId: 0);
+
+            course.AddAttendee(attendee);
+
+            Action act = () => course.GetAttendeeByProfileId(1);
+
+            act
+                .Should()
+                .Throw<CourseException>();
+        }
+
+        [Fact]
         public void AddExerciseGroup_Success_ExerciseGroupIsAddedToExerciseGroupListGivenCorrectExerciseGroup()
         {
             var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
@@ -347,6 +456,49 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
             course.AddExerciseGroup(exerciseGroup);
 
             Action act = () => course.RemoveExerciseGroup(1);
+
+            act
+                .Should()
+                .Throw<CourseException>();
+        }
+
+        [Fact]
+        public void AddCourseRole_Success_GivenCorrectCourseRole()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+
+            var courseRole = new CourseRole(courseId: course.Id, roleName: "Admin");
+            var permission = new Permission(courseRoleId: courseRole.Id);
+            courseRole.UpdatePermission(permission);
+            
+            course.AddCourseRole(courseRole);
+
+            course.CourseRoles
+                .Should()
+                .Contain(courseRole)
+                .And
+                .HaveCount(2); // The default role and the new role we have created
+        }
+
+        [Fact]
+        public void AddCourseRole_ThrowsCourseException_GivenNullAsParameter()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+
+            Action act = () => course.AddCourseRole(null);
+
+            act
+                .Should()
+                .Throw<CourseException>();
+        }
+
+        [Fact]
+        public void AddCourseRole_ThrowsCourseException_GivenTwoDefaultRoles()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+            var courseRole = course.CourseRoles.ElementAt(0); // We use a copy of the default course role
+
+            Action act = () => course.AddCourseRole(courseRole);
 
             act
                 .Should()
