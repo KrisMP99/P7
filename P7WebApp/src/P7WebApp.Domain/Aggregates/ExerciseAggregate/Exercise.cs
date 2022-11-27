@@ -13,10 +13,10 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             Title = title;
             IsVisible = isVisible;
             ExerciseNumber = exerciseNumber;
-            StartDate = startDate ?? DateTime.UtcNow;
-            EndDate = endDate ?? DateTime.MaxValue;
-            VisibleFrom = visibleFrom ?? DateTime.UtcNow;
-            VisibleTo = visibleTo ?? DateTime.MaxValue;
+            StartDate = startDate ?? null;
+            EndDate = endDate ?? null;
+            VisibleFrom = visibleFrom ?? null;
+            VisibleTo = visibleTo ?? null;
             CreatedDate = DateTime.UtcNow;
             LastModifiedDate = CreatedDate;
             LayoutId = layoutId;
@@ -63,6 +63,26 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 if(CanModuleBeAddedToExercise(module))
                 {
                     Modules.Add(module);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void AddModules(ICollection<Module> modules)
+        {
+            try
+            {
+                if (modules is not null && modules.Any())
+                {
+                    Modules.AddRange(modules);
+                    
+                }
+                else
+                {
+                    throw new Exception("Could not add modules");
                 }
             }
             catch (Exception)

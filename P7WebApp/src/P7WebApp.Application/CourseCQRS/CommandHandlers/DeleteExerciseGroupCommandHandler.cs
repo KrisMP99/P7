@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.CourseCQRS.Commands.DeleteExerciseGroup;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,10 +1,20 @@
-﻿using P7WebApp.Domain.Common;
+﻿using P7WebApp.Domain.Aggregates.ProfileAggregate;
+using P7WebApp.Domain.Common;
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
     public class Attendee : EntityBase
     {
-        // An attendee just have an application user
-        // I.e., the user who attends the cours
-        public string UserId { get; set; }
+        public Attendee(int courseId, int courseRoleId, int profileId)
+        {
+            CourseId = courseId;
+            CourseRoleId = courseRoleId;
+            ProfileId = profileId;
+        }
+
+        public int CourseId { get; private set; }
+        public int CourseRoleId { get; private set; }
+        public CourseRole CourseRole { get; private set; }
+        public int ProfileId { get; set; }
+        public Profile Profile { get; set; }
     }
 }

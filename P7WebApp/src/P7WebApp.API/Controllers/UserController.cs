@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using P7WebApp.Application.AccountCQRS.Commands.UpdateAccountProfile;
-using P7WebApp.Application.UserCQRS.Queries;
 using P7WebApp.Application.CourseCQRS.Queries;
+using P7WebApp.Application.ProfileCQRS.Commands.UpdateProfile;
+using P7WebApp.Application.ProfileCQRS.Queries;
 
 namespace P7WebApp.API.Controllers
 {
-    [Route("api/users")]
+    [Route("api/profiles")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : BaseController
     {
@@ -19,64 +19,6 @@ namespace P7WebApp.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        [Route("{userId}/profile")]
-        public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateAccountProfileCommand request)
-        {
-            try
-            {
-                var result = _mediator.Send(request);
-                return Ok("User was updated");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("{userId}/profile")]
-        public async Task<IActionResult> GetUserProfile([FromBody] GetUserProfileQuery request)
-        {
-            try
-            {
-                var result = _mediator.Send(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("{userId}/courses")]
-        public async Task<IActionResult> GetUsersCreatedCourses()
-        {
-            try
-            {
-                var result = await _mediator.Send(new GetCreatedCoursesQuery());
-                return Ok(result);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("courses/attended")]
-        public async Task<IActionResult> GetUsersAttendedCourses()
-        {
-            try
-            {
-                var result = await _mediator.Send(new GetUserAttendedCoursesQuery());
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        
     }
 }

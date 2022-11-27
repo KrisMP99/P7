@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands;
-using P7WebApp.Domain.Aggregates.CourseAggregate;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 
 namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
@@ -22,12 +21,28 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
             try
             {
                 var exercise = ExerciseMapper.Mapper.Map<Exercise>(request);
-                var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
-                exerciseGroup.AddExercise(exercise);
 
-                var result = await _unitOfWork.CommitChangesAsync(cancellationToken); 
+                if (exercise is null)
+                {
+                    throw new Exception("Could not map CreateExerciseCommand to Exercise");
+                }
+                else
+                {
+                    var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
 
-                return result;
+                    if (exerciseGroup is null)
+                    {
+                        throw new NotFoundException("Could not find an exercise group with the specified Id");
+                    }
+                    else
+                    {
+                        exerciseGroup.AddExercise(exercise);
+
+                        var result = await _unitOfWork.CommitChangesAsync(cancellationToken);
+
+                        return result;
+                    }
+                }
             }
             catch (Exception)
             {

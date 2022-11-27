@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.CourseCQRS.Commands.CreateInviteCode;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
@@ -24,7 +24,6 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 if (course.InviteCode is null)
                 {
                     course.CreateInviteCode(inviteCode);
-                    await _unitOfWork.CourseRepository.UpdateCourse(course);
                     await _unitOfWork.CommitChangesAsync(cancellationToken);
                 }
 

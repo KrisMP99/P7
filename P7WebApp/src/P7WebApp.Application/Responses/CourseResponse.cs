@@ -1,4 +1,6 @@
-﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
+﻿using P7WebApp.Domain.Aggregates.CourseAggregate;
+using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
+using System.Reflection.Metadata.Ecma335;
 
 namespace P7WebApp.Application.Responses
 {
@@ -13,5 +15,6 @@ namespace P7WebApp.Application.Responses
         public string CreatedById { get; set; }
         public string OwnerName { get; set; }  
         public IEnumerable<ExerciseGroupResponse> ExerciseGroups { get; set; }
+        public IEnumerable<AttendeeResponse> Attendees { get; set; }
     }
 }

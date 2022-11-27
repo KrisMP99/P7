@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.CourseCQRS.Commands.UpdateCourse;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
@@ -27,7 +27,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 else
                 {
                     course.EditInformation(newTitle: request.Title, newDescription: request.Description, newVisibility: request.IsPrivate);
-                    int rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
+                    var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
                     return rowsAffected;
                 }

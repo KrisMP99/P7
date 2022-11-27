@@ -7,9 +7,11 @@ import './CourseView.css';
 import { LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import ExerciseGroupsOverview from './ExerciseGroupsOverview/ExerciseGroupsOverview';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../Modals/DeleteConfirmModal/DeleteConfirmModal';
-import { Gear, Plus } from 'react-bootstrap-icons';
+import { Gear, Pencil, Plus } from 'react-bootstrap-icons';
 import CreateExerciseGroupModal, { ShowCreateExerciseGroupModal } from '../Modals/CreateExerciseGroupModal/CreateExerciseGroupModal';
 import { useNavigate, useParams } from 'react-router-dom';
+import internal from 'stream';
+import EditCourseModal, { ShowEditCourseModal } from '../Modals/EditCourseModal/EditCourseModal';
 
 export interface ExerciseOverview {
     id: number;
@@ -29,8 +31,13 @@ export interface ExerciseOverview {
 export interface ExerciseGroup {
     id: number;
     title: string;
+    description: string;
+    exerciseGroupNumber: number;
     isVisible: boolean;
     exercises: ExerciseOverview[];
+    createdDate?: Date;
+    lastModifiedDate?: Date;
+    becomesVisibleAt?: Date;
 }
 
 export interface Exercise {
@@ -50,6 +57,13 @@ export interface Course {
     exerciseGroups: ExerciseGroup[];
     createdDate: Date | null;
     modifiedDate: Date | null;
+    attendees: Attendee[];
+}
+
+export interface Attendee {
+    courseId: number;
+    userId: string;
+    roleId: number;
 }
 
 interface CourseProps {
@@ -58,15 +72,16 @@ interface CourseProps {
 }
 
 export default function CourseView(props: CourseProps) {
-
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
+    const editCourseModalRef = useRef<ShowEditCourseModal>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const [course, setCourse] = useState<Course | null>(null);
     const [editedCourse, setEditedCourse] = useState<Course | null>(null);
     const [isOwner, setIsOwner] = useState<boolean>(false);
+    const [isAttendee, setIsAttendee] = useState<boolean>(false);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [inviteCode, setInviteCode] = useState<string>("");
 
@@ -89,13 +104,26 @@ export default function CourseView(props: CourseProps) {
         }
     }, []);
 
-    useEffect(() => {
-        if (props.user.id === course?.createdById && !isOwner) {
-            setIsOwner(true);
+    useEffect(()=> {
+        if (course){
+            if (props.user.id === course?.createdById) {
+                setIsOwner(true);
+            }
+            else {
+                setIsOwner(false);
+            }
+            if (course!.attendees.filter((a) => a.userId === props.user.id).length > 0 && !isOwner){
+                setIsAttendee(true);
+            }
+            else {
+                setIsAttendee(false);
+            }
         }
-        // setIsOwner(true)
+    }, [course, props.user.id, course?.attendees.length]);
+
+    useEffect(() => {
         setEditedCourse(course);
-    }, [course?.createdById, props.user.id, isOwner]);
+    }, [course?.createdById, props.user.id, isOwner, course?.description, course?.isPrivate, course?.title]);
 
     return isLoading ? 
         (<></>) :
@@ -111,6 +139,29 @@ export default function CourseView(props: CourseProps) {
                     }}
                     readOnly={!isEditMode}
                 />
+                {!isOwner && <div style={{float:'right'}} >
+                    {
+                        isAttendee?
+                        <Button size='sm' className='btn-3' onClick={() => {
+                            if (courseId) {
+                                leaveCourse(courseId, ()=>{
+                                    fetchCourse(courseId, (newCourse) => setCourse(newCourse));
+                                });
+                            }
+                        }}>
+                            Leave
+                        </Button>: 
+                        <Button size='sm' className='btn-3' onClick={() => {
+                            if (courseId) {
+                                enrollToCourse(courseId, ()=>{
+                                    fetchCourse(courseId, (newCourse) => setCourse(newCourse));
+                                });
+                            }
+                        }}>
+                            Enroll
+                        </Button>
+                    }     
+                </div> }
                 {isOwner && 
                     (<div style={{ float: 'right' }}>
                         {isEditMode &&
@@ -131,14 +182,7 @@ export default function CourseView(props: CourseProps) {
                         }
                         {!isEditMode &&
                             <>
-                                {inviteCode !== "" && 
-                                <>
-                                    <Form.Control readOnly value={inviteCode}/>
-                                    {/* <Toast delay={2500} autohide>
-                                        <Toast.Body>Invite code copied to clipboard</Toast.Body>
-                                    </Toast> */}
-                                </>
-                                }
+                                {inviteCode !== "" && <Form.Control readOnly value={inviteCode}/>}
                                 <Button size='sm' className='btn-3' onClick={() => {
                                     getInviteCode(course?.id!, (inviteCode) => 
                                     {
@@ -156,8 +200,13 @@ export default function CourseView(props: CourseProps) {
                                         </Tooltip>
                                     }
                                 >
-                                    <Button size='sm' className='btn-3' onClick={() => setIsEditMode(true)}>
-                                        <Gear />
+                                    <Button size='sm' className='btn-3' onClick={() => {
+                                            if (course){
+                                                editCourseModalRef.current?.handleShow(course.id);
+                                            }
+                                        }
+                                    }>
+                                        <Pencil />
                                     </Button>
                                 </OverlayTrigger>
                             </>
@@ -235,6 +284,18 @@ export default function CourseView(props: CourseProps) {
                     }
                 }}
             />
+            {isOwner && 
+                <EditCourseModal
+                    ref={editCourseModalRef}
+                    updatedCourse={()=>{
+                        if (course){
+                            fetchCourse(course?.id, (course) => {
+                                setCourse(course);
+                            })
+                        }
+                    }}
+                />
+            }
             <CreateExerciseGroupModal
                 ref={createExerciseGroupModalRef}
                 updateExerciseGroups={() => {
@@ -284,18 +345,14 @@ async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, ca
     if (jwt === null) return;
     try {
         const requestOptions = {
-            method: 'POST',
+            method: 'DELETE',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + jwt
-            },
-            body: JSON.stringify({
-                "courseId": courseId,
-                "exerciseGroupId": exerciseGroupId
-            })
+            }
         }
-        await fetch(getApiRoot() + 'Course/delete-exercisegroup', requestOptions)
+        await fetch(getApiRoot() + 'courses/' + courseId + '/exercise-group/' + exerciseGroupId, requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend - server unavailable');
@@ -310,7 +367,64 @@ async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, ca
     }
 }
 
-async function fetchCourse(courseId: number, callback: (course: Course) => void) {
+async function leaveCourse(courseId: number, callback: () => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            }
+        }
+        await fetch(getApiRoot() + 'courses/' + courseId + '/leave', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then(() => {
+                callback();
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
+async function enrollToCourse(courseId: number, callback: () => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            },
+            body: JSON.stringify({
+                'courseId': courseId 
+            })
+        }
+        await fetch(getApiRoot() + 'courses/enroll', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then(() => {
+                callback();
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
+export async function fetchCourse(courseId: number, callback: (course: Course) => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -330,7 +444,6 @@ async function fetchCourse(courseId: number, callback: (course: Course) => void)
                 return res.json();
             })
             .then((course: Course) => {
-                console.log(course)
                 callback(course);
             });
     } catch (error) {

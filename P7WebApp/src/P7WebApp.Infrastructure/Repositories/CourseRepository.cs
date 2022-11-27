@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
-using System.Reflection.Metadata;
 
 
 namespace P7WebApp.Infrastructure.Repositories
@@ -29,7 +27,26 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
+        public async Task<int> GetCourseFromInviteCode(int code)
+        {
+            try
+            {
+                var course = await _context.Courses.Where(c => c.InviteCode.Code == code).FirstOrDefaultAsync();
 
+                if (course != null)
+                {
+                    return course.Id;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public async Task<int> DeleteCourse(int courseId)
         {
             try
@@ -51,19 +68,46 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
+
         public async Task<Course> GetCourseWithExerciseGroups(int courseId)
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.ExerciseGroups).Include(c => c.InviteCode).FirstOrDefaultAsync();
-                if (course != null)
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.ExerciseGroups)
+                    .FirstOrDefaultAsync();
+
+                if (course is null)
                 {
-                    return course;
+                    throw new Exception("Could not get course with exercise groups.");
                 }
-                else
+
+                return course;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Course> GetCourseWithExerciseGroupsAttendeesAndInviteCode(int courseId)
+        {
+            try
+            {
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.ExerciseGroups)
+                    .Include(c => c.InviteCode)
+                    .Include(c => c.Attendees)
+                    .FirstOrDefaultAsync();
+               
+                if (course is null)
                 {
                     throw new Exception();
                 }
+
+                return course;
             }
             catch (Exception)
             {
@@ -71,12 +115,13 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        // TODO: Implement correctly
         public async Task<IEnumerable<Course>> GetAttendedCourses(string userId)
         {
             try
             {
-                var courses = _context.Courses.Include(c => c.Attendes).Where(c => c.Attendes.Any(a => a.UserId == userId));
+                var courses = _context.Courses
+                    .Include(c => c.Attendees)
+                    .Where(c => c.Attendees.Any(a => a.Profile.UserId == userId));
 
                 return courses;
             }
@@ -92,17 +137,16 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var exerciseGroups = _context.ExerciseGroups.Where(e => e.CourseId == courseId).Include(e => e.Exercises);
+                var exerciseGroups = _context.ExerciseGroups
+                    .Where(e => e.CourseId == courseId)
+                    .Include(e => e.Exercises);
 
-                if (exerciseGroups != null)
-                {
-                    return exerciseGroups.AsEnumerable();
-
-                } 
-                else
+                if (exerciseGroups is null)
                 {
                     throw new Exception();
                 }
+
+                return exerciseGroups.AsEnumerable();
             }
             catch (Exception)
             {
@@ -118,14 +162,12 @@ namespace P7WebApp.Infrastructure.Repositories
 
             try
             {
-                if (courses != null)
-                {
-                    return courses;
-                }
-                else
+                if (courses is null)
                 {
                     throw new Exception();
                 }
+
+                return courses;
             }
             catch (Exception)
             {
@@ -137,7 +179,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var courses = _context.Courses.Where(c => c.CreatedById == userId);
+                var courses = _context.Courses.Where(c => c.Owner.UserId == userId);
 
                 return courses.AsEnumerable();
             }
@@ -176,6 +218,30 @@ namespace P7WebApp.Infrastructure.Repositories
                 {
                     throw new Exception();
                 }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Course> GetCourseWithAttendeesAndDefaultCourseRoles(int courseId)
+        {
+            try
+            {
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.Attendees)
+                    .Include(c => c.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault())
+                        .ThenInclude(role => role.Permission)
+                    .FirstOrDefaultAsync();
+
+                if (course is null)
+                {
+                    throw new Exception("Could not find course with default role and permission.");
+                }
+
+                return course;
             }
             catch (Exception)
             {
