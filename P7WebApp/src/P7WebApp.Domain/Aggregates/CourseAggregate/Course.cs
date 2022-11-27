@@ -104,16 +104,23 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             }
         }
 
-        public void RemoveAttendee(Attendee attendee)
+        public Attendee GetAttendeeByProfileId(int profileId)
+        {
+            var attendee = Attendees.FirstOrDefault(e => e.ProfileId == profileId);
+
+            if (attendee is null)
+            {
+                throw new Exception("Could not find attendee with the given profile id.");
+            }
+
+            return attendee;
+        }
+
+        public void RemoveAttendeeByProfileId(int profileId)
         {
             try
             {
-                if(Attendees is null)
-                {
-                    throw new Exception("The attendee list is not initialized.");
-                }
-
-                Attendees.Remove(attendee);
+                Attendees.Remove(GetAttendeeByProfileId(profileId));
             }
             catch(Exception)
             {
