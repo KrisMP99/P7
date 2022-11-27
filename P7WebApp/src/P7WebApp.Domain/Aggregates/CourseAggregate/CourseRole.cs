@@ -1,4 +1,5 @@
 ﻿using P7WebApp.Domain.Common;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
@@ -52,12 +53,17 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 
         public void UpdatePermission(Permission permission)
         {
+            if(permission is null)
+            {
+                throw new CourseException("Could not update the permission, since the permission is null.");
+            }
+
             Permission = permission;
         }
 
-        public void EditInformation(string name)
+        public void EditInformation(string roleName)
         {
-            RoleName = name;
+            RoleName = String.IsNullOrEmpty(roleName) ? throw new CourseException("A rolename can not be empty or null.") : roleName;
         }
     }
 }

@@ -71,6 +71,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 {
                     throw new CourseException("Could not create the invite code");             
                 }
+
                 InviteCode = invitecode;
             }
             catch(Exception)
