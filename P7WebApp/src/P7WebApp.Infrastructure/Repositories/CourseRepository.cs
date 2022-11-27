@@ -202,25 +202,23 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        public async Task<Course> GetCourseWithAttendeesAndCourseRoles(int courseId)
+        public async Task<Course> GetCourseWithAttendeesAndDefaultCourseRoles(int courseId)
         {
             try
             {
                 var course = await _context.Courses
                     .Where(c => c.Id == courseId)
                     .Include(c => c.Attendees)
-                    .Include(c => c.CourseRoles)
+                    .Include(c => c.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault())
                         .ThenInclude(role => role.Permission)
                     .FirstOrDefaultAsync();
 
-                if (course != null)
+                if (course is null)
                 {
-                    return course;
+                    throw new Exception("Could not find course with default role and permission.");
                 }
-                else
-                {
-                    throw new Exception();
-                }
+
+                return course;
             }
             catch (Exception)
             {

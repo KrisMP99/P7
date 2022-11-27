@@ -131,7 +131,7 @@ async function attemptLogin (username: string, password: string, callback: (user
                 "password": password
             })
         }
-        await fetch(getApiRoot() + 'accounts/login', requestOptions)
+        await fetch(getApiRoot() + 'profiles/login', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error(res.statusText);

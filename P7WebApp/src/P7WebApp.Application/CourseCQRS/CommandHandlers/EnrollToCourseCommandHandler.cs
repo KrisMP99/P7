@@ -22,10 +22,9 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                // Get the profile
                 var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId);
 
-                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendeesAndCourseRoles(request.CourseId);
+                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendeesAndDefaultCourseRoles(request.CourseId);
 
                 var defaultRole = course.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault();
 

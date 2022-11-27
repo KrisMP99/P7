@@ -15,15 +15,6 @@ namespace P7WebApp.Domain.Aggregates.ProfileAggregate
             UserName = userName;
         }
 
-        public Profile(Profile profile)
-        {
-            UserId=profile.UserId;
-            FirstName=profile.FirstName;
-            LastName=profile.LastName;
-            Email=profile.Email;
-            UserName=profile.UserName;
-        }
-
         public string UserId { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
