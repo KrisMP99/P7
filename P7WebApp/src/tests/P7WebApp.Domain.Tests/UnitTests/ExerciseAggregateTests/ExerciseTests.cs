@@ -238,11 +238,12 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 layoutId: 1);
 
             var module = new TextModule(
+                title: "test",
                 description: "Test",
                 height: 10.00,
                 width: 10.00,
                 position: 1,
-                text: "test");
+                content: "test");
 
             exercise.AddModule(module);
 
@@ -272,22 +273,24 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 layoutId: layoutId);
 
             var module = new TextModule(
+                    title: "Test",
                     description: "Test",
                     height: 10.00,
                     width: 10.00,
                     position: 1,
-                    text: "test");
+                    content: "test");
 
             var numberOfAllowedModules = ExerciseLayout.GetNumberOfModulesAllowed(layoutId);
 
-            for (int i = 0; i < numberOfAllowedModules + 1; i++)
+            for (int i = 0; i < numberOfAllowedModules; i++)
             {
                 module = new TextModule(
+                    title: "Test",
                     description: "Test",
                     height: 10.00,
                     width: 10.00,
-                    position: 1,
-                    text: "test");
+                    position: i + 1,
+                    content: "test");
 
                 exercise.AddModule(module);
             }
@@ -324,11 +327,12 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             for (int i = 0; i < numberOfAllowedModules; i++)
             {
                 var module = new TextModule(
+                    title: "Test",
                     description: "Test",
                     height: 10.00,
                     width: 10.00,
                     position: i + 1,
-                    text: "test");
+                    content: "test");
 
                 exercise.AddModule(module);
             }
@@ -357,11 +361,12 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 layoutId: 1);
 
             var module = new TextModule(
+                title: "Test",
                 description: "Test",
                 height: 10.00,
                 width: 10.00,
                 position: modulePosition,
-                text: "test");
+                content: "test");
 
             exercise.AddModule(module);
 
@@ -393,11 +398,12 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 layoutId: 1);
 
             var module = new TextModule(
+                title: "Test",
                 description: "Test",
                 height: 10.00,
                 width: 10.00,
                 position: modulePosition,
-                text: "test");
+                content: "test");
 
             Action act = () => exercise.AddModule(module);
 
@@ -510,11 +516,12 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 layoutId: 1);
 
             var module = new TextModule(
+                title: "Test",
                 description: "Test",
                 height: 10.00,
                 width: 10.00,
                 position: 1,
-                text: "test");
+                content: "test");
             module.Id = moduleId;
 
             exercise.AddModule(module);
@@ -561,11 +568,12 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 layoutId: 1);
 
             var module = new TextModule(
+                title: "Test",
                 description: "Test",
                 height: 10.00,
                 width: 10.00,
                 position: 1,
-                text: "test");
+                content: "test");
 
             exercise.AddModule(module);
 
@@ -594,11 +602,12 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 layoutId: 1);
 
             var module = new TextModule(
+                title: "Test",
                 description: "Test",
                 height: 10.00,
                 width: 10.00,
                 position: 1,
-                text: "test");
+                content: "test");
             module.Id = moduleId;
 
             exercise.AddModule(module);
@@ -649,11 +658,12 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 layoutId: 1);
 
             var module = new TextModule(
+                title: "Test",
                 description: "Test",
                 height: 10.00,
                 width: 10.00,
                 position: 1,
-                text: "test");
+                content: "test");
             module.Id = 0;
             exercise.AddModule(module);
 

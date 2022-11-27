@@ -6,11 +6,19 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
     {
         // Constructor for EF core
         private CourseRole() { }
-        public CourseRole(int courseId, string roleName, Permission permission)
+        public CourseRole(int courseId, string roleName, Permission? permission = null)
         {
             CourseId = courseId;
             RoleName = roleName;
-            Permission = permission;
+
+            if (permission is null)
+            {
+                Permission = new Permission(base.Id);
+            }
+            else
+            {
+                Permission = permission;
+            }
         }
 
         // Only used for creating a default course role

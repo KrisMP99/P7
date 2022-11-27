@@ -11,7 +11,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void EditInformation_Sucess_GivenNewInformationIsUpdatedCorrectly()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
             string newTitle = "TestNew";
             string newDescription = "TestNew";
             bool newVisibility = false;
@@ -32,7 +32,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void EditInformation_ThrowsCourseException_GivenNullForTitleParameter()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
             string newDescription = "TestNew";
             bool newVisibility = false;
 
@@ -46,7 +46,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void EditInformation_ThrowsCourseException_GivenNullForDescriptionParameter()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
             string newTitle = "TestNew";
             string newDescription = "TestNew";
             bool newVisibility = false;
@@ -64,7 +64,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [InlineData(100)]
         public void GetExerciseGroup_Success_ReturnsOneExerciseGroupGivenCorrectExerciseGroupId(int exerciseGroupId)
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -92,7 +92,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [InlineData(100)]
         public void GetExerciseGroup_ThrowsCourseException_GivenExerciseGroupsListIsEmptyAndIsGivenExerciseGroupsIds(int exerciseGroupId)
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             Action act = () => course.GetExerciseGroup(exerciseGroupId);
 
@@ -105,7 +105,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [InlineData(100)]
         public void GetExerciseGroup_Success_ReturnsOneExerciseGroupWithCorrectCourseIdGivenCorrectCourseIdAndExerciseGroupIdAndExerciseGroupListIsNotEmpty(int courseId)
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup = new ExerciseGroup(
                 courseId: courseId,
@@ -135,7 +135,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [InlineData(100)]
         public void GetExerciseGroup_Success_ReturnsOneExerciseGroupWithCorrectExerciseGroupIdGivenCorrectExerciseGroupId(int exerciseGroupId)
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -162,7 +162,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void GetExerciseGroup_ThrowsCourseException_GivenNoExerciseGroupIsFoundGivenWrongGroupExerciseIdAndExerciseGroupListIsNotEmpty()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -185,7 +185,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void CreateInviteCode_Success_InviteCodeIsAddedToTheCourseGivenCorrectInviteCodeObject()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var inviteCode = new InviteCode(
                 courseId: 0,
@@ -205,7 +205,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void CreateInviteCode_ThrowsCourseException_GivenNullAsParameter()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);    
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);    
 
             Action act = () => course.CreateInviteCode(null);
 
@@ -217,7 +217,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void AddExerciseGroup_Success_ExerciseGroupIsAddedToExerciseGroupListGivenCorrectExerciseGroup()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -238,7 +238,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void AddExerciseGroup_ThrowsCourseException_GivenNullAsParameter()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             Action act = () => course.AddExerciseGroup(null);
 
@@ -250,7 +250,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void AddExerciseGroup_ThrowsCourseException_GivenNegativeExerciseGroupNumber()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -270,7 +270,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void AddExerciseGroup_ThrowsCourseException_GivenTwoExerciseGroupsWithSameExerciseGroupNumber()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup1 = new ExerciseGroup(
                 courseId: 0,
@@ -299,7 +299,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void RemoveExerciseGroup_Success_RemovesCorrectExerciseGroupGivenCorrectExerciseGroupIdAndTheExerciseGroupIsInTheExerciseGroupList()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -320,9 +320,9 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
-        public void RemoveExerciseGroup_ThrowsCourseException_ivenExerciseGroupIdAndTheExerciseGroupDoesNotExistAndExerciseGroupListIsEmpty()
+        public void RemoveExerciseGroup_ThrowsCourseException_GivenExerciseGroupIdAndTheExerciseGroupDoesNotExistAndExerciseGroupListIsEmpty()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             Action act = () => course.RemoveExerciseGroup(1);
 
@@ -334,7 +334,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         [Fact]
         public void RemoveExerciseGroup_ThrowsCourseException_GivenExerciseGroupIdAndTheExerciseGroupDoesNotExistAndTheExerciseGroupListIsNotEmpty()
         {
-            var course = new Course(title: "Test", description: "Test", isPrivate: true);
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
 
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,

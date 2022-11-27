@@ -20,9 +20,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             CreatedDate = DateTime.UtcNow;
             LastModifiedDate = CreatedDate;
             LayoutId = layoutId;
-            Modules = new List<Module>();
-            Solutions = new List<Solution>();
-            Submissions = new List<Submission>();
         }
 
         public int ExerciseGroupId { get; private set; }
@@ -35,9 +32,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime? VisibleTo { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
-        public List<Module> Modules { get; private set; }
-        public List<Solution> Solutions { get; private set; }
-        public List<Submission> Submissions { get; private set; }
+        public ICollection<Module> Modules { get; private set; } = new List<Module>();
+        public ICollection<Solution> Solutions { get; private set; } = new List<Solution>();
+        public ICollection<Submission> Submissions { get; private set; } = new List<Submission>();
         public int LayoutId { get; private set; }
 
         public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId)
@@ -75,14 +72,28 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                if (modules is not null && modules.Any())
+                if(modules is null)
                 {
-                    Modules.AddRange(modules);
-                    
+                    throw new Exception("The modules collection is null.");
+
                 }
-                else
+
+                if(modules.Count() > 4)
                 {
-                    throw new Exception("Could not add modules");
+                    throw new ArgumentOutOfRangeException("An exercise can at most contain 4 modules.");
+                }
+
+                if(modules.Count() == 0)
+                {
+                    throw new ArgumentOutOfRangeException("The module collection to add is empty.");
+                }
+
+                foreach(var module in modules)
+                {
+                    if(CanModuleBeAddedToExercise(module))
+                    {
+                        Modules.Add(module); 
+                    }
                 }
             }
             catch (Exception)
@@ -106,7 +117,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 throw new ExerciseException($"The modules position '{module.Position}' is invalid. Allowed values are: 1-4.");
             }
 
-            var result = Modules.Find(m => m.Position == module.Position);
+            var result = Modules.FirstOrDefault(m => m.Position == module.Position);
 
             if (result is not null)
             {
@@ -132,7 +143,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var module = Modules.Find(m => m.Id == moduleId);
+                var module = Modules.FirstOrDefault(m => m.Id == moduleId);
 
                 if(module is not null)
                 {
@@ -185,7 +196,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Solutions.Find(s => s.Id == solutionId);
+                var result = Solutions.FirstOrDefault(s => s.Id == solutionId);
                 if (result is not null)
                 {
                     return result;
@@ -237,7 +248,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Submissions.Find(s => s.Id == submissionId);
+                var result = Submissions.FirstOrDefault(s => s.Id == submissionId);
                 if (result is not null)
                 {
                     return result;

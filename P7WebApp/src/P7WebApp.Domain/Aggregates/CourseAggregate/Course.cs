@@ -48,11 +48,11 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             try
             {
-                var exerciseGroup = ExerciseGroups.FirstOrDefault(eg => eg.Id == groupId);
+                var exerciseGroup = ExerciseGroups.FirstOrDefault(eg => eg.Id == exerciseGroupId);
 
                 if (exerciseGroup is null)
                 {
-                    throw new Exception("Could not find an exerciseGroup with the specified Id");
+                    throw new CourseException("Could not find an exerciseGroup with the specified Id");
                 }
 
                 return exerciseGroup;
@@ -69,7 +69,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             {
                 if(invitecode is null)
                 {
-                    throw new Exception("Could not create the invite code");             
+                    throw new CourseException("Could not create the invite code");             
                 }
                 InviteCode = invitecode;
             }
@@ -90,7 +90,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             {
                 if(attendee is null)
                 {
-                    throw new Exception("Attendee list has not been initialized.");
+                    throw new CourseException("Attendee list has not been initialized.");
                 }
 
                 Attendees.Add(attendee);
@@ -107,7 +107,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 
             if (attendee is null)
             {
-                throw new Exception("Could not find attendee with the given profile id.");
+                throw new CourseException("Could not find attendee with the given profile id.");
             }
 
             return attendee;
@@ -131,9 +131,13 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             {
                 if(exerciseGroup is null)
                 {
-                    throw new Exception("Could not add the exercisegroup to the course (exercisegroup is null)");    
+                    throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)");    
                 }
-                ExerciseGroups.Add(exerciseGroup);
+
+                if(CheckExerciseGroupNumberIsOk(exerciseGroup))
+                {
+                    ExerciseGroups.Add(exerciseGroup);
+                }
             }
             catch(Exception)
             {
@@ -148,7 +152,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 throw new CourseException("The exercise group number cannot be less than 0.");
             }
 
-            var result = ExerciseGroups.Find(eg => eg.Id == exerciseGroup.ExerciseGroupNumber);
+            var result = ExerciseGroups.FirstOrDefault(eg => eg.Id == exerciseGroup.ExerciseGroupNumber);
 
             if (result is not null)
             {
