@@ -110,7 +110,7 @@ export default function Frontpage(props: LoginProps) {
 }
 
 interface LoginResponse {
-    id: string;
+    userId: string;
     firstname: string;
     lastname: string;
     email: string;
@@ -141,13 +141,14 @@ async function attemptLogin (username: string, password: string, callback: (user
             .then((data: LoginResponse) => {
                 console.log("Successfully logged in!");
                 sessionStorage.setItem("jwt", data.token);
-                callback({
-                    id: data.id,
+                let user: User = {
+                    id: data.userId,
                     firstname: data.firstname,
                     lastname: data.lastname,
                     email: data.email,
                     username: data.username
-                });
+                };
+                callback(user);
             });
     } catch (error) {
         alert(error);

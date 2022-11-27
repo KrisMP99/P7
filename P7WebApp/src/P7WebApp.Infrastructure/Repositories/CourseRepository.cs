@@ -70,11 +70,19 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
+
         public async Task<Course> GetCourseWithExerciseGroups(int courseId)
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.ExerciseGroups).Include(c => c.InviteCode).FirstOrDefaultAsync();
+                var course = await _context.Courses.Where(c => c.Id == courseId)
+                                                   .Include(c => c.ExerciseGroups)
+                                                   .Include(c => c.InviteCode)
+                                                   .Include(c => c.Attendees)
+                                                   .FirstOrDefaultAsync();
+                //string sql = $"SELECT * FROM Courses JOIN ExerciseGroups ON Courses.Id = ExerciseGroups.CourseId JOIN InviteCode ON Course.Id = InviteCode.CourseId JOIN Attendees ON Course.Id = Attendees.CourseId JOIN AspNetUsers ON Attendees.UserId = AspNetUsers.Id";
+                //var course = _context.Courses.FromSql($"SELECT * FROM public.\"Courses\" as c JOIN public.\"ExerciseGroups\" as eg ON c.\"Id\" = eg.\"CourseId\" JOIN public.\"InviteCode\" as ic ON c.\"Id\" = ic.\"CourseId\" JOIN public.\"Attendees\" as a ON c.\"Id\" = a.\"CourseId\" JOIN public.\"AspNetUsers\" as u ON a.\"UserId\" = u.\"Id\"").ToList();
+
                 if (course != null)
                 {
                     return course;

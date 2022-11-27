@@ -94,7 +94,6 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 if(attendee is null)
                 {
                     throw new Exception("Attendee list has not been initialized.");
-                    
                 }
 
                 Attendees.Add(attendee);

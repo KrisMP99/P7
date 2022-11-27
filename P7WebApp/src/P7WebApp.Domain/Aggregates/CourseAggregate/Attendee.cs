@@ -12,6 +12,9 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         }
 
         public int CourseId { get; private set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string UserName { get; set; }
         public int CourseRoleId { get; private set; }
         public CourseRole CourseRole { get; private set; }
         public int ProfileId { get; set; }
