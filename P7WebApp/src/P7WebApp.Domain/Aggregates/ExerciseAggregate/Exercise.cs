@@ -74,18 +74,18 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             {
                 if(modules is null)
                 {
-                    throw new Exception("The modules collection is null.");
+                    throw new ExerciseException("The modules collection is null.");
 
                 }
 
                 if(modules.Count() > 4)
                 {
-                    throw new ArgumentOutOfRangeException("An exercise can at most contain 4 modules.");
+                    throw new ExerciseException("An exercise can at most contain 4 modules.");
                 }
 
                 if(modules.Count() == 0)
                 {
-                    throw new ArgumentOutOfRangeException("The module collection to add is empty.");
+                    throw new ExerciseException("The module collection to add is empty.");
                 }
 
                 foreach(var module in modules)

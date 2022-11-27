@@ -434,6 +434,124 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         }
 
         [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void AddModules_Success_GivenListOfModulesWith1To4Modules(int numberOfModules)
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 6);
+
+            ICollection<Module> modulesToAdd = new List<Module>();
+
+            for(int i = 0; i < numberOfModules; i++)
+            {
+                modulesToAdd.Add(new TextModule(
+                    description: "Test",
+                    height: 10,
+                    width: 10,
+                    position: i + 1,
+                    title: "Test",
+                    content: "Test"
+                    ));
+            }
+
+            exercise.AddModules(modulesToAdd);
+
+            exercise.Modules
+                .Should()
+                .HaveCount(numberOfModules);
+        }
+
+        [Fact]
+        public void AddModules_ThrowsExerciseException_GivenEmptyModuleCollection()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 6);
+
+            ICollection<Module> modulesToAdd = new List<Module>();
+
+            Action act = () => exercise.AddModules(modulesToAdd);
+
+            act
+                .Should()
+                .Throw<ExerciseException>();
+        }
+
+        [Fact]
+        public void AddModules_ThrowsExerciseException_GivenModulesCollectionWith5Modules()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 6);
+
+            ICollection<Module> modulesToAdd = new List<Module>();
+
+            for(int i = 0; i < 5; i++)
+            {
+                modulesToAdd.Add(new TextModule(
+                    description: "Test",
+                    height: 10,
+                    width: 10,
+                    position: i + 1,
+                    title: "Test",
+                    content: "Test"
+                    ));
+            }
+
+            Action act = () => exercise.AddModules(modulesToAdd);
+
+            act
+                .Should()
+                .Throw<ExerciseException>();
+        }
+
+        [Fact]
+        public void AddModules_ThrowsExerciseException_GivenNullAsParameter()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 6);
+
+            Action act = () => exercise.AddModules(null);
+
+            act
+                .Should()
+                .Throw<ExerciseException>();
+        }
+
+        [Theory]
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(100)]
