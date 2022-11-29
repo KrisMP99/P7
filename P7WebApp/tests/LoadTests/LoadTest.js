@@ -15,6 +15,7 @@ const PASSWORD = "LoadTest";
 const BASE_URL = "https://localhost:7001/api";
 const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 
+
 function randomString(length, charset = '') {
     if (!charset) charset = 'abcdefghijklmnopqrstuvwxyz';
     let res = '';
@@ -44,7 +45,19 @@ export function setup(){
     return authToken;
 }
 
+// Example function. DO NOT DELETE
+// See https://k6.io/docs/examples/advanced-api-flow/ for more information
 export default (authToken) => {
+    // GET request
+    const params = {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        }
+    }
+    const getRes = http.get(`${BASE_URL}/courses/1`,params);
+    check(getRes, {'got course': r => r.status === 200})
+    
+    // POST request
     const requestConfigWithTag = (tag) => ({
         headers: {
             Authorization: `Bearer ${authToken}`,
@@ -57,4 +70,23 @@ export default (authToken) => {
             tag
         ), 
     });
+    const body = 
+    {
+        title: "new",
+        description: "string",
+        isPrivate: false,
+    }
+    
+    const postRes = http.post(`${BASE_URL}/courses`,
+     JSON.stringify({
+        title: "new",
+        description: "string",
+        isPrivate: false,
+    }),
+    {headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type' : 'application/json'
+    }})
+    check(postRes, {'Created course': r => r.status === 200})
+
 }
