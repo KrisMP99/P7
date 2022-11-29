@@ -13,19 +13,20 @@ import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDe
 import './ExerciseBoard.css';
 import { fetchExercise } from './ExerciseView';
 
-interface TextModule {
+export interface TextModule {
     title: string;
     body: string;
 }
 
-interface CodeModule {
+export interface CodeModule {
     code: string;
 }
 
 export enum ModuleType {
-    EMPTY,
-    EXERCISE_DESCRIPTION,
-    CODE
+    EMPTY = 'empty',
+    EXERCISE_DESCRIPTION = 'text',
+    CODE = 'code',
+    QUIZ = 'quiz'
 }
 export interface ExerciseModule {
     id: number;
@@ -48,7 +49,6 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: true, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null});
 
     useEffect(() => {
-        console.log("Rendering EDIT");
         if (props.exerciseId >= 1) {
             fetchExercise(props.exerciseId, (newExercise) => setExercise(newExercise));
         }
@@ -102,8 +102,25 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             case ModuleType.EMPTY:
                 return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
             case ModuleType.EXERCISE_DESCRIPTION:
-                const moduleContent: TextModule = content as TextModule;
-                return <ExerciseDescriptionModule changeModuleModalRef={changeModuleModalRef} position={position} isOwner={true} title={moduleContent.title} body={moduleContent.body} />;
+                const moduleContent: TextModule | null = content ? content as TextModule : null;
+                return (
+                    <ExerciseDescriptionModule 
+                        changeModuleModalRef={changeModuleModalRef} 
+                        position={position} 
+                        editMode={true} 
+                        title={moduleContent?.title ?? ''} 
+                        body={moduleContent?.body ?? ''} 
+                        changedContent={(position: number, content: TextModule) => {
+                            let mods = modules.map((m) => {
+                                if (m.position === position) {
+                                    m.content = { title: content.title, body: content.body };
+                                }
+                                return m;
+                            });
+                            setModules(mods);
+                        }}
+                    />
+                );
             default:
                 return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
         };
@@ -135,7 +152,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                     value={exercise.title}
                     onChange={(e) => setExercise({...exercise, title: e.target.value})}
                 />
-                <Button variant='success'>
+                <Button variant='success' onClick={() => createExercise(exercise, props.exerciseGroupId)}>
                     Save exercise
                 </Button>
                 <Button variant='danger' onClick={() => navigator(-1)}>
@@ -170,7 +187,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     )
 }
 
-async function createExercise(exercise: Exercise) {
+async function createExercise(exercise: Exercise, exerciseGroupId: number) {
     const jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -182,7 +199,16 @@ async function createExercise(exercise: Exercise) {
                 'Authorization': 'Bearer ' + jwt
             },
             body: JSON.stringify({
-
+                exerciseGroupId: exerciseGroupId,
+                title: exercise.title,
+                isVisible: exercise.isVisible,
+                exerciseNumber: exercise.exerciseNumber,
+                startDate: null,
+                endDate: null,
+                visibleFrom: null,
+                visibleTo: null,
+                layoutId: exercise.layoutId,
+                modules: convertModulesToRequest(exercise.modules)
             })
         }
         await fetch(getApiRoot() + 'exercise', requestOptions) //WIP - set path
@@ -199,4 +225,33 @@ async function createExercise(exercise: Exercise) {
     } catch (error) {
         alert(error);
     }
+}
+
+function convertModulesToRequest(modules: ExerciseModule[]) {
+    let convertedModules = [];
+    for (let i = 0; i < modules.length; i++) {
+        switch (modules[i].type) {
+            case ModuleType.EXERCISE_DESCRIPTION:
+                let content: TextModule = modules[i].content as TextModule;
+                convertedModules.push({
+                    description: 'undefined',
+                    height: 1,
+                    width: 1,
+                    position: modules[i].position,
+                    type: modules[i].type,
+                    title: content.title,
+                    content: content.body
+                });
+                break;
+            case ModuleType.CODE:
+                break;
+            case ModuleType.EMPTY:
+                break;
+            case ModuleType.QUIZ:
+                break;
+            default:
+                break;
+        }
+    }
+    return convertedModules;
 }

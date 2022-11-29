@@ -192,7 +192,7 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
     )
 });
 
-export function getModuleOptions(id: number) {
+export function getModuleOptions(id: string) {
     switch (id) {
         case ModuleType.EXERCISE_DESCRIPTION:
             return 'Exercise Description';

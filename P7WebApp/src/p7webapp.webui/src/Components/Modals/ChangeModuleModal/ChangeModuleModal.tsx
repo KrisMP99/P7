@@ -42,7 +42,7 @@ export const ChangeModuleModal = forwardRef<ShowChangeModuleModalRef, ChangeModu
                 <Modal.Body>
                     <Form.Group className="mb-3 modal-form-field">
                         <Form.Label>Module:</Form.Label>
-                        <Form.Select onChange={(e) => setModule(Number(e.target.value))} value={module}>
+                        <Form.Select onChange={(e) => setModule(e.target.value as ModuleType)} value={module}>
                             <option value={ModuleType.EMPTY}>{getModuleOptions(ModuleType.EMPTY)}</option>
                             <option value={ModuleType.EXERCISE_DESCRIPTION}>{getModuleOptions(ModuleType.EXERCISE_DESCRIPTION)}</option>
                         </Form.Select>

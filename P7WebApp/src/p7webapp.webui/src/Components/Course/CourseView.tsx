@@ -53,7 +53,6 @@ export interface Exercise {
     endDate: Date | null;
     visibleFrom: Date | null;
     visibleTo: Date | null;
-
     modules: ExerciseModule[];
 }
 

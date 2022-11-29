@@ -97,7 +97,7 @@ export default function Frontpage(props: LoginProps) {
                         <p>
                             Not registered? <a className='link' 
                                 onMouseOver={(e)=>{e.currentTarget.style.cursor = 'pointer'}} 
-                                onClick={()=>{navigator('/')}}
+                                onClick={()=>{navigator('/signup')}}
                             >
                                 Sign up here!
                             </a>
