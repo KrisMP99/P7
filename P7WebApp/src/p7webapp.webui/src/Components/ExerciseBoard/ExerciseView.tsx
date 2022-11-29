@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Allotment } from 'allotment';
 import { getApiRoot } from '../../App';
 import { Exercise } from '../Course/CourseView';
+import { LayoutType } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 
 interface ExerciseViewProps {
     exerciseId: number;
 }
 
 export default function ExerciseView(props: ExerciseViewProps) {
-    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, exerciseGroupId: 0, isVisible: true, modules: []})
+    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: true, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null})
         
     useEffect(() => {
         console.log("Rendering exercise view");
@@ -63,7 +64,7 @@ export async function fetchExercise(exerciseId: number, callback: (newExercise: 
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'exercise', requestOptions) //WIP - set path
+        await fetch(getApiRoot() + 'exercise/' + exerciseId, requestOptions) //WIP - set path
             .then((res) => {
                 if (!res.ok) {
                     throw new Error(res.statusText);

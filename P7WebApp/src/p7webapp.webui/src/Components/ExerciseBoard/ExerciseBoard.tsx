@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { ArrowLeft } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
+import { getApiRoot } from '../../App';
 import { Exercise } from '../Course/CourseView';
 import { ChangeLayoutModal } from '../Modals/ChangeLayoutModal/ChangeLayoutModal';
 import ChangeModuleModal, { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
@@ -44,13 +45,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     const [modules, setModules] = useState<ExerciseModule[]>([{id: 0, position: 1, type: ModuleType.EMPTY, content: null}]);
     const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const navigator = useNavigate();
-    const [exercise, setExercise] = useState<Exercise>({
-        id: props.exerciseId, 
-        exerciseGroupId: props.exerciseGroupId, 
-        title: '', 
-        isVisible: true,
-        modules: []
-    });
+    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: true, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null});
 
     useEffect(() => {
         console.log("Rendering EDIT");
@@ -175,3 +170,33 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     )
 }
 
+async function createExercise(exercise: Exercise) {
+    const jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            },
+            body: JSON.stringify({
+
+            })
+        }
+        await fetch(getApiRoot() + 'exercise', requestOptions) //WIP - set path
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log(data);
+                // callback(exercise);
+            });
+    } catch (error) {
+        alert(error);
+    }
+}

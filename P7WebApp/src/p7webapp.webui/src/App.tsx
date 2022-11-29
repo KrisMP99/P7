@@ -27,7 +27,7 @@ export default function App() {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
     const navigator = useNavigate();
-    
+
 
     return (
         <div className='main-container'>
@@ -44,7 +44,6 @@ export default function App() {
                     <div className="space-from-navbar">
                         <Frontpage
                             loggedIn={(user: User) => {
-                                //WIP - SET TOKEN BEFORE THIS FUNCTION IS CALLED
                                 setLoggedIn(true);
                                 setUser(user);
                             }}

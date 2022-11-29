@@ -47,6 +47,13 @@ export interface Exercise {
     exerciseGroupId: number;
     title: string;
     isVisible: boolean;
+    exerciseNumber: number;
+    layoutId: LayoutType;
+    startDate: Date | null;
+    endDate: Date | null;
+    visibleFrom: Date | null;
+    visibleTo: Date | null;
+
     modules: ExerciseModule[];
 }
 
