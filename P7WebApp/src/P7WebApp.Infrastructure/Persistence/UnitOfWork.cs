@@ -19,12 +19,9 @@ namespace P7WebApp.Infrastructure.Persistence
         }
 
         public ICourseRepository CourseRepository { get; private set; }
-
         public IExerciseGroupRepository ExerciseGroupRepository { get; private set; }
-
         public IExerciseRepository ExerciseRepository { get; private set; }
         public IProfileRepository ProfileRepository { get; private set; }
-
 
         public async Task<int> CommitChangesAsync(CancellationToken cancellationToken)
         {
