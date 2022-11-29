@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Tabs, Tab, Form, InputGroup, Pagination, Table, Button } from 'react-bootstrap'
+import { Container, Form, InputGroup, Pagination, Table, Button } from 'react-bootstrap'
 import { ArrowCounterclockwise } from 'react-bootstrap-icons'
 import { useNavigate } from 'react-router-dom'
 import { getApiRoot } from '../../App'
-import AttendeeCourseOverview from '../Landingpage/LandingpageModules/AttendeeCourseOverview'
-import OwnedCourseOverview, { CourseOverview } from '../Landingpage/LandingpageModules/OwnedCourseOverview'
-import CreateCourseModal from '../Modals/CreateCourseModal/CreateCourseModal'
+import { CourseOverview } from '../Landingpage/LandingpageModules/OwnedCourseOverview';
 
 export default function PublicCourses() {
     const [search, setSearch] = useState('');
@@ -28,7 +26,7 @@ export default function PublicCourses() {
             return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
         }).length / coursesPerPage);
         setMaxPages(endPage === 0 ? 1 : endPage);
-    }, [publicCourses.length, coursesPerPage, search]);
+    }, [publicCourses.length, publicCourses, coursesPerPage, search]);
 
     return (
         <Container style={{marginTop: 'calc(42px + 2rem)'}}>

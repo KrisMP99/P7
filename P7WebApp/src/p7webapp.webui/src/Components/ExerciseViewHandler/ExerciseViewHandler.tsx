@@ -9,8 +9,7 @@ interface ExerciseViewHandlerProps {
 }
 
 export default function ExerciseViewHandler(props: ExerciseViewHandlerProps) {
-
-    const [editMode, setEditMode] = useState<boolean>(false);
+    
     const [viewElement, setViewElement] = useState<JSX.Element>(<></>);
 
     const params = useParams();

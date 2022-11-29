@@ -1,12 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
-import { LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
-import CourseView, { Exercise } from './Components/Course/CourseView';
+import CourseView from './Components/Course/CourseView';
 import PublicCourses from './Components/PublicCourses/PublicCourses';
 import ExerciseViewHandler from './Components/ExerciseViewHandler/ExerciseViewHandler';
 

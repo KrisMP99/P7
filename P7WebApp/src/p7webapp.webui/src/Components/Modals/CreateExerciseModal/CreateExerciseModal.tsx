@@ -17,7 +17,7 @@ import selectedTwoHorizontalImg from '../../../Images/LayoutSelected/selected_ho
 import selectedTwoLeftOneRightImg from '../../../Images/LayoutSelected/selected_2left_1right.svg';
 import selectedOneLeftTwoRightImg from '../../../Images/LayoutSelected/selected_1left_2right.svg';
 import selectedTwoLeftTwoRightImg from '../../../Images/LayoutSelected/selected_2left_2right.svg';
-import { Exercise, ExerciseOverview } from '../../Course/CourseView';
+import { ExerciseOverview } from '../../Course/CourseView';
 import { getApiRoot } from '../../../App';
 
 interface CreateExerciseModalProps {
@@ -81,45 +81,45 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
         setLayout(type);
     }
 
-    const createExercise = async () => {
-        let jwt = sessionStorage.getItem('jwt');
-        if (jwt === null) return;
-        try {
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + jwt
-                },
-                body: JSON.stringify({
-                    "exerciseGroupId": '',
-                    "title": '',
-                    "isVisible": '',
-                    "exerciseNumber": '',
-                    "startDate": '',
-                    "endDate": '',
-                    "visibleFrom": '',
-                    "visibleTo": '',
-                    "createdDate": '',
-                    "lastModifiedDate": '',
-                    "layoutId": '',
-                })
-            }
-            await fetch(getApiRoot() + 'Exercise', requestOptions)
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error('Response not okay from backend - server unavailable');
-                    }
-                    return res.json();
-                })
-                .then((user: any) => {
-                    console.log("Successfully created exercise!");
-                });
-        } catch (error) {
-            alert(error);
-        }
-    }
+    // const createExercise = async () => {
+    //     let jwt = sessionStorage.getItem('jwt');
+    //     if (jwt === null) return;
+    //     try {
+    //         const requestOptions = {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': 'Bearer ' + jwt
+    //             },
+    //             body: JSON.stringify({
+    //                 "exerciseGroupId": '',
+    //                 "title": '',
+    //                 "isVisible": '',
+    //                 "exerciseNumber": '',
+    //                 "startDate": '',
+    //                 "endDate": '',
+    //                 "visibleFrom": '',
+    //                 "visibleTo": '',
+    //                 "createdDate": '',
+    //                 "lastModifiedDate": '',
+    //                 "layoutId": '',
+    //             })
+    //         }
+    //         await fetch(getApiRoot() + 'Exercise', requestOptions)
+    //             .then((res) => {
+    //                 if (!res.ok) {
+    //                     throw new Error('Response not okay from backend - server unavailable');
+    //                 }
+    //                 return res.json();
+    //             })
+    //             .then((user: any) => {
+    //                 console.log("Successfully created exercise!");
+    //             });
+    //     } catch (error) {
+    //         alert(error);
+    //     }
+    // }
 
     return (
         <Modal show={show} onHide={handleClose} size='lg'>
