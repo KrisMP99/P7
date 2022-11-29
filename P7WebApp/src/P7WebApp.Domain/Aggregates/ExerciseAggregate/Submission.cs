@@ -21,6 +21,5 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public bool IsSubmitted { get; set; }
         public DateTime SubmitDate { get; private set; }
         public List<Module> Modules { get; private set; }
-
     }
 }

@@ -21,12 +21,12 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
                 var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
                 exerciseGroup
                     .GetExercise(request.Id)
-                    .UpdateExerciseInformation(newTitle: request.Title,
-                                               isVisible: request.IsVisible,
+                    .EditInformation(newTitle: request.Title,
+                                               newIsVisible: request.IsVisible,
                                                newExerciseNumber: request.ExerciseNumber,
                                                newStartDate: request.StartDate,
                                                newEndDate: request.EndDate,
-                                               layoutId: request.LayoutId);
+                                               newLayoutId: request.LayoutId);
 
                 var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
