@@ -9,7 +9,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
     public class CourseTests
     {
         [Fact]
-        public void Course_Success_CreatesCourseWithDefaultCourseRoleAndPermission()
+        public void Course_Success_CreatesCourseWithDefaultCourseRoleWithNameAttendee()
         {
             var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: false);
 
@@ -28,7 +28,27 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
-        public void EditInformation_Sucess_GivenNewInformationIsUpdatedCorrectly()
+        public void Course_Success_CreatesCourseWithDefaultCourseRoleWhereDefaultRoleIsTrue()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: false);
+
+            course.CourseRoles.ElementAt(0).IsDefaultRole
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void Course_Success_CreatesCourseWithDefaultCourseRoleWithPermissionWherePermissionIdIsCorrect()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: false);
+
+            course.CourseRoles.ElementAt(0).Permission.CourseRoleId
+                .Should()
+                .Be(0);
+        }
+
+        [Fact]
+        public void EditInformation_Sucess_GivenNewInformationTitleIsUpdatedCorrectly()
         {
             var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
             string newTitle = "TestNew";
@@ -40,9 +60,33 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
             course.Title
                 .Should()
                 .BeSameAs(newTitle);
+        }
+
+        [Fact]
+        public void EditInformation_Sucess_GivenNewInformationDescriptionIsUpdatedCorrectly()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+            string newTitle = "TestNew";
+            string newDescription = "TestNew";
+            bool newVisibility = false;
+
+            course.EditInformation(newTitle: newTitle, newDescription: newDescription, newVisibility: newVisibility);
+
             course.Description
                 .Should()
                 .BeSameAs(newDescription);
+        }
+
+        [Fact]
+        public void EditInformation_Sucess_GivenNewInformationIsPrivateUpdatedCorrectly()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+            string newTitle = "TestNew";
+            string newDescription = "TestNew";
+            bool newVisibility = false;
+
+            course.EditInformation(newTitle: newTitle, newDescription: newDescription, newVisibility: newVisibility);
+
             course.IsPrivate
                 .Should()
                 .Be(newVisibility);
@@ -100,8 +144,6 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             result
                 .Should()
-                .BeOfType<ExerciseGroup>()
-                .And
                 .Be(exerciseGroup);
         }
 
@@ -116,6 +158,32 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
             Action act = () => course.GetExerciseGroup(exerciseGroupId);
 
             act.Should().Throw<CourseException>();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(100)]
+        public void GetExerciseGroup_Success_ReturnsOneExerciseGroupGivenExerciseGrupAndExerciseGroupListIsNotEmpty(int courseId)
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+
+            var exerciseGroup = new ExerciseGroup(
+                courseId: courseId,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: courseId,
+                isVisible: true,
+                DateTime.UtcNow);
+            exerciseGroup.Id = courseId;
+
+            course.AddExerciseGroup(exerciseGroup);
+
+            var result = course.GetExerciseGroup(courseId);
+
+            result
+                .Should()
+                .BeOfType<ExerciseGroup>();
         }
 
         [Theory]
@@ -139,43 +207,9 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             var result = course.GetExerciseGroup(courseId);
 
-            result
-                .Should()
-                .BeOfType<ExerciseGroup>()
-                .Which
-                .CourseId
+            result.CourseId
                 .Should()
                 .Be(courseId);
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(100)]
-        public void GetExerciseGroup_Success_ReturnsOneExerciseGroupWithCorrectExerciseGroupIdGivenCorrectExerciseGroupId(int exerciseGroupId)
-        {
-            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
-
-            var exerciseGroup = new ExerciseGroup(
-                courseId: 0,
-                title: "Test",
-                description: "Test",
-                exerciseGroupNumber: exerciseGroupId,
-                isVisible: true,
-                DateTime.UtcNow);
-            exerciseGroup.Id = exerciseGroupId;
-
-            course.AddExerciseGroup(exerciseGroup);
-
-            var result = course.GetExerciseGroup(exerciseGroupId);
-
-            result
-                .Should()
-                .BeOfType<ExerciseGroup>()
-                .Which
-                .Id
-                .Should()
-                .Be(exerciseGroupId);
         }
 
         [Fact]
@@ -234,7 +268,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
         }
 
         [Fact]
-        public void AddAttendee_Success_GivenCorrectAttendee()
+        public void AddAttendee_Success_GivenCorrectAttendeeAttendeeListCountIsOne()
         {
             var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
             var attendee = new Attendee(courseId: course.Id, courseRoleId: 0, profileId: 0);
@@ -243,8 +277,19 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             course.Attendees
                 .Should()
-                .HaveCount(1)
-                .And
+                .HaveCount(1);
+        }
+
+        [Fact]
+        public void AddAttendee_Success_GivenCorrectAttendeeSoAttendeeListContainsCorrectAttendee()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+            var attendee = new Attendee(courseId: course.Id, courseRoleId: 0, profileId: 0);
+
+            course.AddAttendee(attendee);
+
+            course.Attendees
+                .Should()
                 .Contain(attendee);
         }
 
@@ -303,9 +348,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             course.Attendees
                 .Should()
-                .NotContain(attendee)
-                .And
-                .HaveCount(0);
+                .NotContain(attendee);
         }
 
         [Fact]
@@ -422,8 +465,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             course.RemoveExerciseGroup(1);
 
-            course
-                .ExerciseGroups
+            course.ExerciseGroups
                 .Should()
                 .NotContain(exerciseGroup);
         }
@@ -477,6 +519,22 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
                 .Should()
                 .Contain(courseRole)
                 .And
+                .HaveCount(2); // The default role and the new role we have created
+        }
+
+        [Fact]
+        public void AddCourseRole_Success_GivenCorrectCourseRoleWhereCourseRoleListContainsTwoCourseRoles()
+        {
+            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
+
+            var courseRole = new CourseRole(courseId: course.Id, roleName: "Admin");
+            var permission = new Permission(courseRoleId: courseRole.Id);
+            courseRole.UpdatePermission(permission);
+
+            course.AddCourseRole(courseRole);
+
+            course.CourseRoles
+                .Should()
                 .HaveCount(2); // The default role and the new role we have created
         }
 
