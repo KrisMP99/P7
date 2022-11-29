@@ -26,7 +26,7 @@ namespace P7WebApp.Application.ProfileCQRS.QueryHandlers
 
                 if (userId is null)
                 {
-                    throw new Exception("User not found.");
+                    throw new NotFoundException("User not found.");
                 }
 
                 var courses = await _unitOfWork.CourseRepository.GetAttendedCourses(userId);

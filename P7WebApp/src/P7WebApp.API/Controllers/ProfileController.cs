@@ -141,7 +141,7 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                var result = await _mediator.Send(new GetUserAttendedCoursesQuery());
+                var result = await _mediator.Send(new GetProfileAttendedCoursesQuery());
                 return Ok(result);
             }
             catch (Exception ex)
