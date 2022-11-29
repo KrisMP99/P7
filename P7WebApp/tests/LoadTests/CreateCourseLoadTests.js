@@ -2,6 +2,7 @@ import http from 'k6/http';
 import { check } from 'k6';
 
 
+// Options https://k6.io/docs/using-k6/k6-options/reference/
 export const options = {
     vus: 1,
     iterations: 1,
