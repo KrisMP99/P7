@@ -1,19 +1,19 @@
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import { check } from 'k6';
 
 
 export const options = {
     vus: 1,
-    duration: '1s',
+    iterations: 1,
 }
 
-const USERNAME = `${randomString(10)}`;
-const FIRSTNAME = "Load";
-const LASTNAME = "Test";
-const EMAIL = `${USERNAME}@LoadTest.com`; 
-const PASSWORD = "LoadTest";
-const BASE_URL = "https://localhost:7001/api";
-const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
+export const USERNAME = `${randomString(10)}`;
+export const FIRSTNAME = "Load";
+export const LASTNAME = "Test";
+export const EMAIL = `${USERNAME}@LoadTest.com`; 
+export const PASSWORD = "LoadTest";
+export const BASE_URL = "https://localhost:7001/api";
+export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 
 
 function randomString(length, charset = '') {
@@ -23,7 +23,7 @@ function randomString(length, charset = '') {
     return res;
   }
 
-export function setup(){
+export default function setup () {
     const res = http.post(`${BASE_URL}/accounts`,JSON.stringify({
         "username": USERNAME,
         "password": PASSWORD,
@@ -47,7 +47,7 @@ export function setup(){
 
 // Example function. DO NOT DELETE
 // See https://k6.io/docs/examples/advanced-api-flow/ for more information
-export default (authToken) => {
+export function post (authToken) {
     // GET request
     const params = {
         headers: {
