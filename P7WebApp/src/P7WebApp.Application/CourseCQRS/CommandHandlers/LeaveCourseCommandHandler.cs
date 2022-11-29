@@ -21,9 +21,10 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.CourseId);
+                var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId);
                 if (course is not null)
                 {
-                    course.RemoveAttendee(_currentUserService.UserId);
+                    course.RemoveAttendeeByProfileId(profile.Id);
                     int affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
                     return affectedRows;
                 }

@@ -1,20 +1,20 @@
 ﻿using MediatR;
-using P7WebApp.Application.AccountCQRS.Commands.CreateUser;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Common.Models;
+using P7WebApp.Application.ProfileCQRS.Commands.CreateProfile;
 
-namespace P7WebApp.Application.AccountCQRS.CommandHandlers
+namespace P7WebApp.Application.ProfileCQRS.CommandHandlers
 {
-    public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, Result>
+    public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand, Result>
     {
         private readonly IIdentityService _identityService;
 
-        public CreateAccountCommandHandler(IIdentityService identityService)
+        public CreateProfileCommandHandler(IIdentityService identityService)
         {
             _identityService = identityService;
         }
 
-        public async Task<Result> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
         {
             try
             {

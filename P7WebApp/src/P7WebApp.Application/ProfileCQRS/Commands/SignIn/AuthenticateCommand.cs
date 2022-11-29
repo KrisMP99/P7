@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using P7WebApp.Application.Responses.Account;
+using P7WebApp.Application.Responses.Profile;
 
-namespace P7WebApp.Application.AccountCQRS.Commands.SignIn
+namespace P7WebApp.Application.ProfileCQRS.Commands.SignIn
 {
     public class AuthenticateCommand : IRequest<TokenResponse>
     {

@@ -1,10 +1,10 @@
 ﻿using MediatR;
 
-namespace P7WebApp.Application.AccountCQRS.Commands.UpdateAccountProfile
+namespace P7WebApp.Application.ProfileCQRS.Commands.UpdateProfile
 {
-    public class UpdateAccountProfileCommand : IRequest<int>
+    public class UpdateProfileCommand : IRequest<int>
     {
-        public UpdateAccountProfileCommand(string email, string firstName, string lastName, string password)
+        public UpdateProfileCommand(string email, string firstName, string lastName, string password)
         {
             Email = email;
             FirstName = firstName;

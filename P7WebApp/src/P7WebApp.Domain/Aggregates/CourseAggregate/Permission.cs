@@ -4,7 +4,20 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
     public class Permission : EntityBase
     {
-        public Permission(int courseRoleId, bool canUpdateCourse, bool canAddExerciseGroup, bool canDeleteExerciseGroup, bool canAddExercise, bool canUpdateExercise, bool canDeleteExercise, bool canCreateIniviteCode, bool canRevokeInviteCode, bool canViewSubmission, bool canDeleteSubmission, bool canCreateRoles, bool canRemoveAttendee)
+        public Permission(
+            int courseRoleId, 
+            bool canUpdateCourse = false, 
+            bool canAddExerciseGroup = false, 
+            bool canDeleteExerciseGroup = false, 
+            bool canAddExercise = false, 
+            bool canUpdateExercise = false, 
+            bool canDeleteExercise = false, 
+            bool canCreateIniviteCode = false, 
+            bool canRevokeInviteCode = false, 
+            bool canViewSubmission = false,
+            bool canDeleteSubmission = false,
+            bool canCreateRoles = false ,
+            bool canRemoveAttendee = false)
         {
             CourseRoleId = courseRoleId;
             CanUpdateCourse = canUpdateCourse;

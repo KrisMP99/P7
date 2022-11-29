@@ -1,29 +1,41 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
+using P7WebApp.Domain.Aggregates.ProfileAggregate;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
 using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.CourseAggregate
 {
-    public class Course : AuditableEntityBase, IAggregateRoot
+    public class Course : EntityBase, IAggregateRoot
     {
-        public Course(string title, string description, bool isPrivate)
+        // Private constructor only used by EF core
+        private Course() { }
+        public Course(int ownerId, string title, string description, bool isPrivate, CourseRole? defaultRole = null)
         {
             Title = title;
             Description = description;
             IsPrivate = isPrivate;
-            ExerciseGroups = new List<ExerciseGroup>();
-            CourseRoles = new List<CourseRole>();
-            Attendees = new List<Attendee>();
+            CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = CreatedDate;
+            OwnerId = ownerId;
+            LastModifiedById = ownerId;
+
+            CourseRoles.Add(CourseRole.CreateDefaultCourseRole(base.Id));
         }
 
         public string Title { get; private set; }
         public string Description { get; private set; }
         public bool IsPrivate { get; private set; }
+        public DateTime CreatedDate { get; private set; }
+        public int OwnerId { get; private set; }
+        public Profile Owner { get; private set; }
+        public int LastModifiedById { get; private set; }
+        public Profile LastModifiedBy { get; private set; }
+        public DateTime LastModifiedDate { get; private set; }
         public InviteCode? InviteCode { get; private set; }
-        public List<ExerciseGroup> ExerciseGroups { get; private set; }
-        public List<CourseRole> CourseRoles { get; private set; }
-        public List<Attendee> Attendees { get; private set; }
+        public ICollection<ExerciseGroup> ExerciseGroups { get; private set; } = new List<ExerciseGroup>();
+        public ICollection<CourseRole> CourseRoles { get; private set; } = new List<CourseRole>();
+        public ICollection<Attendee> Attendees { get; private set; } = new List<Attendee>();
         
 
         public void EditInformation(string newTitle, string newDescription, bool newVisibility)
@@ -31,22 +43,22 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             Title = String.IsNullOrEmpty(newTitle) ? throw new CourseException("The title has not been set.") : newTitle;
             Description = String.IsNullOrEmpty(newDescription) ? throw new CourseException("Description has not been set.") : newDescription;
             IsPrivate= newVisibility;
+            LastModifiedDate = DateTime.UtcNow;
         }
 
         public ExerciseGroup GetExerciseGroup(int exerciseGroupId)
         {
             try
             {
-                var exerciseGroup = ExerciseGroups.Find(e => e.Id == exerciseGroupId);
+                var exerciseGroup = ExerciseGroups.FirstOrDefault(eg => eg.Id == groupId);
 
-                if (exerciseGroup is not null)
+                if (exerciseGroup is null)
                 {
-                    return exerciseGroup;
+                    throw new Exception("Could not find an exerciseGroup with the specified Id");
+                    
                 }
-                else
-                {
-                    throw new CourseException("Could not find an exercise group with the specified id");
-                }
+
+                return exerciseGroup;
             }
             catch (Exception)
             {
@@ -58,14 +70,12 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             try
             {
-                if(invitecode is not null)
+                if(invitecode is null)
                 {
-                    InviteCode = invitecode;
+                    throw new Exception("Could not create the invite code");             
                 }
-                else
-                {
-                    throw new CourseException("Could not create the invite code");
-                }    
+
+                InviteCode = invitecode;
             }
             catch(Exception)
             {
@@ -82,14 +92,12 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             try
             {
-                if(attendee is not null)
+                if(attendee is null)
                 {
-                    Attendees.Add(attendee);
+                    throw new Exception("Attendee list has not been initialized.");
                 }
-                else
-                {
-                    throw new Exception();
-                }
+
+                Attendees.Add(attendee);
             }
             catch(Exception)
             {
@@ -97,21 +105,25 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             }
         }
 
-        public void RemoveAttendee(string userId)
+        public Attendee GetAttendeeByProfileId(int profileId)
+        {
+            var attendee = Attendees.FirstOrDefault(e => e.ProfileId == profileId);
+
+            if (attendee is null)
+            {
+                throw new Exception("Could not find attendee with the given profile id.");
+            }
+
+            return attendee;
+        }
+
+        public void RemoveAttendeeByProfileId(int profileId)
         {
             try
             {
-                var attendee = Attendees.Where(a => a.UserId == userId).FirstOrDefault();
-                if (attendee is not null)
-                {
-                    Attendees.Remove(attendee);
-                }
-                else
-                {
-                    throw new ArgumentNullException();
-                }
+                Attendees.Remove(GetAttendeeByProfileId(profileId));
             }
-            catch (Exception)
+            catch(Exception)
             {
                 throw;
             }
@@ -123,13 +135,10 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             {
                 if(exerciseGroup is null)
                 {
-                    throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)");
+                    throw new Exception("Could not add the exercisegroup to the course (exercisegroup is null)");    
                 }
-                
-                if(CheckExerciseGroupNumberIsOk(exerciseGroup))
-                {
-                    ExerciseGroups.Add(exerciseGroup);
-                }
+
+                ExerciseGroups.Add(exerciseGroup);
             }
             catch(Exception)
             {
@@ -161,6 +170,18 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 ExerciseGroups.Remove(GetExerciseGroup(exerciseGroupId));
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void AddCourseRole(CourseRole courseRole)
+        {
+            try
+            {
+                CourseRoles.Add(courseRole);
+            }
+            catch(Exception)
             {
                 throw;
             }
