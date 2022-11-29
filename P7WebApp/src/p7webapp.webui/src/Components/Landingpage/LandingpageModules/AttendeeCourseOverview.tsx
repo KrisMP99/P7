@@ -204,7 +204,7 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                'Authorization': 'Bearer ' + jwt
            }
        }
-       await fetch(getApiRoot() + 'users/courses/attends', requestOptions)
+       await fetch(getApiRoot() + 'profiles/courses/attends', requestOptions)
            .then((res) => {
                if (!res.ok) {
                    throw new Error(res.statusText);

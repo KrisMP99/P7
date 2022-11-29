@@ -1,4 +1,4 @@
-﻿namespace P7WebApp.Application.Responses.Account
+﻿namespace P7WebApp.Application.Responses.Profile
 {
     public class TokenResponse
     {

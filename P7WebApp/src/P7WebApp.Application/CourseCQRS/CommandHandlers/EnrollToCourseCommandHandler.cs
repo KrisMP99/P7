@@ -23,21 +23,22 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                // The number specifies the rollId. For now there is only attendee and owner.
-                // Therefore the roleId is 1 -> Attendee
-                var attendee = new Attendee(_currentUserService.UserId, request.CourseId, 1);
-                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendees(request.CourseId);
-                if (course is not null)
-                {
-                    course.AddAttendee(attendee);
-                    var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
-                    return affectedRows;
-                }
-                else
-                {
-                    throw new NotFoundException("Could not find course with specified ID");
-                }
+                var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId);
 
+                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendeesAndDefaultCourseRoles(request.CourseId);
+
+                var defaultRole = course.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault();
+
+                var attendee = new Attendee(
+                    courseId: request.CourseId,
+                    courseRoleId: defaultRole.Id,
+                    profileId: profile.Id);
+
+                course.AddAttendee(attendee);
+
+                var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
+
+                return affectedRows;
             }
             catch(Exception)
             {
