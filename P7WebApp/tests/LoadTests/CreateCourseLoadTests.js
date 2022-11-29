@@ -13,7 +13,7 @@ export const FIRSTNAME = "Load";
 export const LASTNAME = "Test";
 export const EMAIL = `${USERNAME}@LoadTest.com`; 
 export const PASSWORD = "LoadTest";
-export const BASE_URL = "https://localhost:7001/api";
+export const BASE_URL = "https://localhost:7001/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 
 
@@ -25,23 +25,22 @@ function randomString(length, charset = '') {
   }
 
 export default function setup () {
-    const res = http.post(`${BASE_URL}/accounts`,JSON.stringify({
+    const res = http.post(`${BASE_URL}profiles`,JSON.stringify({
         "username": USERNAME,
         "password": PASSWORD,
         "email": EMAIL,
-        "firstname": FIRSTNAME,
-        "lastname": LASTNAME,
+        "firstName": FIRSTNAME,
+        "lastName": LASTNAME,
     }), BASE_HEADER);
-
     check(res, {'created user': (r) => r.status === 200});
 
-    const loginRes = http.post(`${BASE_URL}/accounts/login`, JSON.stringify({
+    const loginRes = http.post(`${BASE_URL}profiles/login`, JSON.stringify({
         username: USERNAME,
         password: PASSWORD,
     }), BASE_HEADER);
 
     const authToken = loginRes.json('token');
-    check(authToken, { 'logged in successfully': () => authToken !== '' && authToken !== undefined});
+    check(loginRes, { 'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200});
 
     return authToken;
 }
@@ -55,7 +54,7 @@ export function post (authToken) {
             Authorization: `Bearer ${authToken}`,
         }
     }
-    const getRes = http.get(`${BASE_URL}/courses/1`,params);
+    const getRes = http.get(`${BASE_URL}courses/1`,params);
     check(getRes, {'got course': r => r.status === 200})
     
     // POST request
@@ -78,7 +77,7 @@ export function post (authToken) {
         isPrivate: false,
     }
     
-    const postRes = http.post(`${BASE_URL}/courses`,
+    const postRes = http.post(`${BASE_URL}courses`,
      JSON.stringify({
         title: "new",
         description: "string",
