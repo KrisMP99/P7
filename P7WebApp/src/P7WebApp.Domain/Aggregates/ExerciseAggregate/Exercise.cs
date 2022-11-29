@@ -40,7 +40,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime LastModifiedDate { get; private set; }
         public List<Module> Modules { get; private set; }
         public List<Solution> Solutions { get; private set; }
-        public List<Submission> Submissions { get; private set; }
+        public List<Submission> Submissions { get; private set;  }
         public int LayoutId { get; private set; }
 
         public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId, List<Module> newModules)

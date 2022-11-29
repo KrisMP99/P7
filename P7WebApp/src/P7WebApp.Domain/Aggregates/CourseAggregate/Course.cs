@@ -50,7 +50,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             try
             {
-                var exerciseGroup = ExerciseGroups.FirstOrDefault(eg => eg.Id == groupId);
+                var exerciseGroup = ExerciseGroups.FirstOrDefault(eg => eg.Id == exerciseGroupId);
 
                 if (exerciseGroup is null)
                 {
@@ -153,7 +153,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 throw new CourseException("The exercise group number cannot be less than 0.");
             }
 
-            var result = ExerciseGroups.Find(eg => eg.Id == exerciseGroup.ExerciseGroupNumber);
+            var result = ExerciseGroups.FirstOrDefault(eg => eg.Id == exerciseGroup.ExerciseGroupNumber);
 
             if (result is not null)
             {

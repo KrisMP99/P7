@@ -46,11 +46,6 @@ namespace P7WebApp.Infrastructure.Persistence
         public DbSet<Module> Modules { get; set; }
         public DbSet<Profile> Profiles { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
-        //}
-
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             await _mediator.DispatchDomainEvents(this);
@@ -60,9 +55,14 @@ namespace P7WebApp.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Module>().UseTpcMappingStrategy();
-            builder.Entity<ExerciseGroup>().Property(eg => eg.ExerciseGroupNumber).ValueGeneratedOnAdd();
-            builder.Entity<Exercise>().Property(e => e.ExerciseNumber).ValueGeneratedOnAdd();
+            builder.Entity<ExerciseGroup>().
+                Property(eg => eg.ExerciseGroupNumber).ValueGeneratedOnAdd();
+                
+            builder.Entity<Exercise>()
+                .Property(e => e.ExerciseNumber).ValueGeneratedOnAdd();
+
+            builder.Entity<Module>()
+                .UseTpcMappingStrategy();
 
             base.OnModelCreating(builder);
         }
