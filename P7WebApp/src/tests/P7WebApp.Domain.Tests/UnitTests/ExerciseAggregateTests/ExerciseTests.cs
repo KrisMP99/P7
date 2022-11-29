@@ -11,7 +11,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
     public class ExerciseTests
     {
         [Fact]
-        public void EditInformation_Success_GivenNewInformationIsUpdatedCorrectly()
+        public void EditInformation_Success_TitleIsUpdatedCorrectly()
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -43,18 +43,178 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             exercise.Title
                 .Should()
                 .BeSameAs(newTitle);
+        }
+
+        [Fact]
+        public void EditInformation_Success_IsVisibleIsUpdatedCorrectly()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            string newTitle = "NewTitle";
+            bool newIsVisible = false;
+            int newExerciseNumber = 1;
+            DateTime newStartDate = DateTime.UtcNow;
+            DateTime newEndDate = DateTime.UtcNow;
+            int newLayoutId = 2;
+
+            exercise.EditInformation(
+                newTitle: newTitle,
+                newIsVisible: newIsVisible,
+                newExerciseNumber: newExerciseNumber,
+                newStartDate: newStartDate,
+                newEndDate: newEndDate,
+                newLayoutId: newLayoutId
+                );
+
             exercise.IsVisible
                 .Should()
-                .Be(newIsVisible);
+                .Be(newIsVisible);;
+        }
+
+        [Fact]
+        public void EditInformation_Success_ExerciseNumberIsUpdatedCorrectly()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            string newTitle = "NewTitle";
+            bool newIsVisible = false;
+            int newExerciseNumber = 1;
+            DateTime newStartDate = DateTime.UtcNow;
+            DateTime newEndDate = DateTime.UtcNow;
+            int newLayoutId = 2;
+
+            exercise.EditInformation(
+                newTitle: newTitle,
+                newIsVisible: newIsVisible,
+                newExerciseNumber: newExerciseNumber,
+                newStartDate: newStartDate,
+                newEndDate: newEndDate,
+                newLayoutId: newLayoutId
+                );
+
             exercise.ExerciseNumber
                 .Should()
                 .Be(newExerciseNumber);
+        }
+
+        [Fact]
+        public void EditInformation_Success_StartDateIsUpdatedCorrectly()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            string newTitle = "NewTitle";
+            bool newIsVisible = false;
+            int newExerciseNumber = 1;
+            DateTime newStartDate = DateTime.UtcNow;
+            DateTime newEndDate = DateTime.UtcNow;
+            int newLayoutId = 2;
+
+            exercise.EditInformation(
+                newTitle: newTitle,
+                newIsVisible: newIsVisible,
+                newExerciseNumber: newExerciseNumber,
+                newStartDate: newStartDate,
+                newEndDate: newEndDate,
+                newLayoutId: newLayoutId
+                );
+
             exercise.StartDate
                 .Should()
                 .BeSameDateAs(newStartDate);
+        }
+
+        [Fact]
+        public void EditInformation_Success_EndDateIsUpdatedCorrectly()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            string newTitle = "NewTitle";
+            bool newIsVisible = false;
+            int newExerciseNumber = 1;
+            DateTime newStartDate = DateTime.UtcNow;
+            DateTime newEndDate = DateTime.UtcNow;
+            int newLayoutId = 2;
+
+            exercise.EditInformation(
+                newTitle: newTitle,
+                newIsVisible: newIsVisible,
+                newExerciseNumber: newExerciseNumber,
+                newStartDate: newStartDate,
+                newEndDate: newEndDate,
+                newLayoutId: newLayoutId
+                );
+
             exercise.EndDate
                 .Should()
-                .BeSameDateAs(newEndDate);
+                .BeSameDateAs(newStartDate);
+        }
+
+        [Fact]
+        public void EditInformation_Success_LayOutIdIsUpdatedCorrectly()
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            string newTitle = "NewTitle";
+            bool newIsVisible = false;
+            int newExerciseNumber = 1;
+            DateTime newStartDate = DateTime.UtcNow;
+            DateTime newEndDate = DateTime.UtcNow;
+            int newLayoutId = 2;
+
+            exercise.EditInformation(
+                newTitle: newTitle,
+                newIsVisible: newIsVisible,
+                newExerciseNumber: newExerciseNumber,
+                newStartDate: newStartDate,
+                newEndDate: newEndDate,
+                newLayoutId: newLayoutId
+                );
+
             exercise.LayoutId
                 .Should()
                 .Be(newLayoutId);
@@ -347,7 +507,40 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
         [InlineData(2)]
         [InlineData(3)]
         [InlineData(4)]
-        public void AddModule_Success_GivenCorrectModulePosition(int modulePosition)
+        public void AddModule_Success_ModulesIsCorrectlyInModuleList(int modulePosition)
+        {
+            var exercise = new Exercise(
+                exerciseGroupId: 0,
+                title: "Test",
+                isVisible: true,
+                exerciseNumber: 0,
+                startDate: DateTime.UtcNow,
+                endDate: DateTime.UtcNow,
+                visibleFrom: DateTime.UtcNow,
+                visibleTo: DateTime.UtcNow,
+                layoutId: 1);
+
+            var module = new TextModule(
+                title: "Test",
+                description: "Test",
+                height: 10.00,
+                width: 10.00,
+                position: modulePosition,
+                content: "test");
+
+            exercise.AddModule(module);
+
+            exercise.Modules
+                .Should()
+                .Contain(module);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void AddModule_Success_ModulePositionIsCorrect(int modulePosition)
         {
             var exercise = new Exercise(
                 exerciseGroupId: 0,
@@ -735,9 +928,6 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             result
                 .Should()
                 .Be(module);
-            result.Id
-                .Should()
-                .Be(moduleId);
         }
 
         [Fact]
@@ -815,9 +1005,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
 
             exercise.Solutions
                 .Should()
-                .Contain(solution)
-                .And
-                .HaveCount(1);
+                .Contain(solution);
         }
 
         [Fact]
@@ -942,9 +1130,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
 
             exercise.Submissions
                 .Should()
-                .Contain(submission)
-                .And
-                .HaveCount(1);
+                .Contain(submission);
         }
 
         [Fact]
@@ -1080,9 +1266,6 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             result
                 .Should()
                 .Be(result);
-            result.Id
-                .Should()
-                .Be(submissionId);
         }
 
         [Fact]

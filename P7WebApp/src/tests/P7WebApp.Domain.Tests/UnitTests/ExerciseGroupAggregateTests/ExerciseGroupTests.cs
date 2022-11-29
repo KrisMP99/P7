@@ -39,8 +39,6 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 
             result
                 .Should()
-                .BeOfType<Exercise>()
-                .And
                 .Be(exercise);
         }
 
@@ -295,7 +293,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
         }
 
         [Fact]
-        public void EditInformation_Success_GivenNewInformationIsUpdatedCorrectly()
+        public void EditInformation_Success_TitleIsUpdatedCorrectlyGivenNewInformation()
         {
             var exerciseGroup = new ExerciseGroup(
                 courseId: 0,
@@ -321,15 +319,119 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
             exerciseGroup.Title
                 .Should()
                 .BeSameAs(newTitle);
+        }
+
+        [Fact]
+        public void EditInformation_Success_DescriptionIsUpdatedCorrectlyGivenNewInformation()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+            string newTitle = "NewTest";
+            string newDescription = "NewTest";
+            int newExerciseGroupNumber = 999;
+            bool newIsVisible = false;
+            DateTime newVisibleFromDate = DateTime.UtcNow;
+
+            exerciseGroup.EditInformation(
+                newTitle: newTitle,
+                newDescription: newDescription,
+                newExerciseGroupNumber,
+                newIsVisible,
+                newBecomeVisibleAt: newVisibleFromDate);
+
             exerciseGroup.Description
                 .Should()
                 .BeSameAs(newDescription);
+        }
+
+        [Fact]
+        public void EditInformation_Success_ExerciseGroupNumberIsUpdatedCorrectlyGivenNewInformation()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+            string newTitle = "NewTest";
+            string newDescription = "NewTest";
+            int newExerciseGroupNumber = 999;
+            bool newIsVisible = false;
+            DateTime newVisibleFromDate = DateTime.UtcNow;
+
+            exerciseGroup.EditInformation(
+                newTitle: newTitle,
+                newDescription: newDescription,
+                newExerciseGroupNumber,
+                newIsVisible,
+                newBecomeVisibleAt: newVisibleFromDate);
+
             exerciseGroup.ExerciseGroupNumber
                 .Should()
                 .Be(newExerciseGroupNumber);
+        }
+
+        [Fact]
+        public void EditInformation_Success_IsVisibleIsUpdatedCorrectlyGivenNewInformation()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+            string newTitle = "NewTest";
+            string newDescription = "NewTest";
+            int newExerciseGroupNumber = 999;
+            bool newIsVisible = false;
+            DateTime newVisibleFromDate = DateTime.UtcNow;
+
+            exerciseGroup.EditInformation(
+                newTitle: newTitle,
+                newDescription: newDescription,
+                newExerciseGroupNumber,
+                newIsVisible,
+                newBecomeVisibleAt: newVisibleFromDate);
+
             exerciseGroup.IsVisible
                 .Should()
                 .Be(newIsVisible);
+        }
+
+        [Fact]
+        public void EditInformation_Success_VisibleFromDateIsUpdatedCorrectlyGivenNewInformation()
+        {
+            var exerciseGroup = new ExerciseGroup(
+                courseId: 0,
+                title: "Test",
+                description: "Test",
+                exerciseGroupNumber: 0,
+                isVisible: true,
+                visibleFromDate: DateTime.UtcNow
+                );
+            string newTitle = "NewTest";
+            string newDescription = "NewTest";
+            int newExerciseGroupNumber = 999;
+            bool newIsVisible = false;
+            DateTime newVisibleFromDate = DateTime.UtcNow;
+
+            exerciseGroup.EditInformation(
+                newTitle: newTitle,
+                newDescription: newDescription,
+                newExerciseGroupNumber,
+                newIsVisible,
+                newBecomeVisibleAt: newVisibleFromDate);
+
             exerciseGroup.VisibleFromDate
                 .Should()
                 .BeSameDateAs(newVisibleFromDate);
@@ -447,8 +549,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
                 );
             exerciseGroup.AddExercise(exercise);
 
-            exerciseGroup
-                .Exercises
+            exerciseGroup.Exercises
                 .Should()
                 .Contain(exercise);
         }
@@ -577,8 +678,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseGroupAggregateTests
 
             exerciseGroup.RemoveExerciseById(1);
 
-            exerciseGroup
-                .Exercises
+            exerciseGroup.Exercises
                 .Should()
                 .NotContain(exercise);
 

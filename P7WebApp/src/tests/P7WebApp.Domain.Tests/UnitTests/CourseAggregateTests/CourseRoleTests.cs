@@ -7,16 +7,30 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
     public class CourseRoleTests
     {
         [Fact]
-        public void CreateDefaultCourseRole_Success_GivenCourseId()
+        public void CreateDefaultCourseRole_Success_GivenCourseIdAndCourseRoleIsDefaultRole()
         {
             var courseRole = CourseRole.CreateDefaultCourseRole(0);
 
             courseRole.IsDefaultRole
                 .Should()
                 .BeTrue();
+        }
+
+        [Fact]
+        public void CreateDefaultCourseRole_Success_GivenCourseIdAndRoleNameIsAttendee()
+        {
+            var courseRole = CourseRole.CreateDefaultCourseRole(0);
+;
             courseRole.RoleName
                 .Should()
                 .BeEquivalentTo("Attendee");
+        }
+
+        [Fact]
+        public void CreateDefaultCourseRole_Success_GivenCourseIdAndCourseRolePermssionHasId0()
+        {
+            var courseRole = CourseRole.CreateDefaultCourseRole(0);
+
             courseRole.Permission.Id
                 .Should()
                 .Be(0);
@@ -56,8 +70,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
 
             courseRole.EditInformation(roleName: newRoleName);
 
-            courseRole
-                .RoleName
+            courseRole.RoleName
                 .Should()
                 .Be(newRoleName);
         }
