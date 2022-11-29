@@ -7,6 +7,7 @@ namespace P7WebApp.Application.Common.Interfaces
         ICourseRepository CourseRepository { get; }
         IExerciseGroupRepository ExerciseGroupRepository { get; }
         IExerciseRepository ExerciseRepository { get; }
+        IProfileRepository ProfileRepository { get; }
 
         Task<int> CommitChangesAsync(CancellationToken cancellationToken);
     }

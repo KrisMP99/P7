@@ -65,7 +65,6 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                             }
                         }}>
                             <Form.Control 
-                                defaultValue={'Enter Invite Code Here...'}
                                 type='number'
                                 value={inviteCode}
                                 isInvalid={invalidInviteCode}
@@ -205,7 +204,7 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                'Authorization': 'Bearer ' + jwt
            }
        }
-       await fetch(getApiRoot() + 'users/courses/attends', requestOptions)
+       await fetch(getApiRoot() + 'profiles/courses/attends', requestOptions)
            .then((res) => {
                if (!res.ok) {
                    throw new Error(res.statusText);
@@ -216,8 +215,7 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                callback(courses);
            });
     } catch (error) {
-    //    alert(error);
-    console.log(error);
+       alert(error);
     }
 }
 

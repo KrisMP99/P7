@@ -1,18 +1,17 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { getApiRoot } from '../../../App';
-import { Course } from '../../Course/CourseView';
-import './OwnedCourseModal.css';
+import CourseView, { Course, fetchCourse } from '../../Course/CourseView';
 
-interface CreateCourseModalProps {
-    createdCourse: () => void;
+interface EditCourseModalProps {
+    updatedCourse: () => void;
 }
 
-export interface ShowCreateCourseModal {
-    handleShow: (userId: string) => void;
+export interface ShowEditCourseModal {
+    handleShow: (courseId: number) => void;
 }
 
-export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseModalProps>((props, ref) => {
+export const EditCourseModal = forwardRef<ShowEditCourseModal, EditCourseModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
     const emptyCourse: Course = {
         id: 0,
@@ -33,30 +32,26 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
     useImperativeHandle(
         ref,
         () => ({
-            handleShow(userId: string) {
-                setCourse({...course, createdById: userId});
+            handleShow(courseId: number) {
+                fetchCourse(courseId, (course)=>{
+                    setCourse(course);
+                });
                 setShow(true);
             }
         }),
     );
 
-    useEffect(() => {
-        if (show) {
-            setCourse({...emptyCourse});
-        }
-    }, [show])
-
     return (
         <Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => {
                 e.preventDefault();
-                createCourse(course.title, course.description, course.isPrivate, () => {
-                    props.createdCourse();
+                editCourse(course.title, course.description, course.isPrivate, course.id, () => {
+                    props.updatedCourse();
                     handleClose();
                 });
             }}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Create course:</Modal.Title>
+                    <Modal.Title>Edit course:</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3 modal-form-field">
@@ -83,7 +78,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
                         Cancel
                     </Button>
                     <Button variant="primary" type='submit'>
-                        Create
+                        Save
                     </Button>
                 </Modal.Footer>
             </Form>
@@ -93,7 +88,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
 });
 
 
-async function createCourse(title: string, description: string, isPrivate: boolean, callback: ()=>void) {
+async function editCourse(title: string, description: string, isPrivate: boolean, id : number, callback: ()=>void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -105,12 +100,13 @@ async function createCourse(title: string, description: string, isPrivate: boole
                  'Authorization': 'Bearer ' + jwt
              },
             body: JSON.stringify({
+                'id': id,
                 'title': title,
                 'description': description,
                 'isPrivate': isPrivate
             })
         }
-        await fetch(getApiRoot() + "courses", requestOptions)
+        await fetch(getApiRoot() + "courses/update", requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend - server unavailable');
@@ -127,4 +123,4 @@ async function createCourse(title: string, description: string, isPrivate: boole
 
 
 
-export default CreateCourseModal;
+export default EditCourseModal;

@@ -3,10 +3,11 @@ import { Container, Table, Form, InputGroup, Button, Pagination} from 'react-boo
 import { useNavigate } from 'react-router-dom';
 import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
-import { ArrowCounterclockwise, Trash } from 'react-bootstrap-icons';
+import { ArrowCounterclockwise, Pencil, Trash } from 'react-bootstrap-icons';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import { getApiRoot } from '../../../App';
 import CreateCourseModal from '../../Modals/CreateCourseModal/CreateCourseModal';
+import EditCourseModal, { ShowEditCourseModal } from '../../Modals/EditCourseModal/EditCourseModal';
 
 export interface CourseOverview {
     id: number;
@@ -29,6 +30,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
     const deleteCourseModalRef = useRef<ShowDeleteConfirmModal>(null);
+    const editCourseModalRef = useRef<ShowEditCourseModal>(null);
     const [ownedCourses, setOwnedCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -102,8 +104,14 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                                     <td>{item.numberOfExercises ?? 0}</td>
                                     <td>{item.numberOfMembers ?? 0}</td>
                                     <td>{item.ownerName ?? 'Missing'}</td>
-                                    <td>
-                                        <Button variant='danger' size='sm' onClick={(e)=>{
+                                    <td className="d-flex justify-content-center">
+                                        <Button size='sm' className="btn-3" onClick={(e)=>{
+                                            e.stopPropagation();
+                                            editCourseModalRef.current?.handleShow(item.id);
+                                        }}>
+                                            <Pencil/>
+                                        </Button>
+                                        <Button variant='danger' className="btn-3" size='sm' onClick={(e)=>{
                                             e.stopPropagation();
                                             deleteCourseModalRef.current?.handleShow(item.title, item.id, DeleteElementType.COURSE);
                                         }}>
@@ -206,6 +214,14 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                     });
                 }}                
             />
+            <EditCourseModal
+                ref={editCourseModalRef}
+                updatedCourse={()=>{
+                    fetchOwnedCourses((courses) => {
+                        setOwnedCourses(courses);
+                    })
+                }}
+            />
             <CreateCourseModal 
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
@@ -230,7 +246,7 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'users/courses/created', requestOptions)
+        await fetch(getApiRoot() + 'profiles/courses/created', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
