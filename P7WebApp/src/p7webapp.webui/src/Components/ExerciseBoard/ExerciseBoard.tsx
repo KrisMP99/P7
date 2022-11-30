@@ -38,6 +38,7 @@ export interface ExerciseModule {
 interface ExerciseBoardProps {
     exerciseId: number;
     exerciseGroupId: number;
+    isNewExercise: boolean;
 }
 
 export default function ExerciseBoard(props: ExerciseBoardProps) {
@@ -152,7 +153,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                     value={exercise.title}
                     onChange={(e) => setExercise({...exercise, title: e.target.value})}
                 />
-                <Button variant='success' onClick={() => createExercise(exercise, props.exerciseGroupId)}>
+                <Button variant='success' onClick={() => createExercise(exercise, props.exerciseGroupId, props.isNewExercise)}>
                     Save exercise
                 </Button>
                 <Button variant='danger' onClick={() => navigator(-1)}>
@@ -187,7 +188,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     )
 }
 
-async function createExercise(exercise: Exercise, exerciseGroupId: number) {
+async function createExercise(exercise: Exercise, exerciseGroupId: number, isNewExercise: boolean) {
     const jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -199,6 +200,7 @@ async function createExercise(exercise: Exercise, exerciseGroupId: number) {
                 'Authorization': 'Bearer ' + jwt
             },
             body: JSON.stringify({
+                id: isNewExercise ? 0 : exercise.id,
                 exerciseGroupId: exerciseGroupId,
                 title: exercise.title,
                 isVisible: exercise.isVisible,
@@ -208,10 +210,10 @@ async function createExercise(exercise: Exercise, exerciseGroupId: number) {
                 visibleFrom: null,
                 visibleTo: null,
                 layoutId: exercise.layoutId,
-                modules: convertModulesToRequest(exercise.modules)
+                modules: convertModulesToRequest(exercise.modules, isNewExercise)
             })
         }
-        await fetch(getApiRoot() + 'exercise', requestOptions) //WIP - set path
+        await fetch(getApiRoot() + 'courses/exercise-groups/exercises', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error(res.statusText);
@@ -227,13 +229,14 @@ async function createExercise(exercise: Exercise, exerciseGroupId: number) {
     }
 }
 
-function convertModulesToRequest(modules: ExerciseModule[]) {
+function convertModulesToRequest(modules: ExerciseModule[], isNewExercise: boolean) {
     let convertedModules = [];
     for (let i = 0; i < modules.length; i++) {
         switch (modules[i].type) {
             case ModuleType.EXERCISE_DESCRIPTION:
                 let content: TextModule = modules[i].content as TextModule;
                 convertedModules.push({
+                    id: isNewExercise ? 0 : modules[0].id,
                     description: 'undefined',
                     height: 1,
                     width: 1,

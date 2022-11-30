@@ -23,10 +23,10 @@ export default function ExerciseViewHandler(props: ExerciseViewHandlerProps) {
             sessionStorage.getItem('jwt') ? navigate('/home') : navigate('/');
         }
         else if (exerciseId <= -1) {
-            setViewElement(<ExerciseBoard exerciseId={exerciseId!} exerciseGroupId={exerciseGroupId} />);
+            setViewElement(<ExerciseBoard exerciseId={exerciseId!} exerciseGroupId={exerciseGroupId} isNewExercise={true} />);
         }
         else if (exerciseId >= 0) {
-            if (isEdit === 1) setViewElement(<ExerciseBoard exerciseId={exerciseId!} exerciseGroupId={exerciseGroupId}/>);
+            if (isEdit === 1) setViewElement(<ExerciseBoard exerciseId={exerciseId!} exerciseGroupId={exerciseGroupId} isNewExercise={false} />);
             else if (isEdit === 0) setViewElement(<ExerciseView exerciseId={exerciseId!}/>);
         }
     }, [exerciseId, isEdit, exerciseGroupId]);
