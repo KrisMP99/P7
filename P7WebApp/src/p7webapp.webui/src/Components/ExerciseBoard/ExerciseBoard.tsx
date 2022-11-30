@@ -218,10 +218,9 @@ async function createExercise(exercise: Exercise, exerciseGroupId: number, isNew
                 if (!res.ok) {
                     throw new Error(res.statusText);
                 }
-                return res.json();
+                return;
             })
-            .then((data) => {
-                console.log(data);
+            .then(() => {
                 // callback(exercise);
             });
     } catch (error) {
