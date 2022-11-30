@@ -311,7 +311,7 @@ namespace P7WebApp.API.Controllers
                 var result = await _mediator.Send(request);
                 if (result != 0)
                 {
-                    return Ok(result);
+                    return Ok();
                 }
                 else
                 {
