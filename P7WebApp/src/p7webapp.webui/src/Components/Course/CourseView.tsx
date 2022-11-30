@@ -61,7 +61,7 @@ export interface Course {
     title: string;
     description: string;
     isPrivate: boolean;
-    ownerId: string;
+    ownerId: number;
     ownerName: string | null;
     exerciseGroups: ExerciseGroup[];
     createdDate: Date | null;
@@ -71,7 +71,7 @@ export interface Course {
 
 export interface Attendee {
     courseId: number;
-    userId: string;
+    userId: number;
     roleId: number;
 }
 
@@ -460,8 +460,7 @@ export async function fetchCourse(courseId: number, callback: (course: Course) =
                 return res.json();
             })
             .then((course) => {
-                console.log(course);
-                // callback(course);
+                callback(course);
             });
     } catch (error) {
         alert(error);

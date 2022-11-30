@@ -24,7 +24,7 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
     const openEditExerciseGroupModalRef = useRef<ShowEditExerciseGroupModal>(null);
 
     useEffect(() => {
-        props.changedCourse();
+        // props.changedCourse();
         setGroupElements(makeExerciseGroupElements(navigate, props.exerciseGroups, props.isOwner, openEditExerciseGroupModalRef, props.openDeleteExerciseModalRef));
     }, [props.exerciseGroups.length, props.exerciseGroups])
 

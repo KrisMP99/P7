@@ -17,9 +17,10 @@ export default function AttendeeOverview(props: AttendeeOverviewProps) {
     const [maxPages, setMaxPages] = useState<number>(1);
 
     useEffect(() => {  
-        let endPage = Math.ceil(props.attendees.filter((attendee: Attendee) => { //WIP - Change userId to firstname and lastname below here
-            return search.toLowerCase() === '' ? attendee : (attendee.userId.toLowerCase().includes(search) || attendee.userId.toLowerCase().includes(search))
-        }).length / coursesPerPage);
+        // let endPage = Math.ceil(props.attendees.filter((attendee: Attendee) => { //WIP - Change userId to firstname and lastname below here
+        //     return search.toLowerCase() === '' ? attendee : (attendee.courseId.toLowerCase().includes(search) || attendee.userId.toLowerCase().includes(search))
+        // }).length / coursesPerPage);
+        let endPage = Math.ceil(props.attendees.length / coursesPerPage);
         setMaxPages(endPage === 0 ? 1 : endPage);
     }, [props.attendees.length, coursesPerPage, search]);
 
@@ -59,7 +60,7 @@ export default function AttendeeOverview(props: AttendeeOverviewProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {props.attendees.filter((attendee) => {
+                            {/* {props.attendees.filter((attendee) => {
                                 return search.toLowerCase() === '' ? attendee : attendee.userId.toLowerCase().includes(search)
                             }).slice(currentPage * coursesPerPage, (currentPage + 1) * coursesPerPage).map((item: Attendee, index) => (
                                 <tr key={item.userId}>
@@ -67,7 +68,16 @@ export default function AttendeeOverview(props: AttendeeOverviewProps) {
                                     <td>{item.userId}</td>
                                     <td></td>
                                 </tr>
-                            ))}
+                            ))} */}
+                            {
+                                props.attendees.slice(currentPage * coursesPerPage, (currentPage + 1) * coursesPerPage).map((item: Attendee, index) => (
+                                    <tr key={item.userId}>
+                                        <td>{index + 1}</td>
+                                        <td>{item.userId}</td>
+                                        <td></td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </Table>
                 </div>

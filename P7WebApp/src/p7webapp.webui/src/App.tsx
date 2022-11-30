@@ -14,7 +14,7 @@ export function getApiRoot() {
 }
 
 export interface User {
-    id: string;
+    id: number;
     firstname: string;
     lastname: string;
     email: string;

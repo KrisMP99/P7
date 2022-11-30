@@ -12,7 +12,7 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221130103206_table")]
+    [Migration("20221130111056_table")]
     partial class table
     {
         /// <inheritdoc />
