@@ -1,36 +1,35 @@
 using MediatR;
-using System.Runtime.InteropServices;
+using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise.Module;
 
 namespace P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise
 {
     public class UpdateExerciseCommand : IRequest<int>
     {
-        public UpdateExerciseCommand(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId)
+        public UpdateExerciseCommand(int id, int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId, List<UpdateModuleCommand> modules)
         {
+            Id = id;
             ExerciseGroupId = exerciseGroupId;
             Title = title;
             IsVisible = isVisible;
             ExerciseNumber = exerciseNumber;
-            StartDate = startDate ?? DateTime.UtcNow;
-            EndDate = endDate ?? DateTime.MaxValue;
-            VisibleFrom = visibleFrom ?? DateTime.UtcNow;
-            VisibleTo = visibleTo ?? DateTime.MaxValue;
-            CreatedDate = DateTime.UtcNow;
-            LastModifiedDate = CreatedDate;
+            StartDate = startDate;
+            EndDate = endDate;
+            VisibleFrom = visibleFrom;
+            VisibleTo = visibleTo;
             LayoutId = layoutId;
+            Modules = modules;
         }
 
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public bool IsVisible { get; set; }
-        public int ExerciseNumber { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public DateTime? VisibleFrom { get; set; }
-        public DateTime? VisibleTo { get; set; }
-        public DateTime CreatedDate { get; }
-        public DateTime LastModifiedDate { get; }
-        public int ExerciseGroupId { get; set; }
-        public int LayoutId { get; set; }
+        public int Id { get; }
+        public int ExerciseGroupId { get; }
+        public string Title { get; }
+        public bool IsVisible { get; }
+        public int ExerciseNumber { get; }
+        public DateTime? StartDate { get; }
+        public DateTime? EndDate { get; }
+        public DateTime? VisibleFrom { get; }
+        public DateTime? VisibleTo { get; }
+        public int LayoutId { get; }
+        public List<UpdateModuleCommand>? Modules { get; }
     }
 }
