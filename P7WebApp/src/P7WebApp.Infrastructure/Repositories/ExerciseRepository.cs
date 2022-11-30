@@ -4,6 +4,7 @@ using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.Domain.Repositories;
+using P7WebApp.Infrastructure.Exceptions;
 
 namespace P7WebApp.Infrastructure.Repositories
 {
@@ -28,7 +29,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ExerciseRepositoryException($"Could not get exercise with solution for exercise with Id: {id}.");
                 }
             }
             catch (Exception)
@@ -48,7 +49,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new ExerciseRepositoryException($"Could not get exercise with submission for exercise with Id: {id}.");
                 }
             }
             catch (Exception)
@@ -69,7 +70,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ExerciseRepositoryException($"Could not get exercise with modules for exercise with Id: {id}.");
                 }
             }
             catch (Exception)
@@ -104,7 +105,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ExerciseRepositoryException($"Could not update exercise with Id: {exercise.Id}.");
                 }
             }
             catch (Exception)
@@ -130,7 +131,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new NullReferenceException($"Could not delete solution with Id: {solution.Id}.");
                 }
                 
             }
@@ -153,7 +154,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new NullReferenceException($"Could not delete solution with Id: {submission.Id}.");
                 }
 
             }

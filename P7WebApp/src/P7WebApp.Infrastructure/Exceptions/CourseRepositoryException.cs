@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Infrastructure.Exceptions
 {
-    public class NotFoundException : Exception
+    public class CourseRepositoryException : Exception
     {
-        public NotFoundException() { }
-        public NotFoundException(string message) : base(message) { }
+        public CourseRepositoryException() { }
+        public CourseRepositoryException(string message) : base(message) { }
+
     }
 }

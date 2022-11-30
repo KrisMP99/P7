@@ -26,7 +26,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch(Exception)
             {
-                throw new NotCreatedException($"Could not create course: {course.Title}.");
+                throw new CourseRepositoryException($"Could not create course: {course.Title}.");
             }
         }
         public async Task<int> GetCourseFromInviteCode(int code)
@@ -41,7 +41,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new NotFoundException($"Invite code: {code} does not exsist.");
+                    throw new CourseRepositoryException($"Invite code: {code} does not exsist.");
                 }
             }
             catch (Exception)
@@ -62,7 +62,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new NotRemovedException($"Could not remove course with id {courseId} (does not exsist).");
+                    throw new CourseRepositoryException($"Could not remove course with id {courseId} (does not exsist).");
                 }
             }
             catch (Exception)
@@ -82,7 +82,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
                 if (course is null)
                 {
-                    throw new NotFoundException($"Could not get course with exercise groups {courseId}.");
+                    throw new CourseRepositoryException($"Could not get course with exercise groups {courseId}.");
                 }
 
                 return course;
@@ -113,7 +113,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-                throw new NotFoundException($"Could not find course with id: {courseId} (does not exsist).");
+                throw new CourseRepositoryException($"Could not find course with id: {courseId} (does not exsist).");
             }
         }
 
@@ -129,7 +129,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             { 
-                throw new NotFoundException($"Could not find attended courses for user Id: {userId}.");
+                throw new CourseRepositoryException($"Could not find attended courses for user Id: {userId}.");
             }
             
         }
@@ -145,7 +145,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
                 if (exerciseGroups is null)
                 {
-                    throw new NotFoundException($"Could not get exercisegroups with exercises for course Id: {courseId}.");
+                    throw new CourseRepositoryException($"Could not get exercisegroups with exercises for course Id: {courseId}.");
                 }
 
                 return exerciseGroups.AsEnumerable();
@@ -166,7 +166,7 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 if (courses is null)
                 {
-                    throw new NotFoundException("Could not get list of courses.");
+                    throw new CourseRepositoryException("Could not get list of courses.");
                 }
 
                 return courses;
@@ -187,7 +187,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             { 
-                throw new NotFoundException($"Could not get created courses for user: {userId}.");
+                throw new CourseRepositoryException($"Could not get created courses for user: {userId}.");
             }
         }
 
@@ -217,7 +217,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new CourseRepositoryException("Could not update the course");
                 }
             }
             catch (Exception)
@@ -239,7 +239,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
                 if (course is null)
                 {
-                    throw new Exception("Could not find course with default role and permission.");
+                    throw new CourseRepositoryException("Could not find course with default role and permission.");
                 }
 
                 return course;
