@@ -67,8 +67,7 @@ namespace P7WebApp.Infrastructure
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
-                })
-                .AddCookie("idsrv.jwtrequesturi.client");
+                });
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IIdentityService, IdentityService>();

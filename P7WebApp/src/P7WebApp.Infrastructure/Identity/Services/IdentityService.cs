@@ -104,10 +104,5 @@ namespace P7WebApp.Infrastructure.Identity.Services
 
             return result.ToApplicationResult();
         }
-
-        public async Task SignOutAsync()
-        {
-            await _httpContextAccessor.HttpContext?.SignOutAsync(IdentityServerConstants.JwtRequestClientKey);
-        }
     }
 }
