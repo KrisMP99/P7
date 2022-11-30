@@ -82,7 +82,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
                 if (course is null)
                 {
-                    throw new CourseRepositoryException($"Could not get course with exercise groups {courseId}.");
+                    throw new CourseRepositoryException($"Could not get course with Id: {courseId}.");
                 }
 
                 return course;

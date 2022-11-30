@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSolution;
 using System;
@@ -32,7 +33,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
             }
             catch (Exception)
             {
-                throw;
+                throw new NotFoundException($"Could not delete solution Id: {request.SolutionId} for exercise with Id: {request.ExerciseId}.");
             }
         }
     }

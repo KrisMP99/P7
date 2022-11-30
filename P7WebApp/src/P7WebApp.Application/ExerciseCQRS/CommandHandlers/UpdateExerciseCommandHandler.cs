@@ -24,7 +24,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
 
                 if (exercise is null)
                 {
-                    throw new NotFoundException("Could not find an exercise group with the specified Id");
+                    throw new NotFoundException($"Could not update exercise '{request.Title}' with Id: {request.Id}.");
                 }
                 else
                 {

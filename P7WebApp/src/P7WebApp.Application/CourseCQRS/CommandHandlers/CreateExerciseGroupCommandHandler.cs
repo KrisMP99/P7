@@ -36,7 +36,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             }
             catch(Exception)
             {
-                throw;
+                throw new Exception($"Could not create exercise group '{request.Title}' for exercise with Id: {request.CourseId}.");
             }
         }
     }

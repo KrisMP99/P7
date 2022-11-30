@@ -32,7 +32,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 
                     if (exerciseGroup is null)
                     {
-                        throw new NotFoundException("Could not find an exercise group with the specified Id");
+                        throw new NotFoundException($"Could not find an exercise group with Id: {request.ExerciseGroupId}.");
                     }
                     else
                     {

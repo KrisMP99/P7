@@ -23,7 +23,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 
                 if (course is null)
                 {
-                    throw new NotFoundException("Could not find the exercise");
+                    throw new NotFoundException($"Could not find the exercise '{request.Title}' with Id: {request.CourseId}.");
                 }
                 else
                 {
