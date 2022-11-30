@@ -66,29 +66,7 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout([FromBody] SignOutProfileCommand request)
-        {
-            try
-            {
-                var result = await _mediator.Send(request);
-
-                if (result)
-                {
-                    return Ok("User was logged out");
-                }
-                else
-                {
-                    return BadRequest("Something went wrong");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
         //-----------------------ACCOUNT SETTINGS END-----------------------//
-
 
 
 
