@@ -83,11 +83,6 @@ export default (authToken) => {
     });
 
     // Get Course GET request
-    const params = {
-        headers: {
-            Authorization: `Bearer ${authToken}`,
-        }
-    }
     const responses = http.batch([
         ['GET', `${BASE_URL}courses/1`, null, requestHeaderConfigWithTag('GetCourse')],
         ['GET', `${BASE_URL}courses/2`, null, requestHeaderConfigWithTag('GetCourse')],
@@ -95,18 +90,4 @@ export default (authToken) => {
         ['GET', `${BASE_URL}courses/4`, null, requestHeaderConfigWithTag('GetCourse')],
     ]) 
     responses.forEach(x => check(x, {'got course': r => r.status === 200}))
-
-
-    // Create, Update and Delete Course group
-    // group('Create, update and delete course', () => {
-    //     let courseUrl = `${BASE_URL}courses`;
-    //     let body = {
-    //             title: "new",
-    //             description: "string",
-    //             isPrivate: false
-    //         }
-    //     const createRes = http.post(courseUrl, JSON.stringify(body), requestHeaderConfig)
-    //     const courseId = createRes.json('id')
-    //     check(createRes, {'Created course': r => r.status === 200})
-    // })
 }
