@@ -61,7 +61,7 @@ export interface Course {
     title: string;
     description: string;
     isPrivate: boolean;
-    createdById: string;
+    ownerId: string;
     ownerName: string | null;
     exerciseGroups: ExerciseGroup[];
     createdDate: Date | null;
