@@ -15,19 +15,16 @@ namespace P7WebApp.Infrastructure.Identity.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
 
         public IdentityService(UserManager<ApplicationUser> userManager, 
             IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, 
             IAuthorizationService authorizationService,
-            IHttpContextAccessor httpContextAccessor,
             IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
-            _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
         }
 

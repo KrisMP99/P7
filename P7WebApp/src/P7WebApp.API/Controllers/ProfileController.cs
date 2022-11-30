@@ -1,13 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.ProfileCQRS.Commands.CreateProfile;
+using P7WebApp.Application.ProfileCQRS.Commands.SignInProfile;
 using P7WebApp.Application.ProfileCQRS.Commands.UpdateProfile;
 using P7WebApp.Application.ProfileCQRS.Queries;
-using P7WebApp.Application.CourseCQRS.Queries;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using P7WebApp.Application.ProfileCQRS.Commands.SignOutProfile;
-using P7WebApp.Application.ProfileCQRS.Commands.SignInProfile;
 
 namespace P7WebApp.API.Controllers
 {
