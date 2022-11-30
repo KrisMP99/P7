@@ -18,7 +18,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         id: 0,
         title: '',
         description: '',
-        createdById: 'undefined',
+        ownerId: 'undefined',
         ownerName: 'undefined',
         exerciseGroups: [],
         isPrivate: true,
@@ -34,7 +34,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         ref,
         () => ({
             handleShow(userId: string) {
-                setCourse({...course, createdById: userId});
+                setCourse({...course, ownerId: userId});
                 setShow(true);
             }
         }),

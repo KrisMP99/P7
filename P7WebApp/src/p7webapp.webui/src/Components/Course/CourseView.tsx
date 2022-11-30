@@ -459,8 +459,9 @@ export async function fetchCourse(courseId: number, callback: (course: Course) =
                 }
                 return res.json();
             })
-            .then((course: Course) => {
-                callback(course);
+            .then((course) => {
+                console.log(course);
+                // callback(course);
             });
     } catch (error) {
         alert(error);
