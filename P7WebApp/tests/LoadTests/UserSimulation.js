@@ -3,16 +3,14 @@ import { check } from 'k6';
 
 // Options https://k6.io/docs/using-k6/k6-options/reference/
 export const options = {
-    vus: 1,
-    iterations: 1,
-    // stages: [{target : 30, duration: '10s'},
-    //          {target : 50, duration: '10s'},
-    //          {target : 100, duration: '10s'},
-    //          {target : 200, duration: '10s'},
-    //          {target : 300, duration: '10s'},
-    //          {target : 1000, duration: '10s'},
-    //          {target : 300, duration: '10s'},
-    //          {target : 0, duration: '10s'},]
+    stages: [{target : 30, duration: '10s'},
+             {target : 50, duration: '10s'},
+             {target : 100, duration: '10s'},
+             {target : 200, duration: '10s'},
+             {target : 300, duration: '10s'},
+             {target : 1000, duration: '10s'},
+             {target : 300, duration: '10s'},
+             {target : 0, duration: '10s'},]
 }
 
 export const USERNAME = "Test";
