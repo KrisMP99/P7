@@ -30,6 +30,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = 2;
+            var newModules = new List<Module>();
 
             exercise.EditInformation(
                 newTitle: newTitle,
@@ -37,7 +38,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 newExerciseNumber: newExerciseNumber,
                 newStartDate: newStartDate,
                 newEndDate: newEndDate,
-                newLayoutId: newLayoutId
+                newLayoutId: newLayoutId,
+                newModules: newModules
                 );
 
             exercise.Title
@@ -65,6 +67,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = 2;
+            var newModules = new List<Module>();
+
 
             exercise.EditInformation(
                 newTitle: newTitle,
@@ -72,7 +76,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 newExerciseNumber: newExerciseNumber,
                 newStartDate: newStartDate,
                 newEndDate: newEndDate,
-                newLayoutId: newLayoutId
+                newLayoutId: newLayoutId,
+                newModules: newModules
                 );
 
             exercise.IsVisible
@@ -100,6 +105,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = 2;
+            var newModules = new List<Module>();
 
             exercise.EditInformation(
                 newTitle: newTitle,
@@ -107,7 +113,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 newExerciseNumber: newExerciseNumber,
                 newStartDate: newStartDate,
                 newEndDate: newEndDate,
-                newLayoutId: newLayoutId
+                newLayoutId: newLayoutId,
+                newModules: newModules
                 );
 
             exercise.ExerciseNumber
@@ -135,6 +142,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = 2;
+            var newModules = new List<Module>();
 
             exercise.EditInformation(
                 newTitle: newTitle,
@@ -142,7 +150,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 newExerciseNumber: newExerciseNumber,
                 newStartDate: newStartDate,
                 newEndDate: newEndDate,
-                newLayoutId: newLayoutId
+                newLayoutId: newLayoutId,
+                newModules: newModules
                 );
 
             exercise.StartDate
@@ -170,6 +179,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = 2;
+            var newModules = new List<Module>();
 
             exercise.EditInformation(
                 newTitle: newTitle,
@@ -177,7 +187,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 newExerciseNumber: newExerciseNumber,
                 newStartDate: newStartDate,
                 newEndDate: newEndDate,
-                newLayoutId: newLayoutId
+                newLayoutId: newLayoutId,
+                newModules: newModules
                 );
 
             exercise.EndDate
@@ -205,6 +216,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = 2;
+            var newModules = new List<Module>();
 
             exercise.EditInformation(
                 newTitle: newTitle,
@@ -212,7 +224,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                 newExerciseNumber: newExerciseNumber,
                 newStartDate: newStartDate,
                 newEndDate: newEndDate,
-                newLayoutId: newLayoutId
+                newLayoutId: newLayoutId,
+                newModules: newModules
                 );
 
             exercise.LayoutId
@@ -240,6 +253,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = 2;
+            var newModules = new List<Module>();
 
             Action act = () => exercise.EditInformation(
                                 newTitle: newTitle,
@@ -247,7 +261,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                                 newExerciseNumber: newExerciseNumber,
                                 newStartDate: newStartDate,
                                 newEndDate: newEndDate,
-                                newLayoutId: newLayoutId
+                                newLayoutId: newLayoutId,
+                                newModules: newModules
                                 );
 
             act
@@ -275,6 +290,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = 2;
+            var newModules = new List<Module>();
 
             Action act = () => exercise.EditInformation(
                                 newTitle: newTitle,
@@ -282,7 +298,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                                 newExerciseNumber: newExerciseNumber,
                                 newStartDate: newStartDate,
                                 newEndDate: newEndDate,
-                                newLayoutId: newLayoutId
+                                newLayoutId: newLayoutId,
+                                newModules: newModules
                                 );
 
             act
@@ -313,6 +330,7 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
             DateTime newStartDate = DateTime.UtcNow;
             DateTime newEndDate = DateTime.UtcNow;
             int newLayoutId = layoutId;
+            var newModules = new List<Module>();
 
             Action act = () => exercise.EditInformation(
                                 newTitle: newTitle,
@@ -320,7 +338,8 @@ namespace P7WebApp.Domain.Tests.UnitTests.ExerciseAggregateTests
                                 newExerciseNumber: newExerciseNumber,
                                 newStartDate: newStartDate,
                                 newEndDate: newEndDate,
-                                newLayoutId: newLayoutId
+                                newLayoutId: newLayoutId,
+                                newModules: newModules
                                 );
 
             act

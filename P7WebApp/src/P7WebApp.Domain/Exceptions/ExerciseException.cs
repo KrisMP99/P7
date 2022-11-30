@@ -2,6 +2,8 @@
 {
     public class ExerciseException : Exception
     {
+        private string _newDescription;
+
         public ExerciseException(string? message) : base(message)
         {
         }

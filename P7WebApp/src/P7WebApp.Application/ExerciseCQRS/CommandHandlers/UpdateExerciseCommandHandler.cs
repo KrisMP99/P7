@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
+using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
-using P7WebApp.Domain.Repositories;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 
 namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
 {
@@ -18,19 +20,30 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
         {
             try
             { 
-                var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
-                exerciseGroup
-                    .GetExercise(request.Id)
-                    .EditInformation(newTitle: request.Title,
-                                               newIsVisible: request.IsVisible,
-                                               newExerciseNumber: request.ExerciseNumber,
-                                               newStartDate: request.StartDate,
-                                               newEndDate: request.EndDate,
-                                               newLayoutId: request.LayoutId);
+                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseWithModulesById(request.Id);
 
-                var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
+                if (exercise is null)
+                {
+                    throw new NotFoundException("Could not find an exercise group with the specified Id");
+                }
+                else
+                {
+                    var modules = ExerciseMapper.Mapper.Map<List<Module>>(request.Modules);
 
-                return affectedRows;
+                    exercise
+                        .EditInformation(newTitle: request.Title,
+                                         newIsVisible: request.IsVisible,
+                                         newExerciseNumber: request.ExerciseNumber,
+                                         newStartDate: request.StartDate,
+                                         newEndDate: request.EndDate,
+                                         newLayoutId: request.LayoutId,
+                                         newModules: modules);
+
+
+                    var affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
+
+                    return affectedRows;
+                }
             }
             catch (Exception)
             {
