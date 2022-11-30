@@ -1,42 +1,36 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Form, InputGroup, Pagination, Table, Button } from 'react-bootstrap'
-import { ArrowCounterclockwise } from 'react-bootstrap-icons'
-import { useNavigate } from 'react-router-dom'
-import { getApiRoot } from '../../App'
-import { CourseOverview } from '../Landingpage/LandingpageModules/OwnedCourseOverview';
+import { Container, InputGroup, Button, Table, Pagination, Form } from 'react-bootstrap';
+import { ArrowCounterclockwise } from 'react-bootstrap-icons';
+import { Attendee } from '../Course/CourseView';
 
-export default function PublicCourses() {
+interface AttendeeOverviewProps {
+    attendees: Attendee[];
+    reFetchCourse: () => void;
+}
+
+export default function AttendeeOverview(props: AttendeeOverviewProps) {
+    
     const [search, setSearch] = useState('');
-    const [publicCourses, setPublicCourses] = useState<CourseOverview[]>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [coursesPerPage, setCoursesPerPage] = useState<number>(25);
+    const [coursesPerPage, setCoursesPerPage] = useState<number>(10);
     const [maxPages, setMaxPages] = useState<number>(1);
 
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        fetchPublicCourses((courses) =>{
-            setPublicCourses(courses);
-        });
-    }, []);
-    
     useEffect(() => {  
-        let endPage = Math.ceil(publicCourses.filter((item: { title: string; }) => {
-            return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
-        }).length / coursesPerPage);
+        // let endPage = Math.ceil(props.attendees.filter((attendee: Attendee) => { //WIP - Change userId to firstname and lastname below here
+        //     return search.toLowerCase() === '' ? attendee : (attendee.courseId.toLowerCase().includes(search) || attendee.userId.toLowerCase().includes(search))
+        // }).length / coursesPerPage);
+        let endPage = Math.ceil(props.attendees.length / coursesPerPage);
         setMaxPages(endPage === 0 ? 1 : endPage);
-    }, [publicCourses.length, publicCourses, coursesPerPage, search]);
+    }, [props.attendees.length, coursesPerPage, search]);
 
     return (
-        <Container style={{marginTop: 'calc(42px + 2rem)'}}>
+        <Container>
             <div className="row justify-content-center">
-                <h1 className='text-center'>Find Courses</h1>
-
                 <div className='row col-7'>
                     <Form>
                         <InputGroup className='my-3'>
-                            <Form.Control placeholder='Search for course name' onChange={(e) => { 
+                            <Form.Control placeholder='Search for attendee name' onChange={(e) => {
                                 setSearch(e.target.value.toLowerCase());
                             }} />
                         </InputGroup>
@@ -45,16 +39,14 @@ export default function PublicCourses() {
 
                 <div className='row col-9 m-2'>
                     <div className='col text-start'>
-                        <h3>Attended courses</h3>
+                        <h3>Attendees:</h3>
                     </div>
-                    <div className="col text-end">
-                        <Button className="btn-2" onClick={()=>{
-                            fetchPublicCourses((courses) => {
-                                setPublicCourses(courses);
-                            })
+                    <div className="col text-end d-flex justify-content-end">
+                        <Button className="btn-2" onClick={() => {
+                            props.reFetchCourse();
                         }}>
                             <ArrowCounterclockwise />
-                        </Button> 
+                        </Button>
                     </div>
                 </div>
 
@@ -62,23 +54,30 @@ export default function PublicCourses() {
                     <Table striped size='sm' bordered hover>
                         <thead>
                             <tr>
-                                <th>Course name</th>
-                                <th>Exercises</th>
-                                <th>Members</th>
-                                <th>Owner</th>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Total: {props.attendees.length}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {publicCourses.filter((item: { title: string; }) => {
-                                return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
-                            }).slice(currentPage * coursesPerPage, (currentPage+1)*coursesPerPage).map((item: CourseOverview) => (
-                                <tr key={item.id} onClick={() => { navigate('/course/' + item.id) }}>
-                                    <td>{item.title}</td>
-                                    <td>{item.numberOfExercises ?? 0}</td>
-                                    <td>{item.numberOfMembers ?? 0}</td>
-                                    <td>{item.ownerName ?? 'Missing'}</td>
+                            {/* {props.attendees.filter((attendee) => {
+                                return search.toLowerCase() === '' ? attendee : attendee.userId.toLowerCase().includes(search)
+                            }).slice(currentPage * coursesPerPage, (currentPage + 1) * coursesPerPage).map((item: Attendee, index) => (
+                                <tr key={item.userId}>
+                                    <td>{index + 1}</td>
+                                    <td>{item.userId}</td>
+                                    <td></td>
                                 </tr>
-                            ))}
+                            ))} */}
+                            {
+                                props.attendees.slice(currentPage * coursesPerPage, (currentPage + 1) * coursesPerPage).map((item: Attendee, index) => (
+                                    <tr key={item.userId}>
+                                        <td>{index + 1}</td>
+                                        <td>{item.userId}</td>
+                                        <td></td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </Table>
                 </div>
@@ -152,7 +151,7 @@ export default function PublicCourses() {
                     <Form.Select size="sm" style={{ height: '100%' }} value={coursesPerPage}
                         onChange={(e) => {
                             setCoursesPerPage(Number(e.target.value));
-                            setMaxPages(Math.ceil(publicCourses.length / Number(e.target.value)))
+                            setMaxPages(Math.ceil(props.attendees.length / Number(e.target.value)))
                             setCurrentPage(0);
                         }
                         }>
@@ -165,33 +164,5 @@ export default function PublicCourses() {
                 </div>
             </div>
         </Container>
-    );
-}
-
-async function fetchPublicCourses(callback: (courses: CourseOverview[]) => void) {
-    const jwt = sessionStorage.getItem('jwt');
-    if (sessionStorage.getItem('jwt') === null) return;
-
-    try {
-        const requestOptions = {
-            method: 'GET',
-            headers: { 
-                'Accept': 'application/json', 
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + jwt
-            }
-        }
-        await fetch(getApiRoot() + 'courses/public', requestOptions)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Response not okay from backend - server unavailable');
-                }
-                return res.json();
-            })
-            .then((courseOverviews: CourseOverview[]) => {
-                callback(courseOverviews);
-            });
-    } catch (error) {
-        
-    }
+    )
 }

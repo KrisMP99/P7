@@ -9,7 +9,7 @@ interface CreateCourseModalProps {
 }
 
 export interface ShowCreateCourseModal {
-    handleShow: (userId: string) => void;
+    handleShow: (userId: number) => void;
 }
 
 export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseModalProps>((props, ref) => {
@@ -18,7 +18,7 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
         id: 0,
         title: '',
         description: '',
-        createdById: 'undefined',
+        ownerId: 0,
         ownerName: 'undefined',
         exerciseGroups: [],
         isPrivate: true,
@@ -33,8 +33,8 @@ export const CreateCourseModal = forwardRef<ShowCreateCourseModal, CreateCourseM
     useImperativeHandle(
         ref,
         () => ({
-            handleShow(userId: string) {
-                setCourse({...course, createdById: userId});
+            handleShow(userId: number) {
+                setCourse({...course, ownerId: userId});
                 setShow(true);
             }
         }),
