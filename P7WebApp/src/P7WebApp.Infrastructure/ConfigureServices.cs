@@ -48,7 +48,7 @@ namespace P7WebApp.Infrastructure
                 options.Password.RequiredUniqueChars = 1;
             });
 
-            services.AddHttpContextAccessor();
+            //services.AddHttpContextAccessor();
 
             services
                 .AddAuthorization();
@@ -60,7 +60,6 @@ namespace P7WebApp.Infrastructure
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://localhost:7001";
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
