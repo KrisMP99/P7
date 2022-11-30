@@ -18,7 +18,6 @@ namespace P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise
             VisibleTo = visibleTo;
             LayoutId = layoutId;
             Modules = modules;
-
         }
 
         public int Id { get; }
