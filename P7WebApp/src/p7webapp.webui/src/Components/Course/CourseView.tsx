@@ -114,7 +114,7 @@ export default function CourseView(props: CourseProps) {
 
     useEffect(()=> {
         if (course){
-            if (props.user.id === course?.createdById) {
+            if (props.user.id === course?.ownerId) {
                 setIsOwner(true);
             }
             else {
@@ -131,7 +131,7 @@ export default function CourseView(props: CourseProps) {
 
     useEffect(() => {
         setEditedCourse(course);
-    }, [course?.createdById, props.user.id, isOwner, course?.description, course?.isPrivate, course?.title]);
+    }, [course?.ownerId, props.user.id, isOwner, course?.description, course?.isPrivate, course?.title]);
 
     return isLoading ? 
         (<></>) :
