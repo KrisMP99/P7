@@ -50,8 +50,11 @@ namespace P7WebApp.Infrastructure
 
             services.AddHttpContextAccessor();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            services
+                .AddAuthorization();
+
+            //services.AddIdentityServer()
+            //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             byte[] key = Encoding.ASCII.GetBytes(configuration.GetSection("token").GetSection("secret").Value); // This should probably be retrieved some other way
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
