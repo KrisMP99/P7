@@ -26,7 +26,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch(Exception)
             {
-                throw new NotCreatedException(string.Format("Could not create course {0}", course.Title));
+                throw new NotCreatedException($"Could not create course: {course.Title}.");
             }
         }
         public async Task<int> GetCourseFromInviteCode(int code)
@@ -41,12 +41,12 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new NotFoundException($"Invite code: {code} does not exsist.");
                 }
             }
             catch (Exception)
             {
-                throw new NotFoundException(string.Format("Could not find invite code: {0}", code));
+                throw;
             }
         }
         public async Task<int> DeleteCourse(int courseId)
@@ -62,12 +62,12 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new NotRemovedException($"Could not remove course with id {courseId} (does not exsist).");
                 }
             }
             catch (Exception)
             {
-                throw new NotRemovedException(string.Format("Could not remove course with id {0} (does not exsist)", courseId));
+                throw;
             }
         }
 
@@ -82,7 +82,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
                 if (course is null)
                 {
-                    throw new Exception("Could not get course with exercise groups.");
+                    throw new NotFoundException($"Could not get course with exercise groups {courseId}.");
                 }
 
                 return course;
@@ -113,7 +113,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-                throw new NotFoundException(string.Format("Could not find course with id: {0} (does not exsist)", courseId));
+                throw new NotFoundException($"Could not find course with id: {courseId} (does not exsist).");
             }
         }
 
@@ -129,7 +129,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             { 
-                throw;
+                throw new NotFoundException($"Could not find attended courses for user Id: {userId}.");
             }
             
         }
@@ -145,7 +145,7 @@ namespace P7WebApp.Infrastructure.Repositories
 
                 if (exerciseGroups is null)
                 {
-                    throw new Exception();
+                    throw new NotFoundException($"Could not get exercisegroups with exercises for course Id: {courseId}.");
                 }
 
                 return exerciseGroups.AsEnumerable();
@@ -166,7 +166,7 @@ namespace P7WebApp.Infrastructure.Repositories
             {
                 if (courses is null)
                 {
-                    throw new Exception();
+                    throw new NotFoundException("Could not get list of courses.");
                 }
 
                 return courses;
@@ -187,7 +187,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             { 
-                throw;
+                throw new NotFoundException($"Could not get created courses for user: {userId}.");
             }
         }
 
@@ -200,7 +200,6 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
             throw new NotImplementedException();
