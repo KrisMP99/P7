@@ -27,15 +27,15 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
-        public async Task<int> GetCourseFromInviteCode(int code)
+        public async Task<int> GetCourseIdFromInviteCode(int code)
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.InviteCode.Code == code).FirstOrDefaultAsync();
+                int courseId = await _context.Courses.Where(c => c.InviteCode.Code == code).Select(c => c.Id).FirstOrDefaultAsync();
 
-                if (course != null)
+                if (courseId > 0)
                 {
-                    return course.Id;
+                    return courseId;
                 }
                 else
                 {
@@ -232,7 +232,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 var course = await _context.Courses
                     .Where(c => c.Id == courseId)
                     .Include(c => c.Attendees)
-                    .Include(c => c.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault())
+                    .Include(c => c.CourseRoles.Where(role => role.IsDefaultRole == true).Take(1))
                         .ThenInclude(role => role.Permission)
                     .FirstOrDefaultAsync();
 
