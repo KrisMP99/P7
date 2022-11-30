@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.VisualStudio.Services.WebApi.Jwt;
-using P7WebApp.Application.ProfileCQRS.Commands.SignIn;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Responses.Profile;
+using P7WebApp.Application.ProfileCQRS.Commands.SignInProfile;
 
 namespace P7WebApp.Application.ProfileCQRS.CommandHandlers
 {
