@@ -6,7 +6,7 @@ networks:
 
 services:
   p7webapp_api-PROD:
-    image: p7webappapi-prod
+    image: kpede19/p7:p7webappapi-prod
     environment:
       ASPNETCORE_ENVIRONMENT: production
     build:
@@ -31,7 +31,7 @@ services:
         delay: 0s
 
   p7webapp_ui-PROD:
-    image: p7webappui-prod
+    image: kpede19/p7:p7webappui-prod
     env_file:
       - .env
     container_name: p7webapp_ui_PROD
@@ -60,7 +60,7 @@ services:
         delay: 0s
 
   postgres-PROD:
-    image: postgres:14.5
+    image: kpede19/p7:postgres
     container_name: postgres_db_PROD
     restart: always
     env_file:
