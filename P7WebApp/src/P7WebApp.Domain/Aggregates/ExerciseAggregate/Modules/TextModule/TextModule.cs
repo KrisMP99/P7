@@ -22,7 +22,6 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule
             base.Height = newHeight != 0 ? newHeight : throw new ExerciseException("Cannot edit to invalid height.");
             base.Width = newWidth != 0 ? newWidth : throw new ExerciseException("Cannot edit to invalid width.");
             base.Position = newPosition != 0 ? newPosition : throw new ExerciseException("Cannot edit to invalid position."); ;
-
             this.Title = !string.IsNullOrEmpty(newTitle)  ? newTitle : throw new ExerciseException("Cannot edit to invalid title.");
             this.Content = !string.IsNullOrEmpty(newContent) ? newContent : throw new ExerciseException("Cannot edit to invalid content.");
         }

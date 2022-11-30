@@ -16,16 +16,13 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             Title = title;
             IsVisible = isVisible;
             ExerciseNumber = exerciseNumber;
-            StartDate = startDate ?? DateTime.UtcNow;
-            EndDate = endDate ?? DateTime.MaxValue;
-            VisibleFrom = visibleFrom ?? DateTime.UtcNow;
-            VisibleTo = visibleTo ?? DateTime.MaxValue;
+            StartDate = startDate ?? null;
+            EndDate = endDate ?? null;
+            VisibleFrom = visibleFrom ?? null;
+            VisibleTo = visibleTo ?? null;
             CreatedDate = DateTime.UtcNow;
             LastModifiedDate = CreatedDate;
             LayoutId = layoutId;
-            Modules = new List<Module>();
-            Solutions = new List<Solution>();
-            Submissions = new List<Submission>();
         }
 
         public int ExerciseGroupId { get; private set; }
@@ -38,9 +35,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime? VisibleTo { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
-        public List<Module> Modules { get; private set; }
-        public List<Solution> Solutions { get; private set; }
-        public List<Submission> Submissions { get; private set;  }
+        public ICollection<Module> Modules { get; private set; } = new List<Module>();
+        public ICollection<Solution> Solutions { get; private set; } = new List<Solution>();
+        public ICollection<Submission> Submissions { get; private set; } = new List<Submission>();
         public int LayoutId { get; private set; }
 
         public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId, List<Module> newModules)
@@ -63,7 +60,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                     {
                         if (module is TextModule)
                         {
-                            TextModule newTextModule = module as TextModule; 
+                            TextModule newTextModule = module as TextModule;
                             var updatedModule = GetModuleById(module.Id) as TextModule;
                             updatedModule.EditInformation(newDescription: newTextModule.Description, newHeight: newTextModule.Height, newWidth: newTextModule.Width, newPosition: newTextModule.Position, newTitle: newTextModule.Title, newTextModule.Content);
                         }
@@ -81,8 +78,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                         }
                         else
                         {
-                            var updatedModule = GetModuleById(module.Id) as QuizModule;
-                            updatedModule.EditInformation(newDescription: module.Description, newHeight: module.Height, newWidth: module.Width, newPosition: module.Position);
+                            throw new ExerciseException("Could not recognize the module type.");
                         }
                     }
                 }
@@ -102,13 +98,8 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 // add new modules
                 if (newModules.Any(nm => nm.Id == 0))
                 {
-                    var module = newModules.Where(nm => nm.Id == 0);
-                    Modules.AddRange(module);
-                }
-
-                if (Modules.Count != ExerciseLayout.GetNumberOfModulesAllowed(LayoutId))
-                {
-                    throw new ExerciseException("You cannot set the layout given the numbers of modules");
+                    var modules = newModules.Where(nm => nm.Id == 0);
+                    AddModules((ICollection<Module>)(modules));
                 }
             }
             catch (Exception)
@@ -124,11 +115,45 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 if (module is null)
                 {
                     throw new ExerciseException("Could not add modules");
-                } 
-                
-                if(CanModuleBeAddedToExercise(module))
+                }
+
+                if (CanModuleBeAddedToExercise(module))
                 {
                     Modules.Add(module);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void AddModules(ICollection<Module> modules)
+        {
+            try
+            {
+                if (modules is null)
+                {
+                    throw new ExerciseException("The modules collection is null.");
+
+                }
+
+                if (modules.Count() > 4)
+                {
+                    throw new ExerciseException("An exercise can at most contain 4 modules.");
+                }
+
+                if (modules.Count() == 0)
+                {
+                    throw new ExerciseException("The module collection to add is empty.");
+                }
+
+                foreach (var module in modules)
+                {
+                    if (CanModuleBeAddedToExercise(module))
+                    {
+                        Modules.Add(module);
+                    }
                 }
             }
             catch (Exception)
@@ -142,23 +167,23 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             var numOfModules = Modules.Count();
             var numberOfModulesAllowed = ExerciseLayout.GetNumberOfModulesAllowed(this.LayoutId);
 
-            if(numOfModules > numberOfModulesAllowed)
+            if (numOfModules > numberOfModulesAllowed)
             {
                 throw new ExerciseException("");
             }
 
-            if(module.Position < 1 || module.Position > 4)
+            if (module.Position < 1 || module.Position > 4)
             {
                 throw new ExerciseException($"The modules position '{module.Position}' is invalid. Allowed values are: 1-4.");
             }
 
-            var result = Modules.Find(m => m.Position == module.Position);
+            var result = Modules.FirstOrDefault(m => m.Position == module.Position);
 
             if (result is not null)
             {
                 throw new ExerciseException($"Module position '{module.Position}' is already assigned to another module.");
             }
-            
+
             return true;
         }
 
@@ -178,9 +203,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var module = Modules.Find(m => m.Id == moduleId);
+                var module = Modules.FirstOrDefault(m => m.Id == moduleId);
 
-                if(module is not null)
+                if (module is not null)
                 {
                     return module;
                 }
@@ -189,7 +214,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                     throw new ExerciseException("Could not find the module with the specified id.");
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -231,7 +256,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Solutions.Find(s => s.Id == solutionId);
+                var result = Solutions.FirstOrDefault(s => s.Id == solutionId);
                 if (result is not null)
                 {
                     return result;
@@ -283,7 +308,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Submissions.Find(s => s.Id == submissionId);
+                var result = Submissions.FirstOrDefault(s => s.Id == submissionId);
                 if (result is not null)
                 {
                     return result;
