@@ -16,7 +16,6 @@ using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSolution;
 using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSubmission;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateSolution;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise;
@@ -76,7 +75,13 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                var result = await _mediator.Send(new GetCourseFromInviteCodeQuery(code));
+                int? result = await _mediator.Send(new GetCourseFromInviteCodeQuery(code));
+
+                if (result is null)
+                {
+                    return NotFound("Could not find a course from the specified invite code");
+                }
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -326,13 +331,14 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(new DeleteExerciseCommand(id, exerciseGroupId));
-                if (result != 0)
+
+                if (result > 0)
                 {
                     return Ok(result);
                 }
                 else
                 {
-                    return BadRequest("Could not create exercise");
+                    return NotFound("Could not find the exercise and delete it");
                 }
             }
             catch (Exception)
@@ -348,16 +354,7 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(request);
-
-                if (result == 0)
-                {
-                    return BadRequest("Could not update the exercise");
-                }
-                else
-                {
-                return Ok(result);
-
-                }
+                return Ok("Updated");  
             }
             catch (Exception ex)
             {

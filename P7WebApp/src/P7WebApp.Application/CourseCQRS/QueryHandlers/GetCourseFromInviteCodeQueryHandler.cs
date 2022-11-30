@@ -21,9 +21,10 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
 
         public async Task<int> Handle(GetCourseFromInviteCodeQuery request, CancellationToken cancellationToken)
         {
-            var id = await _unitOfWork.CourseRepository.GetCourseFromInviteCode(request.Code);
+            //var id = await _unitOfWork.CourseRepository.GetCourseFromInviteCode(request.Code);
 
-            return id;
+            //return id;
+            throw new NotImplementedException();
         }
     }
 }

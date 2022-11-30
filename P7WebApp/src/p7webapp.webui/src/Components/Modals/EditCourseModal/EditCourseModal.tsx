@@ -17,7 +17,7 @@ export const EditCourseModal = forwardRef<ShowEditCourseModal, EditCourseModalPr
         id: 0,
         title: '',
         description: '',
-        createdById: 'undefined',
+        ownerId: 0,
         ownerName: 'undefined',
         exerciseGroups: [],
         isPrivate: true,

@@ -1,4 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
 using P7WebApp.Domain.Exceptions;
@@ -37,15 +40,72 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public ICollection<Submission> Submissions { get; private set; } = new List<Submission>();
         public int LayoutId { get; private set; }
 
-        public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId)
+        public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId, List<Module> newModules)
         {
-            Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseException("Title has not been set.") : newTitle;
-            IsVisible = newIsVisible;
-            ExerciseNumber = newExerciseNumber < 0 ? throw new ExerciseException("Exercise number cannot be negative.") : newExerciseNumber;
-            VisibleFrom = newStartDate ?? VisibleFrom;
-            VisibleTo = newEndDate ?? VisibleTo;
-            LastModifiedDate = DateTime.Now;
-            LayoutId = ExerciseLayout.FromId(newLayoutId).Id;
+            try
+            {
+                Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseException("Title has not been set.") : newTitle;
+                IsVisible = newIsVisible;
+                ExerciseNumber = newExerciseNumber < 0 ? throw new ExerciseException("Exercise number cannot be negative.") : newExerciseNumber;
+                VisibleFrom = newStartDate ?? VisibleFrom;
+                VisibleTo = newEndDate ?? VisibleTo;
+                LastModifiedDate = DateTime.UtcNow;
+                LayoutId = ExerciseLayout.FromId(newLayoutId).Id;
+
+                // update existing modules
+                var modulesToUpdate = newModules.Where(nm => nm.Id != 0).ToList();
+                if (modulesToUpdate is not null && modulesToUpdate.Count != 0)
+                {
+                    foreach (var module in modulesToUpdate)
+                    {
+                        if (module is TextModule)
+                        {
+                            TextModule newTextModule = module as TextModule;
+                            var updatedModule = GetModuleById(module.Id) as TextModule;
+                            updatedModule.EditInformation(newDescription: newTextModule.Description, newHeight: newTextModule.Height, newWidth: newTextModule.Width, newPosition: newTextModule.Position, newTitle: newTextModule.Title, newTextModule.Content);
+                        }
+                        else if (module is CodeEditorModule)
+                        {
+                            CodeEditorModule newCodeEditorModule = module as CodeEditorModule;
+                            var updatedModule = GetModuleById(module.Id) as CodeEditorModule;
+                            updatedModule.EditInformation(newDescription: newCodeEditorModule.Description, newHeight: newCodeEditorModule.Height, newWidth: newCodeEditorModule.Width, newPosition: newCodeEditorModule.Position, newCode: newCodeEditorModule.Code);
+                        }
+                        else if (module is QuizModule)
+                        {
+                            QuizModule newQuizModule = module as QuizModule;
+                            var updatedModule = GetModuleById(module.Id) as QuizModule;
+                            updatedModule.EditInformation(newDescription: newQuizModule.Description, newHeight: newQuizModule.Height, newWidth: newQuizModule.Width, newPosition: newQuizModule.Position);
+                        }
+                        else
+                        {
+                            throw new ExerciseException("Could not recognize the module type.");
+                        }
+                    }
+                }
+
+                // if modules have been deleted,
+                if (Modules.Count > newModules.Count)
+                {
+                    var module = Modules.Where(m => !newModules.Exists(nm => nm.Id == m.Id)).FirstOrDefault();
+
+                    if (module is not null)
+                    {
+                        Modules.Remove(module);
+
+                    }
+                }
+
+                // add new modules
+                if (newModules.Any(nm => nm.Id == 0))
+                {
+                    var modules = newModules.Where(nm => nm.Id == 0);
+                    AddModules((ICollection<Module>)(modules));
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void AddModule(Module module)
@@ -55,9 +115,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 if (module is null)
                 {
                     throw new ExerciseException("Could not add modules");
-                } 
-                
-                if(CanModuleBeAddedToExercise(module))
+                }
+
+                if (CanModuleBeAddedToExercise(module))
                 {
                     Modules.Add(module);
                 }
@@ -72,27 +132,27 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                if(modules is null)
+                if (modules is null)
                 {
                     throw new ExerciseException("The modules collection is null.");
 
                 }
 
-                if(modules.Count() > 4)
+                if (modules.Count() > 4)
                 {
                     throw new ExerciseException("An exercise can at most contain 4 modules.");
                 }
 
-                if(modules.Count() == 0)
+                if (modules.Count() == 0)
                 {
                     throw new ExerciseException("The module collection to add is empty.");
                 }
 
-                foreach(var module in modules)
+                foreach (var module in modules)
                 {
-                    if(CanModuleBeAddedToExercise(module))
+                    if (CanModuleBeAddedToExercise(module))
                     {
-                        Modules.Add(module); 
+                        Modules.Add(module);
                     }
                 }
             }
@@ -107,12 +167,12 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             var numOfModules = Modules.Count();
             var numberOfModulesAllowed = ExerciseLayout.GetNumberOfModulesAllowed(this.LayoutId);
 
-            if(numOfModules > numberOfModulesAllowed)
+            if (numOfModules > numberOfModulesAllowed)
             {
                 throw new ExerciseException("");
             }
 
-            if(module.Position < 1 || module.Position > 4)
+            if (module.Position < 1 || module.Position > 4)
             {
                 throw new ExerciseException($"The modules position '{module.Position}' is invalid. Allowed values are: 1-4.");
             }
@@ -123,7 +183,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             {
                 throw new ExerciseException($"Module position '{module.Position}' is already assigned to another module.");
             }
-            
+
             return true;
         }
 
@@ -145,7 +205,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             {
                 var module = Modules.FirstOrDefault(m => m.Id == moduleId);
 
-                if(module is not null)
+                if (module is not null)
                 {
                     return module;
                 }
@@ -154,7 +214,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                     throw new ExerciseException("Could not find the module with the specified id.");
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }

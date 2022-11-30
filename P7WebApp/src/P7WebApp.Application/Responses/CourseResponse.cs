@@ -12,7 +12,7 @@ namespace P7WebApp.Application.Responses
         public bool IsPrivate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-        public string CreatedById { get; set; }
+        public int OwnerId { get; set; }
         public string OwnerName { get; set; }  
         public IEnumerable<ExerciseGroupResponse> ExerciseGroups { get; set; }
         public IEnumerable<AttendeeResponse> Attendees { get; set; }
