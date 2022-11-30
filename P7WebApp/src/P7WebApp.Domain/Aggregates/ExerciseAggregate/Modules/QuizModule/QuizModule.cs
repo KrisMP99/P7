@@ -4,7 +4,6 @@
     {
         public QuizModule(string description, double height, double width, int position) : base(description, height, width, position)
         {
-            Questions = new List<Question>();
         }
 
         public List<Question> Questions { get; private set; }

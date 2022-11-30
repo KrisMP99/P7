@@ -1,6 +1,10 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
 {
@@ -31,33 +35,91 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         public DateTime? VisibleTo { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModifiedDate { get; private set; }
-        public List<Module>? Modules { get; private set; }
-        public List<Solution>? Solution { get; private set; }
-        public List<Submission>? Submissions { get; private set; }
+        public ICollection<Module> Modules { get; private set; } = new List<Module>();
+        public ICollection<Solution> Solutions { get; private set; } = new List<Solution>();
+        public ICollection<Submission> Submissions { get; private set; } = new List<Submission>();
         public int LayoutId { get; private set; }
 
-        public void UpdateExerciseInformation(string newTitle, bool isVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int? layoutId)
+        public void EditInformation(string newTitle, bool newIsVisible, int newExerciseNumber, DateTime? newStartDate, DateTime? newEndDate, int newLayoutId, List<Module> newModules)
         {
-            Title = String.IsNullOrEmpty(newTitle) ? throw new ArgumentNullException("Title has not been set.") : newTitle;
-            ExerciseNumber = newExerciseNumber < 0 ? throw new ArgumentOutOfRangeException("Exercise number cannot be negative.") : newExerciseNumber;
-            IsVisible = isVisible;
-            VisibleFrom = newStartDate ?? VisibleFrom;
-            VisibleTo = newEndDate ?? VisibleTo;
-            LastModifiedDate = DateTime.Now;
-            LayoutId = layoutId ?? LayoutId;
+            try
+            {
+                Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseException("Title has not been set.") : newTitle;
+                IsVisible = newIsVisible;
+                ExerciseNumber = newExerciseNumber < 0 ? throw new ExerciseException("Exercise number cannot be negative.") : newExerciseNumber;
+                VisibleFrom = newStartDate ?? VisibleFrom;
+                VisibleTo = newEndDate ?? VisibleTo;
+                LastModifiedDate = DateTime.UtcNow;
+                LayoutId = ExerciseLayout.FromId(newLayoutId).Id;
+
+                // update existing modules
+                var modulesToUpdate = newModules.Where(nm => nm.Id != 0).ToList();
+                if (modulesToUpdate is not null && modulesToUpdate.Count != 0)
+                {
+                    foreach (var module in modulesToUpdate)
+                    {
+                        if (module is TextModule)
+                        {
+                            TextModule newTextModule = module as TextModule;
+                            var updatedModule = GetModuleById(module.Id) as TextModule;
+                            updatedModule.EditInformation(newDescription: newTextModule.Description, newHeight: newTextModule.Height, newWidth: newTextModule.Width, newPosition: newTextModule.Position, newTitle: newTextModule.Title, newTextModule.Content);
+                        }
+                        else if (module is CodeEditorModule)
+                        {
+                            CodeEditorModule newCodeEditorModule = module as CodeEditorModule;
+                            var updatedModule = GetModuleById(module.Id) as CodeEditorModule;
+                            updatedModule.EditInformation(newDescription: newCodeEditorModule.Description, newHeight: newCodeEditorModule.Height, newWidth: newCodeEditorModule.Width, newPosition: newCodeEditorModule.Position, newCode: newCodeEditorModule.Code);
+                        }
+                        else if (module is QuizModule)
+                        {
+                            QuizModule newQuizModule = module as QuizModule;
+                            var updatedModule = GetModuleById(module.Id) as QuizModule;
+                            updatedModule.EditInformation(newDescription: newQuizModule.Description, newHeight: newQuizModule.Height, newWidth: newQuizModule.Width, newPosition: newQuizModule.Position);
+                        }
+                        else
+                        {
+                            throw new ExerciseException("Could not recognize the module type.");
+                        }
+                    }
+                }
+
+                // if modules have been deleted,
+                if (Modules.Count > newModules.Count)
+                {
+                    var module = Modules.Where(m => !newModules.Exists(nm => nm.Id == m.Id)).FirstOrDefault();
+
+                    if (module is not null)
+                    {
+                        Modules.Remove(module);
+
+                    }
+                }
+
+                // add new modules
+                if (newModules.Any(nm => nm.Id == 0))
+                {
+                    var modules = newModules.Where(nm => nm.Id == 0);
+                    AddModules((ICollection<Module>)(modules));
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void AddModule(Module module)
         {
             try
             {
-                if (module is not null)
+                if (module is null)
+                {
+                    throw new ExerciseException("Could not add modules");
+                }
+
+                if (CanModuleBeAddedToExercise(module))
                 {
                     Modules.Add(module);
-                } 
-                else
-                {
-                    throw new Exception("Could not add modules");
                 }
             }
             catch (Exception)
@@ -70,14 +132,28 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                if (modules is not null && modules.Any())
+                if (modules is null)
                 {
-                    Modules.AddRange(modules);
-                    
+                    throw new ExerciseException("The modules collection is null.");
+
                 }
-                else
+
+                if (modules.Count() > 4)
                 {
-                    throw new Exception("Could not add modules");
+                    throw new ExerciseException("An exercise can at most contain 4 modules.");
+                }
+
+                if (modules.Count() == 0)
+                {
+                    throw new ExerciseException("The module collection to add is empty.");
+                }
+
+                foreach (var module in modules)
+                {
+                    if (CanModuleBeAddedToExercise(module))
+                    {
+                        Modules.Add(module);
+                    }
                 }
             }
             catch (Exception)
@@ -86,21 +162,62 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
         }
 
-        public void DeleteModule(int moduleId)
+        private bool CanModuleBeAddedToExercise(Module module)
+        {
+            var numOfModules = Modules.Count();
+            var numberOfModulesAllowed = ExerciseLayout.GetNumberOfModulesAllowed(this.LayoutId);
+
+            if (numOfModules > numberOfModulesAllowed)
+            {
+                throw new ExerciseException("");
+            }
+
+            if (module.Position < 1 || module.Position > 4)
+            {
+                throw new ExerciseException($"The modules position '{module.Position}' is invalid. Allowed values are: 1-4.");
+            }
+
+            var result = Modules.FirstOrDefault(m => m.Position == module.Position);
+
+            if (result is not null)
+            {
+                throw new ExerciseException($"Module position '{module.Position}' is already assigned to another module.");
+            }
+
+            return true;
+        }
+
+        public void RemoveModuleById(int moduleId)
         {
             try
             {
-                Modules.Remove(GetModule(moduleId));
+                Modules.Remove(GetModuleById(moduleId));
             }
             catch (Exception)
             {
-                throw new NotImplementedException();
+                throw;
             }
         }
 
-        public Module GetModule(int moduleId)
+        public Module GetModuleById(int moduleId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var module = Modules.FirstOrDefault(m => m.Id == moduleId);
+
+                if (module is not null)
+                {
+                    return module;
+                }
+                else
+                {
+                    throw new ExerciseException("Could not find the module with the specified id.");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void AddSolution(Solution solution)
@@ -109,11 +226,11 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             {
                 if (solution is not null)
                 {
-                    Solution.Add(solution);
+                    Solutions.Add(solution);
                 }
                 else
                 {
-                    throw new Exception("Could not create solution");
+                    throw new ExerciseException("Could not create solution");
                 }
             }
             catch (Exception)
@@ -123,11 +240,11 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             }
         }
 
-        public void RemoveSolution(int solutionId)
+        public void RemoveSolutionById(int solutionId)
         {
             try
             {
-                Solution.Remove(GetSolution(solutionId));
+                Solutions.Remove(GetSolution(solutionId));
             }
             catch (Exception)
             {
@@ -139,14 +256,14 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Solution.Where(s => s.Id == solutionId).FirstOrDefault();
+                var result = Solutions.FirstOrDefault(s => s.Id == solutionId);
                 if (result is not null)
                 {
                     return result;
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new ExerciseException("Could not find a solution with the given solution id.");
                 }
             }
             catch (Exception)
@@ -166,41 +283,39 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not create submission");
+                    throw new ExerciseException("Could not create submission.");
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
-        public void RemoveSubmission(int submissionId)
+        public void RemoveSubmissionById(int submissionId)
         {
             try
             {
-                Submissions.Remove(GetSubmission(submissionId));
+                Submissions.Remove(GetSubmissionById(submissionId));
             }
             catch (Exception)
             {
-                throw new NotImplementedException();
+                throw new ExerciseException("Could not remove submission with the given submission id, as it does not exist in the submission list.");
             }
         }
 
-        public Submission GetSubmission(int submissionId)
+        public Submission GetSubmissionById(int submissionId)
         {
             try
             {
-                var result = Submissions.Where(s => s.Id == submissionId).FirstOrDefault();
+                var result = Submissions.FirstOrDefault(s => s.Id == submissionId);
                 if (result is not null)
                 {
                     return result;
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new ExerciseException("Could not find submission with the given submission id.");
                 }
             }
             catch (Exception)
