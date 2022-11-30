@@ -12,6 +12,7 @@ export const options = {
              {target : 1000, duration: '10s'},]
 }
 
+export const USERNAME = `${randomString(10)}`
 export const FIRSTNAME = "Load";
 export const LASTNAME = "Test";
 export const EMAIL = `test@LoadTest.com`; 
@@ -27,8 +28,7 @@ function randomString(length, charset = '') {
     return res;
   }
 
-export function setup () {
-    const USERNAME = `${randomString(10)}`
+export default () => {
     const res = http.post(`${BASE_URL}profiles`,JSON.stringify({
         "username": USERNAME,
         "password": PASSWORD,
@@ -37,13 +37,4 @@ export function setup () {
         "lastName": LASTNAME,
     }), BASE_HEADER);
     check(res, {'created user': (r) => r.status === 200});
-    return USERNAME
-}
-
-export default (userName) => {
-    const loginRes = http.post(`${BASE_URL}profiles/login`, JSON.stringify({
-        username: userName,
-        password: PASSWORD,
-    }), BASE_HEADER);
-    check(loginRes, { 'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200});
 }
