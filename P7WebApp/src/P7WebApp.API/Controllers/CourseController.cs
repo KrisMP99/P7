@@ -362,6 +362,7 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("exercise-groups/exercises/solution")]
         public async Task<IActionResult> CreateSolution(CreateSolutionCommand request)
@@ -410,7 +411,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/solutions/{solutionId}/update")]
-        public async Task<IActionResult> UpdateSoltuion(UpdateSolutionCommand request)
+        public async Task<IActionResult> UpdateSolution(UpdateSolutionCommand request)
         {
             try
             {

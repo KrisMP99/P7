@@ -1,6 +1,4 @@
-﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate;
-
-namespace P7WebApp.Application.Responses
+﻿namespace P7WebApp.Application.Responses
 {
     public class ExerciseGroupResponse
     {
@@ -12,7 +10,6 @@ namespace P7WebApp.Application.Responses
         public DateTime CreatedDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime BecomeVisibleAt { get; set; }
-        public IEnumerable<Exercise> Exercises { get; set; }
-        //public IEnumerable<ExerciseOverviewResponse> Exercises { get; set; }
+        public IEnumerable<ExerciseOverviewResponse> Exercises { get; set; }
     }
 }
