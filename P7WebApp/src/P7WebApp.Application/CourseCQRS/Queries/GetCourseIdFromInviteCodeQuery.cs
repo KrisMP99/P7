@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace P7WebApp.Application.CourseCQRS.Queries
 {
-    public class GetCourseFromInviteCodeQuery : IRequest<int>
+    public class GetCourseIdFromInviteCodeQuery : IRequest<int>
     {
-        public GetCourseFromInviteCodeQuery(int code)
+        public GetCourseIdFromInviteCodeQuery(int code)
         {
             Code = code;
         }
