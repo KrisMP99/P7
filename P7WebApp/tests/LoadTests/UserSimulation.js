@@ -88,19 +88,16 @@ export default (authToken) => {
                  {method: 'GET', url:`${BASE_URL}courses/1/exercise-groups/1/exercises/1`, body:null, params: requestHeaderConfig},
     ]
     
-    let nr = http.post(`${BASE_URL}profiles/login`, JSON.stringify({"username":"Test", password: PASSWORD}), requestHeaderConfig)
-    console.log("nr", nr.status)
-    check(nr, {'login': r => r.status === 200})
-
     const maxRequest = 10
     let numberOfRequests = Math.floor(Math.random() * maxRequest)
-    let numberOfParams = urlParams.length
+
     for (let i = 0; i < numberOfRequests; i++) {
-        let requestNumber = Math.floor(Math.random() * numberOfParams)
-        console.log(urlParams[requestNumber].url)
-        let res = http.batch([[urlParams[requestNumber].method, urlParams[requestNumber].url, urlParams[requestNumber].body, urlParams[requestNumber].params]])
-        console.log(res[0].status)
-        check(res[0], {'Check': r => r. status === 200})
+        let requestNumber = Math.floor(Math.random() * urlParams.length)
+        let res = http.batch([[urlParams[requestNumber].method, 
+                               urlParams[requestNumber].url, 
+                               urlParams[requestNumber].body, 
+                               urlParams[requestNumber].params]])
+        check(res[0], {'Simulation check': r => r. status === 200})
     }
     
 }
