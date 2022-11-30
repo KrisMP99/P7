@@ -17,7 +17,8 @@ namespace P7WebApp.Infrastructure.Identity.Services
         private readonly IAuthorizationService _authorizationService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, 
+        public IdentityService(
+            UserManager<ApplicationUser> userManager, 
             IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, 
             IAuthorizationService authorizationService,
             IUnitOfWork unitOfWork)
