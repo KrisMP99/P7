@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Duende.IdentityServer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Common.Models;
-using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Infrastructure.Identity.Services
 {
@@ -13,17 +15,19 @@ namespace P7WebApp.Infrastructure.Identity.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
 
-        public IdentityService(
-            UserManager<ApplicationUser> userManager, 
+        public IdentityService(UserManager<ApplicationUser> userManager, 
             IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, 
             IAuthorizationService authorizationService,
+            IHttpContextAccessor httpContextAccessor,
             IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
+            _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
         }
 
@@ -99,6 +103,11 @@ namespace P7WebApp.Infrastructure.Identity.Services
             var result = await _userManager.DeleteAsync(user);
 
             return result.ToApplicationResult();
+        }
+
+        public async Task SignOutAsync()
+        {
+            await _httpContextAccessor.HttpContext?.SignOutAsync(IdentityServerConstants.JwtRequestClientKey);
         }
     }
 }

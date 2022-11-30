@@ -9,5 +9,6 @@ namespace P7WebApp.Application.Common.Interfaces.Identity
         Task<bool> AuthorizeAsync(string userId, string policyName);
         Task<Result> CreateUserAsync(string firstName, string lastName, string username, string email, string password);
         Task<Result> DeleteUserAsync(string userId);
+        Task SignOutAsync();
     }
 }
