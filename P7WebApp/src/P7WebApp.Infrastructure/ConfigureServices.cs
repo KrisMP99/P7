@@ -48,13 +48,8 @@ namespace P7WebApp.Infrastructure
                 options.Password.RequiredUniqueChars = 1;
             });
 
-            //services.AddHttpContextAccessor();
-
             services
                 .AddAuthorization();
-
-            //services.AddIdentityServer()
-            //    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             byte[] key = Encoding.ASCII.GetBytes(configuration.GetSection("token").GetSection("secret").Value); // This should probably be retrieved some other way
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

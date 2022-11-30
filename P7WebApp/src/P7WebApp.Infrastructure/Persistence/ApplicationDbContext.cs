@@ -1,9 +1,6 @@
-﻿using Duende.IdentityServer.EntityFramework.Options;
-using MediatR;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
