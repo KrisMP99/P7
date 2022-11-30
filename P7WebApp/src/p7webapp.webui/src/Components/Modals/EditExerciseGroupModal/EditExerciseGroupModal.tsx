@@ -4,7 +4,7 @@ import '../../../App.css';
 import { ExerciseGroup } from '../../Course/CourseView';
 
 interface EditExerciseGroupModalProps {
-    updateExerciseGroup: (newExGroup: ExerciseGroup) => void;
+    updatedExerciseGroup: (newExGroup: ExerciseGroup) => void;
 }
 export interface ShowEditExerciseGroupModal {
     handleShow: (exerciseGroup: ExerciseGroup, index: number) => void;
@@ -32,7 +32,7 @@ export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, Edi
             <Form onSubmit={(e) => { 
                 e.preventDefault();
                 //WIP - POST TO EDIT EXERCISEGROUP
-                props.updateExerciseGroup(exGroup!);
+                props.updatedExerciseGroup(exGroup!);
                 handleClose();
             }}>
                 <Modal.Header closeButton>

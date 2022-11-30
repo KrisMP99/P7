@@ -1,21 +1,20 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Frontpage from './Components/Frontpage/Frontpage';
 import SignUp from './Components/SignUp/SignUp';
-import ExerciseBoard from './Components/ExerciseBoard/ExerciseBoard';
-import CreateExerciseModal, { LayoutType, ShowModal } from './Components/Modals/CreateExerciseModal/CreateExerciseModal';
 import Landingpage from './Components/Landingpage/Landingpage';
-import CourseView, { Exercise } from './Components/Course/CourseView';
+import CourseView from './Components/Course/CourseView';
 import PublicCourses from './Components/PublicCourses/PublicCourses';
+import ExerciseViewHandler from './Components/ExerciseViewHandler/ExerciseViewHandler';
 
 export function getApiRoot() {
     return 'https://localhost:7001/api/';
 }
 
 export interface User {
-    id: string;
+    id: number;
     firstname: string;
     lastname: string;
     email: string;
@@ -23,13 +22,11 @@ export interface User {
 }
 
 export default function App() {
-    const openCreateExerciseModalRef = useRef<ShowModal>(null);
     
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
-    const [boardLayout, setBoardLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const [user, setUser] = useState<User | null>(null);
-    const [newExerciseCreated, setNewExerciseCreated] = useState<Exercise | null>(null);
     const navigator = useNavigate();
+
 
     return (
         <div className='main-container'>
@@ -46,7 +43,6 @@ export default function App() {
                     <div className="space-from-navbar">
                         <Frontpage
                             loggedIn={(user: User) => {
-                                //WIP - SET TOKEN BEFORE THIS FUNCTION IS CALLED
                                 setLoggedIn(true);
                                 setUser(user);
                             }}
@@ -69,28 +65,16 @@ export default function App() {
                     <Route path="/course/:courseId" element={
                         <CourseView
                             user={user}
-                            openCreateExerciseModalRef={openCreateExerciseModalRef}
                         />
                     } />
-                    <Route path="/exercise/:id" element={
-                        <ExerciseBoard
-                            user={user}
-                            editMode={false}
-                            boardLayout={boardLayout}
-                            newExercise={newExerciseCreated}
-                        />
+                    <Route path="/exercise/:exerciseGroupId/:exerciseId/:isEdit" element={
+                        <ExerciseViewHandler user={user} />
                     } />
                     <Route path="/public-courses" element={
                         <PublicCourses />
                     } />
                 </>}
             </Routes>
-            {/* <Footer/> */}
-            <CreateExerciseModal ref={openCreateExerciseModalRef} created={(layout: LayoutType, exercise: Exercise) => {
-                setBoardLayout(layout);
-                setNewExerciseCreated(exercise);
-                navigator('/exercise');
-            }} />
         </div>
     );
 }

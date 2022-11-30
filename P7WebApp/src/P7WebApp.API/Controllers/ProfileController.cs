@@ -1,13 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using P7WebApp.Application.ProfileCQRS.Commands.SignIn;
-using P7WebApp.Application.ProfileCQRS.Commands;
+using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.ProfileCQRS.Commands.CreateProfile;
+using P7WebApp.Application.ProfileCQRS.Commands.SignInProfile;
 using P7WebApp.Application.ProfileCQRS.Commands.UpdateProfile;
 using P7WebApp.Application.ProfileCQRS.Queries;
-using P7WebApp.Application.CourseCQRS.Queries;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace P7WebApp.API.Controllers
 {
@@ -66,21 +65,7 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout([FromBody] LogoutCommand request)
-        {
-            try
-            {
-                var result = _mediator.Send(request);
-                return Ok("User was logged out");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
         //-----------------------ACCOUNT SETTINGS END-----------------------//
-
 
 
 

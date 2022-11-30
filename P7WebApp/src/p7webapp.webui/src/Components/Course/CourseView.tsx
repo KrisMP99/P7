@@ -12,6 +12,8 @@ import CreateExerciseGroupModal, { ShowCreateExerciseGroupModal } from '../Modal
 import { useNavigate, useParams } from 'react-router-dom';
 import internal from 'stream';
 import EditCourseModal, { ShowEditCourseModal } from '../Modals/EditCourseModal/EditCourseModal';
+import AttendeeOverview from '../AttendeeOverview/AttendeeOverview';
+import { ExerciseModule } from '../ExerciseBoard/ExerciseBoard';
 
 export interface ExerciseOverview {
     id: number;
@@ -45,6 +47,13 @@ export interface Exercise {
     exerciseGroupId: number;
     title: string;
     isVisible: boolean;
+    exerciseNumber: number;
+    layoutId: LayoutType;
+    startDate: Date | null;
+    endDate: Date | null;
+    visibleFrom: Date | null;
+    visibleTo: Date | null;
+    modules: ExerciseModule[];
 }
 
 export interface Course {
@@ -52,7 +61,7 @@ export interface Course {
     title: string;
     description: string;
     isPrivate: boolean;
-    createdById: string;
+    ownerId: number;
     ownerName: string | null;
     exerciseGroups: ExerciseGroup[];
     createdDate: Date | null;
@@ -62,13 +71,12 @@ export interface Course {
 
 export interface Attendee {
     courseId: number;
-    userId: string;
+    userId: number;
     roleId: number;
 }
 
 interface CourseProps {
     user: User;
-    openCreateExerciseModalRef: React.RefObject<ShowModal>;
 }
 
 export default function CourseView(props: CourseProps) {
@@ -106,7 +114,7 @@ export default function CourseView(props: CourseProps) {
 
     useEffect(()=> {
         if (course){
-            if (props.user.id === course?.createdById) {
+            if (props.user.id === course?.ownerId) {
                 setIsOwner(true);
             }
             else {
@@ -123,7 +131,7 @@ export default function CourseView(props: CourseProps) {
 
     useEffect(() => {
         setEditedCourse(course);
-    }, [course?.createdById, props.user.id, isOwner, course?.description, course?.isPrivate, course?.title]);
+    }, [course?.ownerId, props.user.id, isOwner, course?.description, course?.isPrivate, course?.title]);
 
     return isLoading ? 
         (<></>) :
@@ -236,7 +244,9 @@ export default function CourseView(props: CourseProps) {
                     <Tab eventKey={'exercises'} title={'Exercises'}>
                         <div className={'d-flex' + (isOwner ? '' : ' d-none')}>
                             <Button className={'create-btns'} onClick={() => {
-                                createExerciseGroupModalRef.current?.handleShow(course?.id!);
+                                if (course) {
+                                    createExerciseGroupModalRef.current?.handleShow(course.id, course.exerciseGroups.length);
+                                }
                             }}>
                                 <Plus />ExerciseGroup
                             </Button>
@@ -244,7 +254,6 @@ export default function CourseView(props: CourseProps) {
                         <ExerciseGroupsOverview
                             exerciseGroups={course ? course.exerciseGroups : []}
                             openDeleteExerciseModalRef={openDeleteExerciseModalRef}
-                            openCreateExerciseModalRef={props.openCreateExerciseModalRef}
                             isOwner={isOwner}
                             changedCourse={() => {
                                 if (courseId) {
@@ -256,7 +265,14 @@ export default function CourseView(props: CourseProps) {
                         />
                     </Tab>
                     <Tab eventKey={'members'} title={'Members'} tabClassName={!isOwner ? 'd-none' : ''}>
-                        <p>Member overview here.</p>
+                        <AttendeeOverview 
+                            attendees={course?.attendees ?? []} 
+                            reFetchCourse={() => {
+                                if (courseId) {
+                                    fetchCourse(courseId, (newCourse) => setCourse(newCourse));
+                                }
+                            }} 
+                        />
                     </Tab>
                     <Tab eventKey={'statistics'} title={'Statistics'} tabClassName={!isOwner ? 'd-none' : ''}>
                         <p>Statistics overview here.</p>
@@ -298,7 +314,7 @@ export default function CourseView(props: CourseProps) {
             }
             <CreateExerciseGroupModal
                 ref={createExerciseGroupModalRef}
-                updateExerciseGroups={() => {
+                updatedExerciseGroups={() => {
                     if (courseId)
                         fetchCourse(courseId, (data) => {
                             setCourse(data);
@@ -443,7 +459,7 @@ export async function fetchCourse(courseId: number, callback: (course: Course) =
                 }
                 return res.json();
             })
-            .then((course: Course) => {
+            .then((course) => {
                 callback(course);
             });
     } catch (error) {
