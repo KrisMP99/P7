@@ -15,7 +15,7 @@ export const options = {
     //          {target : 0, duration: '10s'},]
 }
 
-export const USERNAME = `${randomString(10)}`;
+export const USERNAME = "Test";
 export const FIRSTNAME = "Load";
 export const LASTNAME = "Test";
 export const EMAIL = `${USERNAME}@LoadTest.com`; 
@@ -33,7 +33,7 @@ function randomString(length, charset = '') {
 
 export function setup () {
     const res = http.post(`${BASE_URL}profiles`,JSON.stringify({
-        "username": USERNAME,
+        "username": "Test",
         "password": PASSWORD,
         "email": EMAIL,
         "firstName": FIRSTNAME,
@@ -60,17 +60,47 @@ export function setup () {
     const responses = http.batch([
         ['POST', `${BASE_URL}courses`, JSON.stringify({ title: "new1", description: "string", isPrivate: false,}), requestHeaderConfig],
         ['POST', `${BASE_URL}courses/exercise-group`, JSON.stringify({ courseId: 1, title: "new1", description: "string", exerciseGroupNumber: 1, isVisible: true, visibleFromData: "2022-11-30T11:09:33.510Z"}), requestHeaderConfig],
-        ['POST', `${BASE_URL}courses/exercise-group/exercises`, JSON.stringify({exerciseGroupId: 1, title: "new3", isVisible: false,
+        ['POST', `${BASE_URL}courses/exercise-groups/exercises`, JSON.stringify({exerciseGroupId: 1, title: "new3", isVisible: false,
                     exerciseNumber: 1, startDate:"2022-11-30T11:11:10.457Z", endDate: "2022-11-30T11:11:10.457Z", visibleFrom:"2022-11-30T11:11:10.457Z", visibleTo:"2022-11-30T11:11:10.457Z",
-                    layoutId:1,modules:[{description: "string", height:0, width:0, position: 1, type:"text"}]}), requestHeaderConfig],
+                    layoutId:1,modules:[{description: "string", height:0, width:0, position: 1, type:"text", title:"string", content:"content"}]}), requestHeaderConfig],
     ])
-    console.log(responses[0].status, responses[1].status, responses[2].status)
-    responses.forEach((x) => check(x, { 'setup' : r => r.status === 200 }))
-
 
     return authToken;
 }
 
-export default () => {
+export default (authToken) => {
+    const requestHeaderConfig = {
+        'headers' : {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type' : 'application/json',
+        }
+    }
+    
+    const urlParams = [{method: 'POST', url: `${BASE_URL}profiles`, body:JSON.stringify({"username": randomString(10),"password": PASSWORD,"email": EMAIL,"firstName": FIRSTNAME,"lastName": LASTNAME,}),params: requestHeaderConfig},
+                 {method: 'POST', url: `${BASE_URL}profiles/login`, body: JSON.stringify({"username":"Test", password: PASSWORD}), params: requestHeaderConfig},
+                 {method: 'GET', url:`${BASE_URL}courses/1`, body:null, params: requestHeaderConfig},
+                 {method: 'POST', url:`${BASE_URL}courses/exercise-group`, body:JSON.stringify({ courseId: 1, title: randomString(5), description: "string", exerciseGroupNumber: 1, isVisible: true, visibleFromData: "2022-11-30T11:09:33.510Z"}), params: requestHeaderConfig},
+                 {method: 'POST', url:`${BASE_URL}courses/exercise-groups/exercise`, body:JSON.stringify({exerciseGroupId: 1, title: "new3", isVisible: false,
+                 exerciseNumber: 1, startDate:"2022-11-30T11:11:10.457Z", endDate: "2022-11-30T11:11:10.457Z", visibleFrom:"2022-11-30T11:11:10.457Z", visibleTo:"2022-11-30T11:11:10.457Z",
+                 layoutId:1,modules:[{description: "string", height:0, width:0, position: 1, type:"text", title:"string", content:"content"}]}), 
+                 params: requestHeaderConfig},
+                 {method: 'GET', url:`${BASE_URL}courses/1/exercise-groups`, body:null, params: requestHeaderConfig},
+                 {method: 'GET', url:`${BASE_URL}courses/1/exercise-groups/1/exercises/1`, body:null, params: requestHeaderConfig},
+    ]
+    
+    let nr = http.post(`${BASE_URL}profiles/login`, JSON.stringify({"username":"Test", password: PASSWORD}), requestHeaderConfig)
+    console.log("nr", nr.status)
+    check(nr, {'login': r => r.status === 200})
 
+    const maxRequest = 10
+    let numberOfRequests = Math.floor(Math.random() * maxRequest)
+    let numberOfParams = urlParams.length
+    for (let i = 0; i < numberOfRequests; i++) {
+        let requestNumber = Math.floor(Math.random() * numberOfParams)
+        console.log(urlParams[requestNumber].url)
+        let res = http.batch([[urlParams[requestNumber].method, urlParams[requestNumber].url, urlParams[requestNumber].body, urlParams[requestNumber].params]])
+        console.log(res[0].status)
+        check(res[0], {'Check': r => r. status === 200})
+    }
+    
 }
