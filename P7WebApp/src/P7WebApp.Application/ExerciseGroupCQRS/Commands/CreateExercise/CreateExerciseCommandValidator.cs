@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
 {
@@ -12,17 +7,17 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
         public CreateExerciseCommandValidator()
         {
             RuleFor(cec => cec.ExerciseGroupId)
-                .NotEmpty().WithMessage("Exercise group id must be provided.")
-                .NotNull().WithMessage("Exercise group id cannot be null.")
-                .GreaterThan(0).WithMessage("Exercise group id cannot be negative.");
-
+                .NotNull().WithMessage("Exercise group id must be not be null.")
+                .GreaterThan(0).WithMessage("Exercise group id cannot.");
+            RuleFor(cec => cec.IsVisible)
+                .NotNull().WithMessage("Must be specified if the exercise is visible.");
             RuleFor(cec => cec.Title)
-                .NotEmpty().WithMessage("Title is required.")
-                .NotNull().WithMessage("Title cannot be null.")
-                .MaximumLength(200).WithMessage("Title cannot exceed 200 characters.");
-
+                .NotNull().WithMessage("The title cannot be null.")
+                .NotEmpty().WithMessage("Title cannot be empty.")
+                .MaximumLength(200).WithMessage("Title cannot be greater than 200 characters.");
             RuleFor(cec => cec.ExerciseNumber)
-                .GreaterThan(0).WithMessage("Exercise number cannot be negative.");
+                .NotNull().WithMessage("Exercise number cannot be null.")
+                .GreaterThan(0).WithMessage("It must be specified what exercise number the exercise has.");
         }
     }
 }

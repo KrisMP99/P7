@@ -1,6 +1,7 @@
 ﻿using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Common;
 using P7WebApp.Domain.Common.Interfaces;
+using P7WebApp.Domain.Exceptions;
 
 namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
 {
@@ -26,7 +27,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
         public DateTime LastModifiedDate { get; private set; }
         public bool IsVisible { get; private set; }
         public DateTime? VisibleFromDate { get; private set; }
-        public List<Exercise> Exercises { get; private set; }
+        public List<Exercise> Exercises { get; private set; } = new List<Exercise>();
 
         public Exercise GetExercise(int exerciseId)
         {
@@ -40,7 +41,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
                 }
                 else
                 {
-                    throw new Exception("Could not find an exercise with the specified id");
+                    throw new ExerciseGroupException("Could not find an exercise with the specified id");
                 }
             }
             catch (Exception)
@@ -49,16 +50,16 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             }
         }
 
-        public IEnumerable<Exercise> GetAllExercises()
+        public List<Exercise> GetAllExercises()
         {
             return Exercises;
         }
 
         public void EditInformation(string newTitle, string newDescription, int newExerciseGroupNumber, bool isVisible, DateTime newBecomeVisibleAt)
         {
-            Title = String.IsNullOrEmpty(newTitle) ? throw new ArgumentNullException("Title has not been set.") : newTitle;
-            Description = String.IsNullOrEmpty(newDescription) ? throw new ArgumentNullException("Description has not been set.") : newDescription;
-            ExerciseGroupNumber = ExerciseGroupNumber < 0 ? throw new ArgumentOutOfRangeException("Exercisegroup number cannot be negative.") : newExerciseGroupNumber;
+            Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseGroupException("Title has not been set.") : newTitle;
+            Description = String.IsNullOrEmpty(newDescription) ? throw new ExerciseGroupException("Description has not been set.") : newDescription;
+            ExerciseGroupNumber = newExerciseGroupNumber < 0 ? throw new ExerciseGroupException("Exercisegroup number cannot be negative.") : newExerciseGroupNumber;
             IsVisible = isVisible;
             VisibleFromDate = newBecomeVisibleAt;
             LastModifiedDate = DateTime.Now;
@@ -70,9 +71,10 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             {
                 if(newExercise == null)
                 {
-                    throw new Exception("Could not add exercise (Exercise is null)");
+                    throw new ExerciseGroupException("Could not add exercise (Exercise is null)");
                 } 
-                else
+
+                if(CheckExerciseNumberIsOk(newExercise))
                 {
                     Exercises.Add(newExercise);
                 }
@@ -81,6 +83,24 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             {
                 throw;
             }
+        }
+
+        // Checks if the exercise number is correct, i.e., the order of the exercises is correct
+        private bool CheckExerciseNumberIsOk(Exercise newExercise)
+        {
+            if (newExercise.ExerciseNumber < 0)
+            {
+                throw new ExerciseGroupException("The exercise number cannot be less than 0.");
+            }
+
+            var result = Exercises.Find(e => e.ExerciseNumber == newExercise.ExerciseNumber);
+
+            if (result is not null)
+            {
+                throw new ExerciseGroupException($"An exercise with exercise number {newExercise.ExerciseNumber} already exists.");
+            }
+
+            return true;
         }
 
         public void RemoveExerciseById(int exerciseId)

@@ -24,7 +24,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
             try
             {
                 var exercise = await _unitOfWork.ExerciseRepository.GetExerciseWithSubmissionsById(request.SubmissionId);
-                exercise.RemoveSubmission(request.SubmissionId);
+                exercise.RemoveSubmissionById(request.SubmissionId);
 
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.CourseCQRS.Commands;
 
@@ -20,15 +21,16 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.CourseId);
+                var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId);
                 if (course is not null)
                 {
-                    course.RemoveAttendee(_currentUserService.UserId);
-                    await _unitOfWork.CommitChangesAsync(cancellationToken);
-                    return 1;
+                    course.RemoveAttendeeByProfileId(profile.Id);
+                    int affectedRows = await _unitOfWork.CommitChangesAsync(cancellationToken);
+                    return affectedRows;
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new NotFoundException("Could not find course");
                 }
             }
             catch (Exception)

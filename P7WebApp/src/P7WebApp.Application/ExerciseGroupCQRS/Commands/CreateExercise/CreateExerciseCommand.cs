@@ -1,17 +1,11 @@
 ﻿using MediatR;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module;
 
 namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
 {
     public class CreateExerciseCommand : IRequest<int>
     {
-        public CreateExerciseCommand(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId)
+        public CreateExerciseCommand(int exerciseGroupId, string title, bool isVisible, int exerciseNumber, DateTime? startDate, DateTime? endDate, DateTime? visibleFrom, DateTime? visibleTo, int layoutId, List<CreateModuleCommand> modules)
         {
             ExerciseGroupId = exerciseGroupId;
             Title = title;
@@ -22,7 +16,10 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
             VisibleFrom = visibleFrom;
             VisibleTo = visibleTo;
             LayoutId = layoutId;
+            Modules = modules;
+
         }
+
         public int ExerciseGroupId { get; }
         public string Title { get; }
         public bool IsVisible { get; }
@@ -32,8 +29,6 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise
         public DateTime? VisibleFrom { get; }
         public DateTime? VisibleTo { get; }
         public int LayoutId { get; }
+        public List<CreateModuleCommand>? Modules { get; }
     }
-    //public int Layout { get; set; }
-    //public IEnumerable<Module>? Modules { get; set; }
-    //public IEnumerable<Solution>? Solutions { get; set; 
 }

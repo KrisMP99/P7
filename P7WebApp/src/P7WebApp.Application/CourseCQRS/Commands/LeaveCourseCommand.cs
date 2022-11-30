@@ -9,6 +9,6 @@ namespace P7WebApp.Application.CourseCQRS.Commands
             CourseId = courseId;
         }
 
-        public int CourseId { get; set; }
+        public int CourseId { get; }
     }
 }

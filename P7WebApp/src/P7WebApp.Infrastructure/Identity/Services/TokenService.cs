@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using P7WebApp.Application.Common.Interfaces.Identity;
-using P7WebApp.Application.Responses.Account;
+using P7WebApp.Application.Responses.Profile;
 using P7WebApp.Infrastructure.Common.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Commands;
@@ -22,8 +23,16 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                var attendee = new Attendee(_currentUserService.UserId, request.CourseId, 1);
-                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendees(request.CourseId);
+                var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId);
+
+                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendeesAndDefaultCourseRoles(request.CourseId);
+
+                var defaultRole = course.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault();
+
+                var attendee = new Attendee(
+                    courseId: request.CourseId,
+                    courseRoleId: defaultRole.Id,
+                    profileId: profile.Id);
 
                 course.AddAttendee(attendee);
 

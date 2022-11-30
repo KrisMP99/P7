@@ -70,12 +70,9 @@ export interface Course {
 }
 
 export interface Attendee {
+    courseId: number;
     userId: string;
     roleId: number;
-    roleName: string;
-    firstname: string;
-    lastname: string;
-    username: string;
 }
 
 interface CourseProps {
@@ -269,8 +266,12 @@ export default function CourseView(props: CourseProps) {
                     </Tab>
                     <Tab eventKey={'members'} title={'Members'} tabClassName={!isOwner ? 'd-none' : ''}>
                         <AttendeeOverview 
-                            attendees={course ? course.attendees : []}
-                            reFetchCourse={() => fetchCourse(courseId!, (newCourse) => setCourse(newCourse)) }
+                            attendees={course?.attendees ?? []} 
+                            reFetchCourse={() => {
+                                if (courseId) {
+                                    fetchCourse(courseId, (newCourse) => setCourse(newCourse));
+                                }
+                            }} 
                         />
                     </Tab>
                     <Tab eventKey={'statistics'} title={'Statistics'} tabClassName={!isOwner ? 'd-none' : ''}>

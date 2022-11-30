@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
-using System.Reflection.Metadata;
 
 
 namespace P7WebApp.Infrastructure.Repositories
@@ -75,22 +73,41 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId)
-                                                   .Include(c => c.ExerciseGroups)
-                                                   .Include(c => c.InviteCode)
-                                                   .Include(c => c.Attendees)
-                                                   .FirstOrDefaultAsync();
-                //string sql = $"SELECT * FROM Courses JOIN ExerciseGroups ON Courses.Id = ExerciseGroups.CourseId JOIN InviteCode ON Course.Id = InviteCode.CourseId JOIN Attendees ON Course.Id = Attendees.CourseId JOIN AspNetUsers ON Attendees.UserId = AspNetUsers.Id";
-                //var course = _context.Courses.FromSql($"SELECT * FROM public.\"Courses\" as c JOIN public.\"ExerciseGroups\" as eg ON c.\"Id\" = eg.\"CourseId\" JOIN public.\"InviteCode\" as ic ON c.\"Id\" = ic.\"CourseId\" JOIN public.\"Attendees\" as a ON c.\"Id\" = a.\"CourseId\" JOIN public.\"AspNetUsers\" as u ON a.\"UserId\" = u.\"Id\"").ToList();
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.ExerciseGroups)
+                    .FirstOrDefaultAsync();
 
-                if (course != null)
+                if (course is null)
                 {
-                    return course;
+                    throw new Exception("Could not get course with exercise groups.");
                 }
-                else
+
+                return course;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Course> GetCourseWithExerciseGroupsAttendeesAndInviteCode(int courseId)
+        {
+            try
+            {
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.ExerciseGroups)
+                    .Include(c => c.InviteCode)
+                    .Include(c => c.Attendees)
+                    .FirstOrDefaultAsync();
+               
+                if (course is null)
                 {
                     throw new Exception();
                 }
+
+                return course;
             }
             catch (Exception)
             {
@@ -98,12 +115,13 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        // TODO: Implement correctly
         public async Task<IEnumerable<Course>> GetAttendedCourses(string userId)
         {
             try
             {
-                var courses = _context.Courses.Include(c => c.Attendees).Where(c => c.Attendees.Any(a => a.UserId == userId));
+                var courses = _context.Courses
+                    .Include(c => c.Attendees)
+                    .Where(c => c.Attendees.Any(a => a.Profile.UserId == userId));
 
                 return courses;
             }
@@ -119,17 +137,16 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var exerciseGroups = _context.ExerciseGroups.Where(e => e.CourseId == courseId).Include(e => e.Exercises);
+                var exerciseGroups = _context.ExerciseGroups
+                    .Where(e => e.CourseId == courseId)
+                    .Include(e => e.Exercises);
 
-                if (exerciseGroups != null)
-                {
-                    return exerciseGroups.AsEnumerable();
-
-                } 
-                else
+                if (exerciseGroups is null)
                 {
                     throw new Exception();
                 }
+
+                return exerciseGroups.AsEnumerable();
             }
             catch (Exception)
             {
@@ -145,14 +162,12 @@ namespace P7WebApp.Infrastructure.Repositories
 
             try
             {
-                if (courses != null)
-                {
-                    return courses;
-                }
-                else
+                if (courses is null)
                 {
                     throw new Exception();
                 }
+
+                return courses;
             }
             catch (Exception)
             {
@@ -164,7 +179,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var courses = _context.Courses.Where(c => c.CreatedById == userId);
+                var courses = _context.Courses.Where(c => c.Owner.UserId == userId);
 
                 return courses.AsEnumerable();
             }
@@ -210,20 +225,23 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        public async Task<Course> GetCourseWithAttendees(int courseId)
+        public async Task<Course> GetCourseWithAttendeesAndDefaultCourseRoles(int courseId)
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.Id == courseId).Include(c => c.Attendees).FirstOrDefaultAsync();
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.Attendees)
+                    .Include(c => c.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault())
+                        .ThenInclude(role => role.Permission)
+                    .FirstOrDefaultAsync();
 
-                if (course != null)
+                if (course is null)
                 {
-                    return course;
+                    throw new Exception("Could not find course with default role and permission.");
                 }
-                else
-                {
-                    throw new Exception();
-                }
+
+                return course;
             }
             catch (Exception)
             {
