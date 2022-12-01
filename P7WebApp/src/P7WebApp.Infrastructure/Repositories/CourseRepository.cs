@@ -29,15 +29,15 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw new CourseRepositoryException($"Could not create course: {course.Title}.");
             }
         }
-        public async Task<int> GetCourseFromInviteCode(int code)
+        public async Task<int> GetCourseIdFromInviteCode(int code)
         {
             try
             {
-                var course = await _context.Courses.Where(c => c.InviteCode.Code == code).FirstOrDefaultAsync();
+                int courseId = await _context.Courses.Where(c => c.InviteCode.Code == code).Select(c => c.Id).FirstOrDefaultAsync();
 
-                if (course != null)
+                if (courseId > 0)
                 {
-                    return course.Id;
+                    return courseId;
                 }
                 else
                 {
@@ -88,6 +88,30 @@ namespace P7WebApp.Infrastructure.Repositories
                 return course;
             }
             catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Course> GetCourseWithExerciseGroupsAndExercisesAndAttendess(int courseId)
+        {
+            try
+            {
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.Attendees)
+                    .Include(c => c.ExerciseGroups)
+                    .ThenInclude(eg => eg.Exercises)
+                    .FirstOrDefaultAsync();
+
+                if (course is null)
+                {
+                    throw new Exception("Could not get course with exercise groups.");
+                }
+
+                return course;
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -233,7 +257,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 var course = await _context.Courses
                     .Where(c => c.Id == courseId)
                     .Include(c => c.Attendees)
-                    .Include(c => c.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault())
+                    .Include(c => c.CourseRoles.Where(role => role.IsDefaultRole == true).Take(1))
                         .ThenInclude(role => role.Permission)
                     .FirstOrDefaultAsync();
 

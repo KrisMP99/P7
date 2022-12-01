@@ -47,15 +47,12 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
         id: 0,
         title: '',
         isVisible: true,
-        exerciseGroupId: 0,
         exerciseNumber: 1,
         startDate: null,
         endDate: null,
         visibleFrom: null,
         visibleTo: null,
-        createdDate: null,
-        lastModifiedDate: null,
-        layoutId: LayoutType.SINGLE
+        createdDate: null
     });
     const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
 
@@ -67,7 +64,7 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
         () => ({
             handleShow(exerciseGroupId: number) {
                 setShow(true);
-                setExercise({...exercise, exerciseGroupId: exerciseGroupId});
+                setExercise({...exercise});
             }
         }),
     );
@@ -75,7 +72,7 @@ export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExe
     useEffect((() => {
         setExercise(e => ({ ...e, title: ''}));
         setLayout(LayoutType.SINGLE);
-    }), [exercise.exerciseGroupId, show]);
+    }), [show]);
 
     const handleChooseLayout = (type: LayoutType, left: number, right: number) => {
         setLayout(type);

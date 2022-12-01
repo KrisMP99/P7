@@ -7,8 +7,9 @@ namespace P7WebApp.Domain.Repositories
     {
         Task CreateCourse(Course course);
         Task<int> DeleteCourse(int courseId);
-        Task<int> GetCourseFromInviteCode(int code);
+        Task<int> GetCourseIdFromInviteCode(int code);
         Task<Course> GetCourseWithExerciseGroups(int courseId);
+        Task<Course> GetCourseWithExerciseGroupsAndExercisesAndAttendess(int courseId);
         Task<Course> GetCourseWithAttendeesAndDefaultCourseRoles(int courseId);
         Task<Course> GetCourseWithExerciseGroupsAttendeesAndInviteCode(int courseId);
         Task<IEnumerable<Course>> GetListOfCourses();

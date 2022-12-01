@@ -75,9 +75,9 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                int? result = await _mediator.Send(new GetCourseFromInviteCodeQuery(code));
+                int result = await _mediator.Send(new GetCourseIdFromInviteCodeQuery(code));
 
-                if (result is null)
+                if (result < 0)
                 {
                     return NotFound("Could not find a course from the specified invite code");
                 }
@@ -92,11 +92,11 @@ namespace P7WebApp.API.Controllers
 
         [HttpPost]
         [Route("enroll")]
-        public async Task<IActionResult> EnrollToCourse([FromBody] EnrollToCourseCommand request)
+        public async Task<IActionResult> EnrollToCourse([FromBody]EnrollToCourseCommand request)
         {
             try
             {
-                var result = await _mediator.Send(new EnrollToCourseCommand(request.CourseId));
+                var result = await _mediator.Send(request);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -311,7 +311,7 @@ namespace P7WebApp.API.Controllers
                 var result = await _mediator.Send(request);
                 if (result != 0)
                 {
-                    return Ok(result);
+                    return Ok();
                 }
                 else
                 {
@@ -362,6 +362,7 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("exercise-groups/exercises/solution")]
         public async Task<IActionResult> CreateSolution(CreateSolutionCommand request)
@@ -410,7 +411,7 @@ namespace P7WebApp.API.Controllers
         }
 
         [Route("{id}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}/solutions/{solutionId}/update")]
-        public async Task<IActionResult> UpdateSoltuion(UpdateSolutionCommand request)
+        public async Task<IActionResult> UpdateSolution(UpdateSolutionCommand request)
         {
             try
             {

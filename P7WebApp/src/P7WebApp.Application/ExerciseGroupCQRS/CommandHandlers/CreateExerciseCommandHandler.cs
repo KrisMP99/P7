@@ -20,17 +20,19 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
         {
             try
             {
-                var exercise = ExerciseMapper.Mapper.Map<Exercise>(request);
+                var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
 
-                if (exercise is null)
+                if (exerciseGroup is null)
                 {
-                    throw new Exception("Could not map CreateExerciseCommand to Exercise");
+                    throw new NotFoundException("Could not find an exercise group with the specified Id");
                 }
                 else
                 {
-                    var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
+                    request.ExerciseNumber = exerciseGroup.Exercises.Count + 1;
 
-                    if (exerciseGroup is null)
+                    var exercise = ExerciseMapper.Mapper.Map<Exercise>(request);
+
+                    if (exercise is null)
                     {
                         throw new NotFoundException($"Could not find an exercise group with Id: {request.ExerciseGroupId}.");
                     }

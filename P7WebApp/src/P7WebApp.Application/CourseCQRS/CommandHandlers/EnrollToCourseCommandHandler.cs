@@ -27,6 +27,13 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 
                 var course = await _unitOfWork.CourseRepository.GetCourseWithAttendeesAndDefaultCourseRoles(request.CourseId);
 
+                // Check if the user is already an attendee
+                var result = course.Attendees.Where(a => a.ProfileId == profile.Id);
+                if (result.Any())
+                {
+                    throw new Exception("The user already attends this course.");
+                }
+
                 var defaultRole = course.CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault();
 
                 var attendee = new Attendee(
