@@ -36,7 +36,6 @@ export function setup () {
         "firstName": FIRSTNAME,
         "lastName": LASTNAME,
     }), BASE_HEADER);
-    console.log(res.status, res.body)
     check(res, {'created user': (r) => r.status === 200});
     return USERNAME
 }
@@ -47,7 +46,6 @@ export default (userName) => {
         password: PASSWORD,
     }), BASE_HEADER);
     if (loginRes.status !== 200){
-        console.log(loginRes.status, loginRes.body)
     }
     check(loginRes, { 'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200});
 }
