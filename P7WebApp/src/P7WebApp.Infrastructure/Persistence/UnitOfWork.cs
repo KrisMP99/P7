@@ -8,6 +8,7 @@ namespace P7WebApp.Infrastructure.Persistence
     {
 
         private readonly IApplicationDbContext _context;
+        private bool _disposed = false;
 
         public UnitOfWork(IApplicationDbContext context)
         {
@@ -34,5 +35,23 @@ namespace P7WebApp.Infrastructure.Persistence
                 throw;
             }
         }
+
+        //protected virtual async ValueTask DisposeAsync(bool disposing) 
+        //{
+        //    if(!this._disposed)
+        //    {
+        //        if(disposing)
+        //        {
+        //            await _context.DisposeAsync();
+        //        }
+        //    }
+        //    this._disposed= true;
+        //}
+
+        //public async ValueTask DisposeAsync()
+        //{
+        //    await DisposeAsync(true);
+        //    GC.SuppressFinalize(this);
+        //}
     }
 }

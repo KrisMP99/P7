@@ -1,10 +1,7 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Commands.CreateCourse;
-using P7WebApp.Domain.Aggregates.CourseAggregate;
-using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {

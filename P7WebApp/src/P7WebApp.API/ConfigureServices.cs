@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Logging;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using P7WebApp.API.Services;
@@ -11,6 +12,8 @@ namespace P7WebApp.API
     {
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
+
+            IdentityModelEventSource.ShowPII = true;
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddSingleton<ICurrentUserService, CurrentUserService>();

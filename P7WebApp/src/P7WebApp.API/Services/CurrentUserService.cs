@@ -1,5 +1,4 @@
 ﻿using P7WebApp.Application.Common.Interfaces;
-using System.Security.Claims;
 
 namespace P7WebApp.API.Services
 {

@@ -9,8 +9,11 @@ import CourseView from './Components/Course/CourseView';
 import PublicCourses from './Components/PublicCourses/PublicCourses';
 import ExerciseViewHandler from './Components/ExerciseViewHandler/ExerciseViewHandler';
 
+const ServerUrl = "http://130.225.39.193/api/";
+const LocalHost = "https://localhost:7001/api/"
+
 export function getApiRoot() {
-    return 'https://localhost:7001/api/';
+    return ServerUrl;
 }
 
 export interface User {
