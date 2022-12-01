@@ -22,7 +22,8 @@ namespace P7WebApp.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                    .EnableRetryOnFailure()));
 
             services.AddTransient<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 

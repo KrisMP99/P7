@@ -34,7 +34,6 @@ services:
     image: kpede19/p7:p7webappui-prod
     env_file:
       - .env
-    container_name: p7webapp_ui_PROD
     build:
       context: ../
       dockerfile: ./p7webapp.webui/Dockerfile
@@ -61,7 +60,6 @@ services:
 
   postgres-PROD:
     image: kpede19/p7:postgres
-    container_name: postgres_db_PROD
     restart: always
     env_file: .env
     ports:
