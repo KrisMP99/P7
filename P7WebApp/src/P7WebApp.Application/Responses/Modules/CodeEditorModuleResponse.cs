@@ -2,6 +2,7 @@
 {
     public class CodeEditorModuleResponse : ModuleResponse
     {
+        public string Type { get; set; } = "code";
         public string Code { get; set; }
     }
 }

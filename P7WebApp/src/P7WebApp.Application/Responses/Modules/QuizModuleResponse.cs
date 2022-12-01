@@ -2,5 +2,6 @@
 {
     public class QuizModuleResponse : ModuleResponse
     {
+        public string Type { get; set; } = "quiz";
     }
 }
