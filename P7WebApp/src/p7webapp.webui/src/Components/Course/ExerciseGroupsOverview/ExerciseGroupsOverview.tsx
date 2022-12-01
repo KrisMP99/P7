@@ -21,14 +21,13 @@ interface ExerciseOverviewProps {
 export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
     const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const [groupElements, setGroupElements] = useState<JSX.Element[]>([]);
-    const [deleteExerciseGroupId, setDeleteExerciseGroupId] = useState<number | null>(null);
 
     const navigate = useNavigate();
     
     const openEditExerciseGroupModalRef = useRef<ShowEditExerciseGroupModal>(null);
 
     useEffect(() => {
-        setGroupElements(makeExerciseGroupElements(navigate, props.exerciseGroups, props.isOwner, openEditExerciseGroupModalRef, openDeleteExerciseModalRef));
+        setGroupElements(makeExerciseGroupElements(navigate, props.exerciseGroups, props.isOwner, openEditExerciseGroupModalRef, openDeleteExerciseModalRef, props.courseId));
     }, [props.exerciseGroups.length, props.exerciseGroups]);
 
     return (
@@ -68,7 +67,8 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
                                     exercisegroups: ExerciseGroup[], 
                                     isOwner: boolean,
                                     editExerciseGroupModalRef: React.RefObject<ShowEditExerciseGroupModal>,
-                                    deleteExerciseModalRef: React.RefObject<ShowDeleteConfirmModal>
+                                    deleteExerciseModalRef: React.RefObject<ShowDeleteConfirmModal>,
+                                    courseId: number
                                     ): JSX.Element[] {
     let exerciseGroupElements: JSX.Element[] = [];
     if (exercisegroups.length <= 0) return [];
@@ -82,14 +82,14 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
             return (
                 <div key={id} className={'exercise-container d-flex ' + (!exercise.isVisible && 'is-invisible')} onClick={(e) => {
                     e.stopPropagation();
-                    navigate('/exercise/' + exGroup.id + '/' + exercise.id + '/0');
+                    navigate('/course/' + courseId + '/exercise-group/' + exGroup.id + '/exercise/' + exercise.id + '/0')
                 }}>
                     <div className='exercise-title'>{exercise.title}</div>
                     {isOwner &&
                         <div className={'exercise-owner-container'}>
                             <Button size='sm' className='btn-3' onClick={(e) => {
                                 e.stopPropagation();
-                                navigate('/exercise/' + exGroup.id + '/' + exercise.id + '/0');
+                                navigate('/course/' + courseId + '/exercise-group/' + exGroup.id + '/exercise/' + exercise.id + '/0')
                             }}>
                                 <Pencil />
                             </Button>
@@ -134,7 +134,7 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
                 <AccordionBody className='exercise-container-box'>
                     {isOwner &&
                     <Button className={'create-btns'} onClick={() => {
-                        navigate('/exercise/' + exGroup.id + '/-1/1');
+                        navigate('/course/' + courseId + '/exercise-group/' + exGroup.id + '/exercise/-1/0');
                     }}>
                         <Plus /> Exercise
                     </Button>}

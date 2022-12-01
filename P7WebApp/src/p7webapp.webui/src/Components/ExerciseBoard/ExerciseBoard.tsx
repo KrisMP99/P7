@@ -11,7 +11,7 @@ import { LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerc
 import EmptyModule from '../Modules/EmptyModule/EmptyModule';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import './ExerciseBoard.css';
-import { fetchExercise } from './ExerciseView';
+import { fetchExercise, getModuleFromType } from './ExerciseView';
 
 export interface TextModule {
     title: string;
@@ -36,6 +36,7 @@ export interface ExerciseModule {
 }
 
 interface ExerciseBoardProps {
+    courseId: number;
     exerciseId: number;
     exerciseGroupId: number;
     isNewExercise: boolean;
@@ -51,7 +52,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
 
     useEffect(() => {
         if (props.exerciseId >= 1) {
-            fetchExercise(props.exerciseId, (newExercise) => setExercise(newExercise));
+            fetchExercise(props.exerciseId, props.exerciseGroupId, props.courseId, (newExercise) => setExercise(newExercise));
         }
     }, [props.exerciseId]);
     useEffect(() => {
@@ -98,35 +99,6 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
         setExercise({...exercise, modules: tempModules.sort((a, b) => a.position - b.position)});
     }
 
-    const getModuleFromType = (type: ModuleType, position: number, content: null | TextModule | CodeModule): React.ReactNode => {
-        switch (type) {
-            case ModuleType.EMPTY:
-                return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
-            case ModuleType.EXERCISE_DESCRIPTION:
-                const moduleContent: TextModule | null = content ? content as TextModule : null;
-                return (
-                    <ExerciseDescriptionModule 
-                        changeModuleModalRef={changeModuleModalRef} 
-                        position={position} 
-                        editMode={true} 
-                        title={moduleContent?.title ?? ''} 
-                        body={moduleContent?.body ?? ''} 
-                        changedContent={(position: number, content: TextModule) => {
-                            let mods = exercise.modules.map((m) => {
-                                if (m.position === position) {
-                                    m.content = { title: content.title, body: content.body };
-                                }
-                                return m;
-                            });
-                            setExercise({...exercise, modules: mods});
-                        }}
-                    />
-                );
-            default:
-                return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
-        };
-    }
-
     let columns: JSX.Element[] = []
     let colElements = [];
     if (exercise.modules.length > 0) {
@@ -134,7 +106,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             let temp = exercise.modules.find((val) => val.position === i+1);
             if (temp !== undefined) {
                 colElements.push((<Allotment.Pane key={i}>
-                    {getModuleFromType(temp.type, temp.position, temp.content)}
+                    {getModuleFromType(temp, changeModuleModalRef, exercise, (newExercise) => setExercise(newExercise))}
                 </Allotment.Pane>));
             }
             if ((i === 1  && exercise.modules.find((val) => val.position>2)) || i === 3) {

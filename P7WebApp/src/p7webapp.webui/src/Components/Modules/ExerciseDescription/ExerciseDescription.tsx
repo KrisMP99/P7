@@ -6,7 +6,7 @@ import ModuleActionBar from '../ModuleActionBar/ModuleActionBar';
 import './ExerciseDescription.css';
 
 interface ExerciseDescriptionProps {
-    changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef>;
+    changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef> | null;
     position: number;
     editMode: boolean;
     title: string;
@@ -33,7 +33,7 @@ export default function ExerciseDescriptionModule(props: ExerciseDescriptionProp
         <>
             <div id='exercise-description-container' className='module-container'>
                 {<ModuleActionBar 
-                    changeModule={()=>props.changeModuleModalRef.current?.handleShow(ModuleType.EXERCISE_DESCRIPTION, props.position)}
+                    changeModule={()=>props.changeModuleModalRef?.current?.handleShow(ModuleType.EXERCISE_DESCRIPTION, props.position)}
                     changeEditMode={()=>{}}
                 />}
                 {/* <button onClick={()=>setEditMode(!editMode)}>Edit</button> */}
