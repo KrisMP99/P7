@@ -20,8 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EBA2B3D9-D5F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E5B2FA1D-5B00-47B7-BAE0-99E5E7144738}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P7WebApp.Domain.Tests", "src\tests\P7WebApp.Domain.Tests\P7WebApp.Domain.Tests.csproj", "{2B6153D3-83F5-4233-BB73-51AFC7AE6C3C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

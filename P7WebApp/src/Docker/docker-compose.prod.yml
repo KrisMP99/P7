@@ -6,7 +6,7 @@ networks:
 
 services:
   p7webapp_api-PROD:
-    image: p7webappapi-prod
+    image: kpede19/p7:p7webappapi-prod
     environment:
       ASPNETCORE_ENVIRONMENT: production
     build:
@@ -31,7 +31,7 @@ services:
         delay: 0s
 
   p7webapp_ui-PROD:
-    image: p7webappui-prod
+    image: kpede19/p7:p7webappui-prod
     env_file:
       - .env
     container_name: p7webapp_ui_PROD
@@ -43,6 +43,8 @@ services:
       - type: bind
         source: ../p7webapp.webui
         target: /app
+    depends_on:
+      - p7webapp_api-PROD
     ports:
       - "80:80"
       - "443:443"
@@ -60,17 +62,13 @@ services:
         delay: 0s
 
   postgres-PROD:
-    image: postgres:14.5
+    image: kpede19/p7:postgres
     container_name: postgres_db_PROD
     restart: always
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_USER=${TARGET_USER}
-      - POSTGRES_PASSWORD=${TARGET_PASSWORD}
+    env_file: .env
     ports:
       - "5431:5431"
     volumes:
-      - /var/lib/docker/volumes/postgres/_data:/var/lib/postgresql/data
+      - C:\dev\pgdata:/var/lib/postgresql/data
     networks:
       - backend

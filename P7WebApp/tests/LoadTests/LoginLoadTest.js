@@ -4,12 +4,8 @@ import { check } from 'k6';
 
 // Options https://k6.io/docs/using-k6/k6-options/reference/
 export const options = {
-    stages: [{target : 30, duration: '10s'},
-             {target : 50, duration: '10s'},
-             {target : 100, duration: '10s'},
-             {target : 200, duration: '10s'},
-             {target : 300, duration: '10s'},
-             {target : 1000, duration: '10s'},]
+    vus: 4000, 
+    duration: '5m'
 }
 
 export const FIRSTNAME = "Load";
@@ -17,7 +13,7 @@ export const LASTNAME = "Test";
 export const EMAIL = `test@LoadTest.com`; 
 export const PASSWORD = "LoadTest1!";
 export const BASE_URL = "http://130.225.39.193/api/";
-export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
+export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' }, timeout: '180s' }
 
 
 function randomString(length, charset = '') {
@@ -46,6 +42,7 @@ export default (userName) => {
         password: PASSWORD,
     }), BASE_HEADER);
     if (loginRes.status !== 200){
+        console.log(loginRes.status, loginRes.body)
     }
     check(loginRes, { 'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200});
 }

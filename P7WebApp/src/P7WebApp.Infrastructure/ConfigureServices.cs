@@ -22,9 +22,10 @@ namespace P7WebApp.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                        .EnableRetryOnFailure()));
 
-            services.AddTransient<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
             // Needed for PostgreSQL date times to work (we probably need to revisit this...)
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
