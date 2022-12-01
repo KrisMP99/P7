@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
@@ -10,7 +9,6 @@ using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Aggregates.ProfileAggregate;
-using P7WebApp.Infrastructure.Common;
 using P7WebApp.Infrastructure.Identity;
 
 namespace P7WebApp.Infrastructure.Persistence
