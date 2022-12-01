@@ -22,7 +22,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 
                 if (exerciseGroup is null)
                 {
-                    throw new NotFoundException("Could not find an exercise group with the provided Id");
+                    throw new NotFoundException($"Could not find an exercise group with Id: {request.ExerciseGroupId} with exercise Id: {request.Id}.");
                 }
 
                 exerciseGroup.RemoveExerciseById(request.Id);

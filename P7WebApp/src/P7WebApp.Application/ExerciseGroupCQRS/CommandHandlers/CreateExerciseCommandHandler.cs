@@ -34,7 +34,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 
                     if (exercise is null)
                     {
-                        throw new Exception("Could not map CreateExerciseCommand to Exercise");
+                        throw new NotFoundException($"Could not find an exercise group with Id: {request.ExerciseGroupId}.");
                     }
                     else
                     {
