@@ -203,7 +203,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var module = Modules.FirstOrDefault(m => m.Id == moduleId);
+                var module = Modules.Where(m => m.Id == moduleId).FirstOrDefault();
 
                 if (module is not null)
                 {

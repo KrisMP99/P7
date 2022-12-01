@@ -6,6 +6,7 @@ namespace P7WebApp.Application.Responses
 {
     public class ExerciseResponse
     {
+        public int Id { get; set; }
         public int ExerciseGroupId { get; set; }
         public string Title { get; set; }
         public bool IsVisible { get; set; }

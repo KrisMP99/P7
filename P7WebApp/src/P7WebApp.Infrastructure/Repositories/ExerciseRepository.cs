@@ -65,7 +65,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var exercise = await _context.Exercises.Include(e => e.Modules).FirstOrDefaultAsync();
+                var exercise = await _context.Exercises.Where(e => e.Id == id).Include(e => e.Modules).FirstOrDefaultAsync();
                 if (exercise is not null)
                 {
                     return exercise;

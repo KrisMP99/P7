@@ -89,7 +89,7 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
                         <div className={'exercise-owner-container'}>
                             <Button size='sm' className='btn-3' onClick={(e) => {
                                 e.stopPropagation();
-                                navigate('/course/' + courseId + '/exercise-group/' + exGroup.id + '/exercise/' + exercise.id + '/0')
+                                navigate('/course/' + courseId + '/exercise-group/' + exGroup.id + '/exercise/' + exercise.id + '/1')
                             }}>
                                 <Pencil />
                             </Button>

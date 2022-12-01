@@ -5,8 +5,11 @@ import { Exercise } from '../Course/CourseView';
 import { LayoutType } from '../Modals/CreateExerciseModal/CreateExerciseModal';
 import EmptyModule from '../Modules/EmptyModule/EmptyModule';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
-import { ExerciseModule, ModuleType, TextModule } from './ExerciseBoard';
+import { ExerciseModule, ModuleType } from './ExerciseBoard';
 import { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
+import { Button } from 'react-bootstrap';
+import { ArrowLeft } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
 
 interface ExerciseViewProps {
     exerciseId: number;
@@ -16,7 +19,8 @@ interface ExerciseViewProps {
 
 export default function ExerciseView(props: ExerciseViewProps) {
     const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: true, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null})
-        
+    const navigator = useNavigate();
+    
     useEffect(() => {
         console.log("Rendering exercise view");
         fetchExercise(props.exerciseId, props.exerciseGroupId, props.courseId, (ex) => {
@@ -31,7 +35,7 @@ export default function ExerciseView(props: ExerciseViewProps) {
             let temp = exercise.modules.find((val) => val.position === i+1);
             if (temp !== undefined) {
                 colElements.push((<Allotment.Pane key={i}>
-                    {getModuleFromType(temp, null, exercise, (newEx) => setExercise(newEx))}
+                    {getModuleFromType(temp, null, exercise, (newEx) => setExercise(newEx), false)}
                 </Allotment.Pane>));
             }
             if ((i === 1  && exercise.modules.find((val) => val.position>2)) || i === 3) {
@@ -44,7 +48,8 @@ export default function ExerciseView(props: ExerciseViewProps) {
     return (
         <div className='exercise-wrapper'>
             <div className='board-actions-container'>
-                <span className='place-right exercise-title-text'>{exercise.title}</span>
+                <Button onClick={() => navigator(-1)}><ArrowLeft /></Button>
+                <span className='place-center exercise-title-text'>{exercise.title}</span>
             </div>
             <div className='board-container'>
                 <Allotment className='board-outer' separator>
@@ -88,24 +93,25 @@ export async function fetchExercise(exerciseId: number, exerciseGroupId: number,
 export function getModuleFromType (module: ExerciseModule,
                                    changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef> | null,
                                    exercise: Exercise,
-                                   setExerciseCallback: (exercise: Exercise) => void
+                                   setExerciseCallback: (exercise: Exercise) => void,
+                                   editMode: boolean
                                    ): React.ReactNode {
     switch (module.type) {
         case ModuleType.EMPTY:
             return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={module.position} />;
         case ModuleType.EXERCISE_DESCRIPTION:
-            const moduleContent: TextModule | null = module.content ? module.content as TextModule : null;
             return (
                 <ExerciseDescriptionModule 
                     changeModuleModalRef={changeModuleModalRef} 
                     position={module.position} 
-                    editMode={true} 
-                    title={moduleContent?.title ?? ''} 
-                    body={moduleContent?.body ?? ''} 
-                    changedContent={(position: number, content: TextModule) => {
+                    editMode={editMode} 
+                    title={module?.title ?? ''} 
+                    body={module?.content ?? ''} 
+                    changedContent={(position: number, title: string, body: string) => {
                         let mods = exercise.modules.map((m) => {
                             if (m.position === position) {
-                                m.content = { title: content.title, body: content.body };
+                                m.title = title;
+                                m.content = body;
                             }
                             return m;
                         });
