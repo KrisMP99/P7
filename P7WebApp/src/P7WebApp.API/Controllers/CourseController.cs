@@ -79,11 +79,6 @@ namespace P7WebApp.API.Controllers
             {
                 int result = await _mediator.Send(new GetCourseIdFromInviteCodeQuery(code));
 
-                if (result < 0)
-                {
-                    return NotFound("Could not find a course from the specified invite code");
-                }
-
                 return Ok(result);
             }
             catch (Exception ex)

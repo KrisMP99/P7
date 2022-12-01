@@ -3,9 +3,15 @@ import { Allotment } from 'allotment';
 import { getApiRoot } from '../../App';
 import { Exercise } from '../Course/CourseView';
 import { LayoutType } from '../Modals/CreateExerciseModal/CreateExerciseModal';
+import EmptyModule from '../Modules/EmptyModule/EmptyModule';
+import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
+import { ExerciseModule, ModuleType, TextModule } from './ExerciseBoard';
+import { ShowChangeModuleModalRef } from '../Modals/ChangeModuleModal/ChangeModuleModal';
 
 interface ExerciseViewProps {
     exerciseId: number;
+    exerciseGroupId: number;
+    courseId: number;
 }
 
 export default function ExerciseView(props: ExerciseViewProps) {
@@ -13,27 +19,27 @@ export default function ExerciseView(props: ExerciseViewProps) {
         
     useEffect(() => {
         console.log("Rendering exercise view");
-        fetchExercise(props.exerciseId, (ex) => {
+        fetchExercise(props.exerciseId, props.exerciseGroupId, props.courseId, (ex) => {
             setExercise(ex)
         });
     }, []);
 
     let columns: JSX.Element[] = []
     let colElements = [];
-    // if (modules.length > 0) {
-    //     for (let i = 0; i < 4; i++) {
-    //         let temp = modules.find((val) => val.position === i+1);
-    //         if (temp !== undefined) {
-    //             colElements.push((<Allotment.Pane key={i}>
-    //                 {getModuleFromType(temp.type, temp.position)}
-    //             </Allotment.Pane>));
-    //         }
-    //         if ((i === 1  && modules.find((val) => val.position>2)) || i === 3) {
-    //             columns[i] = (<Allotment separator vertical key={i}>{colElements}</Allotment>);
-    //             colElements = [];
-    //         }
-    //     }
-    // }
+    if (exercise.modules.length > 0) {
+        for (let i = 0; i < 4; i++) {
+            let temp = exercise.modules.find((val) => val.position === i+1);
+            if (temp !== undefined) {
+                colElements.push((<Allotment.Pane key={i}>
+                    {getModuleFromType(temp, null, exercise, (newEx) => setExercise(newEx))}
+                </Allotment.Pane>));
+            }
+            if ((i === 1  && exercise.modules.find((val) => val.position>2)) || i === 3) {
+                columns[i] = (<Allotment separator vertical key={i}>{colElements}</Allotment>);
+                colElements = [];
+            }
+        }
+    }
 
     return (
         <div className='exercise-wrapper'>
@@ -51,8 +57,7 @@ export default function ExerciseView(props: ExerciseViewProps) {
     )
 }
 
-
-export async function fetchExercise(exerciseId: number, callback: (newExercise: Exercise) => void) {
+export async function fetchExercise(exerciseId: number, exerciseGroupId: number, courseId: number, callback: (newExercise: Exercise) => void) {
     const jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -64,18 +69,51 @@ export async function fetchExercise(exerciseId: number, callback: (newExercise: 
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'exercise/' + exerciseId, requestOptions) //WIP - set path
+        await fetch(getApiRoot() + 'courses/' + courseId + '/exercise-groups/' + exerciseGroupId + '/exercises/' + exerciseId, requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error(res.statusText);
                 }
                 return res.json();
             })
-            .then((data) => {
-                console.log(data);
-                // callback(exercise);
+            .then((exercise) => {
+                console.log(exercise);
+                callback(exercise);
             });
      } catch (error) {
         alert(error);
      }
+}
+
+export function getModuleFromType (module: ExerciseModule,
+                                   changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef> | null,
+                                   exercise: Exercise,
+                                   setExerciseCallback: (exercise: Exercise) => void
+                                   ): React.ReactNode {
+    switch (module.type) {
+        case ModuleType.EMPTY:
+            return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={module.position} />;
+        case ModuleType.EXERCISE_DESCRIPTION:
+            const moduleContent: TextModule | null = module.content ? module.content as TextModule : null;
+            return (
+                <ExerciseDescriptionModule 
+                    changeModuleModalRef={changeModuleModalRef} 
+                    position={module.position} 
+                    editMode={true} 
+                    title={moduleContent?.title ?? ''} 
+                    body={moduleContent?.body ?? ''} 
+                    changedContent={(position: number, content: TextModule) => {
+                        let mods = exercise.modules.map((m) => {
+                            if (m.position === position) {
+                                m.content = { title: content.title, body: content.body };
+                            }
+                            return m;
+                        });
+                        setExerciseCallback({...exercise, modules: mods});
+                    }}
+                />
+            );
+        default:
+            return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={module.position} />;
+    };
 }

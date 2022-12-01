@@ -380,7 +380,6 @@ export async function fetchCourse(courseId: number, callback: (course: Course) =
                 return res.json();
             })
             .then((course: Course) => {
-                console.log(course.exerciseGroups)
                 callback(course);
             });
     } catch (error) {
