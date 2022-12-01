@@ -17,8 +17,8 @@ export const USERNAME = "Test";
 export const FIRSTNAME = "Load";
 export const LASTNAME = "Test";
 export const EMAIL = `${USERNAME}@LoadTest.com`; 
-export const PASSWORD = "LoadTest";
-export const BASE_URL = "https://localhost:7001/api/";
+export const PASSWORD = "LoadTest1!";
+export const BASE_URL = "http://130.225.39.193/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 
 
@@ -96,6 +96,5 @@ export default (authToken) => {
                                urlParams[requestNumber].body, 
                                urlParams[requestNumber].params]])
         check(res[0], {'Simulation check': r => r. status === 200})
-    }
-    
+    }   
 }

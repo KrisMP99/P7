@@ -16,8 +16,8 @@ export const USERNAME = `${randomString(10)}`
 export const FIRSTNAME = "Load";
 export const LASTNAME = "Test";
 export const EMAIL = `test@LoadTest.com`; 
-export const PASSWORD = "LoadTest";
-export const BASE_URL = "https://localhost:7001/api/";
+export const PASSWORD = "LoadTest1!";
+export const BASE_URL = "http://130.225.39.193/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 
 
