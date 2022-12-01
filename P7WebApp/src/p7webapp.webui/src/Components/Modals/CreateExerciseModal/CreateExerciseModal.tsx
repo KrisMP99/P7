@@ -31,12 +31,12 @@ export interface ShowCreateExerciseModal {
 }
 
 export enum LayoutType {
-    SINGLE = 0,
-    TWO_VERTICAL = 1,
-    TWO_HORIZONTAL = 2,
-    TWO_LEFT_ONE_RIGHT = 3,
-    ONE_LEFT_TWO_RIGHT = 4,
-    TWO_LEFT_TWO_RIGHT = 5
+    SINGLE = 1,
+    TWO_VERTICAL = 2,
+    TWO_HORIZONTAL = 3,
+    TWO_LEFT_ONE_RIGHT = 4,
+    ONE_LEFT_TWO_RIGHT = 5,
+    TWO_LEFT_TWO_RIGHT = 6
 }
 
 export const CreateExerciseModal = forwardRef<ShowCreateExerciseModal, CreateExerciseModalProps>((props, ref) => {

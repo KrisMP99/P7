@@ -13,15 +13,6 @@ import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDe
 import './ExerciseBoard.css';
 import { fetchExercise, getModuleFromType } from './ExerciseView';
 
-export interface TextModule {
-    title: string;
-    body: string;
-}
-
-export interface CodeModule {
-    code: string;
-}
-
 export enum ModuleType {
     EMPTY = 'empty',
     EXERCISE_DESCRIPTION = 'text',
@@ -32,7 +23,9 @@ export interface ExerciseModule {
     id: number;
     position: number;
     type: ModuleType;
-    content: null | TextModule | CodeModule;
+    title?: string;
+    content?: string;
+    code?: string;
 }
 
 interface ExerciseBoardProps {
@@ -45,7 +38,6 @@ interface ExerciseBoardProps {
 export default function ExerciseBoard(props: ExerciseBoardProps) {
     const changeModuleModalRef = useRef<ShowChangeModuleModalRef>(null);
     const changeLayoutModalRef = useRef<ShowModal>(null);
-    // const [modules, setModules] = useState<ExerciseModule[]>([{id: 0, position: 1, type: ModuleType.EMPTY, content: null}]);
     const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const navigator = useNavigate();
     const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: true, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null});
@@ -55,13 +47,14 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             fetchExercise(props.exerciseId, props.exerciseGroupId, props.courseId, (newExercise) => setExercise(newExercise));
         }
     }, [props.exerciseId]);
+
     useEffect(() => {
         handleSetModules(layout);
     }, [layout])
 
     const handleSetModules = (layout: LayoutType) => {
         let tempModules: ExerciseModule[] = [...exercise.modules]; 
-        let tempEmpty: ExerciseModule = {id: 0, position: 0, type: ModuleType.EMPTY, content: null};
+        let tempEmpty: ExerciseModule = {id: 0, position: 0, type: ModuleType.EMPTY};
         //Adds or removes left rows
         switch (layout) {
             case LayoutType.SINGLE:
@@ -106,7 +99,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             let temp = exercise.modules.find((val) => val.position === i+1);
             if (temp !== undefined) {
                 colElements.push((<Allotment.Pane key={i}>
-                    {getModuleFromType(temp, changeModuleModalRef, exercise, (newExercise) => setExercise(newExercise))}
+                    {getModuleFromType(temp, changeModuleModalRef, exercise, (newExercise) => setExercise(newExercise), true)}
                 </Allotment.Pane>));
             }
             if ((i === 1  && exercise.modules.find((val) => val.position>2)) || i === 3) {
@@ -126,7 +119,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                     onChange={(e) => setExercise({...exercise, title: e.target.value})}
                 />
                 <Button variant='success' onClick={() => {
-                        if (exercise.modules.some((m) => m.content === null)) {
+                        if (exercise.modules.some((m) => m.type === ModuleType.EMPTY)) {
                             setExercise({...exercise, isVisible: false});
                         }
                         createOrUpdateExercise(exercise, props.exerciseGroupId, props.isNewExercise)
@@ -170,21 +163,22 @@ async function createOrUpdateExercise(exercise: Exercise, exerciseGroupId: numbe
     if (jwt === null) return;
     try {
         const requestOptions = {
-            method: 'POST',
+            method: isNewExercise ? 'POST' : 'PUT',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + jwt
             },
             body: JSON.stringify({
-                id: isNewExercise ? 0 : exercise.id,
+                id: exercise.id,
                 exerciseGroupId: exerciseGroupId,
                 title: exercise.title,
+                exerciseNumber: exercise.exerciseNumber,
                 isVisible: exercise.isVisible,
-                startDate: null,
-                endDate: null,
-                visibleFrom: null,
-                visibleTo: null,
+                startDate: exercise.startDate,
+                endDate: exercise.endDate,
+                visibleFrom: exercise.visibleFrom,
+                visibleTo: exercise.visibleTo,
                 layoutId: exercise.layoutId,
                 modules: convertModulesToRequest(exercise.modules, isNewExercise)
             })
@@ -195,9 +189,6 @@ async function createOrUpdateExercise(exercise: Exercise, exerciseGroupId: numbe
                     throw new Error(res.statusText);
                 }
                 return;
-            })
-            .then(() => {
-                // callback(exercise);
             });
     } catch (error) {
         alert(error);
@@ -209,7 +200,6 @@ function convertModulesToRequest(modules: ExerciseModule[], isNewExercise: boole
     for (let i = 0; i < modules.length; i++) {
         switch (modules[i].type) {
             case ModuleType.EXERCISE_DESCRIPTION:
-                let content: TextModule = modules[i].content as TextModule;
                 convertedModules.push({
                     id: isNewExercise ? 0 : modules[0].id,
                     description: 'undefined',
@@ -217,8 +207,8 @@ function convertModulesToRequest(modules: ExerciseModule[], isNewExercise: boole
                     width: 1,
                     position: modules[i].position,
                     type: modules[i].type,
-                    title: content.title,
-                    content: content.body
+                    title: modules[i].title,
+                    content: modules[i].content
                 });
                 break;
             case ModuleType.CODE:
