@@ -15,8 +15,8 @@ export const options = {
 export const FIRSTNAME = "Load";
 export const LASTNAME = "Test";
 export const EMAIL = `test@LoadTest.com`; 
-export const PASSWORD = "LoadTest";
-export const BASE_URL = "https://localhost:7001/api/";
+export const PASSWORD = "LoadTest1!";
+export const BASE_URL = "http://130.225.39.193/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 
 
@@ -36,6 +36,7 @@ export function setup () {
         "firstName": FIRSTNAME,
         "lastName": LASTNAME,
     }), BASE_HEADER);
+    console.log(res.status, res.body)
     check(res, {'created user': (r) => r.status === 200});
     return USERNAME
 }
@@ -45,5 +46,8 @@ export default (userName) => {
         username: userName,
         password: PASSWORD,
     }), BASE_HEADER);
+    if (loginRes.status !== 200){
+        console.log(loginRes.status, loginRes.body)
+    }
     check(loginRes, { 'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200});
 }
