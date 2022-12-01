@@ -48,7 +48,7 @@ namespace P7WebApp.Infrastructure.Persistence
             this._disposed= true;
         }
 
-        public async void Dispose()
+        public async ValueTask DisposeAsync()
         {
             await DisposeAsync(true);
             GC.SuppressFinalize(this);
