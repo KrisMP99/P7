@@ -4,28 +4,32 @@ import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
 import { ExerciseGroup, ExerciseOverview } from '../CourseView';
 import '../CourseView.css';
-import { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
+import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
 import '../../../App.css';
 import { Eye, EyeSlash, Pencil, Plus, Trash } from 'react-bootstrap-icons';
 import EditExerciseGroupModal, { ShowEditExerciseGroupModal } from '../../Modals/EditExerciseGroupModal/EditExerciseGroupModal';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { getApiRoot } from '../../../App';
 
 interface ExerciseOverviewProps {
+    courseId: number;
     exerciseGroups: ExerciseGroup[];
     changedCourse: () => void;
     isOwner: boolean;
-    openDeleteExerciseModalRef: React.RefObject<ShowDeleteConfirmModal>;
 }
 
 export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
+    const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const [groupElements, setGroupElements] = useState<JSX.Element[]>([]);
+    const [deleteExerciseGroupId, setDeleteExerciseGroupId] = useState<number | null>(null);
+
     const navigate = useNavigate();
     
     const openEditExerciseGroupModalRef = useRef<ShowEditExerciseGroupModal>(null);
 
     useEffect(() => {
-        setGroupElements(makeExerciseGroupElements(navigate, props.exerciseGroups, props.isOwner, openEditExerciseGroupModalRef, props.openDeleteExerciseModalRef));
-    }, [props.exerciseGroups.length, props.exerciseGroups])
+        setGroupElements(makeExerciseGroupElements(navigate, props.exerciseGroups, props.isOwner, openEditExerciseGroupModalRef, openDeleteExerciseModalRef));
+    }, [props.exerciseGroups.length, props.exerciseGroups]);
 
     return (
         <div>
@@ -34,6 +38,26 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
                 ref={openEditExerciseGroupModalRef} 
                 updatedExerciseGroup={() => {
                     props.changedCourse();
+                }}
+            />
+            <DeleteConfirmModal
+                ref={openDeleteExerciseModalRef}
+                confirmDelete={(id: number, type: DeleteElementType) => {
+                    if (props.courseId) {
+                        if (type === DeleteElementType.EXERCISE) {
+                            let exerciseGroup = props.exerciseGroups.find(eg => eg.exercises.some(e => e.id === id));
+                            if (exerciseGroup) {
+                                deleteExercise(exerciseGroup?.id, id, ()=>{
+                                    props.changedCourse();
+                                });
+                            } 
+                        }
+                        else if (type === DeleteElementType.EXERCISEGROUP) {
+                            deleteExerciseGroup(props.courseId, id, ()=>{
+                                props.changedCourse();
+                            });
+                        }
+                    }
                 }}
             />
         </div>
@@ -71,7 +95,7 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
                             </Button>
                             <Button size='sm' className='btn-3' variant='danger' onClick={(e) => {
                                 e.stopPropagation();
-                                // deleteExerciseModalRef.current?.handleShow(exercise.title, exercise.id, DeleteElementType.EXERCISE);
+                                deleteExerciseModalRef.current?.handleShow(exercise.title, exercise.id, DeleteElementType.EXERCISE);
                             }}>
                                 <Trash />
                             </Button>
@@ -120,4 +144,58 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
         });
         
     return exerciseGroupElements;
+}
+
+async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, callback: ()=>void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            }
+        }
+        await fetch(getApiRoot() + 'courses/' + courseId + '/exercise-group/' + exerciseGroupId, requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend - server unavailable');
+                }
+                return res.json();
+            })
+            .then(() => {
+                callback();
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
+
+async function deleteExercise(exerciseGroupId: number, exerciseId: number, callback: ()=>void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            }
+        }
+        await fetch(getApiRoot() + 'courses/exercise-groups/' + exerciseGroupId + '/exercises/' + exerciseId, requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Response not okay from backend');
+                }
+                return res.json();
+            })
+            .then(() => {
+                callback();
+            });
+    } catch (error) {
+        alert(error);
+    }
 }

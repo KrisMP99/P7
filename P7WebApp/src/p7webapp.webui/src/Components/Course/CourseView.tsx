@@ -77,7 +77,6 @@ interface CourseProps {
 }
 
 export default function CourseView(props: CourseProps) {
-    const openDeleteExerciseModalRef = useRef<ShowDeleteConfirmModal>(null);
     const createExerciseGroupModalRef = useRef<ShowCreateExerciseGroupModal>(null);
     const editCourseModalRef = useRef<ShowEditCourseModal>(null);
 
@@ -111,13 +110,16 @@ export default function CourseView(props: CourseProps) {
 
     useEffect(()=> {
         if (course){
+            let l = course.attendees.filter((a) => a.userId === props.user.id);
+            // console.log(course);
+            // l.length > 0 && console.log(typeof(course.attendees.filter((a) => a.userId === props.user.id)[0].userId));
             if (props.user.id === course?.ownerId) {
                 setIsOwner(true);
             }
             else {
                 setIsOwner(false);
             }
-            if (course!.attendees.filter((a) => a.userId === props.user.id).length > 0 && !isOwner){
+            if (course.attendees.filter((a) => a.userId === props.user.id).length > 0 && !isOwner){
                 setIsAttendee(true);
             }
             else {
@@ -249,8 +251,8 @@ export default function CourseView(props: CourseProps) {
                             </Button>
                         </div>
                         <ExerciseGroupsOverview
+                            courseId={course?.id ?? 0}
                             exerciseGroups={course ? course.exerciseGroups : []}
-                            openDeleteExerciseModalRef={openDeleteExerciseModalRef}
                             isOwner={isOwner}
                             changedCourse={() => {
                                 if (courseId) {
@@ -276,27 +278,6 @@ export default function CourseView(props: CourseProps) {
                     </Tab>
                 </Tabs>
             </div>
-            <DeleteConfirmModal
-                ref={openDeleteExerciseModalRef}
-                confirmDelete={(id: number, type: DeleteElementType) => {
-                    if (course && courseId) {
-                        if (type === DeleteElementType.EXERCISE) {
-                            deleteExercise(courseId, id, ()=>{
-                                fetchCourse(courseId, (data) => {
-                                    setCourse(data);
-                                });
-                            });
-                        }
-                        else if (type === DeleteElementType.EXERCISEGROUP) {
-                            deleteExerciseGroup(courseId, id, ()=>{
-                                fetchCourse(courseId, (data) => {
-                                    setCourse(data);
-                                });
-                            });
-                        }
-                    }
-                }}
-            />
             {isOwner && 
                 <EditCourseModal
                     ref={editCourseModalRef}
@@ -320,64 +301,6 @@ export default function CourseView(props: CourseProps) {
                 }
             />
         </Container>)
-}
-
-async function deleteExercise(courseId: number, exerciseId: number, callback: ()=>void) {
-    let jwt = sessionStorage.getItem('jwt');
-    if (jwt === null) return;
-    try {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 
-                'Accept': 'application/json', 
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + jwt
-            },
-            body: JSON.stringify({
-                "courseId": courseId,
-                "exerciseId": exerciseId
-            })
-        }
-        await fetch(getApiRoot() + 'Course/delete-exercise', requestOptions)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Response not okay from backend');
-                }
-                return res.json();
-            })
-            .then(() => {
-                callback();
-            });
-    } catch (error) {
-        alert(error);
-    }
-}
-
-async function deleteExerciseGroup(courseId: number, exerciseGroupId: number, callback: ()=>void) {
-    let jwt = sessionStorage.getItem('jwt');
-    if (jwt === null) return;
-    try {
-        const requestOptions = {
-            method: 'DELETE',
-            headers: { 
-                'Accept': 'application/json', 
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + jwt
-            }
-        }
-        await fetch(getApiRoot() + 'courses/' + courseId + '/exercise-group/' + exerciseGroupId, requestOptions)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Response not okay from backend - server unavailable');
-                }
-                return res.json();
-            })
-            .then(() => {
-                callback();
-            });
-    } catch (error) {
-        alert(error);
-    }
 }
 
 async function leaveCourse(courseId: number, callback: () => void) {
@@ -457,6 +380,7 @@ export async function fetchCourse(courseId: number, callback: (course: Course) =
                 return res.json();
             })
             .then((course: Course) => {
+                console.log(course.exerciseGroups)
                 callback(course);
             });
     } catch (error) {

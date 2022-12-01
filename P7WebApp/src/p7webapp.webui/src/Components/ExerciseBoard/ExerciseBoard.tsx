@@ -153,8 +153,13 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                     value={exercise.title}
                     onChange={(e) => setExercise({...exercise, title: e.target.value})}
                 />
-                <Button variant='success' onClick={() => createExercise(exercise, props.exerciseGroupId, props.isNewExercise)}>
-                    Save exercise
+                <Button variant='success' onClick={() => {
+                        if (exercise.modules.some((m) => m.content === null)) {
+                            setExercise({...exercise, isVisible: false});
+                        }
+                        createOrUpdateExercise(exercise, props.exerciseGroupId, props.isNewExercise)
+                    }}>
+                    Save changes
                 </Button>
                 <Button variant='danger' onClick={() => navigator(-1)}>
                     Cancel
@@ -188,7 +193,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     )
 }
 
-async function createExercise(exercise: Exercise, exerciseGroupId: number, isNewExercise: boolean) {
+async function createOrUpdateExercise(exercise: Exercise, exerciseGroupId: number, isNewExercise: boolean) {
     const jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -212,7 +217,6 @@ async function createExercise(exercise: Exercise, exerciseGroupId: number, isNew
                 modules: convertModulesToRequest(exercise.modules, isNewExercise)
             })
         }
-        console.log(requestOptions.body);
         await fetch(getApiRoot() + 'courses/exercise-groups/exercises', requestOptions)
             .then((res) => {
                 if (!res.ok) {
@@ -231,7 +235,6 @@ async function createExercise(exercise: Exercise, exerciseGroupId: number, isNew
 function convertModulesToRequest(modules: ExerciseModule[], isNewExercise: boolean) {
     let convertedModules = [];
     for (let i = 0; i < modules.length; i++) {
-        console.log(modules[i].type)
         switch (modules[i].type) {
             case ModuleType.EXERCISE_DESCRIPTION:
                 let content: TextModule = modules[i].content as TextModule;
@@ -248,9 +251,9 @@ function convertModulesToRequest(modules: ExerciseModule[], isNewExercise: boole
                 break;
             case ModuleType.CODE:
                 break;
-            case ModuleType.EMPTY:
-                break;
             case ModuleType.QUIZ:
+                break;
+            case ModuleType.EMPTY:
                 break;
             default:
                 break;
