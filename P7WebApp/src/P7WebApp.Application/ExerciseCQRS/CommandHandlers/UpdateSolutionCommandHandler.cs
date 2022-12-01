@@ -35,7 +35,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new NullReferenceException($"Could not update solution '{request.SolutionId}' for exercise Id: {request.ExerciseId}.");
                 }
             }
             catch (Exception)
