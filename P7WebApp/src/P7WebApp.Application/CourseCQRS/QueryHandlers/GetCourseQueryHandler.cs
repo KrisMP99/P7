@@ -1,9 +1,9 @@
 ﻿using MediatR;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
-using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Application.CourseCQRS.QueryHandlers
 {
@@ -18,13 +18,28 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
 
         public async Task<CourseResponse> Handle(GetCourseQuery request, CancellationToken cancellationToken)
         {
-            var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.Id);
-            var result = CourseMapper.Mapper.Map<CourseResponse>(course);
-            if (result == null)
+            try
             {
-                throw new Exception("issue with mapper");
+                var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroupsAndExercisesAndAttendess(request.Id);
+                
+                if (course is null)
+                {
+                    throw new NotFoundException("Course could not be found");
+                }
+
+                var result = CourseMapper.Mapper.Map<CourseResponse>(course);
+
+                if (result is null)
+                {
+                    throw new Exception("Could not map course to course response.");
+                }
+
+                return result;
             }
-            return result;
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

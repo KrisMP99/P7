@@ -140,7 +140,6 @@ async function attemptLogin (username: string, password: string, callback: (user
             })
             .then((data: LoginResponse) => {
                 console.log("Successfully logged in!");
-                sessionStorage.setItem("jwt", data.token);
                 let user: User = {
                     id: Number(data.userId),
                     firstname: data.firstname,
@@ -148,6 +147,8 @@ async function attemptLogin (username: string, password: string, callback: (user
                     email: data.email,
                     username: data.username
                 };
+                sessionStorage.setItem("jwt", data.token);
+                sessionStorage.setItem("user", JSON.stringify(user));
                 callback(user);
             });
     } catch (error) {
