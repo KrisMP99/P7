@@ -24,19 +24,18 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
     const openEditExerciseGroupModalRef = useRef<ShowEditExerciseGroupModal>(null);
 
     useEffect(() => {
-        // props.changedCourse();
         setGroupElements(makeExerciseGroupElements(navigate, props.exerciseGroups, props.isOwner, openEditExerciseGroupModalRef, props.openDeleteExerciseModalRef));
     }, [props.exerciseGroups.length, props.exerciseGroups])
 
     return (
         <div>
             {groupElements}
-            {/* <EditExerciseGroupModal 
+            <EditExerciseGroupModal 
                 ref={openEditExerciseGroupModalRef} 
                 updatedExerciseGroup={() => {
                     props.changedCourse();
                 }}
-            /> */}
+            />
         </div>
     )
 }
@@ -47,20 +46,15 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
                                     editExerciseGroupModalRef: React.RefObject<ShowEditExerciseGroupModal>,
                                     deleteExerciseModalRef: React.RefObject<ShowDeleteConfirmModal>
                                     ): JSX.Element[] {
-
     let exerciseGroupElements: JSX.Element[] = [];
-
+    if (exercisegroups.length <= 0) return [];
     exerciseGroupElements = exercisegroups.filter((exGroup: ExerciseGroup) => isOwner ? true : exGroup.isVisible).map((exGroup: ExerciseGroup, index: number, _arr: ExerciseGroup[]) => {
         let exerciseElements: JSX.Element[] = [];
         exerciseElements = exGroup.exercises.filter((exercise) => {
 
-            if (!isOwner) {
-                return exGroup.isVisible;
-            }
+            return !isOwner ? exGroup.isVisible : true;
 
         }).map((exercise: ExerciseOverview, id: number) => {
-
-            let visibilityElement: JSX.Element = exercise.isVisible ? (<Eye />) : (<EyeSlash />);
             return (
                 <div key={id} className={'exercise-container d-flex ' + (!exercise.isVisible && 'is-invisible')} onClick={(e) => {
                     e.stopPropagation();
@@ -86,7 +80,6 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
                 </div>
             )
         })
-
         return (
             <Accordion key={index} defaultActiveKey={index+''}>
                 <div className='d-flex align-items-center flex-grow-1'>
@@ -125,5 +118,6 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
                 </AccordionBody>
             </Accordion>)
         });
+        
     return exerciseGroupElements;
 }

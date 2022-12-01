@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
 import { Routes, Route, useNavigate } from 'react-router-dom';
@@ -27,6 +27,15 @@ export default function App() {
     const [user, setUser] = useState<User | null>(null);
     const navigator = useNavigate();
 
+    useEffect(() => {
+        if (!loggedIn && !user) {
+            let existingUser = sessionStorage.getItem('user');
+            if (existingUser && sessionStorage.getItem('jwt')) {
+                setLoggedIn(true);
+                setUser(JSON.parse(existingUser));
+            }
+        }
+    }, [loggedIn, user])
 
     return (
         <div className='main-container'>
@@ -35,6 +44,7 @@ export default function App() {
                 logOut={() => {
                     setUser(null);
                     setLoggedIn(false);
+                    sessionStorage.clear();
                     navigator('/');
                 }}
             />

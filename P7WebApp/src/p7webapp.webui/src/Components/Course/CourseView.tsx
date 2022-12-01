@@ -18,16 +18,13 @@ import { ExerciseModule } from '../ExerciseBoard/ExerciseBoard';
 export interface ExerciseOverview {
     id: number;
     title: string;
-    isVisible: boolean;
-    exerciseGroupId: number;
     exerciseNumber: number;
+    isVisible: boolean;
+    visibleTo: Date | null;
+    visibleFrom: Date | null;
     startDate: Date | null;
     endDate: Date | null;
-    visibleFrom: Date | null;
-    visibleTo: Date | null;
     createdDate: Date | null;
-    lastModifiedDate: Date | null;
-    layoutId: LayoutType;
 }
 
 export interface ExerciseGroup {
@@ -459,7 +456,7 @@ export async function fetchCourse(courseId: number, callback: (course: Course) =
                 }
                 return res.json();
             })
-            .then((course) => {
+            .then((course: Course) => {
                 callback(course);
             });
     } catch (error) {
