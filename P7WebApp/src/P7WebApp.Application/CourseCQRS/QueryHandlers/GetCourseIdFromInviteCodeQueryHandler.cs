@@ -17,7 +17,6 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
             try
             {
                 var id = await _unitOfWork.CourseRepository.GetCourseIdFromInviteCode(request.Code);
-
                 return id;
             }
             catch (Exception)

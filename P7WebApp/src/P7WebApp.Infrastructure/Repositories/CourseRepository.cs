@@ -91,6 +91,30 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
+        public async Task<Course> GetCourseWithExerciseGroupsAndExercisesAndAttendess(int courseId)
+        {
+            try
+            {
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.Attendees)
+                    .Include(c => c.ExerciseGroups)
+                    .ThenInclude(eg => eg.Exercises)
+                    .FirstOrDefaultAsync();
+
+                if (course is null)
+                {
+                    throw new Exception("Could not get course with exercise groups.");
+                }
+
+                return course;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<Course> GetCourseWithExerciseGroupsAttendeesAndInviteCode(int courseId)
         {
             try
