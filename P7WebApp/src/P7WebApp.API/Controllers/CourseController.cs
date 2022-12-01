@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.CourseCQRS.Commands;
 using P7WebApp.Application.CourseCQRS.Commands.CreateCourse;
 using P7WebApp.Application.CourseCQRS.Commands.CreateExerciseGroup;
@@ -16,6 +17,7 @@ using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSolution;
 using P7WebApp.Application.ExerciseCQRS.Commands.DeleteSubmission;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateExercise;
 using P7WebApp.Application.ExerciseCQRS.Commands.UpdateSolution;
+using P7WebApp.Application.ExerciseCQRS.Queries.Get;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise;
@@ -362,6 +364,26 @@ namespace P7WebApp.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{courseId}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}")]
+        public async Task<IActionResult> GetExercise([FromRoute]int courseId, [FromRoute] int exerciseGroupId, [FromRoute] int exerciseId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetExerciseQuery(courseId: courseId, exerciseGroupId: exerciseGroupId, exerciseId: exerciseId));
+
+                if (result is null)
+                {
+                    return BadRequest("Could not find an exercise with the specified id");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPost]
         [Route("exercise-groups/exercises/solution")]

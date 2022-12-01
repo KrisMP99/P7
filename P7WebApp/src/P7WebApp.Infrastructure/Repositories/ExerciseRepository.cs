@@ -3,6 +3,9 @@ using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Infrastructure.Repositories
@@ -177,6 +180,27 @@ namespace P7WebApp.Infrastructure.Repositories
         public async Task<Exercise> GetExerciseFromSubmissionId(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Exercise> GetExerciseWithModules(int id)
+        {
+            try
+            {
+                var exercise = await _context.Exercises.Where(e => e.Id == id)
+                    .Include(e => e.Modules)
+                        .ThenInclude(m => (m as TextModule).Images)
+                    .Include(e => e.Modules)
+                        .ThenInclude(m => (m as QuizModule).Questions)
+                        .ThenInclude(qm => qm.Choices)
+                    .FirstOrDefaultAsync();
+
+                return exercise;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

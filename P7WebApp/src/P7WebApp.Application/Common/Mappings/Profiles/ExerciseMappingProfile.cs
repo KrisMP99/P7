@@ -13,6 +13,7 @@ using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.Module;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.QuizModule;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise.TextModule;
 using P7WebApp.Application.Responses;
+using P7WebApp.Application.Responses.Modules;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
@@ -51,6 +52,17 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
                 .Include<UpdateCodeEditorModuleCommand, CodeEditorModule>()
                 .Include<UpdateTextModuleCommand, TextModule>()
                 .Include<UpdateQuizModuleCommand, QuizModule>();
+
+            // get exercise
+            CreateMap<Exercise, ExerciseResponse>()
+                .ForMember(dest => dest.Modules, src => src.MapFrom(src => src.Modules));
+            CreateMap<CodeEditorModule, CodeEditorModuleResponse>();
+            CreateMap<TextModule, TextModuleResponse>();
+            CreateMap<QuizModule, QuizModuleResponse>();
+            CreateMap<Module, ModuleResponse>()
+                .Include<CodeEditorModule, CodeEditorModuleResponse>()
+                .Include<TextModule, TextModuleResponse>()
+                .Include<QuizModule, QuizModuleResponse>();
         }
     }
 }

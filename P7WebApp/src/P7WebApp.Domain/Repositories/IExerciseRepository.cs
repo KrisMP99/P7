@@ -18,7 +18,7 @@ namespace P7WebApp.Domain.Repositories
         Task<int> Createsubmission(Submission submission);
         Task<int> DeleteSubmission(Submission submission);
         Task<Exercise> GetExerciseFromSubmissionId(int id);
-
+        Task<Exercise> GetExerciseWithModules(int id);
 
     }
 }
