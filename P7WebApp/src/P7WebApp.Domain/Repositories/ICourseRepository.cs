@@ -12,6 +12,7 @@ namespace P7WebApp.Domain.Repositories
         Task<Course> GetCourseWithExerciseGroupsAndExercisesAndAttendess(int courseId);
         Task<Course> GetCourseWithAttendeesAndDefaultCourseRoles(int courseId);
         Task<Course> GetCourseWithExerciseGroupsAttendeesAndInviteCode(int courseId);
+        Task<Course> GetCourseWithAttendees(int courseId);
         Task<IEnumerable<Course>> GetListOfCourses();
         Task<IEnumerable<ExerciseGroup>> GetExerciseGroupsWithExercises(int courseId);
         Task<int> UpdateCourse(Course course);

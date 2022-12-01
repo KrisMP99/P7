@@ -182,11 +182,11 @@ namespace P7WebApp.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<Exercise> GetExerciseWithModules(int id)
+        public async Task<Exercise> GetExerciseWithModules(int exerciseGroupId, int exerciseId)
         {
             try
             {
-                var exercise = await _context.Exercises.Where(e => e.Id == id)
+                var exercise = await _context.Exercises.Where(e => e.ExerciseGroupId == exerciseGroupId && e.Id == exerciseId)
                     .Include(e => e.Modules)
                         .ThenInclude(m => (m as TextModule).Images)
                     .Include(e => e.Modules)

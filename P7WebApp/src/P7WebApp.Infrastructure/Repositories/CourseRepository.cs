@@ -272,5 +272,22 @@ namespace P7WebApp.Infrastructure.Repositories
                 throw;
             }
         }
+
+        public async Task<Course> GetCourseWithAttendees(int courseId)
+        {
+            try
+            {
+                var course = await _context.Courses
+                    .Where(c => c.Id == courseId)
+                    .Include(c => c.Attendees)
+                    .FirstOrDefaultAsync();
+
+                return course;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

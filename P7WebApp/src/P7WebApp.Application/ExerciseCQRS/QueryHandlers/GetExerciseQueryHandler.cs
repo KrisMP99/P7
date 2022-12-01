@@ -22,8 +22,16 @@ namespace P7WebApp.Application.ExerciseCQRS.QueryHandlers
         {
             try
             {
-                var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroupsAndExercisesAndAttendess(request.CourseId);
-                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseWithModules(request.ExerciseId);
+                var course = await _unitOfWork.CourseRepository.GetCourseWithAttendees(request.CourseId) ?? throw new Exception("Could not find the specified course"); ;
+                var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId) ?? throw new NotFoundException("User could not be found");
+                
+                // check if user has access to the exercise
+                if (course.OwnerId != profile.Id && !course.Attendees.Any(a => a.ProfileId == profile.Id))
+                {
+                    throw new Exception("User does not have access to the exercise");
+                }
+
+                var exercise = await _unitOfWork.ExerciseRepository.GetExerciseWithModules(request.ExerciseGroupId, request.ExerciseId);
 
                 if (exercise is null)
                 {
