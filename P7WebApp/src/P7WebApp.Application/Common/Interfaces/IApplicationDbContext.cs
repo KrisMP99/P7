@@ -10,7 +10,7 @@ using P7WebApp.Domain.Aggregates.ProfileAggregate;
 
 namespace P7WebApp.Application.Common.Interfaces
 {
-    public interface IApplicationDbContext : IAsyncDisposable
+    public interface IApplicationDbContext
     {
         public DbSet<Course> Courses { get; }
         public DbSet<Attendee> Attendees { get; }

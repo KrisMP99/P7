@@ -17,11 +17,10 @@ namespace P7WebApp.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
-        private readonly IMediator _mediator;
 
-        public ApplicationDbContext(IMediator mediator, DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            _mediator = mediator;
+
         }
 
         public DbSet<Course> Courses { get; set; }
@@ -42,8 +41,6 @@ namespace P7WebApp.Infrastructure.Persistence
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await _mediator.DispatchDomainEvents(this);
-
             return await base.SaveChangesAsync(cancellationToken);
         }
 

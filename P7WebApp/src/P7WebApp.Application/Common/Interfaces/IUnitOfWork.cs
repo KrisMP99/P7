@@ -2,7 +2,7 @@
 
 namespace P7WebApp.Application.Common.Interfaces
 {
-    public interface IUnitOfWork : IAsyncDisposable
+    public interface IUnitOfWork
     {
         ICourseRepository CourseRepository { get; }
         IExerciseGroupRepository ExerciseGroupRepository { get; }
