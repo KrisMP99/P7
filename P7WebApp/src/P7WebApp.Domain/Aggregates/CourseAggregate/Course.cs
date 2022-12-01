@@ -135,6 +135,8 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                     throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)"); 
                 }
 
+                exerciseGroup.SetGroupExerciseNumber(this.ExerciseGroups.Count + 1);
+
                 if(CheckExerciseGroupNumberIsOk(exerciseGroup))
                 {
                     ExerciseGroups.Add(exerciseGroup);

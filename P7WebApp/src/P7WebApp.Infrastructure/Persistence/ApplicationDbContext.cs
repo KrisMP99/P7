@@ -55,12 +55,6 @@ namespace P7WebApp.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<ExerciseGroup>().
-                Property(eg => eg.ExerciseGroupNumber).ValueGeneratedOnAdd();
-                
-            builder.Entity<Exercise>()
-                .Property(e => e.ExerciseNumber).ValueGeneratedOnAdd();
-
             builder.Entity<Module>()
                 .UseTpcMappingStrategy();
 

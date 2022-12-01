@@ -12,7 +12,7 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221201134822_Tables")]
+    [Migration("20221201161855_Tables")]
     partial class Tables
     {
         /// <inheritdoc />
@@ -500,10 +500,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("ExerciseNumber")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExerciseNumber"));
 
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");
@@ -743,10 +740,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("ExerciseGroupNumber")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExerciseGroupNumber"));
 
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");

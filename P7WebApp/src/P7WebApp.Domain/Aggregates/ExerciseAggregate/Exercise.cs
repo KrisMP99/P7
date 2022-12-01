@@ -309,6 +309,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
             try
             {
                 var result = Submissions.FirstOrDefault(s => s.Id == submissionId);
+
                 if (result is not null)
                 {
                     return result;
@@ -317,6 +318,23 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 {
                     throw new ExerciseException("Could not find submission with the given submission id.");
                 }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void SetExerciseNumber(int number)
+        {
+            try
+            {
+                if (number <= 0)
+                {
+                    throw new ExerciseException("Exercise number cannot be 0 or less");
+                }
+
+                this.ExerciseNumber = number;
             }
             catch (Exception)
             {
