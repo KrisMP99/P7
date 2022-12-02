@@ -48,7 +48,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             try
             {
-                var exerciseGroup = ExerciseGroups.FirstOrDefault(eg => eg.Id == exerciseGroupId);
+                var exerciseGroup = ExerciseGroups.Where(eg => eg.Id == exerciseGroupId).FirstOrDefault();
 
                 if (exerciseGroup is null)
                 {
@@ -104,7 +104,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 
         public Attendee GetAttendeeByProfileId(int profileId)
         {
-            var attendee = Attendees.FirstOrDefault(e => e.ProfileId == profileId);
+            var attendee = Attendees.Where(e => e.ProfileId == profileId).FirstOrDefault();
 
             if (attendee is null)
             {
@@ -135,6 +135,8 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                     throw new CourseException("Could not add the exercisegroup to the course (exercisegroup is null)"); 
                 }
 
+                exerciseGroup.SetGroupExerciseNumber(this.ExerciseGroups.Count + 1);
+
                 if(CheckExerciseGroupNumberIsOk(exerciseGroup))
                 {
                     ExerciseGroups.Add(exerciseGroup);
@@ -153,7 +155,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                 throw new CourseException($"The exercise group number cannot be less than 0.");
             }
 
-            var result = ExerciseGroups.FirstOrDefault(eg => eg.Id == exerciseGroup.ExerciseGroupNumber);
+            var result = ExerciseGroups.Where(eg => eg.ExerciseGroupNumber == exerciseGroup.ExerciseGroupNumber).FirstOrDefault();
 
             if (result is not null)
             {
@@ -184,7 +186,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
                     throw new CourseException("The course role could not be added, since it is null.");
                 }
 
-                var result = CourseRoles.FirstOrDefault(role => role.IsDefaultRole);
+                var result = CourseRoles.Where(role => role.IsDefaultRole).FirstOrDefault();
 
                 if(result is not null && courseRole.IsDefaultRole)
                 {

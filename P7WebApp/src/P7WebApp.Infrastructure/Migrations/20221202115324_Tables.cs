@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -296,8 +297,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     CourseId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    ExerciseGroupNumber = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ExerciseGroupNumber = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
@@ -411,8 +411,7 @@ namespace P7WebApp.Infrastructure.Migrations
                     ExerciseGroupId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
-                    ExerciseNumber = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ExerciseNumber = table.Column<int>(type: "integer", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     VisibleFrom = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),

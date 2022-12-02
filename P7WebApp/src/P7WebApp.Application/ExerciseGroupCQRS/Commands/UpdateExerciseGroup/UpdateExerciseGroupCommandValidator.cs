@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise
+namespace P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExerciseGroup
 {
     public class UpdateExerciseGroupCommandValidator : AbstractValidator<UpdateExerciseGroupCommand>
     {

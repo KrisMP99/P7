@@ -18,10 +18,6 @@ namespace P7WebApp.Application.CourseCQRS.Commands.CreateExerciseGroup
 
             RuleFor(ceg => ceg.Description)
                 .NotNull().WithMessage("Description cannot be null.");
-
-            RuleFor(ceg => ceg.ExerciseGroupNumber)
-                .NotNull().WithMessage("Exericse group number cannot be null.")
-                .GreaterThan(0).WithMessage("Exercise group number cannot be negative.");
         }
     }
 }

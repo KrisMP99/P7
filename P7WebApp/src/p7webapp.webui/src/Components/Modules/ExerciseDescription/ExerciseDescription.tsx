@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { ModuleType, TextModule } from '../../ExerciseBoard/ExerciseBoard';
+import { ModuleType } from '../../ExerciseBoard/ExerciseBoard';
 import { ShowChangeModuleModalRef } from '../../Modals/ChangeModuleModal/ChangeModuleModal';
 import '../Module.css';
 import ModuleActionBar from '../ModuleActionBar/ModuleActionBar';
 import './ExerciseDescription.css';
 
 interface ExerciseDescriptionProps {
-    changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef>;
+    changeModuleModalRef: React.RefObject<ShowChangeModuleModalRef> | null;
     position: number;
     editMode: boolean;
     title: string;
     body: string;
 
-    changedContent: (position: number, content: TextModule) => void;
+    changedContent: (position: number, title: string, body: string) => void;
 }
 
 export default function ExerciseDescriptionModule(props: ExerciseDescriptionProps) {
 
     let editModePanel = (
         <div className='exercise-description-content'>
-            <input className='exercise-description-title' type={'text'} value={props.title} onChange={(e)=>props.changedContent(props.position, {title: e.target.value, body: props.body})} />
-            <textarea className='exercise-description-body-ta' value={props.body} onChange={(e)=>props.changedContent(props.position, {title: props.title, body: e.target.value})} />
+            <input className='exercise-description-title' type={'text'} value={props.title} onChange={(e)=>props.changedContent(props.position, e.target.value, props.body)} />
+            <textarea className='exercise-description-body-ta' value={props.body} onChange={(e)=>props.changedContent(props.position, props.title, e.target.value)} />
         </div>
     )
     let bodyTextLinesElements: JSX.Element[] = [];
@@ -32,8 +32,9 @@ export default function ExerciseDescriptionModule(props: ExerciseDescriptionProp
     return (
         <>
             <div id='exercise-description-container' className='module-container'>
-                {<ModuleActionBar 
-                    changeModule={()=>props.changeModuleModalRef.current?.handleShow(ModuleType.EXERCISE_DESCRIPTION, props.position)}
+                {props.editMode && 
+                <ModuleActionBar 
+                    changeModule={()=>props.changeModuleModalRef?.current?.handleShow(ModuleType.EXERCISE_DESCRIPTION, props.position)}
                     changeEditMode={()=>{}}
                 />}
                 {/* <button onClick={()=>setEditMode(!editMode)}>Edit</button> */}

@@ -7,7 +7,7 @@ using P7WebApp.Application.CourseCQRS.Commands.CreateCourse;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
 
-namespace P7WebApp.Infrastructure.Tests.UnitTests.ControllerTests
+namespace P7WebApp.API.Tests.UnitTests.ControllerTests
 {
     public class CourseControllerTests
     {

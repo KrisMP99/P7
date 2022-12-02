@@ -55,7 +55,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var exerciseGroup = await _context.ExerciseGroups.Include(e => e.Exercises).FirstOrDefaultAsync();
+                var exerciseGroup = await _context.ExerciseGroups.Where(eg => eg.Id == Id).Include(eg => eg.Exercises).FirstOrDefaultAsync();
                 
                 if (exerciseGroup is not null)
                 {
