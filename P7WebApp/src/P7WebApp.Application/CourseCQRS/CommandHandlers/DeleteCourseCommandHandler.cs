@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using P7WebApp.Application.CourseCQRS.Commands;
+using P7WebApp.Application.Common.Exceptions;
 
 namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 {
@@ -27,6 +28,12 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             {
                 await _unitOfWork.CourseRepository.DeleteCourse(request.Id);
                 int rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
+
+                if (rowsAffected == 0)
+                {
+                    throw new NotFoundException($"Could not find a course witht the specified Id {request.Id}");
+                }
+
                 return rowsAffected;
             }
             catch (Exception)

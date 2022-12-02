@@ -18,6 +18,12 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules
         public double Height { get; protected set; }
         public double Width { get; protected set; }
         public int Position { get; protected set; }
+        public int? ExerciseId { get; protected set; }
+        public Exercise? Exercise { get; protected set; }
+        public int? SolutionId { get; protected set; }
+        public Solution? Solution { get; protected set; }
+        public int? SubmissionId { get; protected set; }
+        public Submission? Submission { get; protected set; }
 
         public virtual void EditInformation(string newDescription, double newHeight, double newWidth, int newPosition)
         {
