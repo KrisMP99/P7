@@ -66,7 +66,7 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                         }}>
                             <Form.Control 
                                 type='number'
-                                value={inviteCode}
+                                defaultValue={inviteCode}
                                 isInvalid={invalidInviteCode}
                                 onChange={(e) => setInviteCode(Number(e.target.value))}
                             />

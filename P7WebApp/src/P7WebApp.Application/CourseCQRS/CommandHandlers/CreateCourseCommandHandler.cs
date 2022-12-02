@@ -25,14 +25,14 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 
                 if(profile is null)
                 {
-                    throw new NotFoundException("Could not find a profile with the given user id.");
+                    throw new NotFoundException($"Could not find a profile with user id {profile.Id}.");
                 }
 
                 var course = profile.CreateCourse(request.Title, request.Description, request.IsPrivate);
 
                 if(course is null)
                 {
-                    throw new Exception("Could not create the course.");
+                    throw new Exception($"Could not create the course {request.Title}.");
                 }
 
                 await _unitOfWork.CourseRepository.CreateCourse(course);

@@ -42,6 +42,8 @@ services:
       - type: bind
         source: ../p7webapp.webui
         target: /app
+    depends_on:
+      - p7webapp_api-PROD
     ports:
       - "80:80"
       - "443:443"

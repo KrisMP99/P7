@@ -54,8 +54,8 @@ export default function AttendeeOverview(props: AttendeeOverviewProps) {
                     <Table striped size='sm' bordered hover>
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Name</th>
+                                <th>Firstname</th>
+                                <th>Lastname</th>
                                 <th>Total: {props.attendees.length}</th>
                             </tr>
                         </thead>
@@ -72,8 +72,8 @@ export default function AttendeeOverview(props: AttendeeOverviewProps) {
                             {
                                 props.attendees.slice(currentPage * coursesPerPage, (currentPage + 1) * coursesPerPage).map((item: Attendee, index) => (
                                     <tr key={item.userId}>
-                                        <td>{index + 1}</td>
-                                        <td>{item.userId}</td>
+                                        <td>{item.firstName}</td>
+                                        <td>{item.lastName}</td>
                                         <td></td>
                                     </tr>
                                 ))

@@ -3,7 +3,11 @@ using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
+using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Repositories;
+using P7WebApp.Infrastructure.Exceptions;
 
 namespace P7WebApp.Infrastructure.Repositories
 {
@@ -28,7 +32,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ExerciseRepositoryException($"Could not get exercise with solution for exercise with Id: {id}.");
                 }
             }
             catch (Exception)
@@ -48,7 +52,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new ExerciseRepositoryException($"Could not get exercise with submission for exercise with Id: {id}.");
                 }
             }
             catch (Exception)
@@ -62,14 +66,14 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var exercise = await _context.Exercises.Include(e => e.Modules).FirstOrDefaultAsync();
+                var exercise = await _context.Exercises.Where(e => e.Id == id).Include(e => e.Modules).FirstOrDefaultAsync();
                 if (exercise is not null)
                 {
                     return exercise;
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ExerciseRepositoryException($"Could not get exercise with modules for exercise with Id: {id}.");
                 }
             }
             catch (Exception)
@@ -104,7 +108,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ExerciseRepositoryException($"Could not update exercise with Id: {exercise.Id}.");
                 }
             }
             catch (Exception)
@@ -130,7 +134,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new NullReferenceException($"Could not delete solution with Id: {solution.Id}.");
                 }
                 
             }
@@ -153,7 +157,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new NullReferenceException($"Could not delete solution with Id: {submission.Id}.");
                 }
 
             }
@@ -177,6 +181,27 @@ namespace P7WebApp.Infrastructure.Repositories
         public async Task<Exercise> GetExerciseFromSubmissionId(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Exercise> GetExerciseWithModules(int exerciseGroupId, int exerciseId)
+        {
+            try
+            {
+                var exercise = await _context.Exercises.Where(e => e.ExerciseGroupId == exerciseGroupId && e.Id == exerciseId)
+                    .Include(e => e.Modules)
+                        .ThenInclude(m => (m as TextModule).Images)
+                    .Include(e => e.Modules)
+                        .ThenInclude(m => (m as QuizModule).Questions)
+                        .ThenInclude(qm => qm.Choices)
+                    .FirstOrDefaultAsync();
+
+                return exercise;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

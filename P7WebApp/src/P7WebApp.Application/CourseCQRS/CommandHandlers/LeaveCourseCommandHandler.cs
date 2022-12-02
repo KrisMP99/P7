@@ -30,7 +30,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
                 }
                 else
                 {
-                    throw new NotFoundException("Could not find course");
+                    throw new NotFoundException($"Could not find course {request.CourseId}");
                 }
             }
             catch (Exception)

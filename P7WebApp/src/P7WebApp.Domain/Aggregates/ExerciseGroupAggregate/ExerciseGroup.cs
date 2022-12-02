@@ -72,7 +72,9 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
                 if(newExercise == null)
                 {
                     throw new ExerciseGroupException("Could not add exercise (Exercise is null)");
-                } 
+                }
+
+                newExercise.SetExerciseNumber(this.Exercises.Count + 1);
 
                 if(CheckExerciseNumberIsOk(newExercise))
                 {
@@ -111,6 +113,24 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public void SetGroupExerciseNumber(int number)
+        {
+            try
+            {
+                if (number <= 0)
+                {
+                    throw new ExerciseGroupException("Exercise group number cannot be 0 or less");
+                }
+
+                this.ExerciseGroupNumber = number;
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using P7WebApp.Application.Common.Exceptions;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExerciseGroup;
 using P7WebApp.Domain.Repositories;
 
 namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
@@ -23,7 +23,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 
                 if (course is null)
                 {
-                    throw new NotFoundException("Could not find the exercise");
+                    throw new NotFoundException($"Could not find the exercise '{request.Title}' with Id: {request.CourseId}.");
                 }
                 else
                 {

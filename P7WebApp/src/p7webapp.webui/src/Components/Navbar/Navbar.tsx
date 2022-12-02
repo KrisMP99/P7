@@ -28,9 +28,16 @@ function Navbar(props: NavbarProps): JSX.Element {
                             <li className="nav-item">
                                 <NavLink className="nav-link" to={'/signup'}>Signup</NavLink>
                             </li> :
-                            <li style={{marginLeft: 'auto'}} className="nav-item">
-                                <NavLink className="nav-link" to={'/'} onClick={() => props.logOut()}>Log out</NavLink>
-                            </li>
+                            <div className='d-flex' style={{marginLeft: 'auto'}}>
+                                <li className="nav-item">
+                                    <NavLink className={"nav-link"} to={''} onClick={(e)=>e.preventDefault()} >
+                                        {'Welcome ' + props.user.firstname + ' ' + props.user.lastname}
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to={'/'} onClick={() => props.logOut()}>Log out</NavLink>
+                                </li>
+                            </div>
                         }   
                     </ul>
                 </div>

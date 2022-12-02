@@ -15,7 +15,11 @@ namespace P7WebApp.Application.Common.Mappings.Profiles
         public CourseMappingProfile()
         {
             CreateMap<Exercise, ExerciseOverviewResponse>();
-            CreateMap<Attendee, AttendeeResponse>();
+            CreateMap<Attendee, AttendeeResponse>()
+                .ForMember(dest => dest.UserId, src => src.MapFrom(src => src.ProfileId))
+            .ForMember(dest => dest.FirstName, src => src.MapFrom(src => src.Profile.FirstName))
+            .ForMember(dest => dest.LastName, src => src.MapFrom(src => src.Profile.LastName))
+            .ForMember(dest => dest.UserName, src => src.MapFrom(src => src.Profile.UserName));
             CreateMap<ExerciseGroup, ExerciseGroupResponse>()
                 .ForMember(dest => dest.Exercises, src => src.MapFrom(src => src.Exercises));
             CreateMap<Course, CourseResponse>()

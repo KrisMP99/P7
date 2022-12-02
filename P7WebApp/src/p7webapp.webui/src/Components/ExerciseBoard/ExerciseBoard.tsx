@@ -11,16 +11,7 @@ import { LayoutType, ShowModal } from '../Modals/CreateExerciseModal/CreateExerc
 import EmptyModule from '../Modules/EmptyModule/EmptyModule';
 import ExerciseDescriptionModule from '../Modules/ExerciseDescription/ExerciseDescription';
 import './ExerciseBoard.css';
-import { fetchExercise } from './ExerciseView';
-
-export interface TextModule {
-    title: string;
-    body: string;
-}
-
-export interface CodeModule {
-    code: string;
-}
+import { fetchExercise, getModuleFromType } from './ExerciseView';
 
 export enum ModuleType {
     EMPTY = 'empty',
@@ -32,10 +23,13 @@ export interface ExerciseModule {
     id: number;
     position: number;
     type: ModuleType;
-    content: null | TextModule | CodeModule;
+    title?: string;
+    content?: string;
+    code?: string;
 }
 
 interface ExerciseBoardProps {
+    courseId: number;
     exerciseId: number;
     exerciseGroupId: number;
     isNewExercise: boolean;
@@ -44,23 +38,23 @@ interface ExerciseBoardProps {
 export default function ExerciseBoard(props: ExerciseBoardProps) {
     const changeModuleModalRef = useRef<ShowChangeModuleModalRef>(null);
     const changeLayoutModalRef = useRef<ShowModal>(null);
-    // const [modules, setModules] = useState<ExerciseModule[]>([{id: 0, position: 1, type: ModuleType.EMPTY, content: null}]);
     const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const navigator = useNavigate();
-    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: true, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null});
+    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: false, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null});
 
     useEffect(() => {
         if (props.exerciseId >= 1) {
-            fetchExercise(props.exerciseId, (newExercise) => setExercise(newExercise));
+            fetchExercise(props.exerciseId, props.exerciseGroupId, props.courseId, (newExercise) => setExercise(newExercise));
         }
     }, [props.exerciseId]);
+
     useEffect(() => {
         handleSetModules(layout);
     }, [layout])
 
     const handleSetModules = (layout: LayoutType) => {
         let tempModules: ExerciseModule[] = [...exercise.modules]; 
-        let tempEmpty: ExerciseModule = {id: 0, position: 0, type: ModuleType.EMPTY, content: null};
+        let tempEmpty: ExerciseModule = {id: 0, position: 0, type: ModuleType.EMPTY};
         //Adds or removes left rows
         switch (layout) {
             case LayoutType.SINGLE:
@@ -98,35 +92,6 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
         setExercise({...exercise, modules: tempModules.sort((a, b) => a.position - b.position)});
     }
 
-    const getModuleFromType = (type: ModuleType, position: number, content: null | TextModule | CodeModule): React.ReactNode => {
-        switch (type) {
-            case ModuleType.EMPTY:
-                return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
-            case ModuleType.EXERCISE_DESCRIPTION:
-                const moduleContent: TextModule | null = content ? content as TextModule : null;
-                return (
-                    <ExerciseDescriptionModule 
-                        changeModuleModalRef={changeModuleModalRef} 
-                        position={position} 
-                        editMode={true} 
-                        title={moduleContent?.title ?? ''} 
-                        body={moduleContent?.body ?? ''} 
-                        changedContent={(position: number, content: TextModule) => {
-                            let mods = exercise.modules.map((m) => {
-                                if (m.position === position) {
-                                    m.content = { title: content.title, body: content.body };
-                                }
-                                return m;
-                            });
-                            setExercise({...exercise, modules: mods});
-                        }}
-                    />
-                );
-            default:
-                return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={position} />;
-        };
-    }
-
     let columns: JSX.Element[] = []
     let colElements = [];
     if (exercise.modules.length > 0) {
@@ -134,7 +99,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             let temp = exercise.modules.find((val) => val.position === i+1);
             if (temp !== undefined) {
                 colElements.push((<Allotment.Pane key={i}>
-                    {getModuleFromType(temp.type, temp.position, temp.content)}
+                    {getModuleFromType(temp, changeModuleModalRef, exercise, (newExercise) => setExercise(newExercise), true)}
                 </Allotment.Pane>));
             }
             if ((i === 1  && exercise.modules.find((val) => val.position>2)) || i === 3) {
@@ -149,12 +114,30 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             <div className='board-actions-container'>
                 <Button onClick={() => navigator(-1)}><ArrowLeft /></Button>
                 <Button onClick={() => changeLayoutModalRef.current?.handleShow()}>Change layout</Button>
+                <Form.Check 
+                    type="switch"
+                    label="Should be visible to other users"
+                    checked={exercise.isVisible} 
+                    onChange={(e) => {
+                        if (exercise.modules.some(m => m.type === ModuleType.EMPTY) && !exercise.isVisible) {
+                            alert('Please fill out the layout with modules before you set the exercise to visible');
+                        }
+                        else {
+                            setExercise({...exercise, isVisible: e.target.checked});
+                        }
+                    }}
+                />
                 <Form.Control className='exercise-title-text place-center' 
                     value={exercise.title}
                     onChange={(e) => setExercise({...exercise, title: e.target.value})}
                 />
-                <Button variant='success' onClick={() => createExercise(exercise, props.exerciseGroupId, props.isNewExercise)}>
-                    Save exercise
+                <Button variant='success' onClick={() => {
+                        if (exercise.modules.some((m) => m.type === ModuleType.EMPTY)) {
+                            setExercise({...exercise, isVisible: false});
+                        }
+                        createOrUpdateExercise(exercise, props.exerciseGroupId, props.isNewExercise)
+                    }}>
+                    Save changes
                 </Button>
                 <Button variant='danger' onClick={() => navigator(-1)}>
                     Cancel
@@ -188,40 +171,37 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     )
 }
 
-async function createExercise(exercise: Exercise, exerciseGroupId: number, isNewExercise: boolean) {
+async function createOrUpdateExercise(exercise: Exercise, exerciseGroupId: number, isNewExercise: boolean) {
     const jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
         const requestOptions = {
-            method: 'POST',
+            method: isNewExercise ? 'POST' : 'PUT',
             headers: { 
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + jwt
             },
             body: JSON.stringify({
-                id: isNewExercise ? 0 : exercise.id,
+                id: exercise.id,
                 exerciseGroupId: exerciseGroupId,
                 title: exercise.title,
+                exerciseNumber: exercise.exerciseNumber,
                 isVisible: exercise.isVisible,
-                startDate: null,
-                endDate: null,
-                visibleFrom: null,
-                visibleTo: null,
+                startDate: exercise.startDate,
+                endDate: exercise.endDate,
+                visibleFrom: exercise.visibleFrom,
+                visibleTo: exercise.visibleTo,
                 layoutId: exercise.layoutId,
                 modules: convertModulesToRequest(exercise.modules, isNewExercise)
             })
         }
-        console.log(requestOptions.body);
         await fetch(getApiRoot() + 'courses/exercise-groups/exercises', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error(res.statusText);
                 }
                 return;
-            })
-            .then(() => {
-                // callback(exercise);
             });
     } catch (error) {
         alert(error);
@@ -231,10 +211,8 @@ async function createExercise(exercise: Exercise, exerciseGroupId: number, isNew
 function convertModulesToRequest(modules: ExerciseModule[], isNewExercise: boolean) {
     let convertedModules = [];
     for (let i = 0; i < modules.length; i++) {
-        console.log(modules[i].type)
         switch (modules[i].type) {
             case ModuleType.EXERCISE_DESCRIPTION:
-                let content: TextModule = modules[i].content as TextModule;
                 convertedModules.push({
                     id: isNewExercise ? 0 : modules[0].id,
                     description: 'undefined',
@@ -242,15 +220,15 @@ function convertModulesToRequest(modules: ExerciseModule[], isNewExercise: boole
                     width: 1,
                     position: modules[i].position,
                     type: modules[i].type,
-                    title: content.title,
-                    content: content.body
+                    title: modules[i].title,
+                    content: modules[i].content
                 });
                 break;
             case ModuleType.CODE:
                 break;
-            case ModuleType.EMPTY:
-                break;
             case ModuleType.QUIZ:
+                break;
+            case ModuleType.EMPTY:
                 break;
             default:
                 break;

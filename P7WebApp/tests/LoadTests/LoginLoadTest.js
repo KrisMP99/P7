@@ -42,6 +42,7 @@ export default (userName) => {
         password: PASSWORD,
     }), BASE_HEADER);
     if (loginRes.status !== 200){
+        console.log(loginRes.status, loginRes.body)
     }
     check(loginRes, { 'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200});
 }

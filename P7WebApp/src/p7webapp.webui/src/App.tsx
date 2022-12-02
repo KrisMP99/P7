@@ -80,7 +80,7 @@ export default function App() {
                             user={user}
                         />
                     } />
-                    <Route path="/exercise/:exerciseGroupId/:exerciseId/:isEdit" element={
+                    <Route path="/course/:courseId/exercise-group/:exerciseGroupId/exercise/:exerciseId/:isEdit" element={
                         <ExerciseViewHandler user={user} />
                     } />
                     <Route path="/public-courses" element={
