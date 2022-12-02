@@ -49,7 +49,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             }
             catch(Exception)
             {
-                throw;
+                throw new Exception($"Could not enroll to course: {request.CourseId}.");
             }
         }
     }

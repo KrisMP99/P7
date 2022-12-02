@@ -12,7 +12,6 @@ EXPOSE 5000
 COPY ["P7WebApp.API/P7WebApp.API.csproj", "P7WebApp.API/"]
 COPY ["P7WebApp.Infrastructure/P7WebApp.Infrastructure.csproj", "P7WebApp.Infrastructure/"]
 COPY ["P7WebApp.Application/P7WebApp.Application.csproj", "P7WebApp.Application/"]
-COPY ["P7WebApp.SharedKernel/P7WebApp.SharedKernel.csproj", "P7WebApp.SharedKernel/"]
 RUN dotnet restore "P7WebApp.API/P7WebApp.API.csproj"
 COPY . .
 WORKDIR "/src/P7WebApp.API"

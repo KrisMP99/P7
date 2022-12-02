@@ -52,7 +52,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 
                 if (exerciseGroup is null)
                 {
-                    throw new CourseException("Could not find an exerciseGroup with the specified Id");
+                    throw new CourseException($"Could not find an exerciseGroup with Id: {exerciseGroupId}.");
                 }
 
                 return exerciseGroup;
@@ -69,7 +69,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
             {
                 if(invitecode is null)
                 {
-                    throw new CourseException("Could not create the invite code");             
+                    throw new CourseException("Could not create the invite code.");             
                 }
 
                 InviteCode = invitecode;
@@ -108,7 +108,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
 
             if (attendee is null)
             {
-                throw new CourseException("Could not find attendee with the given profile id.");
+                throw new CourseException($"Could not find attendee with profile id {profileId}.");
             }
 
             return attendee;
@@ -152,7 +152,7 @@ namespace P7WebApp.Domain.Aggregates.CourseAggregate
         {
             if(exerciseGroup.ExerciseGroupNumber < 0)
             {
-                throw new CourseException("The exercise group number cannot be less than 0.");
+                throw new CourseException($"The exercise group number cannot be less than 0.");
             }
 
             var result = ExerciseGroups.Where(eg => eg.ExerciseGroupNumber == exerciseGroup.ExerciseGroupNumber).FirstOrDefault();

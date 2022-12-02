@@ -31,8 +31,7 @@ namespace P7WebApp.Application.ExerciseCQRS.CommandHandlers
             }
             catch (Exception)
             {
-
-                throw;
+                throw new Exception($"Could not create solution for the exercise with Id: {request.ExerciseId}.");
             }
         }
     }
