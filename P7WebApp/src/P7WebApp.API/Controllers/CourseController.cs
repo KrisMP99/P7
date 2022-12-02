@@ -20,7 +20,7 @@ using P7WebApp.Application.ExerciseCQRS.Commands.UpdateSolution;
 using P7WebApp.Application.ExerciseCQRS.Queries.Get;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.CreateExercise;
 using P7WebApp.Application.ExerciseGroupCQRS.Commands.DeleteExercise;
-using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExercise;
+using P7WebApp.Application.ExerciseGroupCQRS.Commands.UpdateExerciseGroup;
 
 namespace P7WebApp.API.Controllers
 {
