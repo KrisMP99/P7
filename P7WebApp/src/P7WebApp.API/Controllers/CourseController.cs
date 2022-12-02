@@ -218,7 +218,7 @@ namespace P7WebApp.API.Controllers
             }
         }
 
-        [HttpPost("exercise-group")]
+        [HttpPost("exercise-groups")]
         public async Task<IActionResult> AddExerciseGroup([FromBody] CreateExerciseGroupCommand request)
         {
             try
