@@ -177,7 +177,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 throw new ExerciseException($"The modules position '{module.Position}' is invalid. Allowed values are: 1-4.");
             }
 
-            var result = Modules.FirstOrDefault(m => m.Position == module.Position);
+            var result = Modules.Where(m => m.Position == module.Position).FirstOrDefault();
 
             if (result is not null)
             {
@@ -256,7 +256,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Solutions.FirstOrDefault(s => s.Id == solutionId);
+                var result = Solutions.Where(s => s.Id == solutionId).FirstOrDefault();
                 if (result is not null)
                 {
                     return result;
@@ -308,7 +308,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
         {
             try
             {
-                var result = Submissions.FirstOrDefault(s => s.Id == submissionId);
+                var result = Submissions.Where(s => s.Id == submissionId).FirstOrDefault();
 
                 if (result is not null)
                 {

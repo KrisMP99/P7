@@ -257,6 +257,7 @@ export default function CourseView(props: CourseProps) {
                             courseId={course?.id ?? 0}
                             exerciseGroups={course ? course.exerciseGroups : []}
                             isOwner={isOwner}
+                            isAttendee={isAttendee}
                             changedCourse={() => {
                                 if (courseId) {
                                     fetchCourse(courseId, (data) => {
