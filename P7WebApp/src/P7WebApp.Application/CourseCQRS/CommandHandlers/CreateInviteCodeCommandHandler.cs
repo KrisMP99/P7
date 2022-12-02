@@ -31,7 +31,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             }
             catch(Exception)
             {
-                throw;
+                throw new Exception($"Could not create invite code for course with Id: {request.CourseId}.");
             }
         }
     }

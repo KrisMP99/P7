@@ -22,7 +22,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
 
                 if (course is null)
                 {
-                    throw new NotFoundException("The course could not be found");
+                    throw new NotFoundException($"The course '{request.Title}' with Id {request.Id} could not be found.");
                 }
                 else
                 {

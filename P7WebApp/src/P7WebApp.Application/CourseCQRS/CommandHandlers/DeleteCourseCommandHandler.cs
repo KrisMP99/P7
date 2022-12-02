@@ -31,7 +31,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             }
             catch (Exception)
             { 
-                throw;
+                throw new Exception($"Could not delete course with Id: {request.Id}.");
             }
         }
     }

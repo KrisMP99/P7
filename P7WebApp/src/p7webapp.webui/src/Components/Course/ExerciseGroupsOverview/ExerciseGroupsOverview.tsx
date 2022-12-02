@@ -16,6 +16,7 @@ interface ExerciseOverviewProps {
     exerciseGroups: ExerciseGroup[];
     changedCourse: () => void;
     isOwner: boolean;
+    isAttendee: boolean;
 }
 
 export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
@@ -27,7 +28,7 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
     const openEditExerciseGroupModalRef = useRef<ShowEditExerciseGroupModal>(null);
 
     useEffect(() => {
-        setGroupElements(makeExerciseGroupElements(navigate, props.exerciseGroups, props.isOwner, openEditExerciseGroupModalRef, openDeleteExerciseModalRef, props.courseId));
+        setGroupElements(makeExerciseGroupElements(navigate, props.exerciseGroups, props.isOwner, props.isAttendee, openEditExerciseGroupModalRef, openDeleteExerciseModalRef, props.courseId));
     }, [props.exerciseGroups.length, props.exerciseGroups]);
 
     return (
@@ -66,6 +67,7 @@ export default function ExerciseGroupsOverview(props: ExerciseOverviewProps) {
 function makeExerciseGroupElements (navigate: NavigateFunction, 
                                     exercisegroups: ExerciseGroup[], 
                                     isOwner: boolean,
+                                    isAttendee: boolean,
                                     editExerciseGroupModalRef: React.RefObject<ShowEditExerciseGroupModal>,
                                     deleteExerciseModalRef: React.RefObject<ShowDeleteConfirmModal>,
                                     courseId: number
@@ -76,13 +78,18 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
         let exerciseElements: JSX.Element[] = [];
         exerciseElements = exGroup.exercises.filter((exercise) => {
 
-            return !isOwner ? exGroup.isVisible : true;
+            return !isOwner ? exGroup.isVisible : true; //WIP - måske ændre til exercise.isVisible i stedet idk
 
         }).map((exercise: ExerciseOverview, id: number) => {
             return (
                 <div key={id} className={'exercise-container d-flex ' + (!exercise.isVisible && 'is-invisible')} onClick={(e) => {
                     e.stopPropagation();
-                    navigate('/course/' + courseId + '/exercise-group/' + exGroup.id + '/exercise/' + exercise.id + '/0')
+                    if(isAttendee || isOwner) {
+                        navigate('/course/' + courseId + '/exercise-group/' + exGroup.id + '/exercise/' + exercise.id + '/0');
+                    }
+                    else {
+                        alert("Please enroll, before you start with any exercises")
+                    }
                 }}>
                     <div className='exercise-title'>{exercise.title}</div>
                     {isOwner &&

@@ -67,9 +67,12 @@ export interface Course {
 }
 
 export interface Attendee {
-    courseId: number;
     userId: number;
     roleId: number;
+    firstName: string;
+    lastName: string;
+    username: string;
+    roleName: string;
 }
 
 interface CourseProps {
@@ -257,6 +260,7 @@ export default function CourseView(props: CourseProps) {
                             courseId={course?.id ?? 0}
                             exerciseGroups={course ? course.exerciseGroups : []}
                             isOwner={isOwner}
+                            isAttendee={isAttendee}
                             changedCourse={() => {
                                 if (courseId) {
                                     fetchCourse(courseId, (data) => {

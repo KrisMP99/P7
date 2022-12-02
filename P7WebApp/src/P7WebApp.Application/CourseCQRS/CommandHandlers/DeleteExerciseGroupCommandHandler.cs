@@ -32,7 +32,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             }
             catch(Exception)
             {
-                throw;
+                throw new Exception($"Could not delete exercise group Id: {request.ExerciseGroupId} in course Id: {request.CourseId}.");
             }
         }
     }

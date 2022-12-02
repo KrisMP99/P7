@@ -39,7 +39,7 @@ export default function Frontpage(props: LoginProps) {
 
     return (
         <Container>
-            <div className="row">
+            <div className="row d-flex align-items-center">
 
                 {/* Left side of page */}
                 <div className="col">

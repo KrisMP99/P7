@@ -191,9 +191,9 @@ namespace P7WebApp.API.Controllers
                 var result = await _mediator.Send(request);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("No changes to the course were made, can therefore not update");
             }
         }
 

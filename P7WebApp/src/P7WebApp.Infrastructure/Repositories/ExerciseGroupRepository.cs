@@ -5,6 +5,7 @@ using P7WebApp.Application.Common.Models;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
+using P7WebApp.Infrastructure.Exceptions;
 
 namespace P7WebApp.Infrastructure.Repositories
 {
@@ -25,7 +26,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch (Exception)
             {
-                throw;
+                throw new ExerciseGroupRepositoryException($"Could not create exercise with Id: {exercise.Id}.");
             }
         }
 
@@ -41,7 +42,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ExerciseGroupRepositoryException($"Could not delete exercise with Id: {exerciseId}.");
                 }
             }
             catch (Exception)
@@ -62,7 +63,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new ExerciseGroupRepositoryException($"Could not get exercise group with exercises with Id: {exerciseGroup.Id}.");
                 }
             }
             catch (Exception)
@@ -86,7 +87,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
             catch(Exception)
             {
-                throw;
+                throw new ExerciseGroupRepositoryException($"Could not get exercise group for course with Id: {courseId}.");
             }
         }
 
