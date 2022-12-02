@@ -82,7 +82,6 @@ export async function fetchExercise(exerciseId: number, exerciseGroupId: number,
                 return res.json();
             })
             .then((exercise) => {
-                console.log(exercise);
                 callback(exercise);
             });
      } catch (error) {
