@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\P7WebApp.Domain\P7WebApp.Domain.csproj" />
+    <ProjectReference Include="..\..\src\P7WebApp.Domain\P7WebApp.Domain.csproj" />
   </ItemGroup>
 
 </Project>
