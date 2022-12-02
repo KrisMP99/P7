@@ -98,6 +98,7 @@ namespace P7WebApp.Infrastructure.Repositories
                 var course = await _context.Courses
                     .Where(c => c.Id == courseId)
                     .Include(c => c.Attendees)
+                        .ThenInclude(a => a.Profile)
                     .Include(c => c.ExerciseGroups)
                     .ThenInclude(eg => eg.Exercises)
                     .FirstOrDefaultAsync();
@@ -124,6 +125,7 @@ namespace P7WebApp.Infrastructure.Repositories
                     .Include(c => c.ExerciseGroups)
                     .Include(c => c.InviteCode)
                     .Include(c => c.Attendees)
+                        .ThenInclude(a => a.Profile)
                     .FirstOrDefaultAsync();
                
                 if (course is null)
