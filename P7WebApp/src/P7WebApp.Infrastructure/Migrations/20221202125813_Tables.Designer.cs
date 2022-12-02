@@ -12,7 +12,7 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221202115324_Tables")]
+    [Migration("20221202125813_Tables")]
     partial class Tables
     {
         /// <inheritdoc />
@@ -1042,17 +1042,26 @@ namespace P7WebApp.Infrastructure.Migrations
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.Module", b =>
                 {
-                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Exercise", null)
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Exercise", "Exercise")
                         .WithMany("Modules")
-                        .HasForeignKey("ExerciseId");
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", null)
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Solution", "Solution")
                         .WithMany("Modules")
-                        .HasForeignKey("SolutionId");
+                        .HasForeignKey("SolutionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Submission", null)
+                    b.HasOne("P7WebApp.Domain.Aggregates.ExerciseAggregate.Submission", "Submission")
                         .WithMany("Modules")
-                        .HasForeignKey("SubmissionId");
+                        .HasForeignKey("SubmissionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Solution");
+
+                    b.Navigation("Submission");
                 });
 
             modelBuilder.Entity("P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule.Choice", b =>

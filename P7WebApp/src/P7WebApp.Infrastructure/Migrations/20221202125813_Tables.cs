@@ -496,17 +496,20 @@ namespace P7WebApp.Infrastructure.Migrations
                         name: "FK_CodeEditorModules_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CodeEditorModules_Solutions_SolutionId",
                         column: x => x.SolutionId,
                         principalTable: "Solutions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CodeEditorModules_Submissions_SubmissionId",
                         column: x => x.SubmissionId,
                         principalTable: "Submissions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -529,17 +532,20 @@ namespace P7WebApp.Infrastructure.Migrations
                         name: "FK_QuizModules_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_QuizModules_Solutions_SolutionId",
                         column: x => x.SolutionId,
                         principalTable: "Solutions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_QuizModules_Submissions_SubmissionId",
                         column: x => x.SubmissionId,
                         principalTable: "Submissions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -564,17 +570,20 @@ namespace P7WebApp.Infrastructure.Migrations
                         name: "FK_TextModules_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TextModules_Solutions_SolutionId",
                         column: x => x.SolutionId,
                         principalTable: "Solutions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TextModules_Submissions_SubmissionId",
                         column: x => x.SubmissionId,
                         principalTable: "Submissions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

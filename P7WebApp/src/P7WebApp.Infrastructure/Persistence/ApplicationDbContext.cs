@@ -14,6 +14,7 @@ using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Aggregates.ProfileAggregate;
 using P7WebApp.Infrastructure.Common;
 using P7WebApp.Infrastructure.Identity;
+using System.Reflection.Emit;
 
 namespace P7WebApp.Infrastructure.Persistence
 {
@@ -56,7 +57,25 @@ namespace P7WebApp.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Module>()
-                .UseTpcMappingStrategy();
+            .UseTpcMappingStrategy();
+
+            builder.Entity<Exercise>()
+                .HasMany(e => e.Modules)
+                .WithOne(m => m.Exercise)
+                .HasForeignKey(m => m.ExerciseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Submission>()
+                .HasMany(e => e.Modules)
+                .WithOne(m => m.Submission)
+                .HasForeignKey(m => m.SubmissionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Solution>()
+                .HasMany(e => e.Modules)
+                .WithOne(m => m.Solution)
+                .HasForeignKey(m => m.SolutionId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(builder);
         }
