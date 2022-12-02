@@ -40,7 +40,7 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
     const changeLayoutModalRef = useRef<ShowModal>(null);
     const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const navigator = useNavigate();
-    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: true, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null});
+    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: false, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null});
 
     useEffect(() => {
         if (props.exerciseId >= 1) {
@@ -114,6 +114,19 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             <div className='board-actions-container'>
                 <Button onClick={() => navigator(-1)}><ArrowLeft /></Button>
                 <Button onClick={() => changeLayoutModalRef.current?.handleShow()}>Change layout</Button>
+                <Form.Check 
+                    type="switch"
+                    label="Should be visible to other users"
+                    checked={exercise.isVisible} 
+                    onChange={(e) => {
+                        if (exercise.modules.some(m => m.type === ModuleType.EMPTY) && !exercise.isVisible) {
+                            alert('Please fill out the layout with modules before you set the exercise to visible');
+                        }
+                        else {
+                            setExercise({...exercise, isVisible: e.target.checked});
+                        }
+                    }}
+                />
                 <Form.Control className='exercise-title-text place-center' 
                     value={exercise.title}
                     onChange={(e) => setExercise({...exercise, title: e.target.value})}
