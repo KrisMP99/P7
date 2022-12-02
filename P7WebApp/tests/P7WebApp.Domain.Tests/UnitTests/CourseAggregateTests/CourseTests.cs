@@ -399,54 +399,6 @@ namespace P7WebApp.Domain.Tests.UnitTests.CourseAggregateTests
                 .Throw<CourseException>();
         }
 
-        [Fact]
-        public void AddExerciseGroup_ThrowsCourseException_GivenNegativeExerciseGroupNumber()
-        {
-            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
-
-            var exerciseGroup = new ExerciseGroup(
-                courseId: 0,
-                title: "Test",
-                description: "Test",
-                exerciseGroupNumber: -1,
-                isVisible: true,
-                DateTime.UtcNow);
-
-            Action act = () => course.AddExerciseGroup(exerciseGroup);
-
-            act
-                .Should()
-                .Throw<CourseException>();
-        }
-
-        [Fact]
-        public void AddExerciseGroup_ThrowsCourseException_GivenTwoExerciseGroupsWithSameExerciseGroupNumber()
-        {
-            var course = new Course(ownerId: 0, title: "Test", description: "Test", isPrivate: true);
-
-            var exerciseGroup1 = new ExerciseGroup(
-                courseId: 0,
-                title: "Test",
-                description: "Test",
-                exerciseGroupNumber: 0,
-                isVisible: true,
-                DateTime.UtcNow);
-
-            var exerciseGroup2 = new ExerciseGroup(
-                courseId: 0,
-                title: "Test",
-                description: "Test",
-                exerciseGroupNumber: 0,
-                isVisible: true,
-                DateTime.UtcNow);
-            course.AddExerciseGroup(exerciseGroup1);
-
-            Action act = () => course.AddExerciseGroup(exerciseGroup2);
-
-            act
-                .Should()
-                .Throw<CourseException>();
-        }
 
         [Fact]
         public void RemoveExerciseGroup_Success_RemovesCorrectExerciseGroupGivenCorrectExerciseGroupIdAndTheExerciseGroupIsInTheExerciseGroupList()
