@@ -146,7 +146,8 @@ export default function CourseView(props: CourseProps) {
                     }}
                     readOnly={!isEditMode}
                 />
-                {!isOwner && <div style={{float:'right'}} >
+                {!isOwner && 
+                <div style={{float:'right'}} >
                     {
                         isAttendee?
                         <Button size='sm' className='btn-3' onClick={() => {
@@ -170,7 +171,7 @@ export default function CourseView(props: CourseProps) {
                     }     
                 </div> }
                 {isOwner && 
-                    (<div style={{ float: 'right' }}>
+                    (<div className='d-flex align-items-center'>
                         {isEditMode &&
                             <>
                                 <Button size='sm' className='btn-3' variant='success' onClick={() => {
@@ -189,7 +190,8 @@ export default function CourseView(props: CourseProps) {
                         }
                         {!isEditMode &&
                             <>
-                                {inviteCode !== "" && <Form.Control readOnly value={inviteCode}/>}
+                                <div className='d-flex'>
+                                {inviteCode !== "" && <Form.Control style={{maxWidth: '50px', maxHeight: '33px'}} readOnly value={inviteCode}/>}
                                 <Button size='sm' className='btn-3' onClick={() => {
                                     getInviteCode(course?.id!, (inviteCode) => 
                                     {
@@ -216,6 +218,7 @@ export default function CourseView(props: CourseProps) {
                                         <Pencil />
                                     </Button>
                                 </OverlayTrigger>
+                                </div>
                             </>
                         }
                     </div>
