@@ -67,9 +67,12 @@ export interface Course {
 }
 
 export interface Attendee {
-    courseId: number;
     userId: number;
     roleId: number;
+    firstName: string;
+    lastName: string;
+    username: string;
+    roleName: string;
 }
 
 interface CourseProps {
