@@ -19,7 +19,8 @@ export const USERS = 1000
 
 export const options = {
     vus: USERS,
-    duration: '10m'
+    duration: '10m',
+    setupTimeout: '1000s'
 }
 
 let userData = []
@@ -43,8 +44,6 @@ export function setup () {
         "lastName": "OwnerLast"
     }), BASE_HEADER);
 
-    sleep(5)
-
     check(res, {'created user': (r) => r.status === 200});
 
     // Login to get the auth token
@@ -56,7 +55,6 @@ export function setup () {
 
     check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token' !== undefined && r.status === 200)})
     let ownerToken = loginRes.json('token')
-
 
     // header with token so we can create courses
     const BASE_TOKEN_HEADER = {
@@ -75,8 +73,6 @@ export function setup () {
             isPrivate: false
         }), BASE_TOKEN_HEADER);
 
-        sleep(1)
-
         check(resCourse, r => r.status === 200);
 
         // Create a random number of exercise groups between 1 - 10 for the course created above
@@ -90,7 +86,7 @@ export function setup () {
                 isVisible: true, 
                 visibleFromData: "2022-11-30T11:09:33.510Z"
             }), BASE_TOKEN_HEADER);
-            sleep(0.5)
+
             check(resEG, r => r.status === 200);
 
             // Create a random number of exercises between 1 - 10 for the exercise groups created above
@@ -116,12 +112,9 @@ export function setup () {
                         content:exId.toString() + "_module_content"
                     }]
                 }), BASE_TOKEN_HEADER);
-                sleep(0.5)
                 check(resEx, r => r.status === 200);
             }
-
         }
-
     }
     //-----------------------------------COURSE SETUP END-----------------------------------//
 
@@ -151,7 +144,6 @@ export function setup () {
             "lastName": "LastTest"
         }), BASE_HEADER);
         check(res, {'created user': (r) => r.status === 200});
-        sleep(0.1)
         
         // Login
         const loginRes = http.post(`${BASE_URL}profiles/login`, JSON.stringify({
@@ -159,7 +151,6 @@ export function setup () {
             "password": userData[i].value.password
         }), BASE_HEADER);
 
-        sleep(0.1)
         check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token' !== undefined && r.status === 200)})
         userData[i].value.token = loginRes.json('token')
 
@@ -174,7 +165,6 @@ export function setup () {
             }
         }
         const publicCoursesRes = http.get(`${BASE_URL}courses/public`, USER_TOKEN_HEADER)
-        sleep(0.1)
         check(publicCoursesRes, r => r.status === 200)
         const courseIds = publicCoursesRes.map(c => c.courseId)
 
@@ -184,8 +174,6 @@ export function setup () {
         const enrollRes = http.post(`${BASE_URL}courses/enroll`, JSON.stringify({
             "courseId": enrollInCourseId
         }), USER_TOKEN_HEADER)
-
-        sleep(1)
         check(enrollRes, r => r.status === 200)
     }
     //-----------------------------------USER SETUP END-----------------------------------//
