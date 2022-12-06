@@ -20,10 +20,10 @@ namespace P7WebApp.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(
+                    options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
                     builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
-                        .EnableRetryOnFailure()));
+                .EnableRetryOnFailure()));
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
@@ -49,16 +49,13 @@ namespace P7WebApp.Infrastructure
                 options.Password.RequiredUniqueChars = 1;
             });
 
-            services.AddHttpContextAccessor();
-
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            services
+                .AddAuthorization();
 
             byte[] key = Encoding.ASCII.GetBytes(configuration.GetSection("token").GetSection("secret").Value); // This should probably be retrieved some other way
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://localhost:7001";
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters

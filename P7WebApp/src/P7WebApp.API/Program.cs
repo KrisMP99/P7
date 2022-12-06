@@ -23,9 +23,6 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
-
-    // options.AddPolicy("CorsAllowSpecific",
-    //     p => p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 });
 
 var app = builder.Build();
@@ -46,7 +43,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseRouting();
 app.UseCors("CorsAllowAll");
 
-app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
 
