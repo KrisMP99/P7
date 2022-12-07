@@ -18,14 +18,15 @@ export const NUMBER_COURSES = 100
 export const USERS = 1000
 
 export const options = {
-    vus: USERS,
-    duration: '10m',
+    stages: [{target : 500, duration: '10s'},
+             {target : 1000, duration: '10s'},
+             {target : 10000, duration: '10s'}],
     setupTimeout: '1000s'
 }
 
 
 function randomIntNumber(max) {
-    return Math.floor(Math.random() * 10) + 1;
+    return Math.floor(Math.random() * max) + 1;
 }
 
 // Create courses with exercise groups and exercises
@@ -182,6 +183,9 @@ export function setup () {
 }
 
 export default (userData) => {
+    // The user logs in, clicks on a course -> exercise group -> specific exercise
+    // The users can take different amount of time doing this
+
     // Pick a random user from the user data object
     let user = userData[randomIntNumber(userData.length) - 1]
 
@@ -216,8 +220,8 @@ export default (userData) => {
     const egs = specificCourse.json().exerciseGroups
     const specificEg = egs[randomIntNumber(egs.length) - 1]
     const specificExId = specificEg.exercises[randomIntNumber(specificEg.exercises.length()) - 1].id
-    // Get the specific exercise
-    // [HttpGet("{courseId}/exercise-groups/{exerciseGroupId}/exercises/{exerciseId}")]
-    //const specificEx = http.get(`${BASE_URL}courses/${courseId[0]}`, USER_TOKEN_HEADER)
 
+    // Get the specific exercise
+    const exerciseResponse = http.get(`${BASE_URL}courses/${courseId[0]}/exercise-groups/${specificEg.id}/exercises/${specificExId}`, USER_TOKEN_HEADER)
+    check(exerciseResponse, r => r.status === 200)
 } 
