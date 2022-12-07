@@ -15,19 +15,30 @@ import { check, sleep } from 'k6';
 export const BASE_URL = "http://130.225.39.193/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 export const NUMBER_COURSES = 100
-export const USERS = 1000
+export const USERS = 100
 
 export const options = {
-    stages: [{target : 100, duration: '10s'},
-             {target : 100, duration: '1m'},
-             {target : 200, duration: '1m'},
-             {target : 200, duration: '3m'},
-             {target : 500, duration: '1m'},
-             {target : 500, duration: '3m'},
-             {target : 600, duration: '1m'},
-             {target : 600, duration: '1m'},
-             {target : 400, duration: '30s'},
-             {target : 100, duration: '30s'}],
+    stages: [{target : 5, duration: '10s'},
+             {target : 10, duration: '1m'},
+             {target : 10, duration: '2m'},
+             {target : 20, duration: '30s'},
+             {target : 20, duration: '2m'},
+             {target : 30, duration: '30s'},
+             {target : 30, duration: '2m'},
+             {target : 40, duration: '30s'},
+             {target : 40, duration: '2m'},
+             {target : 50, duration: '30s'},
+             {target : 50, duration: '2m'},
+             {target : 60, duration: '30s'},
+             {target : 60, duration: '2m'},
+             {target : 70, duration: '30s'},
+             {target : 70, duration: '2ms'},
+             {target : 80, duration: '30s'},
+             {target : 80, duration: '2ms'},
+             {target : 90, duration: '30s'},
+             {target : 90, duration: '2m'},
+             {target : 100, duration: '30s'},
+             {target : 100, duration: '2m'}],
     setupTimeout: '1000s'
 }
 
@@ -235,4 +246,11 @@ export default (userData) => {
     // Get the specific exercise
     const exerciseResponse = http.get(`${BASE_URL}courses/${courseId[0]}/exercise-groups/${specificEg.id}/exercises/${specificExId}`, USER_TOKEN_HEADER)
     check(exerciseResponse, r => r.status === 200)
-} 
+}
+
+export function handleSummary(data) {
+    return {
+      "result.html": htmlReport(data),
+      stdout: textSummary(data, { indent: " ", enableColors: true }),
+    };
+}

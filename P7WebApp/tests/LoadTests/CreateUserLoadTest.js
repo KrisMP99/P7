@@ -1,4 +1,5 @@
 import http from 'k6/http';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 import { check } from 'k6';
 
 
@@ -38,3 +39,4 @@ export default () => {
     }), BASE_HEADER);
     check(res, {'created user': (r) => r.status === 200});
 }
+
