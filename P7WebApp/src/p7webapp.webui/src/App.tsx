@@ -13,7 +13,7 @@ const ServerUrl = "http://130.225.39.193/api/";
 const LocalHost = "https://localhost:7001/api/"
 
 export function getApiRoot() {
-    return ServerUrl;
+    return LocalHost;
 }
 
 export interface User {
