@@ -8,6 +8,7 @@ namespace P7WebApp.Infrastructure.Persistence
     {
 
         private readonly IApplicationDbContext _context;
+        private bool _disposed = false;
 
         public UnitOfWork(IApplicationDbContext context)
         {
@@ -34,5 +35,6 @@ namespace P7WebApp.Infrastructure.Persistence
                 throw;
             }
         }
+
     }
 }

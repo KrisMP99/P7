@@ -18,7 +18,7 @@ export const FIRSTNAME = "Load";
 export const LASTNAME = "Test";
 export const EMAIL = `${USERNAME}@LoadTest.com`; 
 export const PASSWORD = "LoadTest1!";
-export const BASE_URL = "http://130.225.39.193/api/";
+export const BASE_URL = "https://localhost:7001/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 
 
@@ -57,7 +57,7 @@ export function setup () {
     }
     const responses = http.batch([
         ['POST', `${BASE_URL}courses`, JSON.stringify({ title: "new1", description: "string", isPrivate: false,}), requestHeaderConfig],
-        ['POST', `${BASE_URL}courses/exercise-group`, JSON.stringify({ courseId: 1, title: "new1", description: "string", exerciseGroupNumber: 1, isVisible: true, visibleFromData: "2022-11-30T11:09:33.510Z"}), requestHeaderConfig],
+        ['POST', `${BASE_URL}courses/exercise-groups`, JSON.stringify({ courseId: 1, title: "new1", description: "string", exerciseGroupNumber: 1, isVisible: true, visibleFromData: "2022-11-30T11:09:33.510Z"}), requestHeaderConfig],
         ['POST', `${BASE_URL}courses/exercise-groups/exercises`, JSON.stringify({exerciseGroupId: 1, title: "new3", isVisible: false,
                     exerciseNumber: 1, startDate:"2022-11-30T11:11:10.457Z", endDate: "2022-11-30T11:11:10.457Z", visibleFrom:"2022-11-30T11:11:10.457Z", visibleTo:"2022-11-30T11:11:10.457Z",
                     layoutId:1,modules:[{description: "string", height:0, width:0, position: 1, type:"text", title:"string", content:"content"}]}), requestHeaderConfig],

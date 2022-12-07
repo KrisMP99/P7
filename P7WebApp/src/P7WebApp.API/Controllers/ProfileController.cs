@@ -72,8 +72,8 @@ namespace P7WebApp.API.Controllers
         //-------------------------PROFILE SETTINGS-------------------------//
         //----------------------AUTHORIZATION REQUIRED----------------------//
         [HttpPost]
-        [Route("{userId}/profile")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("{userId}/profile")]
         public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateProfileCommand request)
         {
             try
@@ -88,8 +88,8 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpGet]
-        [Route("{userId}/profile")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("{userId}/profile")]
         public async Task<IActionResult> GetUserProfile([FromBody] GetProfileQuery request)
         {
             try
@@ -104,8 +104,8 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpGet]
-        [Route("courses/created")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("courses/created")]
         public async Task<IActionResult> GetUsersCreatedCourses()
         {
             try
@@ -120,8 +120,8 @@ namespace P7WebApp.API.Controllers
         }
 
         [HttpGet]
-        [Route("courses/attends")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("courses/attends")]
         public async Task<IActionResult> GetUsersAttendedCourses()
         {
             try

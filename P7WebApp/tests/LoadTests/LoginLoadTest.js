@@ -4,16 +4,16 @@ import { check } from 'k6';
 
 // Options https://k6.io/docs/using-k6/k6-options/reference/
 export const options = {
-    vus: 4000, 
-    duration: '5m'
+    vus: 5000,
+    duration: '1m'
 }
 
 export const FIRSTNAME = "Load";
 export const LASTNAME = "Test";
 export const EMAIL = `test@LoadTest.com`; 
 export const PASSWORD = "LoadTest1!";
-export const BASE_URL = "http://130.225.39.193/api/";
-export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' }, timeout: '180s' }
+export const BASE_URL = "http://localhost/api/";
+export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 
 
 function randomString(length, charset = '') {

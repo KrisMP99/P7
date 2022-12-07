@@ -18,7 +18,8 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var result = await _context.Profiles.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+                var result = await _context.Profiles.Where(p => p.UserId == userId).AsNoTracking().FirstOrDefaultAsync();
+                
                 return result;
             }
             catch(Exception)

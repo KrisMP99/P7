@@ -92,7 +92,7 @@ async function createExerciseGroup(courseId: number, title: string, groupNumber:
             })
         }
         
-        await fetch(getApiRoot() + 'courses/exercise-group', requestOptions)
+        await fetch(getApiRoot() + 'courses/exercise-groups', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Failed to create exercise group - server unavailable');
