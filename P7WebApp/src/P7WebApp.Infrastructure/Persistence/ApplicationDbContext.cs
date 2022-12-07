@@ -10,17 +10,12 @@ using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Aggregates.ProfileAggregate;
 using P7WebApp.Infrastructure.Identity;
-using System.Reflection.Emit;
 
 namespace P7WebApp.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Course> Courses { get; set; }
         public DbSet<Attendee> Attendees { get; set; }
