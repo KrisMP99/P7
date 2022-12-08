@@ -12,34 +12,36 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
+
 export const BASE_URL = "http://130.225.39.193/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 export const NUMBER_COURSES = 100
 export const USERS = 100
 
 export const options = {
-    stages: [{target : 5, duration: '10s'},
-             {target : 10, duration: '1m'},
-             {target : 10, duration: '2m'},
-             {target : 20, duration: '30s'},
-             {target : 20, duration: '2m'},
-             {target : 30, duration: '30s'},
-             {target : 30, duration: '2m'},
-             {target : 40, duration: '30s'},
-             {target : 40, duration: '2m'},
-             {target : 50, duration: '30s'},
-             {target : 50, duration: '2m'},
-             {target : 60, duration: '30s'},
-             {target : 60, duration: '2m'},
-             {target : 70, duration: '30s'},
-             {target : 70, duration: '2ms'},
-             {target : 80, duration: '30s'},
-             {target : 80, duration: '2ms'},
-             {target : 90, duration: '30s'},
-             {target : 90, duration: '2m'},
-             {target : 100, duration: '30s'},
-             {target : 100, duration: '2m'}],
-    setupTimeout: '1000s'
+    stages: [{target : 100, duration: '10s'},
+             {target : 100, duration: '1m'},
+             {target : 500, duration: '2m'},
+             {target : 500, duration: '30s'},
+             {target : 750, duration: '2m'},
+             {target : 750, duration: '30s'},
+             {target : 1000, duration: '2m'},
+             {target : 1000, duration: '30s'},
+             {target : 2000, duration: '2m'},
+             {target : 2000, duration: '30s'},
+             {target : 3000, duration: '2ms'},
+             {target : 3000, duration: '30s'},
+             {target : 2000, duration: '2ms'},
+             {target : 2000, duration: '30s'},
+             {target : 1000, duration: '2m'},
+             {target : 1000, duration: '30s'}],
+    setupTimeout: '1000s',
+
+    thresholds: {
+        // 100% of requests must finish within 1000ms.
+        http_req_duration: ['p(90) < 100', 'p(95) < 200', 'p(99.9) <= 1000'],
+      },
 }
 
 
@@ -70,9 +72,8 @@ export function setup () {
         "username": "owner",
         "password": "Owner123!"
     }), BASE_HEADER);
-    sleep(5)
 
-    check(loginRes, {'Owned user logged in successfully': (r) => r.json('token') !== '' && r.json('token' !== undefined && r.status === 200)})
+    check(loginRes, {'Owned user logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200})
     let ownerToken = loginRes.json('token')
 
     // header with token so we can create courses
@@ -172,7 +173,7 @@ export function setup () {
             "password": userData[i].value.password
         }), BASE_HEADER);
 
-        check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token' !== undefined && r.status === 200)})
+        check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200})
         userData[i].value.token = loginRes.json('token')
 
         // Attend the courses
@@ -214,7 +215,7 @@ export default (userData) => {
         "username": user.value.username,
         "password": user.value.password
     }), BASE_HEADER);
-    check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token' !== undefined && r.status === 200)})
+    check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200})
     user.value.token = loginRes.json('token')
 
     const USER_TOKEN_HEADER = {

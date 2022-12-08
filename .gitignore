@@ -355,3 +355,6 @@ MigrationBackup/
 # env files
 .env
 .DS_Store
+
+# test_files
+test_results/
