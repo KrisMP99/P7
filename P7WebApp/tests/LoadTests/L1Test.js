@@ -20,23 +20,45 @@ export const NUMBER_COURSES = 100
 export const USERS = 100
 
 export const options = {
-    stages: [{target : 100, duration: '10s'},
-             {target : 100, duration: '1m'},
-             {target : 500, duration: '2m'},
+    stages: [{target : 500, duration: '1m'},
              {target : 500, duration: '30s'},
+             {target : 750, duration: '1m'},
              {target : 750, duration: '2m'},
-             {target : 750, duration: '30s'},
+             {target : 1000, duration: '1m'},
              {target : 1000, duration: '2m'},
-             {target : 1000, duration: '30s'},
+             {target : 1500, duration: '2m'},
+             {target : 1500, duration: '1m'},
              {target : 2000, duration: '2m'},
-             {target : 2000, duration: '30s'},
-             {target : 3000, duration: '2ms'},
-             {target : 3000, duration: '30s'},
-             {target : 2000, duration: '2ms'},
-             {target : 2000, duration: '30s'},
-             {target : 1000, duration: '2m'},
-             {target : 1000, duration: '30s'}],
-    setupTimeout: '1000s',
+             {target : 2000, duration: '1m'},
+             {target : 2250, duration: '2m'},
+             {target : 2250, duration: '1m'},
+             {target : 2500, duration: '2m'},
+             {target : 2500, duration: '1m'},
+             {target : 2750, duration: '2m'},
+             {target : 2750, duration: '1m'},
+             {target : 3000, duration: '2m'},
+             {target : 3000, duration: '1m'},
+             {target : 3250, duration: '2m'},
+             {target : 3250, duration: '1m'},
+             {target : 3500, duration: '2m'},
+             {target : 3500, duration: '1m'},
+             {target : 4000, duration: '2m'},
+             {target : 4000, duration: '1m'},
+             {target : 5000, duration: '2m'},
+             {target : 5000, duration: '5m'},
+             {target : 6000, duration: '2m'},
+             {target : 6000, duration: '1m'},
+             {target : 10000, duration: '2m'},
+             {target : 10000, duration: '1m'}],
+    setupTimeout: '10m',
+
+    ext: {
+        loadimpact: {
+          projectID: 3618966,
+          // Test runs with the same name groups test runs together
+          name: "L1 test"
+        }
+    },
 
     thresholds: {
         // 100% of requests must finish within 1000ms.
@@ -187,7 +209,7 @@ export function setup () {
             }
         }
         const publicCoursesRes = http.get(`${BASE_URL}courses/public`, USER_TOKEN_HEADER)
-        check(publicCoursesRes, r => r.status === 200)
+        check(publicCoursesRes, {"Got public courses" : r => r.status === 200})
         const courseIds = publicCoursesRes.json().map(c => c.id)
         
         // enroll in a random course selected from the course ids
@@ -196,7 +218,7 @@ export function setup () {
         const enrollRes = http.post(`${BASE_URL}courses/enroll`, JSON.stringify({
             "courseId": enrollInCourseId
         }), USER_TOKEN_HEADER)
-        check(enrollRes, r => r.status === 200)
+        check(enrollRes, {"Enrolled in course" : r => r.status === 200})
     }
 
     return userData

@@ -9,13 +9,11 @@
 import http from 'k6/http';
 import { check } from 'k6';
 
-export const BASE_URL_prod = "http://130.225.39.193/api/";
-export const BASE_URL = "https://localhost:7001/api/";
+export const BASE_URL = "http://130.225.39.193/api/";
+export const BASE_URL_dev = "https://localhost:7001/api/";
 export const BASE_HEADER = { 
-    headers: { 'Content-Type': 'application/json' },
-    timeout: '1000s' 
+    headers: { 'Content-Type': 'application/json' } 
 }
-export const NUMBER_OF_USERS = 10
 
 function randomIntNumber(max) {
     return Math.floor(Math.random() * max) + 1;
@@ -29,13 +27,19 @@ function randomString(length, charset = '') {
 }
 
 export const options = {
-    stages: [{target : 100, duration: '10s'},
-             {target : 100, duration: '1m'},
-             {target : 0, duration: '10s'}, 
-             {target : 0, duration: '10m'}],
-    setupTimeout: '1000s',
-    gracefulRampDown: '60s',
-
+    stages: [{target : 5, duration: '10s'},
+             {target : 10, duration: '1m'},
+             {target : 10, duration: '2m'},
+             {target : 20, duration: '30s'},
+             {target : 20, duration: '2m'},
+             {target : 30, duration: '30s'},
+             {target : 30, duration: '2m'},
+             {target : 40, duration: '30s'},
+             {target : 40, duration: '2m'},
+             {target : 30, duration: '2m'},
+             {target : 20, duration: '2m'},
+             {target : 10, duration: '1m'},
+             {target : 5, duration: '2m'}],
     thresholds: {
         // 100% of requests must finish within 1000ms.
         http_req_duration: ['p(90) < 100', 'p(95) < 200', 'p(99.9) <= 1000'],
@@ -48,10 +52,6 @@ export const options = {
 // Create x number of exercise groups
 // For each exercise group, create x number of exercises
 export default () => {
-    let params = {
-        timeout: '1000s'
-    };
-
     // Pick a random user to log in to and creating a course
     // creating the user
     let userName = randomString(100)
@@ -77,8 +77,7 @@ export default () => {
         headers: {
             'Authorization': `Bearer ${authToken}`,
             'Content-Type' : 'application/json'
-        },
-        timeout: '1000s'
+        }
     }
 
     // Get own courses + attending courses
@@ -90,7 +89,7 @@ export default () => {
 
     // Creating a course
     const resCourse = http.post(`${BASE_URL}courses`, JSON.stringify({ 
-        title: "_course", 
+        title: "_course_" + randomString(100), 
         description: "_description", 
         isPrivate: false
     }), USER_TOKEN_HEADER);
@@ -112,7 +111,7 @@ export default () => {
     for(let i = 0; i < numOfEGs; i++) {
         const resEG = http.post(`${BASE_URL}courses/exercise-groups`, JSON.stringify({ 
             courseId: newCourseId, 
-            title: i + "_exercisegroup", 
+            title: i + "_exercisegroup_" + randomString(100), 
             description: i + "_exercisegroup", 
             exerciseGroupNumber: 0, 
             isVisible: true, 
@@ -137,7 +136,7 @@ export default () => {
         for(let exId = 0; exId < numOfExs; exId++) {
             const resEx = http.post(`${BASE_URL}courses/exercise-groups/exercises`, JSON.stringify({
                 exerciseGroupId: exGroupId, 
-                title: exId.toString() + "_exercise", 
+                title: exId.toString() + "_exercise_" + randomString(100), 
                 isVisible: true,
                 exerciseNumber: 0, 
                 startDate:"2022-11-30T11:11:10.457Z", 
