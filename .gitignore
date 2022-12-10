@@ -358,3 +358,5 @@ MigrationBackup/
 
 # test_files
 test_results/
+
+P7WebApp/tests/LoadTests/L1_10000_caching_test_results.csv

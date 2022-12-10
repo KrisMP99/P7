@@ -10,7 +10,7 @@
 
 
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import { check, fail, sleep } from 'k6';
 
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
@@ -20,50 +20,30 @@ export const NUMBER_COURSES = 100
 export const USERS = 100
 
 export const options = {
-    stages: [{target : 500, duration: '1m'},
-             {target : 500, duration: '30s'},
-             {target : 750, duration: '1m'},
-             {target : 750, duration: '2m'},
-             {target : 1000, duration: '1m'},
+    stages: [{target : 1000, duration: '1m'},
              {target : 1000, duration: '2m'},
              {target : 1500, duration: '2m'},
              {target : 1500, duration: '1m'},
+             {target : 2000, duration: '5m'},
              {target : 2000, duration: '2m'},
-             {target : 2000, duration: '1m'},
-             {target : 2250, duration: '2m'},
-             {target : 2250, duration: '1m'},
+             {target : 2500, duration: '5m'},
              {target : 2500, duration: '2m'},
-             {target : 2500, duration: '1m'},
-             {target : 2750, duration: '2m'},
-             {target : 2750, duration: '1m'},
-             {target : 3000, duration: '2m'},
-             {target : 3000, duration: '1m'},
-             {target : 3250, duration: '2m'},
-             {target : 3250, duration: '1m'},
+             {target : 3000, duration: '5m'},
              {target : 3500, duration: '2m'},
-             {target : 3500, duration: '1m'},
-             {target : 4000, duration: '2m'},
-             {target : 4000, duration: '1m'},
-             {target : 5000, duration: '2m'},
+             {target : 4000, duration: '5m'},
+             {target : 4500, duration: '2m'},
              {target : 5000, duration: '5m'},
-             {target : 6000, duration: '2m'},
-             {target : 6000, duration: '1m'},
-             {target : 10000, duration: '2m'},
-             {target : 10000, duration: '1m'}],
+             {target : 5000, duration: '2m'},
+             {target : 5500, duration: '5m'},
+             {target : 5500, duration: '2m'},
+             {target : 10000, duration: '5m'},
+             {target : 10000, duration: '2m'}],
     setupTimeout: '10m',
-
-    ext: {
-        loadimpact: {
-          projectID: 3618966,
-          // Test runs with the same name groups test runs together
-          name: "L1 test"
-        }
-    },
 
     thresholds: {
         // 100% of requests must finish within 1000ms.
         http_req_duration: ['p(90) < 100', 'p(95) < 200', 'p(99.9) <= 1000'],
-      },
+    }
 }
 
 
@@ -269,6 +249,13 @@ export default (userData) => {
     // Get the specific exercise
     const exerciseResponse = http.get(`${BASE_URL}courses/${courseId[0]}/exercise-groups/${specificEg.id}/exercises/${specificExId}`, USER_TOKEN_HEADER)
     check(exerciseResponse, r => r.status === 200)
+
+    if(exerciseResponse.status !== 200) {
+        console.log("Something went wrong!")
+        console.log("Reason: " + exerciseResponse.body)
+        console.log("Username: " + user.value.username + " password: " + user.value.password + " token: " + user.value.token)
+        fail()
+    }
 }
 
 export function handleSummary(data) {
