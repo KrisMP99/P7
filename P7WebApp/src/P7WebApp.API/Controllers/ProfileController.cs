@@ -105,7 +105,7 @@ namespace P7WebApp.API.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("courses/created")]
+        [Route("{userId}/courses/created")]
         public async Task<IActionResult> GetUsersCreatedCourses()
         {
             try
@@ -121,7 +121,7 @@ namespace P7WebApp.API.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("courses/attends")]
+        [Route("{userId}/courses/attends")]
         public async Task<IActionResult> GetUsersAttendedCourses()
         {
             try

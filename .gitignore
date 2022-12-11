@@ -360,3 +360,7 @@ MigrationBackup/
 test_results/
 
 P7WebApp/tests/LoadTests/L1_10000_caching_test_results.csv
+
+P7WebApp/src/P7WebApp.API/appsettings.prod.json
+
+P7WebApp/src/p7webapp.webui/nginx/nginx_no_cache.conf

@@ -155,7 +155,8 @@ export function setup () {
                 password: "Test123!",
                 email: i.toString() + "test@test.dk",
                 token: '',
-                courseId: 0
+                courseId: 0,
+                userId: -1
             }
         })
 
@@ -180,8 +181,6 @@ export function setup () {
 
         // Attend the courses
         // Accomplished by getting the course overview -> extracting the course id's -> enroll
-        // header with token so we can create courses
-        // token header for user
         const USER_TOKEN_HEADER = {
             headers: {
                 'Authorization': `Bearer ${userData[i].value.token}`,
@@ -219,6 +218,7 @@ export default (userData) => {
     }), BASE_HEADER);
     check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200})
     user.value.token = loginRes.json('token')
+    user.value.userId = loginRes.json('userId')
 
     const USER_TOKEN_HEADER = {
         headers: {
@@ -228,10 +228,10 @@ export default (userData) => {
     }
 
     // Get own courses + attending courses
-    const ownCourses = http.get(`${BASE_URL}profiles/courses/created`, USER_TOKEN_HEADER)
+    const ownCourses = http.get(`${BASE_URL}profiles/${user.value.userId}courses/created`, USER_TOKEN_HEADER)
     check(ownCourses, r => r.status === 200)
 
-    const attendingCourses = http.get(`${BASE_URL}profiles/courses/attends`, USER_TOKEN_HEADER)
+    const attendingCourses = http.get(`${BASE_URL}profiles/${user.value.userId}/courses/attends`, USER_TOKEN_HEADER)
     check(attendingCourses, r => r.status === 200)
 
     // Get the course id of the course the user attends
@@ -251,10 +251,12 @@ export default (userData) => {
     check(exerciseResponse, r => r.status === 200)
 
     if(exerciseResponse.status !== 200) {
+        sleep(0.5)
         console.log("Something went wrong!")
         console.log("Reason: " + exerciseResponse.body)
         console.log("Username: " + user.value.username + " password: " + user.value.password + " token: " + user.value.token)
-        fail()
+        console.log("Course id: " + courseId[0] + " exGroup id: " + specificEg.id + " exercise id: " + specificExId)
+        sleep(0.5)
     }
 }
 
