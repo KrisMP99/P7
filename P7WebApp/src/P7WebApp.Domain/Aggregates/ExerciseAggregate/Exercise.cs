@@ -91,15 +91,14 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                     if (module is not null)
                     {
                         Modules.Remove(module);
-
                     }
                 }
 
                 // add new modules
                 if (newModules.Any(nm => nm.Id == 0))
                 {
-                    var modules = newModules.Where(nm => nm.Id == 0);
-                    AddModules((ICollection<Module>)(modules));
+                    var modules = newModules.Where(nm => nm.Id == 0).ToList();
+                    AddModules(modules);
                 }
             }
             catch (Exception)
