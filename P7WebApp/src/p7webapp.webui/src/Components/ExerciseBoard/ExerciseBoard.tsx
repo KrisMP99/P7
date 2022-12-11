@@ -38,19 +38,34 @@ interface ExerciseBoardProps {
 export default function ExerciseBoard(props: ExerciseBoardProps) {
     const changeModuleModalRef = useRef<ShowChangeModuleModalRef>(null);
     const changeLayoutModalRef = useRef<ShowModal>(null);
-    const [layout, setLayout] = useState<LayoutType>(LayoutType.SINGLE);
     const navigator = useNavigate();
-    const [exercise, setExercise] = useState<Exercise>({title: '', id: 0, layoutId: LayoutType.SINGLE, exerciseGroupId: 0, isVisible: false, modules: [], exerciseNumber: 0, startDate: null, endDate: null, visibleFrom: null, visibleTo: null});
+    const [exercise, setExercise] = useState<Exercise>({
+        title: '', 
+        id: 0, 
+        layoutId: LayoutType.SINGLE, 
+        exerciseGroupId: 0, 
+        isVisible: false, 
+        modules: [], 
+        exerciseNumber: 0, 
+        startDate: null, 
+        endDate: null, 
+        visibleFrom: null, 
+        visibleTo: null    
+    });
 
     useEffect(() => {
         if (props.exerciseId >= 1) {
-            fetchExercise(props.exerciseId, props.exerciseGroupId, props.courseId, (newExercise) => setExercise(newExercise));
+            fetchExercise(props.exerciseId, props.exerciseGroupId, props.courseId, (newExercise) => {
+                setExercise(newExercise);
+            });
         }
     }, [props.exerciseId]);
 
     useEffect(() => {
-        handleSetModules(layout);
-    }, [layout])
+        if (props.isNewExercise || exercise.id >= 1) {
+            handleSetModules(exercise.layoutId);
+        }
+    }, [exercise.modules.length, exercise.layoutId])
 
     const handleSetModules = (layout: LayoutType) => {
         let tempModules: ExerciseModule[] = [...exercise.modules]; 
@@ -61,13 +76,18 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                 if (!tempModules.find((val) => val.position === 1)) {tempModules.push({...tempEmpty, position: 1})};
                 tempModules = tempModules.filter((val) => val.position <= 1);
                 break;
+            case LayoutType.TWO_VERTICAL:
+                if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
+                tempModules = tempModules.filter((val) => val.position <= 3 && val.position !== 2);
+                break;
             case LayoutType.TWO_HORIZONTAL:
                 if (!tempModules.find((val) => val.position === 2)) tempModules.push({...tempEmpty, position: 2});
                 tempModules = tempModules.filter((val) => val.position <= 2);
                 break;
-            case LayoutType.TWO_VERTICAL:
+            case LayoutType.TWO_LEFT_ONE_RIGHT:
+                if (!tempModules.find((val) => val.position === 2)) tempModules.push({...tempEmpty, position: 2});
                 if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
-                tempModules = tempModules.filter((val) => val.position <= 3 && val.position !== 2);
+                tempModules = tempModules.filter((val) => val.position <= 3);
                 break;
             case LayoutType.ONE_LEFT_TWO_RIGHT:
                 if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
@@ -75,21 +95,17 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
                 tempModules = tempModules.filter((val) => val.position <= 4 && val.position !== 2);
                 break;
             case LayoutType.TWO_LEFT_TWO_RIGHT:
+                if (!tempModules.find((val) => val.position === 1)) tempModules.push({...tempEmpty, position: 1});
                 if (!tempModules.find((val) => val.position === 2)) tempModules.push({...tempEmpty, position: 2});
                 if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
                 if (!tempModules.find((val) => val.position === 4)) tempModules.push({...tempEmpty, position: 4});
                 tempModules = tempModules.filter((val) => val.position <= 4);
                 break;
-            case LayoutType.TWO_LEFT_ONE_RIGHT:
-                if (!tempModules.find((val) => val.position === 2)) tempModules.push({...tempEmpty, position: 2});
-                if (!tempModules.find((val) => val.position === 3)) tempModules.push({...tempEmpty, position: 3});
-                tempModules = tempModules.filter((val) => val.position <= 3);
-                break;
             default:
                 break;
         }
         
-        setExercise({...exercise, modules: tempModules.sort((a, b) => a.position - b.position)});
+        setExercise({...exercise, layoutId: layout, modules: tempModules.sort((a, b) => a.position - b.position)});
     }
 
     let columns: JSX.Element[] = []
@@ -164,8 +180,8 @@ export default function ExerciseBoard(props: ExerciseBoardProps) {
             }} />
             <ChangeLayoutModal
                 ref={changeLayoutModalRef}
-                currentLayout={layout}
-                changedLayout={(newLayout: LayoutType) => setLayout(newLayout)}
+                currentLayout={exercise.layoutId}
+                changedLayout={(newLayout: LayoutType) => setExercise({...exercise, layoutId: newLayout})}
             />
         </div>
     )

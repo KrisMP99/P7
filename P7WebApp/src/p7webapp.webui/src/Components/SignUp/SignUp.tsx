@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { getApiRoot } from '../../App';
 
@@ -16,6 +17,7 @@ export default function SignUp(): JSX.Element {
     const emptyUser: NewUserForm = {username:'', password:'', confirmPassword:'', email:'', firstname:'', lastname:''};
     const [newUser, setNewUser] = useState<NewUserForm>(emptyUser);
     const [errorTxt, setErrorTxt] = useState<string | null>(null);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
     const navigator = useNavigate();
 
     const resetPage = () => {
@@ -34,8 +36,10 @@ export default function SignUp(): JSX.Element {
                     setErrorTxt('Passwords do not match');
                 } 
                 else {
-                    attemptSignUp(newUser, () => {
-                        navigator('/');
+                    setIsFetching(true);
+                    attemptSignUp(newUser, (success) => {
+                        success ? navigator('/') : setErrorTxt('Could not sign up');
+                        setIsFetching(false);
                     });
                 }
             }}>
@@ -75,7 +79,17 @@ export default function SignUp(): JSX.Element {
                 </div>}
 
                 <div className="row mt-5">
-                    <input className="button rounded" type="submit" value="Sign up" />
+                    <Button type="submit" disabled={isFetching}>
+                        {isFetching ? (
+                            <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            />
+                        ) : 'Sign up'}
+                    </Button>
                 </div>
             </form>
             <div className="row mt-2">
@@ -85,7 +99,7 @@ export default function SignUp(): JSX.Element {
     );
 }
 
-async function attemptSignUp(newUser: NewUserForm, callback: () => void) {
+async function attemptSignUp(newUser: NewUserForm, callback: (success: boolean) => void) {
     try {
         const requestOptions = {
             method: 'POST',
@@ -110,9 +124,9 @@ async function attemptSignUp(newUser: NewUserForm, callback: () => void) {
             })
             .then(() => {
                 console.log("Successfully signed up!");
-                callback();
+                callback(true);
             });
     } catch (error) {
-        alert(error);
+        callback(false);
     }
 }
