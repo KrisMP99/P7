@@ -48,7 +48,7 @@ export default function Frontpage(props: LoginProps) {
                 {/* Left side of page */}
                 <div className="col">
                     <div className="row mt-3">
-                        <h3>Welcome to UniAcdademy!</h3>
+                        <h3>Welcome to UniAcademy!</h3>
                     </div>
                     <div className="row mt-5">
                         <div className="border rounded">
