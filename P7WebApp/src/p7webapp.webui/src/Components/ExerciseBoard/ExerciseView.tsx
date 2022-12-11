@@ -95,7 +95,6 @@ export function getModuleFromType (module: ExerciseModule,
                                    setExerciseCallback: (exercise: Exercise) => void,
                                    editMode: boolean
                                    ): React.ReactNode {
-    console.log(module.type)
     switch (module.type) {
         case ModuleType.EMPTY:
             return <EmptyModule changeModuleModalRef={changeModuleModalRef} position={module.position} />;
