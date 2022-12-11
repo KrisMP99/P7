@@ -5,7 +5,7 @@ import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
 import { ArrowCounterclockwise, Pencil, Trash } from 'react-bootstrap-icons';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
-import { getApiRoot } from '../../../App';
+import { getApiRoot, User } from '../../../App';
 import CreateCourseModal from '../../Modals/CreateCourseModal/CreateCourseModal';
 import EditCourseModal, { ShowEditCourseModal } from '../../Modals/EditCourseModal/EditCourseModal';
 
@@ -21,7 +21,7 @@ export interface CourseOverview {
 }
 
 interface OwnedCourseOverviewProps {
-
+    user: User;
 }
 
 export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
@@ -38,7 +38,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     const [maxPages, setMaxPages] = useState<number>(1);
 
     useEffect(() => {
-        fetchOwnedCourses((courses) =>{
+        fetchOwnedCourses(props.user.id, (courses) =>{
             setOwnedCourses(courses);
         });
     }, []);
@@ -72,7 +72,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                             Create course
                         </Button> 
                         <Button className="btn-2" onClick={()=>{
-                            fetchOwnedCourses((courses) => {
+                            fetchOwnedCourses(props.user.id, (courses) => {
                                 setOwnedCourses(courses);
                             })
                         }}>
@@ -210,14 +210,16 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={deleteCourseModalRef}
                 confirmDelete={(courseId: number)=>{
                     deleteOwnedCourse(courseId, () => {
-                        fetchOwnedCourses((courses) => setOwnedCourses(courses));
+                        fetchOwnedCourses(props.user.id, (courses) => {
+                            setOwnedCourses(courses);
+                        });
                     });
                 }}                
             />
             <EditCourseModal
                 ref={editCourseModalRef}
                 updatedCourse={()=>{
-                    fetchOwnedCourses((courses) => {
+                    fetchOwnedCourses(props.user.id, (courses) => {
                         setOwnedCourses(courses);
                     })
                 }}
@@ -225,7 +227,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
             <CreateCourseModal 
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
-                    fetchOwnedCourses((courses) => {
+                    fetchOwnedCourses(props.user.id, (courses) => {
                         setOwnedCourses(courses);
                     });
                 }}
@@ -234,7 +236,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     );
 }
 
-async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) {
+async function fetchOwnedCourses(userId: number, callback: (courses: CourseOverview[]) => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -246,7 +248,7 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'profiles/courses/created', requestOptions)
+        await fetch(getApiRoot() + 'profiles/' + userId + 'courses/created', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
