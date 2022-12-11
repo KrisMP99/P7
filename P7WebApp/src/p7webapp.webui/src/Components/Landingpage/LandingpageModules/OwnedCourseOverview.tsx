@@ -248,7 +248,7 @@ async function fetchOwnedCourses(userId: number, callback: (courses: CourseOverv
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'profiles/' + userId + 'courses/created', requestOptions)
+        await fetch(getApiRoot() + 'profiles/' + userId + '/courses/created', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');
