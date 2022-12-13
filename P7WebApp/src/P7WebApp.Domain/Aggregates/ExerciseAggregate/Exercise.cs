@@ -83,7 +83,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                     }
                 }
 
-                // if modules have been deleted,
+                // if modules have been deleted
                 if (Modules.Count > newModules.Count)
                 {
                     var module = Modules.Where(m => !newModules.Exists(nm => nm.Id == m.Id)).FirstOrDefault();
@@ -98,7 +98,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                 // add new modules
                 if (newModules.Any(nm => nm.Id == 0))
                 {
-                    var modules = newModules.Where(nm => nm.Id == 0);
+                    var modules = newModules.Where(nm => nm.Id == 0).ToList();
                     AddModules((ICollection<Module>)(modules));
                 }
             }

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Container, Table, Form, InputGroup, Pagination, Button } from 'react-bootstrap';
 import { ArrowCounterclockwise } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
-import { getApiRoot } from '../../../App';
+import { getApiRoot, User } from '../../../App';
 import { CourseOverview } from './OwnedCourseOverview';
 import './OwnedCourseOverview.css';
 
 interface AttendedCourseOverviewProps {
-    
+    user: User;
 }
 
 export default function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element {
@@ -24,7 +24,7 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchAttendedCourses((courses) =>{
+        fetchAttendedCourses(props.user.id, (courses) =>{
             setAttendedCourses(courses);
         });
     }, []);
@@ -73,7 +73,7 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                             <Button className='btn-2' type='submit'>Find</Button>
                         </Form>
                         <Button className="btn-2" onClick={()=>{
-                            fetchAttendedCourses((courses) => {
+                            fetchAttendedCourses(props.user.id, (courses) => {
                                 setAttendedCourses(courses);
                             })
                         }}>
@@ -192,7 +192,7 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     );
 }
 
-async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => void) {
+async function fetchAttendedCourses(userId: number, callback: (courses: CourseOverview[]) => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -204,7 +204,7 @@ async function fetchAttendedCourses(callback: (courses: CourseOverview[]) => voi
                'Authorization': 'Bearer ' + jwt
            }
        }
-       await fetch(getApiRoot() + 'profiles/courses/attends', requestOptions)
+       await fetch(getApiRoot() + 'profiles/' + userId + '/courses/attends', requestOptions)
            .then((res) => {
                if (!res.ok) {
                    throw new Error(res.statusText);
