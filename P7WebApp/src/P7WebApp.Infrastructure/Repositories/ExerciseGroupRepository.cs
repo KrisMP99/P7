@@ -91,7 +91,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        public Task<int> UpdateExerciseGroup(ExerciseGroup exerciseGroup)
+        public async Task<int> UpdateExerciseGroup(ExerciseGroup exerciseGroup)
         {
             try
             {
