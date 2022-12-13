@@ -240,6 +240,9 @@ def ProduceGraph(csv_file, specificer):
     df = df.loc[df["metric_name"] == "http_req_duration"] 
     df = df.loc[df["group"] != "::setup"]
 
+    print("Length of df: " + len(df))
+    quit()
+
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit='s')
     df["elapsed_time"] = df["timestamp"] - df["timestamp"].iat[0]
     

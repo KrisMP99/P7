@@ -27,23 +27,35 @@ function randomString(length, charset = '') {
 }
 
 export const options = {
-    stages: [{target : 5, duration: '10s'},
-             {target : 10, duration: '1m'},
+    stages: [{target : 5, duration: '30s'},
              {target : 10, duration: '2m'},
-             {target : 20, duration: '30s'},
+             {target : 10, duration: '2m'},
+             {target : 15, duration: '2m'},
+             {target : 15, duration: '2m'},
              {target : 20, duration: '2m'},
-             {target : 30, duration: '30s'},
+             {target : 20, duration: '2m'},
+             {target : 25, duration: '2m'},
+             {target : 25, duration: '2m'},
              {target : 30, duration: '2m'},
-             {target : 40, duration: '30s'},
+             {target : 30, duration: '2m'},
+             {target : 35, duration: '2m'},
              {target : 40, duration: '2m'},
-             {target : 30, duration: '2m'},
-             {target : 20, duration: '2m'},
-             {target : 10, duration: '1m'},
+             {target : 40, duration: '2m'},
+             {target : 50, duration: '2m'},
+             {target : 50, duration: '2m'},
+             {target : 60, duration: '2m'},
+             {target : 60, duration: '2m'},
+             {target : 70, duration: '2m'},
+             {target : 70, duration: '2m'},
+             {target : 80, duration: '2m'},
+             {target : 80, duration: '2m'},
+             {target : 90, duration: '2m'},
+             {target : 90, duration: '2m'},
+             {target : 100, duration: '2m'},
+             {target : 100, duration: '2m'},
+             {target : 50, duration: '2m'},
+             {target : 25, duration: '2m'},
              {target : 5, duration: '2m'}],
-    thresholds: {
-        // 100% of requests must finish within 1000ms.
-        http_req_duration: ['p(90) < 100', 'p(95) < 200', 'p(99.9) <= 1000'],
-    }
 }
 
 // steps:
@@ -71,7 +83,8 @@ export default () => {
     }), BASE_HEADER)
 
     check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200})
-    let authToken = loginRes.json('token')
+    const authToken = loginRes.json('token')
+    const profileId = loginRes.json('userId')
 
     const USER_TOKEN_HEADER = {
         headers: {
@@ -81,10 +94,10 @@ export default () => {
     }
 
     // Get own courses + attending courses
-    const ownCourses = http.get(`${BASE_URL}profiles/courses/created`, USER_TOKEN_HEADER)
+    const ownCourses = http.get(`${BASE_URL}profiles/${profileId}/courses/created`, USER_TOKEN_HEADER)
     check(ownCourses, r => r.status === 200)
 
-    const attendingCourses = http.get(`${BASE_URL}profiles/courses/attends`, USER_TOKEN_HEADER)
+    const attendingCourses = http.get(`${BASE_URL}profiles/${profileId}/courses/attends`, USER_TOKEN_HEADER)
     check(attendingCourses, r => r.status === 200)
 
     // Creating a course
@@ -96,7 +109,7 @@ export default () => {
     check(resCourse, {"Created course" : r => r.status === 200});
 
     // After the course is created, the course is once again fetched
-    const ownCourses2 = http.get(`${BASE_URL}profiles/courses/created`, USER_TOKEN_HEADER)
+    const ownCourses2 = http.get(`${BASE_URL}profiles/${profileId}/courses/created`, USER_TOKEN_HEADER)
     check(ownCourses2, {"Got own courses" : r => r.status === 200})
 
     // We extract the id from the own courses created
