@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { getApiRoot } from '../../../App';
 import '../../../App.css';
 import { ExerciseGroup } from '../../Course/CourseView';
 
@@ -13,16 +14,18 @@ export interface ShowEditExerciseGroupModal {
 export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, EditExerciseGroupModalProps>((props, ref) => {
     const [show, setShow] = useState(false);
     const [exGroup, setExGroup] = useState<ExerciseGroup | null>(null);
+    const [courseId, setCourseId] = useState<number | null>(null);
 
     const handleClose = () => setShow(false);
 
     useImperativeHandle(
         ref,
         () => ({
-            handleShow(exerciseGroup: ExerciseGroup, index: number) {
+            handleShow(exerciseGroup: ExerciseGroup, courseId: number) {
                 setShow(true);
-                if (exerciseGroup === null) return;
+                if (exerciseGroup === null || courseId === null) return;
                 setExGroup(exerciseGroup);
+                setCourseId(courseId);
             }
         }),
     )
@@ -31,9 +34,10 @@ export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, Edi
         (<Modal show={show} onHide={handleClose}>
             <Form onSubmit={(e) => { 
                 e.preventDefault();
-                //WIP - POST TO EDIT EXERCISEGROUP
-                props.updatedExerciseGroup(exGroup!);
-                handleClose();
+                updateExerciseGroup(courseId!, exGroup, () => {
+                    props.updatedExerciseGroup(exGroup!);
+                    handleClose();
+                });
             }}>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit Exercise Group:</Modal.Title>
@@ -65,6 +69,37 @@ export const EditExerciseGroupModal = forwardRef<ShowEditExerciseGroupModal, Edi
     );
 });
     
-
+async function updateExerciseGroup(courseId: number, exerciseGroup: ExerciseGroup, callback: () => void) {
+    let jwt = sessionStorage.getItem('jwt');
+    if (jwt === null) return;
+    try {
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            },
+            body: JSON.stringify({
+                "courseId": courseId,
+                "id": exerciseGroup.id,
+                "title": exerciseGroup.title,
+                "description": "undefined",
+                "isVisible": exerciseGroup.isVisible,
+                "exerciseGroupNumber": exerciseGroup.exerciseGroupNumber,
+                "becomesVisibleAt": null
+            })
+        }
+        await fetch(getApiRoot() + 'courses/exercise-groups', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Failed to update exercise group - server unavailable');
+                }
+                callback();
+            });
+    } catch (error) {
+        alert(error);
+    }
+}
 
 export default EditExerciseGroupModal;

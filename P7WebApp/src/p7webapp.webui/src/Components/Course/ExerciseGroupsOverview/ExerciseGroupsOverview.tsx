@@ -114,18 +114,14 @@ function makeExerciseGroupElements (navigate: NavigateFunction,
         return (
             <Accordion key={index} defaultActiveKey={index+''}>
                 <div className='d-flex align-items-center flex-grow-1'>
-                    <AccordionHeader className={'flex-grow-1' + (exGroup.isVisible ? '' : ' is-invisible')}>
-                        <input
-                            className='input-field'
-                            value={exGroup.title}
-                            readOnly={true}
-                        />
+                    <AccordionHeader className={'flex-grow-1 d-flex' + (exGroup.isVisible ? '' : ' is-invisible')}>
+                        <input className='input-field' style={{width:'80%'}} value={exGroup.title} readOnly={true} />
                     </AccordionHeader>
                     {isOwner &&
                         (<div className='group-owner-buttons'>
                             <Button size='sm' className={'btn-3'} onClick={(e) => {
                                 e.stopPropagation();
-                                editExerciseGroupModalRef.current?.handleShow(exGroup, index);
+                                editExerciseGroupModalRef.current?.handleShow(exGroup, courseId);
                             }}>
                                 <Pencil />
                             </Button>

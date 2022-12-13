@@ -91,9 +91,25 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        public Task<int> UpdateExerciseGroup(ExerciseGroup course)
+        public async Task<int> UpdateExerciseGroup(ExerciseGroup exerciseGroup)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var courseUpdate = _context.ExerciseGroups.Update(exerciseGroup);
+
+                if (courseUpdate != null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    throw new ExerciseRepositoryException($"Could not update exercise group with Id: {exerciseGroup.Id}.");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

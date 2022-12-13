@@ -240,8 +240,8 @@ namespace P7WebApp.API.Controllers
             }
         }
         
-        [HttpPost("exercise-groups/update")]
-        public async Task<IActionResult> UpdateExerciseGroup([FromBody]UpdateExerciseGroupCommand request)
+        [HttpPut("exercise-groups")]
+        public async Task<IActionResult> UpdateExerciseGroup(UpdateExerciseGroupCommand request)
         {
             try
             {

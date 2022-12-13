@@ -55,7 +55,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseGroupAggregate
             return Exercises;
         }
 
-        public void EditInformation(string newTitle, string newDescription, int newExerciseGroupNumber, bool isVisible, DateTime newBecomeVisibleAt)
+        public void EditInformation(string newTitle, string newDescription, int newExerciseGroupNumber, bool isVisible, DateTime? newBecomeVisibleAt)
         {
             Title = String.IsNullOrEmpty(newTitle) ? throw new ExerciseGroupException("Title has not been set.") : newTitle;
             Description = String.IsNullOrEmpty(newDescription) ? throw new ExerciseGroupException("Description has not been set.") : newDescription;
