@@ -114,8 +114,6 @@ export default function CourseView(props: CourseProps) {
     useEffect(()=> {
         if (course){
             let l = course.attendees.filter((a) => a.userId === props.user.id);
-            // console.log(course);
-            // l.length > 0 && console.log(typeof(course.attendees.filter((a) => a.userId === props.user.id)[0].userId));
             if (props.user.id === course?.ownerId) {
                 setIsOwner(true);
             }

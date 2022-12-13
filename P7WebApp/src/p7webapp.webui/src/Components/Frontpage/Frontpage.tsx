@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Button, Container, Spinner } from 'react-bootstrap';
 import './Frontpage.css';
 import { useNavigate } from 'react-router-dom';
 import { getApiRoot, User } from '../../App';
@@ -11,6 +11,8 @@ interface LoginProps {
 
 export default function Frontpage(props: LoginProps) {
     const navigator = useNavigate();
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+
     useEffect(() => {
         if (props.alreadyLoggedIn) {
             navigator('/home');
@@ -28,7 +30,9 @@ export default function Frontpage(props: LoginProps) {
         event.preventDefault();
 
         if (username && password) {
+            setIsFetching(true);
             attemptLogin(username, password, (user) => {
+                setIsFetching(false);
                 user ? props.loggedIn(user) : setError('Incorrect Username or Password');
             });
         } else {
@@ -44,7 +48,7 @@ export default function Frontpage(props: LoginProps) {
                 {/* Left side of page */}
                 <div className="col">
                     <div className="row mt-3">
-                        <h3>Welcome to UniAcdademy!</h3>
+                        <h3>Welcome to UniAcademy!</h3>
                     </div>
                     <div className="row mt-5">
                         <div className="border rounded">
@@ -87,7 +91,17 @@ export default function Frontpage(props: LoginProps) {
                                 })} />
                         </div>
                         <div className="row mt-4">
-                            <input className="button rounded" type="submit" value="Login" />
+                            <Button type="submit" disabled={isFetching}>
+                                {isFetching ? (
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                ) : 'Login'}
+                            </Button>
                         </div>
                         <div className='error-box mt-4 rounded'>
                             {error}
@@ -118,7 +132,7 @@ interface LoginResponse {
     token: string;
 }
 
-async function attemptLogin (username: string, password: string, callback: (user: User) => void) {
+async function attemptLogin (username: string, password: string, callback: (user: User | null) => void) {
     try {
         const requestOptions = {
             method: 'POST',
@@ -152,6 +166,6 @@ async function attemptLogin (username: string, password: string, callback: (user
                 callback(user);
             });
     } catch (error) {
-        alert(error);
+        callback(null);
     }
 }

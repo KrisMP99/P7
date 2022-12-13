@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Container, Table, Form, InputGroup, Button, Pagination} from 'react-bootstrap';
+import { Container, Table, Form, InputGroup, Button, Pagination, Spinner} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
@@ -27,6 +27,8 @@ interface OwnedCourseOverviewProps {
 export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
     const openCreateCourseModalRef = useRef<ShowModal>(null);
 
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+    const [errorText, setErrorText] = useState<string | null>(null);
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
     const deleteCourseModalRef = useRef<ShowDeleteConfirmModal>(null);
@@ -38,10 +40,16 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     const [maxPages, setMaxPages] = useState<number>(1);
 
     useEffect(() => {
+        setIsFetching(true)
         fetchOwnedCourses((courses) =>{
-            setOwnedCourses(courses);
+            courses ? setOwnedCourses(courses) : setErrorText('Could not fetch your own courses at the moment');
+            setIsFetching(false);
         });
     }, []);
+
+    useEffect(() => {
+        setErrorText(null);
+    }, [ownedCourses.length]);
 
     useEffect(() => {
         let endPage = Math.ceil(ownedCourses.filter((item: { title: string; }) => {
@@ -71,12 +79,23 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                         <Button className="btn-2" onClick={()=>openCreateCourseModalRef.current?.handleShow()}>
                             Create course
                         </Button> 
-                        <Button className="btn-2" onClick={()=>{
+                        <Button className="btn-2" disabled={isFetching} onClick={()=>{
+                            setIsFetching(true);
                             fetchOwnedCourses((courses) => {
-                                setOwnedCourses(courses);
+                                courses ? setOwnedCourses(courses) : setErrorText('Could not fetch your own courses at the moment');
+                                setIsFetching(false);
                             })
                         }}>
-                            <ArrowCounterclockwise />
+                            {isFetching ?
+                            <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            />
+                            : <ArrowCounterclockwise />
+                            }
                         </Button> 
                     </div>
                 </div>
@@ -125,6 +144,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                     </Table>
                 </div>
             </div>
+            {errorText && <div className='row justify-content-center' style={{color:'red', marginBottom:'15px', fontSize:'1.3rem'}}>{errorText}</div>}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Pagination>
                     <Pagination.Prev disabled={currentPage <= 0} onClick={() => setCurrentPage(currentPage - 1)} />
@@ -210,23 +230,31 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
                 ref={deleteCourseModalRef}
                 confirmDelete={(courseId: number)=>{
                     deleteOwnedCourse(courseId, () => {
-                        fetchOwnedCourses((courses) => setOwnedCourses(courses));
+                        setIsFetching(true);
+                        fetchOwnedCourses((courses) => {
+                            courses ? setOwnedCourses(courses) : setErrorText('Could not fetch your own courses at the moment');;
+                            setIsFetching(false);
+                        });
                     });
                 }}                
             />
             <EditCourseModal
                 ref={editCourseModalRef}
                 updatedCourse={()=>{
+                    setIsFetching(true);
                     fetchOwnedCourses((courses) => {
-                        setOwnedCourses(courses);
+                        courses ? setOwnedCourses(courses) : setErrorText('Could not fetch your own courses at the moment');
+                        setIsFetching(false);
                     })
                 }}
             />
             <CreateCourseModal 
                 ref={openCreateCourseModalRef}
                 createdCourse={() => {
+                    setIsFetching(true);
                     fetchOwnedCourses((courses) => {
-                        setOwnedCourses(courses);
+                        courses ? setOwnedCourses(courses) : setErrorText('Could not fetch your own courses at the moment');
+                        setIsFetching(false);
                     });
                 }}
             />
@@ -234,7 +262,7 @@ export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JS
     );
 }
 
-async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) {
+async function fetchOwnedCourses(callback: (courses: CourseOverview[] | null) => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
@@ -257,7 +285,7 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[]) => void) 
                 callback(courses);
             });
     } catch (error) {
-        alert(error);
+        callback(null);
     }
 }
 

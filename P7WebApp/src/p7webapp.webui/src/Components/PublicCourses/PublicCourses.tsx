@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Form, InputGroup, Pagination, Table, Button } from 'react-bootstrap'
+import { Container, Form, InputGroup, Pagination, Table, Button, Spinner } from 'react-bootstrap'
 import { ArrowCounterclockwise } from 'react-bootstrap-icons'
 import { useNavigate } from 'react-router-dom'
 import { getApiRoot } from '../../App'
 import { CourseOverview } from '../Landingpage/LandingpageModules/OwnedCourseOverview';
 
 export default function PublicCourses() {
+
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+    const [errorText, setErrorText] = useState<string | null>(null);
     const [search, setSearch] = useState('');
     const [publicCourses, setPublicCourses] = useState<CourseOverview[]>([]);
 
@@ -16,10 +19,16 @@ export default function PublicCourses() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setIsFetching(true);
         fetchPublicCourses((courses) =>{
-            setPublicCourses(courses);
+            courses ? setPublicCourses(courses) : setErrorText('Could not fetch public courses');
+            setIsFetching(false);
         });
     }, []);
+
+    useEffect(() => {
+        setErrorText(null);
+    }, [publicCourses.length]);
     
     useEffect(() => {  
         let endPage = Math.ceil(publicCourses.filter((item: { title: string; }) => {
@@ -48,12 +57,23 @@ export default function PublicCourses() {
                         <h3>Attended courses</h3>
                     </div>
                     <div className="col text-end">
-                        <Button className="btn-2" onClick={()=>{
-                            fetchPublicCourses((courses) => {
-                                setPublicCourses(courses);
-                            })
+                        <Button className="btn-2" disabled={isFetching} onClick={()=>{
+                            setIsFetching(true);
+                            fetchPublicCourses((courses) =>{
+                                courses ? setPublicCourses(courses) : setErrorText('Could not fetch public courses');
+                                setIsFetching(false);
+                            });
                         }}>
-                            <ArrowCounterclockwise />
+                            {isFetching ?
+                            <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            />
+                            : <ArrowCounterclockwise />
+                            }
                         </Button> 
                     </div>
                 </div>
@@ -83,6 +103,7 @@ export default function PublicCourses() {
                     </Table>
                 </div>
             </div>
+            {errorText && <div className='row justify-content-center' style={{color:'red', marginBottom:'15px', fontSize:'1.3rem'}}>{errorText}</div>}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Pagination>
                     <Pagination.Prev disabled={currentPage <= 0} onClick={() => setCurrentPage(currentPage - 1)} />
@@ -168,7 +189,7 @@ export default function PublicCourses() {
     );
 }
 
-async function fetchPublicCourses(callback: (courses: CourseOverview[]) => void) {
+async function fetchPublicCourses(callback: (courses: CourseOverview[] | null) => void) {
     const jwt = sessionStorage.getItem('jwt');
     if (sessionStorage.getItem('jwt') === null) return;
 
@@ -192,6 +213,6 @@ async function fetchPublicCourses(callback: (courses: CourseOverview[]) => void)
                 callback(courseOverviews);
             });
     } catch (error) {
-        
+        callback(null);
     }
 }

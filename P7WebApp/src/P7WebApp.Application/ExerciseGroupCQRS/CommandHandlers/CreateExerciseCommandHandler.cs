@@ -40,6 +40,11 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
 
                         var result = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
+                        if (result >= 1)
+                        {
+                            return exercise.Id;
+                        }
+
                         return result;
                     }
                 }
