@@ -7,7 +7,7 @@ def getvus(time_c, time_p, ramp_period, vus_p, target,):
     return vus_p + (target - vus_p)/ramp_period*(time_c-time_p)
 
 def virtual_user_handler():
-    total_time = 5741
+    total_time = 5742
     period = range(total_time)
     vus = []
     for i in period:
@@ -165,7 +165,7 @@ def virtual_user_handler():
             
 
 def virtual_user_handler_big_cache():
-    total_time = 2901
+    total_time = 2881
     period = range(total_time)
     vus = []
     for i in period:
@@ -212,7 +212,7 @@ def virtual_user_handler_big_cache():
         elif i < 1940:
             vus.append(getvus(i,1820,120,3250,3500))
         elif i < 2000:
-            vus.append(getvus(i,1940, 60,3500,3500))
+            vus.append(getvus(i,1940,60,3500,3500))
         elif i < 2120:
             vus.append(getvus(i,2000,120,3500,4000))
         elif i < 2180:
@@ -226,7 +226,7 @@ def virtual_user_handler_big_cache():
         elif i < 2780:
             vus.append(getvus(i,2720,60,6000,6000))
         elif i < 2900:
-            vus.append(getvus(i,2780,120,600,10000))
+            vus.append(getvus(i,2780,120,6000,10000))
         else:
             vus.append(getvus(i,2900,60,10000,10000))
     return vus
@@ -236,18 +236,18 @@ def ProduceGraph(csv_file, specificer):
 
     columns = ["metric_name", "timestamp", "metric_value", "group"]
     df = pd.read_csv(csv_file, usecols=columns, dtype={'metric_name': 'object', 'timestamp': 'int64', 'metric_value': 'float64', 'group' : 'object'})
-    
+
     df = df.loc[df["metric_name"] == "http_req_duration"] 
     df = df.loc[df["group"] != "::setup"]
 
-    print("Length of df: " + len(df))
-    quit()
-
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit='s')
-    df["elapsed_time"] = df["timestamp"] - df["timestamp"].iat[0]
     
+    ## This were used for collecting data used in the paper
+        #df = df.loc[df["timestamp"] <= '2022-12-13 13:01:30']
+
     df = df.groupby(pd.Grouper(key="timestamp", freq="1s"))['metric_value'].agg(['sum', 'count'])
-    df["virtual_users"] = virtual_user_handler_big_cache()
+    df["virtual_users"] = virtual_user_handler()
+
     df = df.rename(columns={'sum':'sum_response_time', 'count':'number_of_responses'})
     df["timestamp"] = df.index
 
@@ -255,51 +255,63 @@ def ProduceGraph(csv_file, specificer):
     df2['sum_response_time_avg'] = df2['sum_response_time']['sum'] / df2['sum_response_time']['count']
     df2['number_response_avg'] = df2['number_of_responses']['sum'] / df2['number_of_responses']['count']
     df2['virtual_users_avg'] = df2['virtual_users']['sum'] / df2['virtual_users']['count']
-    
     df2['avg_response_time'] = df2['sum_response_time_avg']/df2['number_response_avg']
-    df2 = df2.drop(columns=['sum_response_time', 'number_of_responses'])
+    
+    df2 = df2.drop(columns=['sum_response_time', 'number_of_responses', 'sum_response_time_avg', 'virtual_users'])
 
-
-# CASE FOR AVERAGE REQUEST RESPONSE TIME PR. 30 SECONDS 
     df2 = df2.reset_index()
-    df2["time"] = df2.index * 30
+    df2["time"] = df2["timestamp"] - df2["timestamp"].iat[0]
+    df2["time2"] = df2["time"].astype(str).str[-8:]
+
+    ## These were used for collecting data used in the paper
+        #df2 = df2.loc[df2["avg_response_time"] <= 1000.0]
+        #df2 = df2.loc[df2["time2"] <= '01:17:00']
+        #df2["sum"] = df2['number_response_avg'].sum()
+
+# CASE FOR REQUEST RESPONSE TIME PR. X SECONDS 
     fig, ax = plt.subplots()
     
-    ax.set_title('Average request response time pr. 30 seconds')
     ax.set_xlabel("Time elapsed in 30 seconds intervals")
     ax.set_ylabel("Average request response time (ms)")
-    ax.plot(df2["time"], df2["avg_response_time"], 'bo')
-    
+    ax.xaxis.set_major_locator(plt.MaxNLocator(8))
+    ax.plot(df2["time2"], df2["avg_response_time"], 'bo')
 
     ax2 = ax.twinx()
-    ax2.plot(df2["time"], df2["virtual_users_avg"], color="red")
+    ax2.xaxis.set_major_locator(plt.MaxNLocator(8))
+    ax2.plot(df2["time2"], df2["virtual_users_avg"], color="red")
     ax2.set_ylabel("Virtual Users")
 
-# CASE FOR AVEAGE NUMBER OF REQUEST PR. 30 SECONDS
+#CASE FOR AVEAGE REQUEST A SECOND
     # df2 = df2.reset_index()
-    # df2["time"] = df2.index * 30
+    # df2["time"] = df2["timestamp"] - df2["timestamp"].iat[0]
+    # df2["time2"] = df2["time"].astype(str).str[-8:]
     # fig, ax = plt.subplots()
 
-    # ax.set_title('Average number of requests pr. 30 seconds')
-    # ax.plot(df2["time"], df2["number_response_avg"], 'bo')
+    # ax.xaxis.set_major_locator(plt.MaxNLocator(8))
+    # ax.plot(df2["time2"], df2["number_response_avg"], 'bo')
     # ax.set_xlabel("Time elapsed in 30 seconds intervals")
     # ax.set_ylabel("Average number of requests")
 
     # ax2 = ax.twinx()
-    # ax2.plot(df2["time"], df2["virtual_users_avg"], color="red")
+    # ax2.xaxis.set_major_locator(plt.MaxNLocator(8))
+    # ax2.plot(df2["time2"], df2["virtual_users_avg"], color="red")
     # ax2.set_ylabel("Virtual Users")
 
-    print("Process " + specificer + " completed.")
+    # print("Process " + specificer + " completed.")
+    # print(" ")
 
 def main():
     #ProduceGraph("Testdata_no_cache_500_vus.csv", "1")
     #ProduceGraph("Testdata_cache_500_vus.csv", "2")
     #ProduceGraph("Testdata_cache_10000_vus.csv", "3")
+    #ProduceGraph("Testdata2_no_cache_500_vus.csv", "4")
+    
+    plt.show()
 
-    #plt.show()
+    #import tikzplotlib
+    #tikzplotlib.save("Testdata2_no_cache_avg_response_time_one_hour_new.tex")
+    #tikzplotlib.save("Testdata2_no_cache_avg_number_requests_new.tex")
 
-    import tikzplotlib
-    tikzplotlib.save("testdata.tex")
 
 
 main()
