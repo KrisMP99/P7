@@ -12,7 +12,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P7WebApp.API.Tests.IntegrationsTests.ProfileTests
+namespace P7WebApp.API.Tests.IntegrationTests.EndpointTests
 {
     public class ProfileEndpointTests : IClassFixture<WebApplicationFactory<Program>>
     {
@@ -26,11 +26,11 @@ namespace P7WebApp.API.Tests.IntegrationsTests.ProfileTests
         public async Task CreateProfile()
         {
             var client = _factory.CreateClient();
-            var response = await client.PostAsJsonAsync<CreateProfileCommand>("/api/profiles",
-                new CreateProfileCommand("integrationtest1","password","email@emaul.dk","firstname","lastname"));
+            var response = await client.PostAsJsonAsync("/api/profiles",
+                new CreateProfileCommand("integrationtest1", "password", "email@emaul.dk", "firstname", "lastname"));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
-        
+
     }
 }
