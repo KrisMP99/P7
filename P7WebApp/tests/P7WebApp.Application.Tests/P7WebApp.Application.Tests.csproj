@@ -23,4 +23,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\P7WebApp.Application\P7WebApp.Application.csproj" />
+  </ItemGroup>
+
 </Project>
