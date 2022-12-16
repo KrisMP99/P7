@@ -16,7 +16,7 @@ RUN npm install react-scripts -g
 COPY /p7webapp.webui/ .
 RUN npm run build
 
-FROM nginx:latest AS production
+FROM ghcr.io/max-lt/nginx-jwt-module:latest AS production
 COPY --from=build /app/build/ /var/www
 COPY --from=build /app/nginx/nginx.conf /etc/nginx/nginx.conf
 ENTRYPOINT ["nginx","-g","daemon off;"]

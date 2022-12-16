@@ -67,8 +67,8 @@ namespace P7WebApp.Infrastructure
                     };
                 });
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IIdentityService, IdentityService>();
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddScoped<ITokenService, TokenService>();
             services.Configure<Token>(configuration.GetSection("token"));

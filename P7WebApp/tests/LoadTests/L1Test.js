@@ -10,18 +10,53 @@
 
 
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import { check, fail, sleep } from 'k6';
 
-export const BASE_URL = "https://localhost:7001/api/";
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
+
+export const BASE_URL = "http://130.225.39.193/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 export const NUMBER_COURSES = 100
-export const USERS = 1000
+export const USERS = 100
 
 export const options = {
-    stages: [{target : 500, duration: '10s'},
-             {target : 1000, duration: '10s'},
-             {target : 10000, duration: '10s'}],
-    setupTimeout: '1000s'
+             stages: [{target : 500, duration: '1m'},
+             {target : 500, duration: '30s'},
+             {target : 750, duration: '1m'},
+             {target : 750, duration: '2m'},
+             {target : 1000, duration: '1m'},
+             {target : 1000, duration: '2m'},
+             {target : 1500, duration: '2m'},
+             {target : 1500, duration: '1m'},
+             {target : 2000, duration: '2m'},
+             {target : 2000, duration: '1m'},
+             {target : 2250, duration: '2m'},
+             {target : 2250, duration: '1m'},
+             {target : 2500, duration: '2m'},
+             {target : 2500, duration: '1m'},
+             {target : 2750, duration: '2m'},
+             {target : 2750, duration: '1m'},
+             {target : 3000, duration: '2m'},
+             {target : 3000, duration: '1m'},
+             {target : 3250, duration: '2m'},
+             {target : 3250, duration: '1m'},
+             {target : 3500, duration: '2m'},
+             {target : 3500, duration: '1m'},
+             {target : 4000, duration: '2m'},
+             {target : 4000, duration: '1m'},
+             {target : 5000, duration: '2m'},
+             {target : 5000, duration: '5m'},
+             {target : 6000, duration: '2m'},
+             {target : 6000, duration: '1m'},
+             {target : 10000, duration: '2m'},
+             {target : 10000, duration: '1m'}],
+
+    setupTimeout: '10m',
+
+    thresholds: {
+        // 100% of requests must finish within 1000ms.
+        http_req_duration: ['p(90) < 100', 'p(95) < 200', 'p(99.9) <= 1000'],
+    }
 }
 
 
@@ -45,16 +80,15 @@ export function setup () {
         "lastName": "OwnerLast"
     }), BASE_HEADER);
 
-    check(res, {'created user': (r) => r.status === 200});
+    check(res, {'Created owner user': (r) => r.status === 200});
 
     // Login to get the auth token
     const loginRes = http.post(`${BASE_URL}profiles/login`, JSON.stringify({
         "username": "owner",
         "password": "Owner123!"
     }), BASE_HEADER);
-    sleep(5)
 
-    check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token' !== undefined && r.status === 200)})
+    check(loginRes, {'Owned user logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200})
     let ownerToken = loginRes.json('token')
 
     // header with token so we can create courses
@@ -65,6 +99,7 @@ export function setup () {
         }
     }
 
+    let ExGroupsCounter = 0;
     // Setup courses
     for(let courseId = 0; courseId < NUMBER_COURSES; courseId++) {
         // Create the course
@@ -79,6 +114,7 @@ export function setup () {
         // Create a random number of exercise groups between 1 - 10 for the course created above
         let numOfEGs = randomIntNumber(10)
         for(let egId = 0; egId < numOfEGs; egId++) {
+            ExGroupsCounter++
             const resEG = http.post(`${BASE_URL}courses/exercise-groups`, JSON.stringify({ 
                 courseId: courseId + 1, 
                 title: egId.toString() + "_exercisegroup", 
@@ -94,7 +130,7 @@ export function setup () {
             let numOfExs = randomIntNumber(10)
             for(let exId = 0; exId < numOfExs; exId++) {
                 const resEx = http.post(`${BASE_URL}courses/exercise-groups/exercises`, JSON.stringify({
-                    exerciseGroupId: egId + 1, 
+                    exerciseGroupId: ExGroupsCounter, 
                     title: exId.toString() + "_exercise", 
                     isVisible: true,
                     exerciseNumber: exId + 1, 
@@ -132,7 +168,8 @@ export function setup () {
                 password: "Test123!",
                 email: i.toString() + "test@test.dk",
                 token: '',
-                courseId: 0
+                courseId: 0,
+                userId: -1
             }
         })
 
@@ -152,13 +189,11 @@ export function setup () {
             "password": userData[i].value.password
         }), BASE_HEADER);
 
-        check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token' !== undefined && r.status === 200)})
+        check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200})
         userData[i].value.token = loginRes.json('token')
 
         // Attend the courses
         // Accomplished by getting the course overview -> extracting the course id's -> enroll
-        // header with token so we can create courses
-        // token header for user
         const USER_TOKEN_HEADER = {
             headers: {
                 'Authorization': `Bearer ${userData[i].value.token}`,
@@ -166,16 +201,16 @@ export function setup () {
             }
         }
         const publicCoursesRes = http.get(`${BASE_URL}courses/public`, USER_TOKEN_HEADER)
-        check(publicCoursesRes, r => r.status === 200)
+        check(publicCoursesRes, {"Got public courses" : r => r.status === 200})
         const courseIds = publicCoursesRes.json().map(c => c.id)
-
+        
         // enroll in a random course selected from the course ids
-        const enrollInCourseId = courseIds[randomIntNumber(courseIds.length)]
+        const enrollInCourseId = courseIds[randomIntNumber(courseIds.length) - 1]
         userData[i].value.courseId = enrollInCourseId
         const enrollRes = http.post(`${BASE_URL}courses/enroll`, JSON.stringify({
             "courseId": enrollInCourseId
         }), USER_TOKEN_HEADER)
-        check(enrollRes, r => r.status === 200)
+        check(enrollRes, {"Enrolled in course" : r => r.status === 200})
     }
 
     return userData
@@ -194,8 +229,9 @@ export default (userData) => {
         "username": user.value.username,
         "password": user.value.password
     }), BASE_HEADER);
-    check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token' !== undefined && r.status === 200)})
+    check(loginRes, {'logged in successfully': (r) => r.json('token') !== '' && r.json('token') !== undefined && r.status === 200})
     user.value.token = loginRes.json('token')
+    user.value.userId = loginRes.json('userId')
 
     const USER_TOKEN_HEADER = {
         headers: {
@@ -205,23 +241,41 @@ export default (userData) => {
     }
 
     // Get own courses + attending courses
-    const ownCourses = http.get(`${BASE_URL}courses/created`, USER_TOKEN_HEADER)
+    const ownCourses = http.get(`${BASE_URL}profiles/${user.value.userId}courses/created`, USER_TOKEN_HEADER)
     check(ownCourses, r => r.status === 200)
 
-    const attendingCourses = http.get(`${BASE_URL}courses/attends`, USER_TOKEN_HEADER)
+    const attendingCourses = http.get(`${BASE_URL}profiles/${user.value.userId}/courses/attends`, USER_TOKEN_HEADER)
     check(attendingCourses, r => r.status === 200)
 
     // Get the course id of the course the user attends
-    const courseId = publicCoursesRes.json().map(c => c.id)
+    const courseId = attendingCourses.json().map(c => c.id)
+
     const specificCourse = http.get(`${BASE_URL}courses/${courseId[0]}`, USER_TOKEN_HEADER)
     check(specificCourse, r => r.status === 200)
 
     // Get the exercise group ids with each exercise id
-    const egs = specificCourse.json().exerciseGroups
+    const egs = specificCourse.json('exerciseGroups')
     const specificEg = egs[randomIntNumber(egs.length) - 1]
-    const specificExId = specificEg.exercises[randomIntNumber(specificEg.exercises.length()) - 1].id
+    const index = randomIntNumber(specificEg.exercises.length) - 1
+    const specificExId = specificEg.exercises[index].id
 
     // Get the specific exercise
     const exerciseResponse = http.get(`${BASE_URL}courses/${courseId[0]}/exercise-groups/${specificEg.id}/exercises/${specificExId}`, USER_TOKEN_HEADER)
     check(exerciseResponse, r => r.status === 200)
-} 
+
+    if(exerciseResponse.status !== 200) {
+        sleep(0.5)
+        console.log("Something went wrong!")
+        console.log("Reason: " + exerciseResponse.body)
+        console.log("Username: " + user.value.username + " password: " + user.value.password + " token: " + user.value.token)
+        console.log("Course id: " + courseId[0] + " exGroup id: " + specificEg.id + " exercise id: " + specificExId)
+        sleep(0.5)
+    }
+}
+
+export function handleSummary(data) {
+    return {
+      "result.html": htmlReport(data),
+      stdout: textSummary(data, { indent: " ", enableColors: true }),
+    };
+}

@@ -83,7 +83,7 @@ namespace P7WebApp.Domain.Aggregates.ExerciseAggregate
                     }
                 }
 
-                // if modules have been deleted,
+                // if modules have been deleted
                 if (Modules.Count > newModules.Count)
                 {
                     var module = Modules.Where(m => !newModules.Exists(nm => nm.Id == m.Id)).FirstOrDefault();

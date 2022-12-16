@@ -25,10 +25,10 @@ export default function Landingpage(props: LandingpageProps): JSX.Element {
                     className="mb-3 mt-3"
                     fill>
                     <Tab eventKey="My courses" title="My courses">
-                        <OwnedCourseOverview />
+                        <OwnedCourseOverview user={props.user} />
                     </Tab>
                     <Tab eventKey="Attending courses" title="Attending courses">
-                        <AttendeeCourseOverview />
+                        <AttendeeCourseOverview user={props.user} />
                     </Tab>
                 </Tabs>
             </div>

@@ -22,6 +22,9 @@ services:
       - frontend
       - backend
     deploy:
+      placement:
+        constraints:
+          - node.role==manager
       replicas: 1
       restart_policy:
         condition: on-failure
@@ -64,6 +67,10 @@ services:
     image: kpede19/p7:postgres
     restart: always
     env_file: .env
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
     ports:
       - "5431:5431"
     volumes:

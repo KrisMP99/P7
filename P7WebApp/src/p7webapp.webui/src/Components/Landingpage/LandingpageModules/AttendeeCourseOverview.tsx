@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Container, Table, Form, InputGroup, Pagination, Button, Spinner } from 'react-bootstrap';
 import { ArrowCounterclockwise } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
-import { getApiRoot } from '../../../App';
+import { getApiRoot, User } from '../../../App';
 import { CourseOverview } from './OwnedCourseOverview';
 import './OwnedCourseOverview.css';
 
 interface AttendedCourseOverviewProps {
-
+    user: User;
 }
 
 export default function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element {
@@ -228,28 +228,28 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     );
 }
 
-async function fetchAttendedCourses(callback: (courses: CourseOverview[] | null) => void) {
+async function fetchAttendedCourses(userId: number, callback: (courses: CourseOverview[]) => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + jwt
-            }
-        }
-        await fetch(getApiRoot() + 'profiles/courses/attends', requestOptions)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error(res.statusText);
-                }
-                return res.json();
-            })
-            .then((courses: CourseOverview[]) => {
-                callback(courses);
-            });
+       const requestOptions = {
+           method: 'GET',
+           headers: { 
+               'Accept': 'application/json', 
+               'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + jwt
+           }
+       }
+       await fetch(getApiRoot() + 'profiles/' + userId + '/courses/attends', requestOptions)
+           .then((res) => {
+               if (!res.ok) {
+                   throw new Error(res.statusText);
+               }
+               return res.json();
+           })
+           .then((courses: CourseOverview[]) => {
+               callback(courses);
+           });
     } catch (error) {
         callback(null);
     }
