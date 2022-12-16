@@ -10,5 +10,6 @@ namespace P7WebApp.Domain.Repositories
         Task<int> UpdateExerciseGroup(ExerciseGroup course);
         Task CreateExercise(Exercise exercise);
         Task<int> DeleteExercise(int exerciseId);
+        Task CreateExerciseGroupAsync(ExerciseGroup exerciseGroup);
     }
 }

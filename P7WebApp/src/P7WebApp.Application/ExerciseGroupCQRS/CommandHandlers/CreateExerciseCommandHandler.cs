@@ -28,15 +28,15 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
                 }
                 else
                 {
-                    var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
+                    //var exerciseGroup = await _unitOfWork.ExerciseGroupRepository.GetExerciseGroupByIdWithExercises(request.ExerciseGroupId);
 
-                    if (exerciseGroup is null)
-                    {
-                        throw new NotFoundException($"Could not find an exercise group with Id: {request.ExerciseGroupId}.");
-                    }
-                    else
-                    {
-                        exerciseGroup.AddExercise(exercise);
+                    //if (exerciseGroup is null)
+                    //{
+                    //    throw new NotFoundException($"Could not find an exercise group with Id: {request.ExerciseGroupId}.");
+                    //}
+                    //else
+                    //{
+                        await _unitOfWork.ExerciseRepository.CreateExercise(exercise);
 
                         var result = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
@@ -46,7 +46,7 @@ namespace P7WebApp.Application.ExerciseGroupCQRS.CommandHandlers
                         }
 
                         return result;
-                    }
+                    //}
                 }
             }
             catch (Exception)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.Services.Common;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Models;
@@ -12,10 +13,26 @@ namespace P7WebApp.Infrastructure.Repositories
     public class ExerciseGroupRepository : IExerciseGroupRepository
     {
         private readonly IApplicationDbContext _context;
+        private readonly ILogger<ExerciseGroupRepository> _logger;
 
-        public ExerciseGroupRepository(IApplicationDbContext context)
+        public ExerciseGroupRepository(IApplicationDbContext context, ILogger<ExerciseGroupRepository> logger)
         {
             _context = context;
+            _logger = logger;
+        }
+
+        public async Task CreateExerciseGroupAsync(ExerciseGroup exerciseGroup)
+        {
+            try
+            {
+                var result = await _context.ExerciseGroups.AddAsync(exerciseGroup);
+                _logger.LogInformation("create exercise group in repository");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Create exercise group failed with message: {ex.Message}");
+                throw new ExerciseGroupRepositoryException($"Could not create exercise with Id: {exerciseGroup.Id}, due to: {ex.Message}");
+            }
         }
 
         public async Task CreateExercise(Exercise exercise)
@@ -23,10 +40,11 @@ namespace P7WebApp.Infrastructure.Repositories
             try
             {
                 var result = await  _context.Exercises.AddAsync(exercise);
+                _logger.LogInformation("create exercise in repository");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new ExerciseGroupRepositoryException($"Could not create exercise with Id: {exercise.Id}.");
+                throw new ExerciseGroupRepositoryException($"Could not create exercise with Id: {exercise.Id}, due to: {ex.Message}");
             }
         }
 

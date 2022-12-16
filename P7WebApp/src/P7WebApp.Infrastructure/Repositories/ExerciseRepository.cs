@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using P7WebApp.Application.Common.Interfaces;
-using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules;
-using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.CodeModule;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.QuizModule;
 using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Repositories;
@@ -13,14 +12,28 @@ namespace P7WebApp.Infrastructure.Repositories
 {
     public class ExerciseRepository : IExerciseRepository
     {
-
         private readonly IApplicationDbContext _context;
+        private readonly ILogger<ExerciseRepository> _logger;
 
-        public ExerciseRepository(IApplicationDbContext context)
+        public ExerciseRepository(IApplicationDbContext context, ILogger<ExerciseRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
+        public async Task CreateExercise(Exercise exercise)
+        {
+            try
+            {
+                var result = await _context.Exercises.AddAsync(exercise);
+                _logger.LogInformation("create exercise in repository");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Create exercise group failed with message: {ex.Message}");
+                throw new ExerciseGroupRepositoryException($"Could not create exercise with Id: {exercise.Id}, due to: {ex.Message}");
+            }
+        }
         public async Task<Exercise> GetExerciseWithSolutionsById(int id)
         {
             try

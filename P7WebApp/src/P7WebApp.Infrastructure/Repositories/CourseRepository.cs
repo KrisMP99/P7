@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
@@ -12,10 +13,12 @@ namespace P7WebApp.Infrastructure.Repositories
     public class CourseRepository : ICourseRepository
     {
         private readonly IApplicationDbContext _context;
+        private readonly ILogger<CourseRepository> _logger;
 
-        public CourseRepository(IApplicationDbContext context)
+        public CourseRepository(IApplicationDbContext context, ILogger<CourseRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task CreateCourse(Course course)
@@ -23,10 +26,12 @@ namespace P7WebApp.Infrastructure.Repositories
             try 
             {
                 await _context.Courses.AddAsync(course);
+                _logger.LogInformation("create course in repository");
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                throw new CourseRepositoryException($"Could not create course: {course.Title}.");
+                _logger.LogWarning($"Create course failed with message: {ex.Message}");
+                throw new CourseRepositoryException($"Could not create course: {course.Title} due to {ex.Message}.");
             }
         }
         public async Task<int> GetCourseIdFromInviteCode(int code)

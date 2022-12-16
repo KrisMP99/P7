@@ -26,10 +26,10 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 var exerciseGroup = CourseMapper.Mapper.Map<ExerciseGroup>(request);
-                var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.CourseId);
+                //var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.CourseId);
 
-                course.AddExerciseGroup(exerciseGroup);
-
+                //course.AddExerciseGroup(exerciseGroup);
+                await _unitOfWork.ExerciseGroupRepository.CreateExerciseGroupAsync(exerciseGroup);
                 var rowsAffected = await _unitOfWork.CommitChangesAsync(cancellationToken);
 
                 return rowsAffected;

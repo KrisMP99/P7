@@ -1,4 +1,5 @@
-﻿using P7WebApp.Application.Common.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Repositories;
 
@@ -8,15 +9,17 @@ namespace P7WebApp.Infrastructure.Persistence
     {
 
         private readonly IApplicationDbContext _context;
+        private readonly ILogger<UnitOfWork> _logger;
         private bool _disposed = false;
 
-        public UnitOfWork(IApplicationDbContext context)
+        public UnitOfWork(IApplicationDbContext context, ILogger<UnitOfWork> logger, ILogger<CourseRepository> courseLogger, ILogger<ExerciseGroupRepository> exerciseGroupLogger, ILogger<ExerciseRepository> exerciseLogger, ILogger<ProfileRepository> profileLogger)
         {
             _context = context;
-            CourseRepository = new CourseRepository(context);
-            ExerciseGroupRepository = new ExerciseGroupRepository(context);
-            ExerciseRepository = new ExerciseRepository(context);
-            ProfileRepository = new ProfileRepository(context);
+            _logger = logger;
+            CourseRepository = new CourseRepository(context, courseLogger);
+            ExerciseGroupRepository = new ExerciseGroupRepository(context, exerciseGroupLogger);
+            ExerciseRepository = new ExerciseRepository(context, exerciseLogger);
+            ProfileRepository = new ProfileRepository(context, profileLogger);
         }
 
         public ICourseRepository CourseRepository { get; private set; }
@@ -28,10 +31,12 @@ namespace P7WebApp.Infrastructure.Persistence
         {
             try
             {
+                _logger.LogInformation("trying to commit changes");
                 return await _context.SaveChangesAsync(cancellationToken);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogWarning($"Error orcurred while commiting to db, with message {ex.Message}");
                 throw;
             }
         }
