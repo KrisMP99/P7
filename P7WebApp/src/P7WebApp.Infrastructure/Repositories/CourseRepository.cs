@@ -102,6 +102,8 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
+                // Why do we include the profile here as well? (I suppose it's for the frontend?)
+                // However, use AsNoTracking
                 var course = await _context.Courses
                     .Where(c => c.Id == courseId)
                     .Include(c => c.Attendees)
@@ -148,11 +150,12 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
+        // Perhap use AsNoTracking and AsAsyncEnumerable
         public async Task<IEnumerable<Course>> GetAttendedCourses(string userId)
         {
             try
             {
-                var courses = _context.Courses
+                var courses =  _context.Courses
                     .Include(c => c.Attendees)
                     .Where(c => c.Attendees.Any(a => a.Profile.UserId == userId));
 
@@ -208,6 +211,7 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
+        // Try using AsNoTracking and AsAsyncEnumerable, and a select statement, only extracting what we need for the course overview response?
         public async Task<IEnumerable<Course>> GetCreatedCourses(string userId)
         {
             try

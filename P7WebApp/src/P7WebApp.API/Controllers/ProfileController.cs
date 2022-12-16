@@ -78,7 +78,7 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                var result = _mediator.Send(request);
+                var result = await _mediator.Send(request);
                 return Ok("User was updated");
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace P7WebApp.API.Controllers
         {
             try
             {
-                var result = _mediator.Send(request);
+                var result = await _mediator.Send(request);
                 return Ok(result);
             }
             catch (Exception ex)
