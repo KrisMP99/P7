@@ -5,6 +5,7 @@ using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Responses.Profile;
 using P7WebApp.Infrastructure.Common.Models;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -34,11 +35,20 @@ namespace P7WebApp.Infrastructure.Identity.Services
         {
             try
             {
+                var userManagerStopWatch = Stopwatch.StartNew();
                 var user = await _userManager.FindByNameAsync(username);
+                userManagerStopWatch.Stop();
+                Debug.WriteLine($"user manager milliseconds: {userManagerStopWatch.ElapsedMilliseconds}");
 
                 if (user is not null)
                 {
-                    SignInResult signIn = await _signInManager.PasswordSignInAsync(user, password, true, false);
+                    var signInStopWatch = Stopwatch.StartNew();
+
+                    SignInResult signIn = await _signInManager.PasswordSignInAsync(user.UserName, password, true, false);
+
+                    signInStopWatch.Stop();
+
+                    Debug.WriteLine($"sign in milliseconds {signInStopWatch.ElapsedMilliseconds}");
 
                     if (signIn.Succeeded)
                     {
