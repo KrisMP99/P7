@@ -1,0 +1,72 @@
+version: "3.4"
+
+networks:
+  frontend:
+  backend:
+
+services:
+  p7webapp_api-PROD:
+    image: kpede19/p7:p7webappapi-prod
+    environment:
+      ASPNETCORE_ENVIRONMENT: production
+    build:
+      context: ../
+      dockerfile: ./P7WebApp.API/Dockerfile
+      target: production
+    expose:
+      - "5000"
+    restart: always
+    depends_on:
+      - postgres-PROD
+    networks:
+      - frontend
+      - backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      update_config:
+        parallelism: 10
+        delay: 0s
+
+  p7webapp_ui-PROD:
+    image: kpede19/p7:p7webappui-prod
+    env_file:
+      - .env
+    build:
+      context: ../
+      dockerfile: ./p7webapp.webui/Dockerfile
+      target: production
+    volumes:
+      - type: bind
+        source: ../p7webapp.webui
+        target: /app
+    depends_on:
+      - p7webapp_api-PROD
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    networks:
+      - frontend
+      - backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      update_config:
+        parallelism: 10
+        delay: 0s
+
+  postgres-PROD:
+    image: kpede19/p7:postgres
+    restart: always
+    env_file: .env
+    ports:
+      - "5431:5431"
+    volumes:
+      - C:\dev\pgdata:/var/lib/postgresql/data
+    networks:
+      - backend

@@ -1,0 +1,27 @@
+.row-input-container {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.flex-space-evenly {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+[type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.layout-row {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 30px;
+}
+
+img {
+    cursor: pointer;
+}

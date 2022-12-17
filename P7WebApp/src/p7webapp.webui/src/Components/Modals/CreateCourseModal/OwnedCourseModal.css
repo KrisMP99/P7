@@ -1,0 +1,13 @@
+.create {
+    background-color: #00AB8E !important;
+    width: 35% !important;
+    border: none !important;
+    color: white !important;
+}
+
+.cancel {
+    background-color: #ff5471 !important;
+    width: 35% !important;
+    border: none !important;
+    color: white !important;
+}

@@ -1,0 +1,22 @@
+.button {
+    width: 100%;
+}
+
+.container {
+    position: relative;
+}
+
+.table {
+    z-index: -1;
+}
+
+.create-course {
+    background-color: #00AB8E;
+    width: 40%;
+    color: white;
+    border: none;
+}
+
+.footer {
+    width: 100%;
+}
