@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Domain.Aggregates.CourseAggregate;
@@ -10,6 +11,7 @@ using P7WebApp.Domain.Aggregates.ExerciseAggregate.Modules.TextModule;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Aggregates.ProfileAggregate;
 using P7WebApp.Infrastructure.Identity;
+using System.Reflection.Emit;
 
 namespace P7WebApp.Infrastructure.Persistence
 {
@@ -62,8 +64,23 @@ namespace P7WebApp.Infrastructure.Persistence
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(builder);
+
+            builder.Ignore<IdentityUserToken<string>>();
+            builder.Ignore<IdentityUserLogin<string>>();
+
+
+            builder.Entity<IdentityUser>()
+               .Ignore(c => c.AccessFailedCount)
+               .Ignore(c => c.LockoutEnabled)
+               .Ignore(c => c.TwoFactorEnabled)
+               .Ignore(c => c.ConcurrencyStamp)
+               .Ignore(c => c.LockoutEnd)
+               .Ignore(c => c.EmailConfirmed)
+               .Ignore(c => c.TwoFactorEnabled)
+               .Ignore(c => c.LockoutEnd)
+               .Ignore(c => c.AccessFailedCount)
+               .Ignore(c => c.PhoneNumberConfirmed)
+               .Ignore(c => c.PhoneNumber);
         }
-
-
     }
 }
