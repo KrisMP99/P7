@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using P7WebApp.Application.Common.Interfaces;
@@ -18,17 +19,20 @@ namespace P7WebApp.Infrastructure.Identity.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly Token _token;
+        private readonly ILogger<TokenService> _logger;
 
         public TokenService(
             SignInManager<ApplicationUser> signInManager, 
             UserManager<ApplicationUser> userManager, 
             IOptions<Token> tokenOptions,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<TokenService> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _token = tokenOptions.Value;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<TokenResponse> AuthenticateAsync(string username, string password)
@@ -38,7 +42,7 @@ namespace P7WebApp.Infrastructure.Identity.Services
                 var userManagerStopWatch = Stopwatch.StartNew();
                 var user = await _userManager.FindByNameAsync(username);
                 userManagerStopWatch.Stop();
-                Debug.WriteLine($"user manager milliseconds: {userManagerStopWatch.ElapsedMilliseconds}");
+                _logger.LogInformation($"user manager milliseconds: {userManagerStopWatch.ElapsedMilliseconds}");
 
                 if (user is not null)
                 {
@@ -48,7 +52,7 @@ namespace P7WebApp.Infrastructure.Identity.Services
 
                     signInStopWatch.Stop();
 
-                    Debug.WriteLine($"sign in milliseconds {signInStopWatch.ElapsedMilliseconds}");
+                    _logger.LogInformation($"sign in milliseconds {signInStopWatch.ElapsedMilliseconds}");
 
                     if (signIn.Succeeded)
                     {
