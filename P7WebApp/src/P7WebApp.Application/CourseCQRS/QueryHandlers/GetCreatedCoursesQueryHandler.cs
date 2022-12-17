@@ -1,9 +1,11 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Mappings;
 using P7WebApp.Application.Common.Models;
 using P7WebApp.Application.CourseCQRS.Queries;
 using P7WebApp.Application.Responses;
+using System.Diagnostics;
 
 namespace P7WebApp.Application.CourseCQRS.QueryHandlers
 {
@@ -11,16 +13,21 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
     {
 		private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
+        private readonly ILogger<GetCreatedCoursesQueryHandler> _logger;
 
-        public GetCreatedCoursesQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+        public GetCreatedCoursesQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<GetCreatedCoursesQueryHandler> logger)
         {
             _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<CourseOverviewResponse>> Handle(GetCreatedCoursesQuery request, CancellationToken cancellationToken)
         {
-			try
+            var sw = Stopwatch.StartNew();
+            _logger.LogInformation("GetCreatedCoursesQueryHandler.Handle() began");
+            
+            try
 			{
                 var userId = _currentUserService.UserId;
                 var courses = await _unitOfWork.CourseRepository.GetCreatedCourses(userId);
@@ -32,13 +39,18 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
                 {
                     course.OwnerName = fullName;
                 }
-                
+
+                sw.Stop();
+                _logger.LogInformation($"GetCreatedCoursesQueryHandler.Handle() finished with time in milliseconds: {sw.ElapsedMilliseconds}");
+
                 return response;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				throw;
-			}
+                sw.Stop();
+                _logger.LogWarning($"GetCreatedCoursesQueryHandler.Handle() failed with message {ex.Message} after {sw.ElapsedMilliseconds}");
+                throw;
+            }
         }
     }
 }
