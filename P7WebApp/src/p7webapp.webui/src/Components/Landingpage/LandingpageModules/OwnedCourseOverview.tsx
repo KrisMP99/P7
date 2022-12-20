@@ -5,7 +5,7 @@ import './OwnedCourseOverview.css';
 import { ShowModal } from '../../Modals/CreateExerciseModal/CreateExerciseModal';
 import { ArrowCounterclockwise, Pencil, Trash } from 'react-bootstrap-icons';
 import DeleteConfirmModal, { DeleteElementType, ShowDeleteConfirmModal } from '../../Modals/DeleteConfirmModal/DeleteConfirmModal';
-import { getApiRoot, User } from '../../../App';
+import { getApiRoot } from '../../../App';
 import CreateCourseModal from '../../Modals/CreateCourseModal/CreateCourseModal';
 import EditCourseModal, { ShowEditCourseModal } from '../../Modals/EditCourseModal/EditCourseModal';
 
@@ -21,7 +21,7 @@ export interface CourseOverview {
 }
 
 interface OwnedCourseOverviewProps {
-    user: User;
+
 }
 
 export default function OwnedCourseOverview(props: OwnedCourseOverviewProps): JSX.Element {
@@ -274,7 +274,7 @@ async function fetchOwnedCourses(callback: (courses: CourseOverview[] | null) =>
                 'Authorization': 'Bearer ' + jwt
             }
         }
-        await fetch(getApiRoot() + 'profiles/' + userId + '/courses/created', requestOptions)
+        await fetch(getApiRoot() + 'profiles/courses/created', requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Response not okay from backend');

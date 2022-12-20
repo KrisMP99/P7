@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Container, Table, Form, InputGroup, Pagination, Button, Spinner } from 'react-bootstrap';
 import { ArrowCounterclockwise } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
-import { getApiRoot, User } from '../../../App';
+import { getApiRoot } from '../../../App';
 import { CourseOverview } from './OwnedCourseOverview';
 import './OwnedCourseOverview.css';
 
 interface AttendedCourseOverviewProps {
-    user: User;
+
 }
 
 export default function AttendedCourseOverview(props: AttendedCourseOverviewProps): JSX.Element {
@@ -25,10 +25,10 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     const [maxPages, setMaxPages] = useState<number>(1);
 
     const navigate = useNavigate();
-    //TEMP FIX!!
+
     useEffect(() => {
         setIsFetching(true);
-        fetchAttendedCourses(1, (courses) => {
+        fetchAttendedCourses((courses) => {
             courses ? setAttendedCourses(courses) : setErrorText('Could not fetch attending courses at the moment');
             setIsFetching(false);
         });
@@ -98,8 +98,7 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                         </Form>
                         <Button className="btn-2" onClick={() => {
                             setIsFetching(true);
-                            //TEMP FIX!!!
-                            fetchAttendedCourses(1,(courses) => {
+                            fetchAttendedCourses((courses) => {
                                 courses ? setAttendedCourses(courses) : setErrorText('Could not fetch attending courses at the moment');
                                 setIsFetching(false);
                             });
@@ -229,28 +228,28 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     );
 }
 
-async function fetchAttendedCourses(userId: number, callback: (courses: CourseOverview[]) => void) {
+async function fetchAttendedCourses(callback: (courses: CourseOverview[] | null) => void) {
     let jwt = sessionStorage.getItem('jwt');
     if (jwt === null) return;
     try {
-       const requestOptions = {
-           method: 'GET',
-           headers: { 
-               'Accept': 'application/json', 
-               'Content-Type': 'application/json',
-               'Authorization': 'Bearer ' + jwt
-           }
-       }
-       await fetch(getApiRoot() + 'profiles/' + userId + '/courses/attends', requestOptions)
-           .then((res) => {
-               if (!res.ok) {
-                   throw new Error(res.statusText);
-               }
-               return res.json();
-           })
-           .then((courses: CourseOverview[]) => {
-               callback(courses);
-           });
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt
+            }
+        }
+        await fetch(getApiRoot() + 'profiles/courses/attends', requestOptions)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then((courses: CourseOverview[]) => {
+                callback(courses);
+            });
     } catch (error) {
         callback(null);
     }
