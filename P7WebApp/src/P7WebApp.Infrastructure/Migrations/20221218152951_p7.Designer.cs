@@ -12,7 +12,7 @@ using P7WebApp.Infrastructure.Persistence;
 namespace P7WebApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221210192127_p7")]
+    [Migration("20221218152951_p7")]
     partial class p7
     {
         /// <inheritdoc />
@@ -641,7 +641,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 

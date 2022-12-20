@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Services.UserAccountMapping;
 using P7WebApp.Application.Common.Interfaces;
 using P7WebApp.Application.Common.Interfaces.Identity;
 using P7WebApp.Application.Responses.Profile;
+using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Common.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,19 +15,19 @@ namespace P7WebApp.Infrastructure.Identity.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
+        //private readonly SignInManager<ApplicationUser> _signInManager;
+        //private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly Token _token;
 
         public TokenService(
-            SignInManager<ApplicationUser> signInManager, 
-            UserManager<ApplicationUser> userManager, 
+            //SignInManager<ApplicationUser> signInManager, 
+            //UserManager<ApplicationUser> userManager, 
             IOptions<Token> tokenOptions,
             IUnitOfWork unitOfWork)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
+            //_signInManager = signInManager;
+            //_userManager = userManager;
             _token = tokenOptions.Value;
             _unitOfWork = unitOfWork;
         }
@@ -34,23 +36,24 @@ namespace P7WebApp.Infrastructure.Identity.Services
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(username);
+                //var user = await _userManager.FindByNameAsync(username);
+                var user = await _unitOfWork.ProfileRepository.GetProfileByUserName(username);
 
                 if (user is not null)
                 {
-                    SignInResult signIn = await _signInManager.PasswordSignInAsync(user, password, true, false);
+                    //SignInResult signIn = await _signInManager.PasswordSignInAsync(user, password, true, false);
 
-                    if (signIn.Succeeded)
-                    {
+                    //if (signIn.Succeeded)
+                    //{
                         byte[] secret = Encoding.ASCII.GetBytes(_token.Secret);
-                        string token = SetToken(issuer: _token.Issuer, audience: _token.Audience, expires: _token.Expiry, secret: secret, user: user);
+                        string token = SetToken(issuer: _token.Issuer, audience: _token.Audience, expires: _token.Expiry, secret: secret, userId: user.Id, firstName: user.FirstName, lastName: user.LastName, userName: user.UserName, email: user.Email);
 
-                        var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(user.Id);
+                        //var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(user.Id);
 
-                        var tokenResponse = new TokenResponse(token: token, userId: profile.Id, firstname: user.FirstName, lastname: user.LastName, email: user.Email, username: user.UserName);
+                        var tokenResponse = new TokenResponse(token: token, userId: user.Id, firstname: user.FirstName, lastname: user.LastName, email: user.Email, username: user.UserName);
 
                         return tokenResponse;
-                    }
+                    //}
                 }
 
                 return null;
@@ -85,6 +88,46 @@ namespace P7WebApp.Infrastructure.Identity.Services
                             new Claim("Username", user.UserName),
                             new Claim(ClaimTypes.Email, user.Email),
                             new Claim(ClaimTypes.NameIdentifier, user.Id)
+                        }),
+                        Expires = DateTime.UtcNow.AddMinutes(expires),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
+                    };
+
+                    var jwtToken = handler.CreateToken(descriptor);
+                    var writtenToken = handler.WriteToken(jwtToken);
+
+                    return writtenToken;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string SetToken(string issuer, string audience, int expires, byte[] secret, int userId, string firstName, string lastName, string userName, string email)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience) || expires == 0 || secret is null)
+                {
+                    throw new Exception("Was given invalid date for creation of token"); // TODO: Make own exception?
+                }
+                else
+                {
+                    var handler = new JwtSecurityTokenHandler();
+                    var descriptor = new SecurityTokenDescriptor
+                    {
+                        Issuer = issuer,
+                        Audience = audience,
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim("UserId", userId.ToString()),
+                            new Claim("FirstName", $"{firstName}"),
+                            new Claim("LastName", $"{lastName}"),
+                            new Claim("Username", userName),
+                            new Claim(ClaimTypes.Email, email),
+                            new Claim(ClaimTypes.NameIdentifier, userId.ToString())
                         }),
                         Expires = DateTime.UtcNow.AddMinutes(expires),
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)

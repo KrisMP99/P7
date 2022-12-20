@@ -22,9 +22,9 @@ namespace P7WebApp.Application.ProfileCQRS.QueryHandlers
         {
             try
             {
-                var userId = _currentUserService.UserId;
+                var userId = _currentUserService.ProfileId;
 
-                if (userId is null)
+                if (userId == 0)
                 {
                     throw new NotFoundException("User not found.");
                 }

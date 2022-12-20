@@ -9,8 +9,8 @@
 import http from 'k6/http';
 import { check } from 'k6';
 
-export const BASE_URL = "http://130.225.39.193/api/";
-export const BASE_URL_dev = "https://localhost:7001/api/";
+export const BASE_URL_ee = "http://130.225.39.193/api/";
+export const BASE_URL = "https://localhost:7001/api/";
 export const BASE_HEADER = { 
     headers: { 'Content-Type': 'application/json' } 
 }
@@ -27,31 +27,10 @@ function randomString(length, charset = '') {
 }
 
 export const options = {
-    stages: [{target : 5, duration: '30s'},
-             {target : 10, duration: '2m'},
-             {target : 10, duration: '2m'},
-             {target : 15, duration: '2m'},
-             {target : 15, duration: '2m'},
-             {target : 20, duration: '2m'},
-             {target : 20, duration: '2m'},
-             {target : 25, duration: '2m'},
-             {target : 25, duration: '2m'},
-             {target : 30, duration: '2m'},
-             {target : 30, duration: '2m'},
-             {target : 35, duration: '2m'},
-             {target : 40, duration: '2m'},
-             {target : 40, duration: '2m'},
-             {target : 50, duration: '2m'},
-             {target : 50, duration: '2m'},
-             {target : 60, duration: '2m'},
-             {target : 60, duration: '2m'},
-             {target : 70, duration: '2m'},
-             {target : 70, duration: '2m'},
-             {target : 80, duration: '2m'},
-             {target : 80, duration: '2m'},
-             {target : 90, duration: '2m'},
-             {target : 90, duration: '2m'},
-             {target : 100, duration: '2m'},
+    stages: [
+             {target : 1000, duration: '2m'},
+             {target : 2000, duration: '2m'},
+             {target : 5000, duration: '2m'},
              {target : 100, duration: '2m'},
              {target : 50, duration: '2m'},
              {target : 25, duration: '2m'},

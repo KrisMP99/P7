@@ -16,8 +16,8 @@ namespace P7WebApp.Domain.Repositories
         Task<IEnumerable<Course>> GetListOfCourses();
         Task<IEnumerable<ExerciseGroup>> GetExerciseGroupsWithExercises(int courseId);
         Task<int> UpdateCourse(Course course);
-        Task<IEnumerable<Course>> GetAttendedCourses(string userId);
+        Task<IEnumerable<Course>> GetAttendedCourses(int profileId);
         Task<IEnumerable<Course>> GetPublicCourses();
-        Task<IEnumerable<Course>> GetCreatedCourses(string profileId);
+        Task<IEnumerable<Course>> GetCreatedCourses(int profileId);
     }
 }

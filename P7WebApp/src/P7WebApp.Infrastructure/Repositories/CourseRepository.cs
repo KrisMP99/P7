@@ -5,7 +5,6 @@ using P7WebApp.Domain.Aggregates.CourseAggregate;
 using P7WebApp.Domain.Aggregates.ExerciseGroupAggregate;
 using P7WebApp.Domain.Repositories;
 using P7WebApp.Infrastructure.Exceptions;
-using System.Reflection.Metadata;
 
 
 namespace P7WebApp.Infrastructure.Repositories
@@ -38,7 +37,7 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                int courseId = await _context.Courses.Where(c => c.InviteCode.Code == code).Select(c => c.Id).FirstOrDefaultAsync();
+                int courseId = await _context.Courses.Where(c => c.InviteCode.Code == code).AsNoTracking().Select(c => c.Id).FirstOrDefaultAsync();
 
                 if (courseId > 0)
                 {
@@ -102,14 +101,13 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                // Why do we include the profile here as well? (I suppose it's for the frontend?)
-                // However, use AsNoTracking
                 var course = await _context.Courses
                     .Where(c => c.Id == courseId)
                     .Include(c => c.Attendees)
                         .ThenInclude(a => a.Profile)
                     .Include(c => c.ExerciseGroups)
                     .ThenInclude(eg => eg.Exercises)
+                    .AsNoTracking()
                     .FirstOrDefaultAsync();
 
                 if (course is null)
@@ -150,20 +148,21 @@ namespace P7WebApp.Infrastructure.Repositories
             }
         }
 
-        // Perhap use AsNoTracking and AsAsyncEnumerable
-        public async Task<IEnumerable<Course>> GetAttendedCourses(string userId)
+        public async Task<IEnumerable<Course>> GetAttendedCourses(int profileId)
         {
             try
             {
-                var courses =  _context.Courses
+                var courses = await  _context.Courses
                     .Include(c => c.Attendees)
-                    .Where(c => c.Attendees.Any(a => a.Profile.UserId == userId));
+                    .Where(c => c.Attendees.Any(a => a.Profile.Id == profileId))
+                    .AsNoTracking()
+                    .ToListAsync();
 
-                return courses;
+                return courses.AsEnumerable();
             }
             catch (Exception)
             { 
-                throw new CourseRepositoryException($"Could not find attended courses for user Id: {userId}.");
+                throw new CourseRepositoryException($"Could not find attended courses for user Id: {profileId}.");
             }
             
         }
@@ -173,9 +172,11 @@ namespace P7WebApp.Infrastructure.Repositories
         {
             try
             {
-                var exerciseGroups = _context.ExerciseGroups
+                var exerciseGroups = await _context.ExerciseGroups
                     .Where(e => e.CourseId == courseId)
-                    .Include(e => e.Exercises);
+                    .Include(e => e.Exercises)
+                    .AsNoTracking()
+                    .ToListAsync();
 
                 if (exerciseGroups is null)
                 {
@@ -194,7 +195,9 @@ namespace P7WebApp.Infrastructure.Repositories
         public async Task<IEnumerable<Course>> GetListOfCourses()
         {
 
-            var courses = await _context.Courses.ToListAsync();
+            var courses = await _context.Courses
+                .AsNoTracking()
+                .ToListAsync();
 
             try
             {
@@ -203,7 +206,7 @@ namespace P7WebApp.Infrastructure.Repositories
                     throw new CourseRepositoryException("Could not get list of courses.");
                 }
 
-                return courses;
+                return courses.AsEnumerable();
             }
             catch (Exception)
             {
@@ -212,17 +215,17 @@ namespace P7WebApp.Infrastructure.Repositories
         }
 
         // Try using AsNoTracking and AsAsyncEnumerable, and a select statement, only extracting what we need for the course overview response?
-        public async Task<IEnumerable<Course>> GetCreatedCourses(string userId)
+        public async Task<IEnumerable<Course>> GetCreatedCourses(int profileId)
         {
             try
             {
-                var courses = _context.Courses.Where(c => c.Owner.UserId == userId);
+                var courses = await _context.Courses.Where(c => c.Owner.Id == profileId).ToListAsync();
 
-                return courses.AsEnumerable();
+                return courses;
             }
             catch (Exception)
             { 
-                throw new CourseRepositoryException($"Could not get created courses for user: {userId}.");
+                throw new CourseRepositoryException($"Could not get created courses for user: {profileId}.");
             }
         }
 

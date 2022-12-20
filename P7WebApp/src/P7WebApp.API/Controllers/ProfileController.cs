@@ -28,13 +28,13 @@ namespace P7WebApp.API.Controllers
             try
             {
                 var result = await _mediator.Send(request);
-                if (result.Succeeded)
+                if (result > 0)
                 {
                     return Ok("Profile was created successfully");
                 }
                 else
                 {
-                    return BadRequest(result.Errors);
+                    return BadRequest("Could not create profile");
                 }
             }
             catch (Exception ex)

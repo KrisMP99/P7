@@ -21,7 +21,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
         {
             try
             {
-                var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId);
+                var profile = await _unitOfWork.ProfileRepository.GetProfileById(_currentUserService.ProfileId);
 
                 if(profile is null)
                 {

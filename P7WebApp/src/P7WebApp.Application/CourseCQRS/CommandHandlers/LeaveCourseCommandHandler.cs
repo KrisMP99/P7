@@ -21,7 +21,7 @@ namespace P7WebApp.Application.CourseCQRS.CommandHandlers
             try
             {
                 var course = await _unitOfWork.CourseRepository.GetCourseWithExerciseGroups(request.CourseId);
-                var profile = await _unitOfWork.ProfileRepository.GetProfileByUserId(_currentUserService.UserId);
+                var profile = await _unitOfWork.ProfileRepository.GetProfileById(_currentUserService.ProfileId);
                 if (course is not null)
                 {
                     course.RemoveAttendeeByProfileId(profile.Id);

@@ -25,10 +25,10 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
     const [maxPages, setMaxPages] = useState<number>(1);
 
     const navigate = useNavigate();
-
+    //TEMP FIX!!
     useEffect(() => {
         setIsFetching(true);
-        fetchAttendedCourses((courses) => {
+        fetchAttendedCourses(1, (courses) => {
             courses ? setAttendedCourses(courses) : setErrorText('Could not fetch attending courses at the moment');
             setIsFetching(false);
         });
@@ -98,7 +98,8 @@ export default function AttendedCourseOverview(props: AttendedCourseOverviewProp
                         </Form>
                         <Button className="btn-2" onClick={() => {
                             setIsFetching(true);
-                            fetchAttendedCourses((courses) => {
+                            //TEMP FIX!!!
+                            fetchAttendedCourses(1,(courses) => {
                                 courses ? setAttendedCourses(courses) : setErrorText('Could not fetch attending courses at the moment');
                                 setIsFetching(false);
                             });

@@ -22,8 +22,8 @@ namespace P7WebApp.Application.CourseCQRS.QueryHandlers
         {
 			try
 			{
-                var userId = _currentUserService.UserId;
-                var courses = await _unitOfWork.CourseRepository.GetCreatedCourses(userId);
+                var profileId = _currentUserService.ProfileId;
+                var courses = await _unitOfWork.CourseRepository.GetCreatedCourses(profileId);
                 var response = CourseMapper.Mapper.Map<IEnumerable<CourseOverviewResponse>>(courses);
                 var fullName = _currentUserService.FullName;
 

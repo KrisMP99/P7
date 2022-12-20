@@ -5,7 +5,7 @@ using P7WebApp.Application.ProfileCQRS.Commands.CreateProfile;
 
 namespace P7WebApp.Application.ProfileCQRS.CommandHandlers
 {
-    public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand, Result>
+    public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand, int>
     {
         private readonly IIdentityService _identityService;
 
@@ -14,11 +14,11 @@ namespace P7WebApp.Application.ProfileCQRS.CommandHandlers
             _identityService = identityService;
         }
 
-        public async Task<Result> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var result = await _identityService.CreateUserAsync(firstName: request.FirstName, lastName: request.LastName, username: request.Username, email: request.Email, password: request.Password);
+                var result = await _identityService.CreateUserAsync(firstName: request.FirstName, lastName: request.LastName, email: request.Email, username: request.Username, password: request.Password);
                 return result;
             }
             catch (Exception)

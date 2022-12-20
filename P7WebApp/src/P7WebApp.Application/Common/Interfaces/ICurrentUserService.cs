@@ -2,7 +2,7 @@
 {
     public interface ICurrentUserService
     {
-        string? UserId { get; }
+        int ProfileId { get; }
         string? Username { get; }
         string? FirstName { get; }
         string? LastName { get; }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace P7WebApp.Application.ProfileCQRS.Commands.CreateProfile;
 
-public class CreateProfileCommand : IRequest<Result>
+public class CreateProfileCommand : IRequest<int>
 {
     public CreateProfileCommand(string username, string password, string email, string firstName, string lastName)
     {

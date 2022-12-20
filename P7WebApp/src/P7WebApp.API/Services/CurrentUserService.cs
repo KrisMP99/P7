@@ -12,7 +12,7 @@ namespace P7WebApp.API.Services
             
         }
 
-        public string? UserId => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value;
+        public int ProfileId => Int32.Parse(_httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value);
         public string? Username => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "Username")?.Value;
         public string? FirstName => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "FirstName")?.Value;
         public string? LastName => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "LastName")?.Value;

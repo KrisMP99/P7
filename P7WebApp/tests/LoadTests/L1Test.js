@@ -14,32 +14,14 @@ import { check, fail, sleep } from 'k6';
 
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
-export const BASE_URL = "http://130.225.39.193/api/";
+export const BASE_URL_prod = "http://130.225.39.193/api/";
+export const BASE_URL = "https://localhost:7001/api/";
 export const BASE_HEADER = { headers: { 'Content-Type': 'application/json' } }
 export const NUMBER_COURSES = 100
 export const USERS = 100
 
 export const options = {
-             stages: [{target : 500, duration: '1m'},
-             {target : 500, duration: '30s'},
-             {target : 750, duration: '1m'},
-             {target : 750, duration: '2m'},
-             {target : 1000, duration: '1m'},
-             {target : 1000, duration: '2m'},
-             {target : 1500, duration: '2m'},
-             {target : 1500, duration: '1m'},
-             {target : 2000, duration: '2m'},
-             {target : 2000, duration: '1m'},
-             {target : 2250, duration: '2m'},
-             {target : 2250, duration: '1m'},
-             {target : 2500, duration: '2m'},
-             {target : 2500, duration: '1m'},
-             {target : 2750, duration: '2m'},
-             {target : 2750, duration: '1m'},
-             {target : 3000, duration: '2m'},
-             {target : 3000, duration: '1m'},
-             {target : 3250, duration: '2m'},
-             {target : 3250, duration: '1m'},
+             stages: [
              {target : 3500, duration: '2m'},
              {target : 3500, duration: '1m'},
              {target : 4000, duration: '2m'},

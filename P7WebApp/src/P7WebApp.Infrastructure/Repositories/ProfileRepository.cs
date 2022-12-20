@@ -17,25 +17,54 @@ namespace P7WebApp.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<Profile> GetProfileByUserId(string userId)
+        //public async Task<Profile> GetProfileByUserId(string userId)
+        //{
+        //    try
+        //    {
+        //        _logger.LogInformation("trying to add profile");
+        //        var result = await _context.Profiles.Where(p => p.UserId == userId).AsNoTracking().FirstOrDefaultAsync();
+                
+        //        return result;
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        _logger.LogWarning($"creating profile failed with message {ex.Message}");
+        //        throw;
+        //    }
+        //}
+
+        public async Task<Profile> GetProfileByUserName(string username)
         {
             try
             {
-                _logger.LogInformation("trying to add profile");
-                var result = await _context.Profiles.Where(p => p.UserId == userId).AsNoTracking().FirstOrDefaultAsync();
-                
+                //var result = await _context.Profiles.Where(p => p.UserName == username).AsNoTracking().FirstOrDefaultAsync();
+                var result = await _context.Profiles.AsNoTracking().FirstOrDefaultAsync(p => p.UserName == username);
                 return result;
             }
             catch(Exception ex)
             {
-                _logger.LogWarning($"creating profile failed with message {ex.Message}");
                 throw;
             }
         }
 
-        public async Task CreateProfile(string userId, string firstName, string lastName, string email, string userName)
+        public async Task<Profile> GetProfileById(int Id)
         {
-            var profile = new Profile(userId: userId, firstName: firstName, lastName: lastName, email: email, userName: userName);
+            try
+            {
+                //var result = await _context.Profiles.Where(p => p.UserName == username).AsNoTracking().FirstOrDefaultAsync();
+                var result = await _context.Profiles.FindAsync(Id);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        // TODO: Password hashing
+        public async Task CreateProfile(string firstName, string lastName, string email, string userName, string password)
+        {
+            var profile = new Profile(firstName: firstName, lastName: lastName, email: email, userName: userName, password: password);
             await _context.Profiles.AddAsync(profile);
         }
     }

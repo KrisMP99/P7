@@ -638,7 +638,7 @@ namespace P7WebApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 

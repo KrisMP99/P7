@@ -9,95 +9,78 @@ namespace P7WebApp.Infrastructure.Identity.Services
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-        private readonly IAuthorizationService _authorizationService;
+        //private readonly UserManager<ApplicationUser> _userManager;
+        //private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+        //private readonly IAuthorizationService _authorizationService;
         private readonly IUnitOfWork _unitOfWork;
 
         public IdentityService(
-            UserManager<ApplicationUser> userManager, 
-            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, 
-            IAuthorizationService authorizationService,
+            //UserManager<ApplicationUser> userManager, 
+            //IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, 
+            //IAuthorizationService authorizationService,
             IUnitOfWork unitOfWork)
         {
-            _userManager = userManager;
-            _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-            _authorizationService = authorizationService;
+            //_userManager = userManager;
+            //_userClaimsPrincipalFactory = userClaimsPrincipalFactory;
+            //_authorizationService = authorizationService;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<string> GetUserNameAsync(string userId)
-        {
-            var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+        //public async Task<string> GetUserNameAsync(string userId)
+        //{
+        //    var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
 
-            return user.UserName;
+        //    return user.UserName;
+        //}
+
+        public async Task<int> CreateUserAsync(string firstName, string lastName, string email, string username, string password)
+        {
+            await _unitOfWork.ProfileRepository.CreateProfile(
+                firstName, 
+                lastName, 
+                email, 
+                username,
+                password);
+
+            var rowsAffected = await _unitOfWork.CommitChangesAsync(CancellationToken.None);
+
+            return rowsAffected;
         }
 
-        public async Task<Result> CreateUserAsync(string firstName, string lastName, string username, string email, string password)
-        {
-            var user = new ApplicationUser();
-            user.SetIdentity(username, email, firstName, lastName);
+        //public async Task<bool> IsInRoleAsync(string userId, string role)
+        //{
+        //    var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
-            var result = await _userManager.CreateAsync(user, password);
+        //    return user != null && await _userManager.IsInRoleAsync(user, role);
+        //}
 
-            if(result.Succeeded)
-            {
-                var appUser = await _userManager.Users.FirstAsync(au => au.UserName == username);
-                await _unitOfWork.ProfileRepository.CreateProfile(
-                    appUser.Id, 
-                    appUser.FirstName, 
-                    appUser.LastName, 
-                    appUser.Email, 
-                    appUser.UserName);
+        //public async Task<bool> AuthorizeAsync(string userId, string policyName)
+        //{
+        //    var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
-                var rowsAffected = await _unitOfWork.CommitChangesAsync(CancellationToken.None);
-               
-                // The user could not be created, so we delete the application user as well,
-                // to avoid inconsistency between AspNetUsers and domain profiles
-                if(rowsAffected == 0)
-                {
-                    await this.DeleteUserAsync(appUser);
-                    throw new Exception("Could not profile user from Application User.");
-                }
-            }
+        //    if (user == null)
+        //    {
+        //        return false;
+        //    }
 
-            return result.ToApplicationResult();
-        }
+        //    var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
+        //    var result = await _authorizationService.AuthorizeAsync(principal, policyName);
 
-        public async Task<bool> IsInRoleAsync(string userId, string role)
-        {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+        //    return result.Succeeded;
+        //}
 
-            return user != null && await _userManager.IsInRoleAsync(user, role);
-        }
+        //public async Task<Result> DeleteUserAsync(string userId)
+        //{
+        //    var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
-        public async Task<bool> AuthorizeAsync(string userId, string policyName)
-        {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+        //    return user != null ? await DeleteUserAsync(user) : Result.Success();
+        //}
 
-            if (user == null)
-            {
-                return false;
-            }
+        //public async Task<Result> DeleteUserAsync(ApplicationUser user)
+        //{
+        //    var result = await _userManager.DeleteAsync(user);
 
-            var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
-            var result = await _authorizationService.AuthorizeAsync(principal, policyName);
-
-            return result.Succeeded;
-        }
-
-        public async Task<Result> DeleteUserAsync(string userId)
-        {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
-
-            return user != null ? await DeleteUserAsync(user) : Result.Success();
-        }
-
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
-        {
-            var result = await _userManager.DeleteAsync(user);
-
-            return result.ToApplicationResult();
-        }
+        //    return result.ToApplicationResult();
+        //}
     }
 }

@@ -6,21 +6,21 @@ namespace P7WebApp.Domain.Aggregates.ProfileAggregate
 {
     public class Profile : EntityBase, IAggregateRoot
     {
-        public Profile(string userId, string firstName, string lastName, string email, string userName)
+        public Profile(string firstName, string lastName, string email, string userName, string password = "")
         {
-            UserId = userId;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             UserName = userName;
+            Password = password;
         }
 
-        public string UserId { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string Email { get; private set; }
         public string UserName { get; private set; }
         public string FullName { get => FirstName + " " + LastName; }
+        public string Password { get; private set; }
 
         public Course CreateCourse(string title, string description, bool isPrivate)
         {
