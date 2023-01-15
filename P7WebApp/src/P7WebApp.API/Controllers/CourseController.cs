@@ -182,8 +182,8 @@ namespace P7WebApp.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpPost("update")]
+        
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateCourse([FromBody] UpdateCourseCommand request)
         {
             try

@@ -1,0 +1,141 @@
+FROM node:latest AS base
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY p7webapp.webui/package.json ./
+COPY p7webapp.webui/package-lock.json ./
+
+FROM base AS development
+WORKDIR /app
+RUN npm install 
+RUN npm install react-scripts -g
+CMD ["npm", "start"]
+
+FROM base AS build
+RUN npm ci --silent
+RUN npm install react-scripts -g
+COPY /p7webapp.webui/ .
+RUN npm run build
+
+FROM nginx:1.23-alpine as basenginx
+FROM basenginx as production
+
+RUN apk add --no-cache \
+  # nginx
+  gcc \
+  libc-dev \
+  make \
+  openssl-dev \
+  pcre-dev \
+  zlib-dev \
+  linux-headers \
+  curl \
+  gnupg \
+  libxslt-dev \
+  gd-dev \
+  # libjwt
+  jansson-dev \
+  autoconf \
+  automake \
+  libtool \
+  cmake \
+  check-dev
+
+RUN mkdir -p /home/nginx && cd /home/nginx && \
+    wget -qO - https://nginx.org/download/nginx-1.23.3.tar.gz | tar zxfv - && \
+    wget -qO - https://github.com/nginx-modules/ngx_cache_purge/archive/refs/tags/2.5.1.tar.gz | tar zxfv - && \
+    wget -qO - https://github.com/benmcollins/libjwt/archive/v1.13.1.tar.gz | tar zxfv -
+
+RUN cd /home/nginx/nginx-1.23.3 && \
+    ./configure --add-dynamic-module=../ngx_cache_purge-2.5.1 --add-dynamic-module=../libjwt-1.13.1 --with-compat && \
+    make modules && \
+    cp objs/ngx_http_cache_purge_module.so /usr/lib/nginx/modules/ && \
+    cp objsngx_http_auth_jwt_module.so /usr/lib/nginx/modules/
+
+COPY --from=build /app/build/ /var/www
+COPY --from=build /app/nginx/nginx.conf /etc/nginx/nginx.conf
+ENTRYPOINT ["nginx","-g","daemon off;"]
+
+
+
+
+
+
+FROM node:latest AS base
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY p7webapp.webui/package.json ./
+COPY p7webapp.webui/package-lock.json ./
+
+FROM base AS development
+WORKDIR /app
+RUN npm install 
+RUN npm install react-scripts -g
+CMD ["npm", "start"]
+
+FROM base AS build
+RUN npm ci --silent
+RUN npm install react-scripts -g
+COPY /p7webapp.webui/ .
+RUN npm run build
+
+FROM nginx:1.23-alpine as basenginx
+FROM basenginx as builder
+ARG JWT_MODULE_PATH=/usr/local/lib/ngx-http-auth-jwt-module
+ARG LIBJWT_VERSION=1.13.1
+RUN mkdir -p $JWT_MODULE_PATH/src
+RUN apk add --no-cache \
+  # nginx
+  gcc \
+  libc-dev \
+  make \
+  openssl-dev \
+  pcre-dev \
+  zlib-dev \
+  linux-headers \
+  curl \
+  gnupg \
+  libxslt-dev \
+  gd-dev \
+  # libjwt
+  jansson-dev \
+  autoconf \
+  automake \
+  libtool \
+  cmake \
+  check-dev
+# BEGIN libjwt install
+RUN mkdir libjwt \
+  && curl -sL https://github.com/benmcollins/libjwt/archive/v1.13.1.tar.gz \
+   | tar -zx -C libjwt/ --strip-components=1 \
+  && cd libjwt \
+  && autoreconf -i \
+  && ./configure \
+  && make all \
+  && make check \
+  && make install
+RUN curl -fSL http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx.tar.gz \
+  && mkdir -p /usr/src \
+  && tar -zxC /usr/src -f nginx.tar.gz \
+  && rm nginx.tar.gz
+ADD config $JWT_MODULE_PATH/config
+ADD src $JWT_MODULE_PATH/src
+RUN cd /usr/src/nginx-${NGINX_VERSION} \
+  && cd /usr/local/lib/ \
+  && wget -qO https://github.com/nginx-modules/ngx_cache_purge/archive/2.5.2.tar.gz | tar zxfv - \
+  && cd /usr/src/nginx-${NGINX_VERSION} \
+  && ./configure --with-compat --add-dynamic-module=$JWT_MODULE_PATH --add-module=/usr/local/lib/ngx_cache_purge-2.5.2 \
+  && make modules
+FROM basenginx as jwt-nginx
+ARG LIBJWT=libjwt.so.1.8.1
+COPY --from=builder /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_auth_jwt_module.so /usr/lib/nginx/modules/ngx_http_auth_jwt_module.so
+COPY --from=builder /usr/src/nginx-${NGINX_VERSION}/objs/ngx_http_cache_purge_module.so /usr/lib/nginx/modules/ngx_cache_purge_module.so
+COPY --from=builder /usr/local/lib/${LIBJWT} /lib
+RUN apk add --no-cache jansson \
+  && sed -i '1iload_module modules/ngx_http_auth_jwt_module.so;' /etc/nginx/nginx.conf \
+  && ln -s /lib/${LIBJWT} /lib/libjwt.so.1 \
+  && ln -s /lib/${LIBJWT} /lib/libjwt.so
+
+FROM jwt-nginx AS production
+COPY --from=build /app/build/ /var/www
+COPY --from=build /app/nginx/nginx.conf /etc/nginx/nginx.conf
+ENTRYPOINT ["nginx","-g","daemon off;"]
