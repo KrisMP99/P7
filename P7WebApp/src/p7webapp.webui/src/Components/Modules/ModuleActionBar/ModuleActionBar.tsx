@@ -13,7 +13,7 @@ export default function ModuleActionBar(props: ModuleActionBarProps) {
     return (
         <div className='action-bar-container d-flex'>
             <div style={{marginLeft:'auto'}}>
-                <Pencil className='scale-transition btn-1' onClick={props.changeEditMode}/>
+                {/* <Pencil className='scale-transition btn-1' onClick={props.changeEditMode}/> */}
                 <Gear className='scale-transition btn-1' onClick={props.changeModule}/>
             </div>
         </div>

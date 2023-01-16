@@ -251,7 +251,7 @@ export default function CourseView(props: CourseProps) {
                                     createExerciseGroupModalRef.current?.handleShow(course.id, course.exerciseGroups.length);
                                 }
                             }}>
-                                <Plus />ExerciseGroup
+                                <Plus />Exercise Group
                             </Button>
                         </div>
                         <ExerciseGroupsOverview
