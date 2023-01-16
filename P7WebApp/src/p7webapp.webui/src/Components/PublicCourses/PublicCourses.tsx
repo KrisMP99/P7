@@ -54,7 +54,7 @@ export default function PublicCourses() {
 
                 <div className='row col-9 m-2'>
                     <div className='col text-start'>
-                        <h3>Attended courses</h3>
+                        <h3>Public courses</h3>
                     </div>
                     <div className="col text-end">
                         <Button className="btn-2" disabled={isFetching} onClick={()=>{
